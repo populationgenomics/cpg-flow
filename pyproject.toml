@@ -1,3 +1,90 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cpg-flow"
+description = "CPG Flow API for Hail Batch"
+requires-python = ">=3.10"
+readme = "README.md"
+license = {"file"="LICENSE"}
+dynamic = ["version"]
+dependencies = [
+    # "cpg-utils>=5.0.11",
+    # "cyvcf2==0.30.18",
+    # "analysis-runner>=2.43.3",
+    # "hail==0.2.132",  # Pin Hail at CPG"s installed version
+    # "networkx>=2.8.3",
+    # "obonet>=0.3.1",  # for HPO parsing
+    # "grpcio-status>=1.48,<1.50",  # Avoid dependency resolution backtracking
+    # "onnx",
+    # "onnxruntime",
+    # "skl2onnx",
+    # "metamist>=6.9.0",
+    # "pandas",
+    # "peddy>=0.4.8",  # Avoid 0.4.7, which is incompatible
+    # "pyfaidx>=0.8.1.1",
+    # "fsspec",
+    # "slack_sdk",
+    # "elasticsearch==8.*",
+    # "coloredlogs",
+    # "bokeh",
+    # "numpy",
+    # "click",
+    # "tenacity",
+    # "toml",
+]
+classifiers=[
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+
+    # Indicate who your project is intended for
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+
+    # Pick your license as you wish
+    "License :: OSI Approved :: MIT License",
+
+
+    "Natural Language :: English",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+keywords = ["hail", "flow", "api", "bioinformatics", "genomics"]
+
+[project.urls]
+Repository = "https://github.com/populationgenomics/cpg-flow"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "commitizen",
+    "coverage",
+    "cpg-utils>=5.0.11",
+    "isort",
+    "mypy",
+    "pre-commit",
+    "pylint",
+    "pytest",
+    "pytest_mock",
+    "ruff",
+    "tenacity",
+]
+test = [
+    "pytest",
+    "pytest-mock",
+    "coverage",
+]
+
 [tool.black]
 line-length = 88
 skip-string-normalization = true
@@ -23,30 +110,91 @@ known_cpg = [
     "hail_scripts",
     "metamist",
 ]
-# extend_skip = ["list", "submodules", "etc", here"]
 
 [tool.ruff]
 line-length = 88
 
 # ignore pydocstyle, flake8-boolean-trap (FBT)
-select = ["A", "B", "C",  "E", "F", "G", "I", "N", "Q", "S", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
-
-fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
+# select = ["A", "B", "C",  "E", "F", "G", "I", "N", "Q", "S", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
+# fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
 
 ignore = [
-    "ANN101",  # Missing type annotation for self in method
-    "ANN201",  # Missing return type annotation for public function
-    "E501",    # Line length too long
-    "E731",    # Do not assign a lambda expression, use a def
-    "E741",    # Ambiguous variable name
-    "G004",    # Logging statement uses f-string
-    "PLR0911", # Too many return statements
-    "PLR0912", # Too many branches
-    "PLR0913", # Too many arguments to function call
-    "PLR0915", # Too many statements
-    "PLW0603", # Using the global statement to update `<VAR>` is discouraged
-    "PT018",   # Assertion should be broken down into multiple parts
-    "Q000",    # Single quotes found but double quotes preferred
-    "S101",    # Use of assert detected
-    "I001", # Import block is un-sorted (we use isort directly as ruff sort isn't fully supported)
+    # "ANN101",  # Missing type annotation for self in method
+    # "ANN201",  # Missing return type annotation for public function
+    # "E501",    # Line length too long
+    # "E731",    # Do not assign a lambda expression, use a def
+    # "E741",    # Ambiguous variable name
+    # "G004",    # Logging statement uses f-string
+    # "PLR0911", # Too many return statements
+    # "PLR0912", # Too many branches
+    # "PLR0913", # Too many arguments to function call
+    # "PLR0915", # Too many statements
+    # "PLW0603", # Using the global statement to update `<VAR>` is discouraged
+    # "PT018",   # Assertion should be broken down into multiple parts
+    # "Q000",    # Single quotes found but double quotes preferred
+    # "S101",    # Use of assert detected
+    # "I001", # Import block is un-sorted (we use isort directly as ruff sort isn"t fully supported)
 ]
+
+[tool.semantic_release]
+version_variables = ["src/cpg_flow/__init__.py:__version__", "pyproject.toml:project.version"]
+assets = []
+build_command_env = []
+commit_message = "{version}\n\nAutomatically generated by python-semantic-release"
+commit_parser = "angular"
+logging_use_named_masks = false
+major_on_zero = true
+allow_zero_version = true
+repo_dir = "/Users/sabyan/Desktop/cpg-flow"
+no_git_verify = false
+tag_format = "v{version}"
+
+[tool.semantic_release.branches.main]
+match = "(main|master)"
+prerelease_token = "rc"
+prerelease = false
+
+[tool.semantic_release.changelog]
+changelog_file = ""
+exclude_commit_patterns = []
+mode = "init"
+insertion_flag = "<!-- version list -->"
+template_dir = "templates"
+
+[tool.semantic_release.changelog.default_templates]
+changelog_file = "CHANGELOG.md"
+output_format = "md"
+
+[tool.semantic_release.changelog.environment]
+block_start_string = "{%"
+block_end_string = "%}"
+variable_start_string = "{{"
+variable_end_string = "}}"
+comment_start_string = "{#"
+comment_end_string = "#}"
+trim_blocks = false
+lstrip_blocks = false
+newline_sequence = "\n"
+keep_trailing_newline = false
+extensions = []
+autoescape = false
+
+[tool.semantic_release.commit_author]
+env = "GIT_COMMIT_AUTHOR"
+default = "semantic-release <semantic-release>"
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["build", "chore", "ci", "docs", "feat", "fix", "perf", "style", "refactor", "test"]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf"]
+default_bump_level = 0
+
+[tool.semantic_release.remote]
+name = "origin"
+type = "github"
+ignore_token_for_push = false
+insecure = false
+
+[tool.semantic_release.publish]
+dist_glob_patterns = ["dist/*"]
+upload_to_vcs_release = true
