@@ -11,15 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
         with:
-          python-version: '3.12'
+          # Install a specific version of uv.
+          version: '0.4.22'
 
-      - name: Install packages
-        run: pip install -r requirements-dev.txt
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the dependencies
+        run: uv sync --all-extras --dev
 
       - name: Install pre-commit hooks
-        run: pre-commit install --install-hooks
+        # For example, using `pytest`
+        run: uv run pre-commit install --install-hooks
 
       - name: Run pre-commit
-        run: pre-commit run --all-files
+        run: uv run pre-commit run --all-files
