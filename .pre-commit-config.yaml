@@ -19,6 +19,7 @@ repos:
     rev: v0.38.0
     hooks:
       - id: markdownlint
+        args: [-s, .markdownlint.json]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
@@ -53,3 +54,10 @@ repos:
             --non-interactive,
           ]
         additional_dependencies: [types-PyYAML==6.0.4, types-toml]
+
+  - repo: https://github.com/AliYmn/conventional-commits-check
+    rev: v2.0.0
+    hooks:
+      - id: conventional-commits-check
+        stages: [commit-msg]
+        # args: ["--emoji-disabled"] # Add this argument to disable emojis
