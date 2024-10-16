@@ -94,86 +94,29 @@ You can also run the app in development mode with Docker, more information in th
 
 ## <a name="build">🚀 Build</a>
 
-In order to build the app for production, run the following command :
-
-```bash
-# Build the app
-pnpm run build
-
-# Run the app in production mode
-pnpm run start:prod
-```
-
-You can also run the app in production mode with Docker, more information in the **[Docker section](#docker)**.
+TODO
 
 ## <a name="docker">🐳 Docker</a>
 
-This app is Docker ready !
-
-The Dockerfile is available at the root of the project. It uses a multi-stage build to optimize the image size and distroless image to reduce the attack surface.
+TODO
 
 ### 🔨 Development mode
 
-To run the app in development mode with Docker, multiple commands are available :
-
-```bash
-# Run the app in development mode with Docker
-pnpm run docker:dev:start
-
-# Stop the app in development mode with Docker
-pnpm run docker:dev:stop
-
-# Reset the app in development mode with Docker (stop, remove image, containers and volumes, then start)
-pnpm run docker:dev:reset
-```
-
-When starting the app in development mode with Docker, a container for the API and a container for the MongoDB database are created.
-
-Docker compose will use the `development` step of the Dockerfile to build the image.
-
-For more information, please check the **[docker-compose.yml file](https://github.com/antoinezanardi/werewolves-assistant-api-next/blob/main/docker/werewolves-assistant-api-dev/docker-compose.yml)**.
+TODO
 
 ### 🚀 Production mode
 
-To run the app in production mode with Docker, multiple commands are available :
-
-```bash
-# Run the app in production mode with Docker
-pnpm run docker:production:start
-
-# Stop the app in production mode with Docker
-pnpm run docker:production:stop
-
-# Reset the app in production mode with Docker (stop, remove image, containers and volumes, then start)
-pnpm run docker:production:reset
-```
-
-When starting the app in production mode with Docker, a container for the API and a container for the MongoDB database are created.
-
-Docker compose will use the `production` step of the Dockerfile to build the image.
-
-For more information, please check the **[docker-compose.yml file](https://github.com/antoinezanardi/werewolves-assistant-api-next/blob/main/docker/werewolves-assistant-api-production/docker-compose.yml)**.
+TODO
 
 ### 🧪 Test mode
 
-To run the tests available in this project thanks to Docker, multiple commands are available :
-
-```bash
-# Deploy test containers (4 databases are created to parallelize tests)
-pnpm run docker:test:start
-
-# Stop test containers
-pnpm run docker:test:stop
-
-# Reset test containers (stop, remove image, containers and volumes, then start)
-pnpm run docker:test:reset
-```
-
-For more information, please check the **[docker-compose.yml file](https://github.com/antoinezanardi/werewolves-assistant-api-next/blob/main/docker/werewolves-assistant-api-test/docker-compose.yml)**.
+TODO
 
 ## <a name="tests">💯 Tests</a>
 
 ### 🧪 Unit and E2E tests
+
+TODO: Test results and badges here (in more detail). Will look something like this.
 
 ![Jest](https://img.shields.io/badge/-Jest-black?style=for-the-badge&logoColor=white&logo=jest&color=BF3B14)
 
@@ -209,43 +152,13 @@ You can also check the **[mutation testing report](https://dashboard.stryker-mut
 
 Before testing, you must follow the **[installation steps](#installation)**.
 
-Then, run one of the following commands :
-
-```bash
-# Assure you started test Docker containers (4 databases are created to parallelize tests)
-pnpm run docker:test:start
-
-# Run unit tests with coverage
-pnpm run test:unit:cov
-
-# Run e2e tests with coverage
-pnpm run test:e2e:cov
-
-# Run both unit and e2e tests with coverage
-pnpm run test:cov
-
-# Run both unit and e2e tests only on staged files (run on pre-commit)
-pnpm run test:staged
-
-# Run acceptance tests
-pnpm run test:cucumber
-
-# Run acceptance tests and publish the report
-pnpm run test:cucumber:publish
-
-# Run mutant tests with coverage
-pnpm run test:stryker
-
-# Run mutant tests with coverage from scratch (without using the incremental file)
-pnpm run test:stryker:force
-```
+TODO
 
 ## <a name="env-variables">🌿 Env variables</a>
 
-Environnement files are available in the **[env directory](https://github.com/antoinezanardi/werewolves-assistant-api-next/tree/main/env)**.
+TODO
 
-You can create a `.env` file in this directory to override the default values when starting the API locally with `pnpm run start` command.
-
+<!--
 Environment variables are :
 
 |        Name         |               Description               | Required | Default value |                   Limitations                    |
@@ -259,13 +172,14 @@ Environment variables are :
 | `DATABASE_USERNAME` |          MongoDB database user          |    ✅     |       ❌       |              Can't be empty string               |
 | `DATABASE_PASSWORD` |        MongoDB database password        |    ✅     |       ❌       |              Can't be empty string               |
 |    `CORS_ORIGIN`    |           CORS allowed origin           |    ❌     |      `*`      |          If set, can't be empty string           |
+-->
 
 
 ## <a name="code-analysis-and-consistency">☑️ Code analysis and consistency</a>
 
 ### 🔍 Code linting & formatting
 
-![ESLint](https://img.shields.io/badge/-ESLint-black?style=for-the-badge&logoColor=white&logo=eslint&color=341BAB)
+![Precommit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)
 
 In order to keep the code clean, consistent and free of bad TS practices, more than **300 ESLint rules are activated** !
 
@@ -275,26 +189,26 @@ Complete list of all enabled rules is available in the **[.eslintrc.js file](htt
 
 Before linting, you must follow the [installation steps](#installation).
 
-Then, run one of the following commands :
+Then, run the following command
 
 ```bash
 # Lint 
-pnpm run lint
+pre-commit run --all-files
+```
 
-# Lint and fix
-pnpm run lint:fix
+When setting up local linting for development you can also run the following once:
 
-# Lint and fix only on staged files (runs on pre-commit)
-pnpm run lint:staged:fix
-
-# Display all configs and rules used in browser using @eslint/config-inspector
-pnpm run lint:inspect-config
+```bash
+# Install the pre-commit hook
+pre-commit install
 ```
 
 ### 🥇 Project quality scanner
 
-Multiple tools are set up to maintain the best code quality and to prevent vulnerabilities :
+Multiple tools are set up to maintain the best code quality and to prevent vulnerabilities:
 
+TODO:
+<!--
 ![CodeQL](https://img.shields.io/badge/-CodeQL-black?style=for-the-badge&logoColor=white&logo=github&color=2781FE)
 
 You can check the **[CodeQL analysis report here](https://github.com/antoinezanardi/werewolves-assistant-api-next/security/code-scanning)**.
@@ -314,9 +228,13 @@ SonarCloud summary is available **[here](https://sonarcloud.io/summary/new_code?
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=antoinezanardi_werewolves-assistant-api-next&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=antoinezanardi_werewolves-assistant-api-next)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=antoinezanardi_werewolves-assistant-api-next&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=antoinezanardi_werewolves-assistant-api-next)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=antoinezanardi_werewolves-assistant-api-next&metric=bugs)](https://sonarcloud.io/summary/new_code?id=antoinezanardi_werewolves-assistant-api-next)
+-->
 
 ## <a name="versions">📈 Releases & Changelog</a>
 
+TODO:
+
+<!--
 Releases on **main** branch are generated and published automatically by :
 
 ![Semantic Release](https://img.shields.io/badge/-Semantic%20Release-black?style=for-the-badge&logoColor=white&logo=semantic-release&color=000000)
@@ -329,14 +247,18 @@ Also, you can keep up with changes by watching releases via the **Watch GitHub b
 
 #### 🏷️ <a href="https://github.com/antoinezanardi/werewolves-assistant-api-next/releases" target="_blank">All releases for this project are available here</a>.
 
+-->
+
 ## <a name="github-actions">🎬 GitHub Actions</a>
 
 This project uses **GitHub Actions** to automate some boring tasks.
 
-You can find all the workflows in the **[.github/workflows directory](https://github.com/antoinezanardi/werewolves-assistant-api-next/tree/main/.github/workflows).**
+You can find all the workflows in the **[.github/workflows directory](https://github.com/populationgenomics/cpg-flow/tree/main/.github/workflows).**
 
 ### 🎢 Workflows
 
+TODO
+<!--
 |                                                                             Name                                                                             |                                                                                                                                                                          Description & Status                                                                                                                                                                           |                      Triggered on                      |    
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------:|
 |                         **[⚙️ Build](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/build.yml)**                          |                                   Various checks for app health, code quality and tests coverage<br/><br/>[![⚙️ Build Workflow](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/build.yml/badge.svg)](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/build.yml)                                    | `push` on `develop` and all pull requests to `develop` |
@@ -346,8 +268,13 @@ You can find all the workflows in the **[.github/workflows directory](https://gi
 |         **[🏷️ Release Creation Workflow](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/release-creation.yml)**          |           Creates a new release using `semantic-release` with tag and updated changelog<br/><br/>[![🏷️ Release Creation Workflow](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/release-creation.yml/badge.svg)](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/release-creation.yml)           |                    `push` on `main`                    | 
 |      **[🚀 Deploy To Production Workflow](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/deploy-to-production.yml)**      |              Deploys app with last tag version to `Docker Hub` and `GCP`<br/><br/>[![🚀 Deploy To Production Workflow](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/deploy-to-production.yml/badge.svg)](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/deploy-to-production.yml)               |                     `tag-creation`                     | 
 
+-->
+
 ## <a name="misc-commands">✨ Misc commands</a>
 
+TODO
+
+<!--
 ### 🌳 Animated tree visualisation of the project's evolution with **[Gource](https://gource.io/)**
 ```shell
 # Please ensure that `gource` is installed on your system.
@@ -370,6 +297,8 @@ All the above commands are available in the **.run directory** at the root of th
 
 You can add them as **run configurations** in your IDE.
 
+-->
+
 ## <a name="license">©️ License</a>
 
 This project is licensed under the [MIT License](http://opensource.org/licenses/MIT).
@@ -378,4 +307,4 @@ This project is licensed under the [MIT License](http://opensource.org/licenses/
 
 There is no contributor yet. Want to be the first ?
 
-If you want to contribute to this project, please read the [**contribution guide**](https://github.com/antoinezanardi/werewolves-assistant-api-next/blob/master/CONTRIBUTING.md).
+If you want to contribute to this project, please read the [**contribution guide**](https://github.com/populationgenomics/cpg-flow/blob/master/CONTRIBUTING.md).
