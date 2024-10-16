@@ -1,3 +1,14 @@
+[project]
+name = "cpg-flow"
+version = "0.1.0"
+description = "A pipeline API for CPG workflows"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "CPG Team", email = "software-team@populationgenomics.org.au" },
+]
+requires-python = "==3.12.*"
+
 [tool.black]
 line-length = 88
 skip-string-normalization = true
@@ -6,11 +17,16 @@ skip-string-normalization = true
 py_version = 311
 profile = "black"
 line_length = 88
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "HAIL", "CPG", "FIRSTPARTY", "LOCALFOLDER"]
-known_hail = [
-    "hail",
-    "hailtop",
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "HAIL",
+    "CPG",
+    "FIRSTPARTY",
+    "LOCALFOLDER",
 ]
+known_hail = ["hail", "hailtop"]
 # Adjust these for each repository, e.g., removing those that should be
 # local rather than CPG. Also fill in extend_skip below if there are any
 # subdirectories that should be ignored.
@@ -29,9 +45,88 @@ known_cpg = [
 line-length = 88
 
 # ignore pydocstyle, flake8-boolean-trap (FBT)
-select = ["A", "B", "C",  "E", "F", "G", "I", "N", "Q", "S", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
+select = [
+    "A",
+    "B",
+    "C",
+    "E",
+    "F",
+    "G",
+    "I",
+    "N",
+    "Q",
+    "S",
+    "W",
+    "ANN",
+    "ARG",
+    "BLE",
+    "COM",
+    "DJ",
+    "DTZ",
+    "ERA",
+    "EXE",
+    "ICN",
+    "ISC",
+    "NPY",
+    "PD",
+    "PGH",
+    "PIE",
+    "PL",
+    "PT",
+    "PYI",
+    "RET",
+    "RSE",
+    "RUF",
+    "SIM",
+    "SLF",
+    "TCH",
+    "TID",
+    "UP",
+    "YTT",
+]
 
-fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
+fixable = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "I",
+    "N",
+    "Q",
+    "S",
+    "T",
+    "W",
+    "ANN",
+    "ARG",
+    "BLE",
+    "COM",
+    "DJ",
+    "DTZ",
+    "ERA",
+    "EXE",
+    "FBT",
+    "ICN",
+    "ISC",
+    "NPY",
+    "PD",
+    "PGH",
+    "PIE",
+    "PL",
+    "PT",
+    "PYI",
+    "RET",
+    "RSE",
+    "RUF",
+    "SIM",
+    "SLF",
+    "TCH",
+    "TID",
+    "UP",
+    "YTT",
+]
 
 ignore = [
     "ANN101",  # Missing type annotation for self in method
@@ -48,5 +143,13 @@ ignore = [
     "PT018",   # Assertion should be broken down into multiple parts
     "Q000",    # Single quotes found but double quotes preferred
     "S101",    # Use of assert detected
-    "I001", # Import block is un-sorted (we use isort directly as ruff sort isn't fully supported)
+    "I001",    # Import block is un-sorted (we use isort directly as ruff sort isn't fully supported)
+]
+
+[tool.uv]
+dev-dependencies = [
+    "black>=24.10.0",
+    "bump2version>=1.0.1",
+    "pre-commit>=4.0.1",
+    "pylint>=3.3.1",
 ]
