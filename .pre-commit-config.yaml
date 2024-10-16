@@ -2,7 +2,7 @@ default_language_version:
   python: python3.12
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: check-yaml
         exclude: '\.*conda/.*'
@@ -16,7 +16,7 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.38.0
+    rev: v0.42.0
     hooks:
       - id: markdownlint
         args: [-s, .markdownlint.json]
@@ -28,20 +28,20 @@ repos:
         name: isort (python)
 
   - repo: https://github.com/ambv/black
-    rev: 23.12.1
+    rev: 24.10.0
     hooks:
       - id: black
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.1.11
+    rev: v0.6.9
     hooks:
       - id: ruff
         name: ruff (format)
         args: [--fix]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v1.12.0
     hooks:
       - id: mypy
         args:
@@ -56,7 +56,7 @@ repos:
         additional_dependencies: [types-PyYAML==6.0.4, types-toml]
 
   - repo: https://github.com/AliYmn/conventional-commits-check
-    rev: v2.0.0
+    rev: V2.0.0
     hooks:
       - id: conventional-commits-check
         stages: [commit-msg]

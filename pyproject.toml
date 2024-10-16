@@ -72,6 +72,7 @@ dev = [
     "cpg-utils>=5.0.11",
     "isort",
     "mypy",
+    "pip-tools",
     "pre-commit",
     "pylint",
     "pytest",
