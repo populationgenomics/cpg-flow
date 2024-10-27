@@ -102,7 +102,12 @@ TODO
 
 ### 🔨 Development mode
 
-TODO
+To develop on this project first clone the repository. Then use the make init to setup for development. This will install the pre-commit hooks and requirements.
+
+```bash
+git clone https://github.com/populationgenomics/cpg-flow.git
+make init
+```
 
 ### 🚀 Production mode
 

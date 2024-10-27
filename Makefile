@@ -16,6 +16,9 @@ install-deps:
 	python -m pip check
 
 update: update-deps compile-deps install-deps
-install: compile-deps install-deps
 
-.PHONY: update-deps compile-deps install-deps update install
+init: install-deps
+	pre-commit install
+	pre-commit install --hook-type commit-msg
+
+.PHONY: update-deps compile-deps install-deps update init
