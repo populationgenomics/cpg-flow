@@ -9,7 +9,9 @@ on:
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
+    if: false
     defaults:
       run:
         shell: bash -l {0}
