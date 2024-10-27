@@ -68,6 +68,7 @@ Repository = "https://github.com/populationgenomics/cpg-flow"
 dev = [
     "black",
     "commitizen",
+    "commitlint",
     "coverage",
     "cpg-utils>=5.0.11",
     "isort",
@@ -146,7 +147,7 @@ commit_parser = "angular"
 logging_use_named_masks = false
 major_on_zero = true
 allow_zero_version = true
-repo_dir = "/Users/sabyan/Desktop/cpg-flow"
+repo_dir = "cpg-flow"
 no_git_verify = false
 tag_format = "v{version}"
 

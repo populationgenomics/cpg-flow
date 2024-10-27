@@ -10,11 +10,12 @@ compile-deps:
 	python -m piptools compile --strip-extras --extra dev -o requirements/dev.txt pyproject.toml
 	python -m piptools compile --strip-extras --extra test -o requirements/test.txt pyproject.toml
 
-init:
+install-deps:
 	python -m pip install --upgrade pip-tools pip wheel
 	python -m pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt -e .
 	python -m pip check
 
-update: update-deps install-deps
+update: update-deps compile-deps install-deps
+install: compile-deps install-deps
 
-.PHONY: update-deps compile-deps install-deps update
+.PHONY: update-deps compile-deps install-deps update install
