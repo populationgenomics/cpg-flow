@@ -9,11 +9,11 @@
     "semanticCommits": "enabled",
     "enabledManagers": ["pip-compile"],
     "constraints": {
-      "python": "==3.12"
+      "python": "==3.10"
     },
     "platformCommit": "enabled",
     "pip-compile": {
-      "fileMatch": ["^requirements\\.txt$", "^requirements-dev\\.txt$"],
+      "fileMatch": ["^requirements/main\\.txt$", "^requirements/dev\\.txt$", "^requirements/test\\.txt$"],
       "lockFileMaintenance": {
         "enabled": true,
         "branchTopic": "pip-compile-refresh",
