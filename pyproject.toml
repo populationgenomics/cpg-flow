@@ -16,7 +16,8 @@ dependencies = [
     # "hail==0.2.132",  # Pin Hail at CPG"s installed version
     # "networkx>=2.8.3",
     # "obonet>=0.3.1",  # for HPO parsing
-    # "grpcio-status>=1.48,<1.50",  # Avoid dependency resolution backtracking
+    "grpcio>=1.48,<1.50",  # Avoid dependency resolution backtracking, Python 3.10 compatibility
+    "grpcio-status>=1.48,<1.50",  # Avoid dependency resolution backtracking, Python 3.10 compatibility
     # "onnx",
     # "onnxruntime",
     # "skl2onnx",
@@ -56,8 +57,6 @@ classifiers=[
     # Specify the Python versions you support here.
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
 ]
 keywords = ["hail", "flow", "api", "bioinformatics", "genomics"]
 
