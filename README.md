@@ -67,7 +67,7 @@ This API is used by the **[Werewolves Assistant Web App](https://preprod.werewol
 
 The development server is updated automatically when a commit is pushed on the `develop` branch.
 
-## 🔨 Installation
+## <a name="installation">🔨 Installation</a>
 
 To install this project, you will need to have on your machine :
 
@@ -93,11 +93,11 @@ The above command will start the app in development mode and watch for changes o
 
 You can also run the app in development mode with Docker, more information in the **[Docker section](#docker)**.
 
-## 🚀 Build
+## <a name="build">🚀 Build</a>
 
 TODO
 
-## 🐳 Docker
+## <a name="docker">🐳 Docker</a>
 
 TODO
 
@@ -118,7 +118,7 @@ TODO
 
 TODO
 
-## 💯 Tests
+## <a name="tests">💯 Tests</a>
 
 ### 🧪 Unit and E2E tests
 
@@ -160,7 +160,7 @@ Before testing, you must follow the **[installation steps](#installation)**.
 
 TODO
 
-## 🌿 Env variables
+## <a name="env-variables">🌿 Env variables</a>
 
 TODO
 
@@ -181,7 +181,7 @@ Environment variables are :
 -->
 
 
-## ☑️ Code analysis and consistency
+## <a name="code-analysis-and-consistency">☑️ Code analysis and consistency</a>
 
 ### 🔍 Code linting & formatting
 
@@ -236,7 +236,7 @@ SonarCloud summary is available **[here](https://sonarcloud.io/summary/new_code?
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=antoinezanardi_werewolves-assistant-api-next&metric=bugs)](https://sonarcloud.io/summary/new_code?id=antoinezanardi_werewolves-assistant-api-next)
 -->
 
-## 📈 Releases & Changelog
+## <a name="versions">📈 Releases & Changelog</a>
 
 TODO:
 
@@ -255,7 +255,7 @@ Also, you can keep up with changes by watching releases via the **Watch GitHub b
 
 -->
 
-## 🎬 GitHub Actions
+## <a name="github-actions">🎬 GitHub Actions</a>
 
 This project uses **GitHub Actions** to automate some boring tasks.
 
@@ -276,7 +276,7 @@ TODO
 
 -->
 
-## ✨ Misc commands
+## <a name="misc-commands">✨ Misc commands</a>
 
 TODO
 
@@ -305,11 +305,11 @@ You can add them as **run configurations** in your IDE.
 
 -->
 
-## ©️ License
+## <a name="license">©️ License</a>
 
 This project is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
-## ❤️ Contributors
+## <a name="contributors">❤️ Contributors</a>
 
 There is no contributor yet. Want to be the first ?
 
