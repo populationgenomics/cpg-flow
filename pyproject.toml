@@ -164,8 +164,8 @@ match = "(main|master)"
 prerelease = false
 
 [tool.semantic_release.branches.prerelease]
-match = "(alpha|beta|rc)"
-prerelease_token = "pre"
+match = "alpha"
+prerelease_token = "alpha"
 prerelease = true
 
 [tool.semantic_release.changelog]
