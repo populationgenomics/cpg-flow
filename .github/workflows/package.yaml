@@ -41,5 +41,4 @@ jobs:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}  # Use the test PyPI token for authentication
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
         run:
-          semantic-release version
-          semantic-release publish
+          semantic-release version && semantic-release publish
