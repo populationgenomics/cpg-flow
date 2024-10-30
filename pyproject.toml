@@ -77,6 +77,7 @@ dev = [
     "pylint",
     "pytest",
     "pytest_mock",
+    "python-semantic-release",
     "ruff",
     "tenacity",
     "twine"
