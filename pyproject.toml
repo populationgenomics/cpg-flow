@@ -158,6 +158,7 @@ allow_zero_version = true
 repo_dir = "."
 no_git_verify = false
 tag_format = "v{version}"
+build_command = "make build"
 
 [tool.semantic_release.branches.main]
 match = "(main|master)"
