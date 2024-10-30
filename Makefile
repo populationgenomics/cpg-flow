@@ -22,7 +22,12 @@ init: install-deps
 	pre-commit install
 	pre-commit install --hook-type commit-msg
 
-build:
+clean:
+	rm -rf build dist *.egg-info
+	rm -rf src/__pycache__ src/*/__pycache__ src/*/*/__pycache__
+	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
+
+build: clean
 	python -m build --sdist --wheel
 
 upload: clean build
@@ -38,9 +43,5 @@ install-build: build
 run:
 	python main.py
 
-clean:
-	rm -rf build dist *.egg-info
-	rm -rf src/__pycache__ src/*/__pycache__ src/*/*/__pycache__
-	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 
 .PHONY: update-deps compile-deps install-deps compile update init build install-local install-build run clean
