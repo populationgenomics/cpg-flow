@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.0.1-alpha.2 (2024-10-30)
+
+### Bug Fixes
+
+* fix(package.yaml): typo in token name TEST_PYPI_API_TOKEN ([`2ab5be4`](https://github.com/populationgenomics/cpg-flow/commit/2ab5be4e987e2c936e287d74dfae2543a599ea8f))
+
+* fix(package.yaml): typo in semantic release command ([`b480575`](https://github.com/populationgenomics/cpg-flow/commit/b480575c7d7732dae92639f937b1ff23e92e45a8))
+
+### Continuous Integration
+
+* ci(package.yaml): split semantic version and publish ([`8c04d34`](https://github.com/populationgenomics/cpg-flow/commit/8c04d3434f93800009aa0b76d3780d4953c81ce2))
+
+* ci(package.yaml): fix requirements and add pypi token ([`2bb89f7`](https://github.com/populationgenomics/cpg-flow/commit/2bb89f766d0422786df53fe5593e59d355ba7586))
+
+* ci(package.yaml): switch to semantic release ([`891da2c`](https://github.com/populationgenomics/cpg-flow/commit/891da2cb20f7d59bf115b504a2a37d251d18a0f6))
+
+
 ## v0.0.1-alpha.1 (2024-10-30)
 
 ### Bug Fixes
