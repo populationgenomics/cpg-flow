@@ -19,6 +19,8 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for tags
 
       - uses: actions/setup-python@v5
         with:
@@ -36,9 +38,16 @@ jobs:
       - name: Test import
         run: make run
 
-      - name: Run semantic-release
+      - name: Run semantic-release version
         env:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}  # Use the test PyPI token for authentication
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
         run:
-          semantic-release version && semantic-release publish
+          semantic-release version
+
+      - name: Run semantic-release publish
+        env:
+          TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}  # Use the test PyPI token for authentication
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
+        run:
+          semantic-release publish
