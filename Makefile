@@ -16,9 +16,31 @@ install-deps:
 	python -m pip check
 
 update: update-deps compile-deps install-deps
+compile: compile-deps install-deps
 
 init: install-deps
 	pre-commit install
 	pre-commit install --hook-type commit-msg
 
-.PHONY: update-deps compile-deps install-deps update init
+build:
+	python -m build --sdist --wheel
+
+upload: clean build
+	python -m twine check dist/*
+	python -m twine upload -r testpypi dist/*
+
+install-local:
+	pip install --force-reinstall -e .
+
+install-build: build
+	pip install --force-reinstall dist/*.whl
+
+run:
+	python main.py
+
+clean:
+	rm -rf build dist *.egg-info
+	rm -rf src/__pycache__ src/*/__pycache__ src/*/*/__pycache__
+	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
+
+.PHONY: update-deps compile-deps install-deps compile update init build install-local install-build run clean

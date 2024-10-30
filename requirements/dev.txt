@@ -18,6 +18,8 @@ azure-storage-blob==12.23.1
     #   cloudpathlib
 azure-storage-file-datalake==12.17.0
     # via cloudpathlib
+backports-tarfile==1.2.0
+    # via jaraco-context
 black==24.10.0
     # via cpg-flow (pyproject.toml)
 boto3==1.35.49
@@ -69,6 +71,8 @@ dill==0.3.9
     # via pylint
 distlib==0.3.9
     # via virtualenv
+docutils==0.21.2
+    # via readme-renderer
 exceptiongroup==1.2.2
     # via pytest
 filelock==3.16.1
@@ -121,6 +125,10 @@ identify==2.6.1
     # via pre-commit
 idna==3.10
     # via requests
+importlib-metadata==8.5.0
+    # via
+    #   keyring
+    #   twine
 iniconfig==2.0.0
     # via pytest
 isodate==0.7.2
@@ -131,22 +139,40 @@ isort==5.13.2
     # via
     #   cpg-flow (pyproject.toml)
     #   pylint
+jaraco-classes==3.4.0
+    # via keyring
+jaraco-context==6.0.1
+    # via keyring
+jaraco-functools==4.1.0
+    # via keyring
 jinja2==3.1.4
     # via commitizen
 jmespath==1.0.1
     # via
     #   boto3
     #   botocore
+keyring==25.5.0
+    # via twine
+markdown-it-py==3.0.0
+    # via rich
 markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
+mdurl==0.1.2
+    # via markdown-it-py
+more-itertools==10.5.0
+    # via
+    #   jaraco-classes
+    #   jaraco-functools
 mypy==1.13.0
     # via cpg-flow (pyproject.toml)
 mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
+nh3==0.2.18
+    # via readme-renderer
 nodeenv==1.9.1
     # via pre-commit
 packaging==24.1
@@ -159,6 +185,8 @@ pathspec==0.12.1
     # via black
 pip-tools==7.4.1
     # via cpg-flow (pyproject.toml)
+pkginfo==1.10.0
+    # via twine
 platformdirs==4.3.6
     # via
     #   black
@@ -190,6 +218,10 @@ pyasn1-modules==0.4.1
     # via google-auth
 pycparser==2.22
     # via cffi
+pygments==2.18.0
+    # via
+    #   readme-renderer
+    #   rich
 pylint==3.3.1
     # via cpg-flow (pyproject.toml)
 pyproject-hooks==1.2.0
@@ -210,12 +242,22 @@ pyyaml==6.0.2
     #   pre-commit
 questionary==2.0.1
     # via commitizen
+readme-renderer==44.0
+    # via twine
 requests==2.32.3
     # via
     #   azure-core
     #   cpg-utils
     #   google-api-core
     #   google-cloud-storage
+    #   requests-toolbelt
+    #   twine
+requests-toolbelt==1.0.0
+    # via twine
+rfc3986==2.0.0
+    # via twine
+rich==13.9.3
+    # via twine
 rsa==4.9
     # via google-auth
 ruff==0.7.1
@@ -247,6 +289,8 @@ tomlkit==0.13.2
     # via
     #   commitizen
     #   pylint
+twine==5.1.1
+    # via cpg-flow (pyproject.toml)
 typing-extensions==4.12.2
     # via
     #   astroid
@@ -256,10 +300,12 @@ typing-extensions==4.12.2
     #   black
     #   cloudpathlib
     #   mypy
+    #   rich
 urllib3==2.2.3
     # via
     #   botocore
     #   requests
+    #   twine
 virtualenv==20.27.0
     # via pre-commit
 wcwidth==0.2.13
@@ -268,6 +314,8 @@ wheel==0.44.0
     # via pip-tools
 wrapt==1.16.0
     # via deprecated
+zipp==3.20.2
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

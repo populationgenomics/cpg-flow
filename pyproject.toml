@@ -8,7 +8,7 @@ description = "CPG Flow API for Hail Batch"
 requires-python = ">=3.10"
 readme = "README.md"
 license = {"file"="LICENSE"}
-dynamic = ["version"]
+version = "0.0.0"
 dependencies = [
     # "cpg-utils>=5.0.11",
     # "cyvcf2==0.30.18",
@@ -79,6 +79,7 @@ dev = [
     "pytest_mock",
     "ruff",
     "tenacity",
+    "twine"
 ]
 test = [
     "pytest",
@@ -86,12 +87,15 @@ test = [
     "coverage",
 ]
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.black]
 line-length = 88
 skip-string-normalization = true
 
 [tool.isort]
-py_version = 311
+py_version = 310
 profile = "black"
 line_length = 88
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "HAIL", "CPG", "FIRSTPARTY", "LOCALFOLDER"]
@@ -118,7 +122,7 @@ line-length = 88
 # ignore pydocstyle, flake8-boolean-trap (FBT)
 # select = ["A", "B", "C",  "E", "F", "G", "I", "N", "Q", "S", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
 # fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "UP", "YTT"]
-
+[tool.ruff.lint]
 ignore = [
     # "ANN101",  # Missing type annotation for self in method
     # "ANN201",  # Missing return type annotation for public function
