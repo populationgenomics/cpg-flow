@@ -7,9 +7,12 @@ on:
   push:
     branches:
       - main
+      - alpha
 
 jobs:
   package:
+    name: Package
+    environment: production
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,20 +24,23 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Install dependencies
+        run: make install-deps
+
       - name: Build
-        run: python setup.py sdist
+        run: make build
 
       - name: Test install
-        run: pip install dist/*
+        run: make install-build
 
       - name: Test import
-        run: python -c "import cpg_flow"
+        run: make run
 
       - name: Publish the wheel to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         if: ${{ github.event_name != 'pull_request' }}
         with:
           user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           packages_dir: dist/
           skip_existing: true
