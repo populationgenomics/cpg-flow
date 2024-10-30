@@ -36,11 +36,9 @@ jobs:
       - name: Test import
         run: make run
 
-      - name: Publish the wheel to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          packages_dir: dist/
-          skip_existing: true
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
+        run:
+          semantic-release version
+          semantic-release publish
