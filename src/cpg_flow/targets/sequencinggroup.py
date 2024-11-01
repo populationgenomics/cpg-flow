@@ -6,9 +6,7 @@ from cpg_utils.config import reference_path
 from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPairs, GvcfPath
 from cpg_flow.metamist import Assay
 
-from cpg_flow.targets.target import Target
-from cpg_flow.targets.pedigreeinfo import PedigreeInfo
-from cpg_flow.targets.types import Sex
+from cpg_flow.targets import PedigreeInfo, Sex, Target
 
 
 class SequencingGroup(Target):

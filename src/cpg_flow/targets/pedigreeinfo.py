@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
-from cpg_flow.targets.types import Sex
-from cpg_flow.targets.sequencinggroup import SequencingGroup
+from cpg_flow.targets import SequencingGroup, Sex
 
 
 @dataclass

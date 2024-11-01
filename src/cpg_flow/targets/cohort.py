@@ -24,9 +24,7 @@ import pandas as pd
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 
-from cpg_flow.targets.target import Target
-from cpg_flow.targets.dataset import Dataset
-from cpg_flow.targets.sequencinggroup import SequencingGroup
+from cpg_flow.targets import Target, Dataset, SequencingGroup
 
 
 class Cohort(Target):

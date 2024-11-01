@@ -22,10 +22,7 @@ import pandas as pd
 from cpg_utils import Path
 from cpg_utils.config import get_config
 
-from cpg_flow.targets.target import Target
-from cpg_flow.targets.sequencinggroup import SequencingGroup
-from cpg_flow.targets.dataset import Dataset
-from cpg_flow.targets.cohort import Cohort
+from cpg_flow.targets import Cohort, Dataset, SequencingGroup, Target
 
 
 class MultiCohort(Target):

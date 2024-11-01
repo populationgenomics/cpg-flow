@@ -31,11 +31,7 @@ from cpg_utils.config import dataset_path, get_config, web_url
 
 from cpg_flow.filetypes import AlignmentInput
 
-from cpg_flow.targets.target import Target
-from cpg_flow.targets.sequencinggroup import SequencingGroup
-from cpg_flow.targets.types import Sex
-from cpg_flow.targets.pedigreeinfo import PedigreeInfo
-from cpg_flow.targets.helpers import seq_type_subdir
+from cpg_flow.targets import PedigreeInfo, Sex, SequencingGroup, Target, seq_type_subdir
 
 
 class Dataset(Target):

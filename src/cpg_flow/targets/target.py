@@ -36,7 +36,7 @@ Targets for workflow stages: SequencingGroup, Dataset, Cohort.
 
 import hashlib
 
-from cpg_flow.targets.sequencinggroup import SequencingGroup
+from cpg_flow.targets import SequencingGroup
 
 
 class Target:
