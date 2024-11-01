@@ -78,6 +78,7 @@ dev = [
     "pytest",
     "pytest_mock",
     "ruff",
+    "setuptools>=65.5.1", # Pinned by pip-audit to avoid a vulnerability
     "tenacity",
 ]
 test = ["pytest", "pytest-mock", "coverage"]
