@@ -19,12 +19,13 @@ Example:
 """
 
 import logging
+
 import pandas as pd
 
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 
-from cpg_flow.targets import Target, Dataset, SequencingGroup
+from cpg_flow.targets import Dataset, SequencingGroup, Target
 
 
 class Cohort(Target):
