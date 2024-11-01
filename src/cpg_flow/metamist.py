@@ -19,22 +19,17 @@ from tenacity import (
 
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
-from cpg_workflows.filetypes import (
-    AlignmentInput,
-    BamPath,
-    CramPath,
-    FastqPair,
-    FastqPairs,
-)
-from cpg_workflows.utils import exists
 from metamist import models
 from metamist.apis import AnalysisApi
 from metamist.exceptions import ApiException, ServiceException
 from metamist.graphql import gql, query
 
+from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPair, FastqPairs
+from cpg_flow.utils import exists
+
 GET_SEQUENCING_GROUPS_QUERY = gql(
     """
-        query SGQuery($metamist_proj: String!, $only_sgs: [String!]!, $skip_sgs: [String!]!, $sequencing_type: String!) {
+        query SGQuery($metamist_proj: String!, $only_sgs: [String!]!, $skip_sgs: [String!]!, $sequencing_type: String!){
             project(name: $metamist_proj) {
                 sequencingGroups(id: { in_: $only_sgs, nin: $skip_sgs}, type:  {eq: $sequencing_type}) {
                     id
