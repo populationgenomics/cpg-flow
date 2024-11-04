@@ -1,5 +1,3 @@
-<!-- #region KEEP -->
-
 # How To Write a Test
 Welcome, please enjoy! Testing is all about FUN (Fewer Undiscovered Nastybugs)
 in your code.
@@ -119,5 +117,3 @@ def test_the_thing(tmp_path: Path, default_config: dict[str, Any]):
 
 For more information on fixtures, see the
 [pytest documentation](https://docs.pytest.org/en/stable/fixture.html).
-
-<!-- #endregion KEEP -->
