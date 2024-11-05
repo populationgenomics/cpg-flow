@@ -3,20 +3,6 @@
 #input_cohorts = []
 
 # Datasets to load inputs. If not provided, datasets will be determined
-# automatically based on the input provider implementation:
-#input_datasets = []
-
-# Datasets to skip:
-#skip_datasets = []
-
-# Sequencing groups to skip:
-#skip_sgs = []
-
-# Only process the following sequencing groups:
-#only_sgs = []
-
-# Process the following sequencing groups even if outputs exist:
-#force_sgs = []
 
 # Skip these stages:
 #skip_stages = []
