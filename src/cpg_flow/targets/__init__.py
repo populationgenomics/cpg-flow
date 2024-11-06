@@ -3,7 +3,7 @@ from .cohort import Cohort
 from .dataset import Dataset
 from .helpers import seq_type_subdir
 from .multicohort import MultiCohort
-from .pedigreeinfo import PedigreeInfo
-from .sequencinggroup import SequencingGroup
+from .pedigree_info import PedigreeInfo
+from .sequencing_group import SequencingGroup
 from .target import Target
 from .types import Sex

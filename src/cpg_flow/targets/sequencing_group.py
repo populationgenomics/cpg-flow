@@ -5,7 +5,7 @@ from cpg_utils.config import reference_path
 
 from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPairs, GvcfPath
 from cpg_flow.metamist import Assay
-from cpg_flow.targets import PedigreeInfo, Sex, Target
+from cpg_flow.targets import Dataset, PedigreeInfo, Sex, Target
 
 
 class SequencingGroup(Target):
@@ -15,8 +15,8 @@ class SequencingGroup(Target):
 
     def __init__(
         self,
-        id: str,  # pylint: disable=redefined-builtin
-        dataset: "Dataset",  # type: ignore  # noqa: F821
+        id: str,
+        dataset: "Dataset",
         *,
         sequencing_type: str,
         sequencing_technology: str,
