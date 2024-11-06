@@ -43,7 +43,7 @@ class CramOrBamPath(AlignmentInput, ABC):
             self.index_path = to_path(index_path)
             assert self.index_path.suffix == f".{self.index_ext}"
             self.full_index_suffix = str(self.index_path).replace(
-                str(self.path.with_suffix("")), ""
+                str(self.path.with_suffix("")), "",
             )
         self.reference_assembly = None
         if reference_assembly:
@@ -230,7 +230,7 @@ class FastqPair(AlignmentInput):
         """
         return "".join(
             f'{{{",".join(sorted(set(chars)))}}}' if len(set(chars)) > 1 else chars[0]
-            for chars in zip(str(self.r1), str(self.r2))
+            for chars in zip(str(self.r1), str(self.r2), strict=False)
         )
 
 
@@ -259,5 +259,5 @@ class FastqPairs(list[FastqPair], AlignmentInput):
         """
         return "".join(
             f'{{{",".join(sorted(set(chars)))}}}' if len(set(chars)) > 1 else chars[0]
-            for chars in zip(*[repr(pair) for pair in self])
+            for chars in zip(*[repr(pair) for pair in self], strict=False)
         )

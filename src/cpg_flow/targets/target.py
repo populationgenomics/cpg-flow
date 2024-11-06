@@ -35,8 +35,10 @@ Targets for workflow stages: SequencingGroup, Dataset, Cohort.
 """
 
 import hashlib
+from typing import TYPE_CHECKING
 
-from cpg_flow.targets import SequencingGroup
+if TYPE_CHECKING:
+    from cpg_flow.targets import SequencingGroup
 
 
 class Target:
@@ -51,8 +53,9 @@ class Target:
         self.active: bool = True
 
     def get_sequencing_groups(
-        self, only_active: bool = True
-    ) -> list["SequencingGroup"]:
+        self,
+        only_active: bool = True,
+    ) -> list['SequencingGroup']:
         """
         Get flat list of all sequencing groups corresponding to this target.
         """
@@ -65,15 +68,11 @@ class Target:
         return [s.id for s in self.get_sequencing_groups(only_active=only_active)]
 
     def alignment_inputs_hash(self) -> str:
-        s = " ".join(
-            sorted(
-                " ".join(str(s.alignment_input))
-                for s in self.get_sequencing_groups()
-                if s.alignment_input
-            ),
+        s = ' '.join(
+            sorted(' '.join(str(s.alignment_input)) for s in self.get_sequencing_groups() if s.alignment_input),
         )
         h = hashlib.sha256(s.encode()).hexdigest()[:38]
-        return f"{h}_{len(self.get_sequencing_group_ids())}"
+        return f'{h}_{len(self.get_sequencing_group_ids())}'
 
     @property
     def target_id(self) -> str:
@@ -112,8 +111,4 @@ class Target:
         """
         Map if internal IDs to participant or external IDs, if the latter is provided.
         """
-        return {
-            s.id: s.rich_id
-            for s in self.get_sequencing_groups()
-            if s.participant_id != s.id
-        }
+        return {s.id: s.rich_id for s in self.get_sequencing_groups() if s.participant_id != s.id}

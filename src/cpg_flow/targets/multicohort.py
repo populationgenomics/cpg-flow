@@ -80,7 +80,7 @@ class MultiCohort(Target):
         return cohorts
 
     def get_cohort_by_name(
-        self, name: str, only_active: bool = True
+        self, name: str, only_active: bool = True,
     ) -> Optional["Cohort"]:
         """
         Get cohort by name.
@@ -109,7 +109,7 @@ class MultiCohort(Target):
         return all_datasets
 
     def get_sequencing_groups(
-        self, only_active: bool = True
+        self, only_active: bool = True,
     ) -> list["SequencingGroup"]:
         """
         Gets a flat list of all sequencing groups from all datasets.
@@ -142,7 +142,7 @@ class MultiCohort(Target):
         """
         if d.name in self._datasets_by_name:
             logging.debug(
-                f"Dataset {d.name} already exists in the MultiCohort {self.name}"
+                f"Dataset {d.name} already exists in the MultiCohort {self.name}",
             )
         else:
             # We need create a new dataset to avoid manipulating the cohort dataset at this point
@@ -150,7 +150,7 @@ class MultiCohort(Target):
         return self._datasets_by_name[d.name]
 
     def get_dataset_by_name(
-        self, name: str, only_active: bool = True
+        self, name: str, only_active: bool = True,
     ) -> Optional["Dataset"]:
         """
         Get dataset by name.
@@ -170,7 +170,7 @@ class MultiCohort(Target):
         }
 
     def write_ped_file(
-        self, out_path: Path | None = None, use_participant_id: bool = False
+        self, out_path: Path | None = None, use_participant_id: bool = False,
     ) -> Path:
         """
         Create a PED file for all samples in the whole MultiCohort
@@ -181,8 +181,8 @@ class MultiCohort(Target):
         for sequencing_group in self.get_sequencing_groups():
             datas.append(
                 sequencing_group.pedigree.get_ped_dict(
-                    use_participant_id=use_participant_id
-                )
+                    use_participant_id=use_participant_id,
+                ),
             )
         if not datas:
             raise ValueError(f"No pedigree data found for {self.name}")

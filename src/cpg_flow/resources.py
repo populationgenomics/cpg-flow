@@ -165,11 +165,10 @@ class MachineType:
         """
         if ncpu > self.max_ncpu:
             raise ValueError(
-                f"Requesting more cores than available on {self.name} machine: {ncpu}>{self.max_ncpu}"
+                f"Requesting more cores than available on {self.name} machine: {ncpu}>{self.max_ncpu}",
             )
 
-        if ncpu < MachineType.min_cpu:
-            ncpu = MachineType.min_cpu
+        ncpu = max(ncpu, MachineType.min_cpu)
 
         # round to the nearest power of 2 (15 -> 16, 16 -> 16, 17 -> 32)
         return int(pow(2, math.ceil(math.log2(ncpu))))

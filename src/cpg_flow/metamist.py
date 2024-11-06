@@ -5,9 +5,10 @@ Helpers to communicate with the metamist database.
 import logging
 import pprint
 import traceback
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 
 from gql.transport.exceptions import TransportServerError
 from tenacity import (
@@ -190,7 +191,7 @@ class AnalysisType(Enum):
         d = {v.value: v for v in AnalysisType}
         if val not in d:
             raise MetamistError(
-                f"Unrecognised analysis type {val}. Available: {list(d.keys())}"
+                f"Unrecognised analysis type {val}. Available: {list(d.keys())}",
             )
         return d[val.lower()]
 
@@ -480,7 +481,7 @@ class Assay:
 
         if missing_keys:
             raise ValueError(
-                f"Cannot parse metamist Sequence {data}. Missing keys: {missing_keys}"
+                f"Cannot parse metamist Sequence {data}. Missing keys: {missing_keys}",
             )
 
         assay_type = str(data["type"])
@@ -530,7 +531,7 @@ def parse_reads(  # pylint: disable=too-many-return-statements
         raise MetamistError(f'{sequencing_group_id}: no "meta/reads" field in meta')
     if not reads_type:
         raise MetamistError(
-            f'{sequencing_group_id}: no "meta/reads_type" field in meta'
+            f'{sequencing_group_id}: no "meta/reads_type" field in meta',
         )
     supported_types = ("fastq", "bam", "cram")
     if reads_type not in supported_types:
@@ -541,7 +542,7 @@ def parse_reads(  # pylint: disable=too-many-return-statements
     if reads_type in ("bam", "cram"):
         if len(reads_data) > 1:
             raise MetamistError(
-                f"{sequencing_group_id}: supporting only single bam/cram input"
+                f"{sequencing_group_id}: supporting only single bam/cram input",
             )
 
         location = reads_data[0]["location"]
@@ -554,7 +555,7 @@ def parse_reads(  # pylint: disable=too-many-return-statements
             location = location.replace("-main-upload/", "-test-upload/")
         if check_existence and not exists(location):
             raise MetamistError(
-                f"{sequencing_group_id}: ERROR: index file does not exist: {location}"
+                f"{sequencing_group_id}: ERROR: index file does not exist: {location}",
             )
 
         # Index:
@@ -570,11 +571,11 @@ def parse_reads(  # pylint: disable=too-many-return-statements
                 )
             if get_config()["workflow"]["access_level"] == "test":
                 index_location = index_location.replace(
-                    "-main-upload/", "-test-upload/"
+                    "-main-upload/", "-test-upload/",
                 )
             if check_existence and not exists(index_location):
                 raise MetamistError(
-                    f"{sequencing_group_id}: ERROR: index file does not exist: {index_location}"
+                    f"{sequencing_group_id}: ERROR: index file does not exist: {index_location}",
                 )
 
         if location.endswith(".cram"):

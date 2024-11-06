@@ -150,7 +150,7 @@ class Dataset(Target):
         """
         if id in self._sequencing_group_by_id:
             logging.debug(
-                f"SequencingGroup {id} already exists in the dataset {self.name}"
+                f"SequencingGroup {id} already exists in the dataset {self.name}",
             )
             return self._sequencing_group_by_id[id]
 
@@ -184,7 +184,7 @@ class Dataset(Target):
         """
         if s.id in self._sequencing_group_by_id:
             logging.debug(
-                f"SequencingGroup {s.id} already exists in the dataset {self.name}"
+                f"SequencingGroup {s.id} already exists in the dataset {self.name}",
             )
         else:
             self._sequencing_group_by_id[s.id] = s
@@ -196,7 +196,7 @@ class Dataset(Target):
         return self._sequencing_group_by_id.get(id)
 
     def get_sequencing_groups(
-        self, only_active: bool = True
+        self, only_active: bool = True,
     ) -> list["SequencingGroup"]:
         """
         Get dataset's sequencing groups. Include only "active" sequencing groups, unless only_active=False
@@ -223,7 +223,7 @@ class Dataset(Target):
         return f"{self.name}: "
 
     def write_ped_file(
-        self, out_path: Path | None = None, use_participant_id: bool = False
+        self, out_path: Path | None = None, use_participant_id: bool = False,
     ) -> Path:
         """
         Create a PED file for all sequencing groups
@@ -233,8 +233,8 @@ class Dataset(Target):
         for sequencing_group in self.get_sequencing_groups():
             datas.append(
                 sequencing_group.pedigree.get_ped_dict(
-                    use_participant_id=use_participant_id
-                )
+                    use_participant_id=use_participant_id,
+                ),
             )
         if not datas:
             raise ValueError(f"No pedigree data found for {self.name}")

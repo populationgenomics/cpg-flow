@@ -40,7 +40,7 @@ def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
 
     # phenotypes are managed badly here, need a cleaner way to get them into the SG
     update_dict(
-        metadata, {"phenotypes": sg_data["sample"]["participant"].get("phenotypes", {})}
+        metadata, {"phenotypes": sg_data["sample"]["participant"].get("phenotypes", {})},
     )
 
     # create a SequencingGroup object from its component parts
@@ -72,7 +72,7 @@ def get_multicohort() -> MultiCohort:
     custom_cohort_ids = config_retrieve(["workflow", "input_cohorts"], [])
     if custom_cohort_ids and input_datasets:
         raise ValueError(
-            "Cannot use both custom_cohort_ids and input_datasets in the same workflow"
+            "Cannot use both custom_cohort_ids and input_datasets in the same workflow",
         )
 
     # NOTE: When configuring sgs in the config is deprecated, this will be removed.
@@ -171,7 +171,7 @@ def _populate_alignment_inputs(
         sequencing_group.alignment_input = alignment_input
     else:
         logging.warning(
-            f'No reads found for sequencing group {sequencing_group.id} of type {entry["type"]}'
+            f'No reads found for sequencing group {sequencing_group.id} of type {entry["type"]}',
         )
 
     return None

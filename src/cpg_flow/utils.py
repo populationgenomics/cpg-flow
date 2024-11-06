@@ -27,7 +27,7 @@ ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
 
 
 def get_logger(
-    logger_name: str | None = None, log_level: int = logging.INFO
+    logger_name: str | None = None, log_level: int = logging.INFO,
 ) -> logging.Logger:
     """
     creates a logger instance (so as not to use the root logger)
@@ -51,7 +51,7 @@ def get_logger(
 
         # create format string for messages
         formatter = logging.Formatter(
-            "%(asctime)s - %(name)s %(lineno)d - %(levelname)s - %(message)s"
+            "%(asctime)s - %(name)s %(lineno)d - %(levelname)s - %(message)s",
         )
         stream_handler.setFormatter(formatter)
 
@@ -264,7 +264,7 @@ def timestamp(rand_suffix_len: int = 5) -> str:
     result = time.strftime("%Y_%m%d_%H%M")
     if rand_suffix_len:
         rand_bit = "".join(
-            choices(string.ascii_uppercase + string.digits, k=rand_suffix_len)
+            choices(string.ascii_uppercase + string.digits, k=rand_suffix_len),
         )
         result += f"_{rand_bit}"
     return result

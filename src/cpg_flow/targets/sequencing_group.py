@@ -85,7 +85,7 @@ class SequencingGroup(Target):
                 ai_tag += f"{len(self.alignment_input)}FQS"
             else:
                 raise ValueError(
-                    f"Unrecognised alignment input type {type(self.alignment_input)}"
+                    f"Unrecognised alignment input type {type(self.alignment_input)}",
                 )
 
         ext_id = f"|{self._external_id}" if self._external_id else ""
@@ -158,7 +158,7 @@ class SequencingGroup(Target):
         return self.id
 
     def get_sequencing_groups(
-        self, only_active: bool = True
+        self, only_active: bool = True,
     ) -> list["SequencingGroup"]:
         """
         Implementing the abstract method.

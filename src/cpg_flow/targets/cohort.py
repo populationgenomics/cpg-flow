@@ -50,7 +50,7 @@ class Cohort(Target):
         return self.name
 
     def write_ped_file(
-        self, out_path: Path | None = None, use_participant_id: bool = False
+        self, out_path: Path | None = None, use_participant_id: bool = False,
     ) -> Path:
         """
         Create a PED file for all samples in the whole cohort
@@ -60,8 +60,8 @@ class Cohort(Target):
         for sequencing_group in self.get_sequencing_groups():
             datas.append(
                 sequencing_group.pedigree.get_ped_dict(
-                    use_participant_id=use_participant_id
-                )
+                    use_participant_id=use_participant_id,
+                ),
             )
         if not datas:
             raise ValueError(f"No pedigree data found for {self.name}")
@@ -80,7 +80,7 @@ class Cohort(Target):
         return out_path
 
     def add_sequencing_group_object(
-        self, s: "SequencingGroup", allow_duplicates: bool = True
+        self, s: "SequencingGroup", allow_duplicates: bool = True,
     ):
         """
         Add a sequencing group object to the Cohort.
@@ -91,17 +91,17 @@ class Cohort(Target):
         if s.id in self._sequencing_group_by_id:
             if allow_duplicates:
                 logging.debug(
-                    f"SequencingGroup {s.id} already exists in the Cohort {self.name}"
+                    f"SequencingGroup {s.id} already exists in the Cohort {self.name}",
                 )
                 return self._sequencing_group_by_id[s.id]
             else:
                 raise ValueError(
-                    f"SequencingGroup {s.id} already exists in the Cohort {self.name}"
+                    f"SequencingGroup {s.id} already exists in the Cohort {self.name}",
                 )
         self._sequencing_group_by_id[s.id] = s
 
     def get_sequencing_groups(
-        self, only_active: bool = True
+        self, only_active: bool = True,
     ) -> list["SequencingGroup"]:
         """
         Gets a flat list of all sequencing groups from all datasets.
