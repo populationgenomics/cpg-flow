@@ -63,18 +63,11 @@ def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
     return sequencing_group
 
 
-def actual_get_multicohort() -> MultiCohort:
-    """Return the multicohort object"""
-    global _multicohort
-    if not _multicohort:
-        _multicohort = create_multicohort()
-    return _multicohort
-
-
 def get_multicohort() -> MultiCohort:
     """
     Return the cohort or multicohort object based on the workflow configuration.
     """
+    # TODO: Investigate if we actually require `input_datasets`
     input_datasets = config_retrieve(["workflow", "input_datasets"], [])
     custom_cohort_ids = config_retrieve(["workflow", "input_cohorts"], [])
     if custom_cohort_ids and input_datasets:
@@ -83,11 +76,9 @@ def get_multicohort() -> MultiCohort:
         )
 
     # NOTE: When configuring sgs in the config is deprecated, this will be removed.
-    if custom_cohort_ids:
-        if not isinstance(custom_cohort_ids, list):
-            raise ValueError("input_cohorts must be a list")
-        return actual_get_multicohort()
-    return get_multicohort()
+    if custom_cohort_ids and not isinstance(custom_cohort_ids, list):
+        raise ValueError("input_cohorts must be a list")
+    return create_multicohort()
 
 
 def create_multicohort() -> MultiCohort:
