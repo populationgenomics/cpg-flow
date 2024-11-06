@@ -1,23 +1,20 @@
 """
-This module defines the `Dataset` class, which represents a CPG dataset.
+This module defines the `Dataset` class, which is part of the cpg-flow system for managing genomic datasets.
 
-A CPG dataset corresponds to:
+The `Dataset` class allows for:
+- Managing sequencing groups: Creation, addition, and retrieval of sequencing groups that are part of the dataset.
+- Storage path management: Provides methods to access primary, temporary, analysis, and web storage paths.
+- Integration with configurations: Uses configuration settings for workflow management and path handling.
+- Pedigree file generation: Capable of generating PED files based on sequencing group data for genetic analysis.
+- Logging: Utilizes logging to track and debug sequencing group additions.
 
-Classes:
-    Dataset: Represents a CPG dataset, providing methods to manage sequencing groups and storage paths.
+Key Components:
+- Dataset: Main class that represents a genomic dataset and extends from the `Target` class.
+- SequencingGroup Management: Methods to handle sequencing groups related to the dataset.
+- Path Handling: Methods to derive and handle various storage paths.
+- Configurations: Integration with external configuration settings for flexible dataset handling.
 
-Imports:
-    logging
-    Optional from typing
-    pandas as pd
-    Path, to_path from cpg_utils
-    dataset_path, get_config, web_url from cpg_utils.config
-    AlignmentInput from cpg_flow.filetypes
-    Target from cpg_flow.targets.target
-    SequencingGroup from cpg_flow.targets.sequencinggroup
-    Sex from cpg_flow.targets.types
-    PedigreeInfo from cpg_flow.targets.pedigreeinfo
-    seq_type_subdir from cpg_flow.targets.helpers
+This module is essential for organizing and managing data resources in CPG-related projects.
 
 """
 

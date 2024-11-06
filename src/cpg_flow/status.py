@@ -47,7 +47,7 @@ def complete_analysis_job(
 
     # if SG IDs are listed in the meta, remove them
     # these are already captured in the sg_ids list
-    _drop_sgids = meta.pop("sequencing_groups", None)
+    meta.pop("sequencing_groups", None)
 
     # if the meta has a remove_sgids key, we need to remove those from the list
     # this occurs when samples are soft-filtered from joint-calls in a way that
@@ -82,11 +82,9 @@ def complete_analysis_job(
         meta=meta,
     )
     if a_id is None:
-        print(
-            f"Creation of Analysis failed (type={analysis_type}, output={output}) in {project_name}"
-        )
-        # What Exception should we raise here?
-        raise
+        _msg = f"Creation of Analysis failed (type={analysis_type}, output={output}) in {project_name}"
+        print(_msg)
+        raise ConnectionError(_msg)
     else:
         print(
             f"Created Analysis(id={a_id}, type={analysis_type}, output={output}) in {project_name}"
