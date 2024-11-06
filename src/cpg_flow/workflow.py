@@ -18,7 +18,6 @@ main.py, which provides a way to choose a workflow using a CLI argument.
 
 import functools
 import logging
-from abc import ABC, abstractmethod
 from collections import defaultdict
 from enum import Enum
 from typing import Callable, Optional, Union
@@ -30,10 +29,10 @@ from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
 
 from .inputs import get_multicohort
-from .stage import Stage, StageDecorator, StageInput, StageOutput
+from .stage import Stage, StageDecorator, StageOutput
 from .status import MetamistStatusReporter
-from .targets import Cohort, Dataset, MultiCohort, SequencingGroup
-from .utils import ExpectedResultT, slugify, timestamp
+from .targets import Cohort, MultiCohort
+from .utils import slugify, timestamp
 
 
 def path_walk(expected, collected: set | None = None) -> set[Path]:
@@ -533,152 +532,3 @@ class Workflow:
             f'{error}: {", ".join(target_ids)}'
             for error, target_ids in targets_by_error.items()
         ]
-
-
-class SequencingGroupStage(Stage[SequencingGroup], ABC):
-    """
-    Sequencing Group level stage.
-    """
-
-    @abstractmethod
-    def expected_outputs(self, sequencing_group: SequencingGroup) -> ExpectedResultT:
-        """
-        Override to declare expected output paths.
-        """
-
-    @abstractmethod
-    def queue_jobs(
-        self, sequencing_group: SequencingGroup, inputs: StageInput
-    ) -> StageOutput | None:
-        """
-        Override to add Hail Batch jobs.
-        """
-        pass
-
-    def queue_for_multicohort(
-        self, multicohort: MultiCohort
-    ) -> dict[str, StageOutput | None]:
-        """
-        Plug the stage into the workflow.
-        """
-        output_by_target: dict[str, StageOutput | None] = dict()
-        if not (active_sgs := multicohort.get_sequencing_groups()):
-            all_sgs = len(multicohort.get_sequencing_groups(only_active=False))
-            logging.warning(
-                f"{len(active_sgs)}/{all_sgs} usable (active=True) SGs found in the multicohort. "
-                "Check that input_cohorts` or `input_datasets` are provided and not skipped",
-            )
-            return output_by_target
-
-        # evaluate_stuff en masse
-        for sequencing_group in active_sgs:
-            action = self._get_action(sequencing_group)
-            output_by_target[sequencing_group.target_id] = self._queue_jobs_with_checks(
-                sequencing_group, action
-            )
-        return output_by_target
-
-
-class DatasetStage(Stage, ABC):
-    """
-    Dataset-level stage
-    """
-
-    @abstractmethod
-    def expected_outputs(self, dataset: Dataset) -> ExpectedResultT:
-        """
-        Override to declare expected output paths.
-        """
-
-    @abstractmethod
-    def queue_jobs(self, dataset: Dataset, inputs: StageInput) -> StageOutput | None:
-        """
-        Override to add Hail Batch jobs.
-        """
-        pass
-
-    def queue_for_multicohort(
-        self, multicohort: MultiCohort
-    ) -> dict[str, StageOutput | None]:
-        """
-        Plug the stage into the workflow.
-        """
-        output_by_target: dict[str, StageOutput | None] = dict()
-        # iterate directly over the datasets in this multicohort
-        for dataset_i, dataset in enumerate(multicohort.get_datasets()):
-            action = self._get_action(dataset)
-            logging.info(f"{self.name}: #{dataset_i + 1}/{dataset} [{action.name}]")
-            output_by_target[dataset.target_id] = self._queue_jobs_with_checks(
-                dataset, action
-            )
-        return output_by_target
-
-
-class CohortStage(Stage, ABC):
-    """
-    Cohort-level stage (all datasets of a workflow run).
-    """
-
-    @abstractmethod
-    def expected_outputs(self, cohort: Cohort) -> ExpectedResultT:
-        """
-        Override to declare expected output paths.
-        """
-
-    @abstractmethod
-    def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
-        """
-        Override to add Hail Batch jobs.
-        """
-        pass
-
-    def queue_for_multicohort(
-        self, multicohort: MultiCohort
-    ) -> dict[str, StageOutput | None]:
-        """
-        Plug the stage into the workflow.
-        """
-        output_by_target: dict[str, StageOutput | None] = dict()
-        for cohort in multicohort.get_cohorts():
-            action = self._get_action(cohort)
-            logging.info(f"{self.name}: {cohort} [{action.name}]")
-            output_by_target[cohort.target_id] = self._queue_jobs_with_checks(
-                cohort, action
-            )
-        return output_by_target
-
-
-class MultiCohortStage(Stage, ABC):
-    """
-    MultiCohort-level stage (all datasets of a workflow run).
-    """
-
-    @abstractmethod
-    def expected_outputs(self, multicohort: MultiCohort) -> ExpectedResultT:
-        """
-        Override to declare expected output paths.
-        """
-        pass
-
-    @abstractmethod
-    def queue_jobs(
-        self, multicohort: MultiCohort, inputs: StageInput
-    ) -> StageOutput | None:
-        """
-        Override to add Hail Batch jobs.
-        """
-        pass
-
-    def queue_for_multicohort(
-        self, multicohort: MultiCohort
-    ) -> dict[str, StageOutput | None]:
-        """
-        Plug the stage into the workflow.
-        """
-        output_by_target: dict[str, StageOutput | None] = dict()
-        action = self._get_action(multicohort)
-        logging.info(f"{self.name}: {multicohort} [{action.name}]")
-        output_by_target[multicohort.target_id] = self._queue_jobs_with_checks(
-            multicohort, action
-        )
-        return output_by_target

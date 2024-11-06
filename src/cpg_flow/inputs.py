@@ -24,7 +24,7 @@ _multicohort: MultiCohort | None = None
 
 def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
     """
-    This is moved here just to reduce code duplication
+    Adds a sequencing group to a dataset.
 
     Args:
         dataset (Dataset): Dataset to insert the SequencingGroup into
@@ -33,9 +33,11 @@ def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
     Returns:
         The SequencingGroup object
     """
+    # TODO: The update_dict calls are a bit of a hack, we should be able to do this in a cleaner way
     # scavenge all the metadata from the SG dict (SG/Sample/Participant)
     metadata = sg_data.get("meta", {})
     update_dict(metadata, sg_data["sample"]["participant"].get("meta", {}))
+
     # phenotypes are managed badly here, need a cleaner way to get them into the SG
     update_dict(
         metadata, {"phenotypes": sg_data["sample"]["participant"].get("phenotypes", {})}
