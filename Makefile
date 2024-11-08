@@ -1,3 +1,6 @@
+remove-deps:
+	rm -f requirements/main.txt requirements/dev.txt requirements/test.txt
+
 update-deps:
 	pre-commit autoupdate
 	python -m pip install --upgrade pip-tools pip wheel
@@ -15,10 +18,11 @@ install-deps:
 	python -m pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt -e .
 	python -m pip check
 
-update: update-deps compile-deps install-deps
+update: update-deps install-deps
+compile: compile-deps install-deps
 
 init: install-deps
 	pre-commit install
 	pre-commit install --hook-type commit-msg
 
-.PHONY: update-deps compile-deps install-deps update init
+.PHONY: update-deps compile-deps install-deps update compile init
