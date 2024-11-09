@@ -83,7 +83,6 @@ def _common(mocker, tmp_path):
         return m
 
     mocker.patch('cpg_flow.inputs.create_multicohort', mock_create_cohort)
-    # mocker.patch('cpg_flow.inputs.get_multicohort', mock_create_cohort)
 
 
 def test_status_reporter(mocker: MockFixture, tmp_path):

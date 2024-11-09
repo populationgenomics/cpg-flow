@@ -1,0 +1,406 @@
+{
+    "py/object": "cpg_workflows.targets.MultiCohort",
+    "forced": false,
+    "active": true,
+    "name": "fewgenomes",
+    "_cohorts_by_name": {
+        "fewgenomes": {
+            "py/object": "cpg_workflows.targets.Cohort",
+            "forced": false,
+            "active": true,
+            "name": "fewgenomes",
+            "analysis_dataset": {
+                "py/object": "cpg_workflows.targets.Dataset",
+                "forced": false,
+                "active": true,
+                "_sequencing_group_by_id": {},
+                "name": "fewgenomes"
+            },
+            "_sequencing_group_by_id": {
+                "CPGLCL17": {
+                    "py/object": "cpg_workflows.targets.SequencingGroup",
+                    "forced": false,
+                    "active": true,
+                    "id": "CPGLCL17",
+                    "name": "CPGLCL17",
+                    "_external_id": "NA12340",
+                    "sequencing_type": "genome",
+                    "sequencing_technology": "short-read",
+                    "sequencing_platform": "illumina",
+                    "dataset": {
+                        "py/object": "cpg_workflows.targets.Dataset",
+                        "forced": false,
+                        "active": true,
+                        "_sequencing_group_by_id": {
+                            "CPGLCL17": {
+                                "py/id": 6
+                            },
+                            "CPGLCL25": {
+                                "py/object": "cpg_workflows.targets.SequencingGroup",
+                                "forced": false,
+                                "active": true,
+                                "id": "CPGLCL25",
+                                "name": "CPGLCL25",
+                                "_external_id": "NA12489",
+                                "sequencing_type": "genome",
+                                "sequencing_technology": "short-read",
+                                "sequencing_platform": "illumina",
+                                "dataset": {
+                                    "py/id": 7
+                                },
+                                "_participant_id": "14",
+                                "meta": {
+                                    "sample_meta": "is_fun",
+                                    "participant_metadata": "number_fourteen",
+                                    "phenotypes": {}
+                                },
+                                "pedigree": {
+                                    "py/object": "cpg_workflows.targets.PedigreeInfo",
+                                    "sequencing_group": {
+                                        "py/id": 9
+                                    },
+                                    "sex": {
+                                        "py/reduce": [
+                                            {
+                                                "py/type": "cpg_workflows.targets.Sex"
+                                            },
+                                            {
+                                                "py/tuple": [
+                                                    2
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "fam_id": "124",
+                                    "phenotype": 1,
+                                    "dad": null,
+                                    "mom": null
+                                },
+                                "alignment_input": {
+                                    "py/object": "cpg_workflows.filetypes.FastqPairs",
+                                    "py/seq": [
+                                        {
+                                            "py/object": "cpg_workflows.filetypes.FastqPair",
+                                            "r1": {
+                                                "py/object": "cloudpathlib.gs.gspath.GSPath",
+                                                "py/state": {
+                                                    "_handle": null,
+                                                    "_str": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                    "_url": {
+                                                        "py/object": "urllib.parse.ParseResult",
+                                                        "py/newargs": {
+                                                            "py/tuple": [
+                                                                "gs",
+                                                                "cpg-fewgenomes-main",
+                                                                "/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                                "",
+                                                                "",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "py/seq": [
+                                                            "gs",
+                                                            "cpg-fewgenomes-main",
+                                                            "/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                            "",
+                                                            "",
+                                                            ""
+                                                        ]
+                                                    },
+                                                    "_path": {
+                                                        "py/reduce": [
+                                                            {
+                                                                "py/type": "pathlib.PurePosixPath"
+                                                            },
+                                                            {
+                                                                "py/tuple": [
+                                                                    "/",
+                                                                    "cpg-fewgenomes-main",
+                                                                    "HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "_dirty": false
+                                                }
+                                            },
+                                            "r2": {
+                                                "py/object": "cloudpathlib.gs.gspath.GSPath",
+                                                "py/state": {
+                                                    "_handle": null,
+                                                    "_str": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                    "_url": {
+                                                        "py/object": "urllib.parse.ParseResult",
+                                                        "py/newargs": {
+                                                            "py/tuple": [
+                                                                "gs",
+                                                                "cpg-fewgenomes-main",
+                                                                "/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                                "",
+                                                                "",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "py/seq": [
+                                                            "gs",
+                                                            "cpg-fewgenomes-main",
+                                                            "/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                            "",
+                                                            "",
+                                                            ""
+                                                        ]
+                                                    },
+                                                    "_path": {
+                                                        "py/reduce": [
+                                                            {
+                                                                "py/type": "pathlib.PurePosixPath"
+                                                            },
+                                                            {
+                                                                "py/tuple": [
+                                                                    "/",
+                                                                    "cpg-fewgenomes-main",
+                                                                    "HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "_dirty": false
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "assays": {
+                                    "py/tuple": [
+                                        {
+                                            "py/object": "cpg_workflows.metamist.Assay",
+                                            "id": "2",
+                                            "sequencing_group_id": "CPGLCL25",
+                                            "meta": {
+                                                "platform": "30x Illumina PCR-Free",
+                                                "concentration": "25",
+                                                "fluid_x_tube_id": "220405_FS29",
+                                                "reference_genome": "Homo sapiens (b37d5)",
+                                                "volume": "100",
+                                                "reads_type": "fastq",
+                                                "batch": "1",
+                                                "reads": [
+                                                    [
+                                                        {
+                                                            "location": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                            "basename": "HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                            "class": "File",
+                                                            "checksum": null,
+                                                            "size": 997128,
+                                                            "datetime_added": null
+                                                        },
+                                                        {
+                                                            "location": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                            "basename": "HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                            "class": "File",
+                                                            "checksum": null,
+                                                            "size": 1035385,
+                                                            "datetime_added": null
+                                                        }
+                                                    ]
+                                                ],
+                                                "sequencing_type": "genome",
+                                                "sequencing_technology": "short-read",
+                                                "sequencing_platform": "illumina"
+                                            },
+                                            "assay_type": "sequencing",
+                                            "alignment_input": null
+                                        }
+                                    ]
+                                },
+                                "gvcf": null,
+                                "cram": null
+                            }
+                        },
+                        "name": "fewgenomes"
+                    },
+                    "_participant_id": "8",
+                    "meta": {
+                        "sg_meta": "is_fun",
+                        "participant_meta": "is_here",
+                        "phenotypes": {}
+                    },
+                    "pedigree": {
+                        "py/object": "cpg_workflows.targets.PedigreeInfo",
+                        "sequencing_group": {
+                            "py/id": 6
+                        },
+                        "sex": {
+                            "py/reduce": [
+                                {
+                                    "py/type": "cpg_workflows.targets.Sex"
+                                },
+                                {
+                                    "py/tuple": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        },
+                        "fam_id": "123",
+                        "phenotype": 1,
+                        "dad": {
+                            "py/id": 9
+                        },
+                        "mom": null
+                    },
+                    "alignment_input": {
+                        "py/object": "cpg_workflows.filetypes.FastqPairs",
+                        "py/seq": [
+                            {
+                                "py/object": "cpg_workflows.filetypes.FastqPair",
+                                "r1": {
+                                    "py/object": "cloudpathlib.gs.gspath.GSPath",
+                                    "py/state": {
+                                        "_handle": null,
+                                        "_str": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                        "_url": {
+                                            "py/object": "urllib.parse.ParseResult",
+                                            "py/newargs": {
+                                                "py/tuple": [
+                                                    "gs",
+                                                    "cpg-fewgenomes-main",
+                                                    "/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                    "",
+                                                    "",
+                                                    ""
+                                                ]
+                                            },
+                                            "py/seq": [
+                                                "gs",
+                                                "cpg-fewgenomes-main",
+                                                "/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                "",
+                                                "",
+                                                ""
+                                            ]
+                                        },
+                                        "_path": {
+                                            "py/reduce": [
+                                                {
+                                                    "py/type": "pathlib.PurePosixPath"
+                                                },
+                                                {
+                                                    "py/tuple": [
+                                                        "/",
+                                                        "cpg-fewgenomes-main",
+                                                        "HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "_dirty": false
+                                    }
+                                },
+                                "r2": {
+                                    "py/object": "cloudpathlib.gs.gspath.GSPath",
+                                    "py/state": {
+                                        "_handle": null,
+                                        "_str": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                        "_url": {
+                                            "py/object": "urllib.parse.ParseResult",
+                                            "py/newargs": {
+                                                "py/tuple": [
+                                                    "gs",
+                                                    "cpg-fewgenomes-main",
+                                                    "/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                    "",
+                                                    "",
+                                                    ""
+                                                ]
+                                            },
+                                            "py/seq": [
+                                                "gs",
+                                                "cpg-fewgenomes-main",
+                                                "/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                "",
+                                                "",
+                                                ""
+                                            ]
+                                        },
+                                        "_path": {
+                                            "py/reduce": [
+                                                {
+                                                    "py/type": "pathlib.PurePosixPath"
+                                                },
+                                                {
+                                                    "py/tuple": [
+                                                        "/",
+                                                        "cpg-fewgenomes-main",
+                                                        "HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "_dirty": false
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "assays": {
+                        "py/tuple": [
+                            {
+                                "py/object": "cpg_workflows.metamist.Assay",
+                                "id": "1",
+                                "sequencing_group_id": "CPGLCL17",
+                                "meta": {
+                                    "platform": "30x Illumina PCR-Free",
+                                    "concentration": "25",
+                                    "fluid_x_tube_id": "220405_FS28",
+                                    "reference_genome": "Homo sapiens (b37d5)",
+                                    "volume": "100",
+                                    "reads_type": "fastq",
+                                    "batch": "1",
+                                    "reads": [
+                                        [
+                                            {
+                                                "location": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                "basename": "HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
+                                                "class": "File",
+                                                "checksum": null,
+                                                "size": 1070968,
+                                                "datetime_added": null
+                                            },
+                                            {
+                                                "location": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                "basename": "HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
+                                                "class": "File",
+                                                "checksum": null,
+                                                "size": 1123158,
+                                                "datetime_added": null
+                                            }
+                                        ]
+                                    ],
+                                    "sequencing_type": "genome",
+                                    "sequencing_technology": "short-read",
+                                    "sequencing_platform": "illumina"
+                                },
+                                "assay_type": "sequencing",
+                                "alignment_input": null
+                            }
+                        ]
+                    },
+                    "gvcf": null,
+                    "cram": null
+                },
+                "CPGLCL25": {
+                    "py/id": 9
+                }
+            }
+        }
+    },
+    "_datasets_by_name": {
+        "fewgenomes": {
+            "py/id": 7
+        }
+    },
+    "analysis_dataset": {
+        "py/id": 7
+    }
+}

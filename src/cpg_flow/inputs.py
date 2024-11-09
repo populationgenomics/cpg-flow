@@ -75,6 +75,7 @@ def get_multicohort() -> MultiCohort:
     # NOTE: When configuring sgs in the config is deprecated, this will be removed.
     if custom_cohort_ids and not isinstance(custom_cohort_ids, list):
         raise ValueError('input_cohorts must be a list')
+
     return create_multicohort()
 
 
