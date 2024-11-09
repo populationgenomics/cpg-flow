@@ -60,7 +60,7 @@ class StageOutput:
 
     def __init__(
         self,
-        target: 'Target',
+        target: Target,
         data: ExpectedResultT = None,
         jobs: Sequence[Job | None] | Job | None = None,
         meta: dict | None = None,
@@ -229,7 +229,7 @@ class StageInput:
 
     def _get(
         self,
-        target: 'Target',
+        target: Target,
         stage: StageDecorator,
     ):
         if not self._outputs_by_target_by_stage.get(stage.__name__):
@@ -246,7 +246,7 @@ class StageInput:
 
     def as_path(
         self,
-        target: 'Target',
+        target: Target,
         stage: StageDecorator,
         key: str | None = None,
     ) -> Path:
@@ -259,7 +259,7 @@ class StageInput:
 
     def as_str(
         self,
-        target: 'Target',
+        target: Target,
         stage: StageDecorator,
         key: str | None = None,
     ) -> str:
@@ -270,14 +270,14 @@ class StageInput:
         res = self._get(target=target, stage=stage)
         return res.as_str(key)
 
-    def as_dict(self, target: 'Target', stage: StageDecorator) -> dict[str, Path]:
+    def as_dict(self, target: Target, stage: StageDecorator) -> dict[str, Path]:
         """
         Get a dict of paths for a specific target and stage
         """
         res = self._get(target=target, stage=stage)
         return res.as_dict()
 
-    def get_jobs(self, target: 'Target') -> list[Job]:
+    def get_jobs(self, target: Target) -> list[Job]:
         """
         Get list of jobs that the next stage would depend on.
         """
@@ -457,7 +457,7 @@ class Stage(Generic[TargetT], ABC):
 
     def make_outputs(
         self,
-        target: 'Target',
+        target: Target,
         data: ExpectedResultT = None,
         jobs: Sequence[Job | None] | Job | None = None,
         meta: dict | None = None,

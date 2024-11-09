@@ -80,7 +80,12 @@ dev = [
     "setuptools>=65.5.1", # Pinned by pip-audit to avoid a vulnerability
     "tenacity",
 ]
-test = ["pytest", "pytest-mock", "coverage"]
+test = [
+    "coverage",
+    "networkx",
+    "pytest",
+    "pytest-mock",
+]
 
 [tool.mypy]
 

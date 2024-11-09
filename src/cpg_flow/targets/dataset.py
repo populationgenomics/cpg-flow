@@ -19,7 +19,7 @@ This module is essential for organizing and managing data resources in CPG-relat
 """
 
 import logging
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 
@@ -27,7 +27,10 @@ from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path, get_config, web_url
 
 from cpg_flow.filetypes import AlignmentInput
-from cpg_flow.targets import PedigreeInfo, SequencingGroup, Sex, Target, seq_type_subdir
+from cpg_flow.targets import SequencingGroup, Target, seq_type_subdir
+
+if TYPE_CHECKING:
+    from cpg_flow.targets import PedigreeInfo, Sex
 
 
 class Dataset(Target):
@@ -50,7 +53,7 @@ class Dataset(Target):
         self.active = True
 
     @staticmethod
-    def create(name: str) -> "Dataset":
+    def create(name: str) -> 'Dataset':
         """
         Create a dataset.
         """
@@ -65,7 +68,7 @@ class Dataset(Target):
         return f'Dataset("{self.name}", {len(self.get_sequencing_groups())} sequencing groups)'
 
     def __str__(self):
-        return f"{self.name} ({len(self.get_sequencing_groups())} sequencing groups)"
+        return f'{self.name} ({len(self.get_sequencing_groups())} sequencing groups)'
 
     def prefix(self, **kwargs) -> Path:
         """
@@ -87,7 +90,7 @@ class Dataset(Target):
             dataset_path(
                 seq_type_subdir(),
                 dataset=self.name,
-                category="tmp",
+                category='tmp',
                 **kwargs,
             ),
         )
@@ -100,7 +103,7 @@ class Dataset(Target):
             dataset_path(
                 seq_type_subdir(),
                 dataset=self.name,
-                category="analysis",
+                category='analysis',
                 **kwargs,
             ),
         )
@@ -114,7 +117,7 @@ class Dataset(Target):
             dataset_path(
                 seq_type_subdir(),
                 dataset=self.name,
-                category="web",
+                category='web',
                 **kwargs,
             ),
         )
@@ -138,23 +141,21 @@ class Dataset(Target):
         external_id: str | None = None,
         participant_id: str | None = None,
         meta: dict | None = None,
-        sex: Optional["Sex"] = None,
-        pedigree: Optional["PedigreeInfo"] = None,
+        sex: Optional['Sex'] = None,
+        pedigree: Optional['PedigreeInfo'] = None,
         alignment_input: AlignmentInput | None = None,
-    ) -> "SequencingGroup":
+    ) -> 'SequencingGroup':
         """
         Create a new sequencing group and add it to the dataset.
         """
         if id in self._sequencing_group_by_id:
             logging.debug(
-                f"SequencingGroup {id} already exists in the dataset {self.name}",
+                f'SequencingGroup {id} already exists in the dataset {self.name}',
             )
             return self._sequencing_group_by_id[id]
 
-        force_sgs = get_config()["workflow"].get("force_sgs", set())
-        forced = (
-            id in force_sgs or external_id in force_sgs or participant_id in force_sgs
-        )
+        force_sgs = get_config()['workflow'].get('force_sgs', set())
+        forced = id in force_sgs or external_id in force_sgs or participant_id in force_sgs
 
         s = SequencingGroup(
             id=id,
@@ -173,7 +174,7 @@ class Dataset(Target):
         self._sequencing_group_by_id[id] = s
         return s
 
-    def add_sequencing_group_object(self, s: "SequencingGroup"):
+    def add_sequencing_group_object(self, s: 'SequencingGroup'):
         """
         Add a sequencing group object to the dataset.
         Args:
@@ -181,35 +182,32 @@ class Dataset(Target):
         """
         if s.id in self._sequencing_group_by_id:
             logging.debug(
-                f"SequencingGroup {s.id} already exists in the dataset {self.name}",
+                f'SequencingGroup {s.id} already exists in the dataset {self.name}',
             )
         else:
             self._sequencing_group_by_id[s.id] = s
 
-    def get_sequencing_group_by_id(self, id: str) -> Optional["SequencingGroup"]:
+    def get_sequencing_group_by_id(self, id: str) -> Optional['SequencingGroup']:
         """
         Get sequencing group by ID
         """
         return self._sequencing_group_by_id.get(id)
 
     def get_sequencing_groups(
-        self, only_active: bool = True,
-    ) -> list["SequencingGroup"]:
+        self,
+        only_active: bool = True,
+    ) -> list['SequencingGroup']:
         """
         Get dataset's sequencing groups. Include only "active" sequencing groups, unless only_active=False
         """
-        return [
-            s
-            for sid, s in self._sequencing_group_by_id.items()
-            if (s.active or not only_active)
-        ]
+        return [s for sid, s in self._sequencing_group_by_id.items() if (s.active or not only_active)]
 
     def get_job_attrs(self) -> dict:
         """
         Attributes for Hail Batch job.
         """
         return {
-            "dataset": self.name,
+            'dataset': self.name,
             # 'sequencing_groups': self.get_sequencing_group_ids(),
         }
 
@@ -217,10 +215,12 @@ class Dataset(Target):
         """
         Prefix job names.
         """
-        return f"{self.name}: "
+        return f'{self.name}: '
 
     def write_ped_file(
-        self, out_path: Path | None = None, use_participant_id: bool = False,
+        self,
+        out_path: Path | None = None,
+        use_participant_id: bool = False,
     ) -> Path:
         """
         Create a PED file for all sequencing groups
@@ -234,13 +234,13 @@ class Dataset(Target):
                 ),
             )
         if not datas:
-            raise ValueError(f"No pedigree data found for {self.name}")
+            raise ValueError(f'No pedigree data found for {self.name}')
         df = pd.DataFrame(datas)
 
         if out_path is None:
-            out_path = self.tmp_prefix() / "ped" / f"{self.alignment_inputs_hash()}.ped"
+            out_path = self.tmp_prefix() / 'ped' / f'{self.alignment_inputs_hash()}.ped'
 
-        if not get_config()["workflow"].get("dry_run", False):
-            with out_path.open("w") as fp:
-                df.to_csv(fp, sep="\t", index=False, header=False)
+        if not get_config()['workflow'].get('dry_run', False):
+            with out_path.open('w') as fp:
+                df.to_csv(fp, sep='\t', index=False, header=False)
         return out_path

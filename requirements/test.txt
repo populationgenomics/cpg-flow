@@ -206,6 +206,8 @@ multidict==6.1.0
     #   yarl
 nest-asyncio==1.6.0
     # via hail
+networkx==3.4.2
+    # via cpg-flow (pyproject.toml)
 numpy==1.26.4
     # via
     #   bokeh
