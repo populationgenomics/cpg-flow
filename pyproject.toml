@@ -87,9 +87,6 @@ test = [
     "pytest-mock",
 ]
 
-[tool.mypy]
-
-
 [tool.ruff]
 line-length = 120
 
