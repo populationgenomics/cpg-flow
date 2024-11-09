@@ -46,12 +46,13 @@ cpg_flow = "stub"
 def _common(mocker, tmp_path):
     conf = TOML.format(directory=tmp_path)
 
+    # TODO: remove the dependency on seqr_loader.toml for this test
     set_config(
         conf,
         tmp_path / 'config.toml',
         merge_with=[
-            Path(to_path(__file__).parent.parent / 'cpg_flow' / 'defaults.toml'),
-            Path(to_path(__file__).parent.parent / 'configs' / 'defaults' / 'seqr_loader.toml'),
+            Path(to_path(__file__).parent.parent / 'src' / 'cpg_flow' / 'defaults.toml'),
+            Path(to_path(__file__).parent.parent / 'tests' / 'assets' / 'seqr_loader.toml'),
         ],
     )
 
@@ -81,7 +82,8 @@ def _common(mocker, tmp_path):
         c.add_sequencing_group_object(add_sg('CPGBB', external_id='SAMPLE2'))
         return m
 
-    mocker.patch('cpg_flow.inputs.deprecated_create_cohort', mock_create_cohort)
+    mocker.patch('cpg_flow.inputs.create_multicohort', mock_create_cohort)
+    # mocker.patch('cpg_flow.inputs.get_multicohort', mock_create_cohort)
 
 
 def test_status_reporter(mocker: MockFixture, tmp_path):

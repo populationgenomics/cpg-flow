@@ -36,7 +36,7 @@ backend = 'local'
 """
 
 
-def mock_deprecated_create_cohort() -> MultiCohort:
+def mock_create_create_cohort() -> MultiCohort:
     m = MultiCohort()
     c = m.create_cohort('fewgenomes')
     ds = m.create_dataset('my_dataset')
@@ -55,7 +55,7 @@ def mock_deprecated_create_cohort() -> MultiCohort:
     return m
 
 
-@mock.patch('cpg_flow.inputs.deprecated_create_cohort', mock_deprecated_create_cohort)
+@mock.patch('cpg_flow.inputs.create_multicohort', mock_create_create_cohort)
 def test_workflow(tmp_path):
     """
     Testing running a workflow from a mock cohort.
