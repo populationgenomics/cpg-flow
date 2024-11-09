@@ -5,7 +5,7 @@ Test building stages DAG.
 from collections.abc import Callable
 from typing import Union
 
-from cpg_flow.stage import (
+from cpg_flow import (
     CohortStage,
     DatasetStage,
     MultiCohortStage,
@@ -15,13 +15,15 @@ from cpg_flow.stage import (
     stage,
 )
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup
-from cpg_flow.workflow import run_workflow as _run_workflow
+from cpg_flow.workflow import (
+    run_workflow as _run_workflow,
+)
 from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path
 from cpg_utils.hail_batch import get_batch
 
 
-def add_sg(ds, id, external_id: str):
+def add_sg(ds, id, external_id: str) -> SequencingGroup:
     sg = ds.add_sequencing_group(
         id=id,
         external_id=external_id,
@@ -35,11 +37,10 @@ def add_sg(ds, id, external_id: str):
 def mock_cohort() -> MultiCohort:
     m = MultiCohort()
     c = m.create_cohort('fewgenomes')
-    ds = c.create_dataset('my_dataset')
-    m_ds = m.add_dataset(ds)
+    d = m.create_dataset('my_dataset')
 
-    sg1 = add_sg(ds, 'CPGAA', external_id='SAMPLE1')
-    m_ds.add_sequencing_group_object(sg1)
+    sg1 = add_sg(d, 'CPGAA', external_id='SAMPLE1')
+    c.add_sequencing_group_object(sg1)
     return m
 
 
@@ -47,22 +48,20 @@ def mock_multidataset_cohort() -> MultiCohort:
     m = MultiCohort()
     c = m.create_cohort('fewgenomes')
 
-    ds = c.create_dataset('my_dataset')
-    m_ds_1 = m.add_dataset(ds)
+    ds = m.create_dataset('my_dataset')
 
     sg1 = add_sg(ds, 'CPGAA', external_id='SAMPLE1')
     sg2 = add_sg(ds, 'CPGBB', external_id='SAMPLE2')
 
-    m_ds_1.add_sequencing_group_object(sg1)
-    m_ds_1.add_sequencing_group_object(sg2)
+    c.add_sequencing_group_object(sg1)
+    c.add_sequencing_group_object(sg2)
 
-    ds2 = c.create_dataset('my_dataset2')
-    m_ds_2 = m.add_dataset(ds2)
+    ds2 = m.create_dataset('my_dataset2')
 
     sg3 = add_sg(ds2, 'CPGCC', external_id='SAMPLE3')
     sg4 = add_sg(ds2, 'CPGDD', external_id='SAMPLE4')
-    m_ds_2.add_sequencing_group_object(sg3)
-    m_ds_2.add_sequencing_group_object(sg4)
+    c.add_sequencing_group_object(sg3)
+    c.add_sequencing_group_object(sg4)
 
     return m
 
@@ -73,29 +72,22 @@ def mock_multicohort() -> MultiCohort:
     # Create a cohort with two datasets
     cohort_a = mc.create_cohort('CohortA')
     # Create a dataset in the cohort (legacy)
-    ds = cohort_a.create_dataset('projecta')
-    # Create a dataset in the multicohort (new)
-    dm1 = mc.add_dataset(ds)
-    # Add sequencing groups to the cohort.dataset AND multicohort.dataset
-    sg1 = add_sg(ds, 'CPGXXXX', external_id='SAMPLE1')
-    sg2 = add_sg(ds, 'CPGAAAA', external_id='SAMPLE2')
-    dm1.add_sequencing_group_object(sg1)
-    dm1.add_sequencing_group_object(sg2)
+    ds = mc.create_dataset('projecta')
 
-    ds2 = cohort_a.create_dataset('projectc')
-    dm2 = mc.add_dataset(ds2)
-    sg3 = add_sg(ds2, 'CPGCCCC', external_id='SAMPLE3')
-    sg4 = add_sg(ds2, 'CPGDDDD', external_id='SAMPLE4')
-    dm2.add_sequencing_group_object(sg3)
-    dm2.add_sequencing_group_object(sg4)
+    # Add sequencing groups to the cohort AND dataset
+    cohort_a.add_sequencing_group_object(add_sg(ds, 'CPGXXXX', external_id='SAMPLE1'))
+    cohort_a.add_sequencing_group_object(add_sg(ds, 'CPGAAAA', external_id='SAMPLE2'))
 
+    # same cohort, samples from a second Dataset
+    ds2 = mc.create_dataset('projectc')
+    cohort_a.add_sequencing_group_object(add_sg(ds2, 'CPGCCCC', external_id='SAMPLE3'))
+    cohort_a.add_sequencing_group_object(add_sg(ds2, 'CPGDDDD', external_id='SAMPLE4'))
+
+    # second cohort, third dataset
     cohort_b = mc.create_cohort('CohortB')
-    ds3 = cohort_b.create_dataset('projectb')
-    dm3 = mc.add_dataset(ds3)
-    sg5 = add_sg(ds3, 'CPGEEEEEE', external_id='SAMPLE5')
-    sg6 = add_sg(ds3, 'CPGFFFFFF', external_id='SAMPLE6')
-    dm3.add_sequencing_group_object(sg5)
-    dm3.add_sequencing_group_object(sg6)
+    ds3 = mc.create_dataset('projectb')
+    cohort_b.add_sequencing_group_object(add_sg(ds3, 'CPGEEEEEE', external_id='SAMPLE5'))
+    cohort_b.add_sequencing_group_object(add_sg(ds3, 'CPGFFFFFF', external_id='SAMPLE6'))
 
     return mc
 
@@ -104,20 +96,9 @@ class TestStage(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> Path:
         return to_path(dataset_path(f'{sequencing_group.id}_{self.name}.tsv'))
 
-    def queue_jobs(
-        self,
-        sequencing_group: SequencingGroup,
-        inputs: StageInput,
-    ) -> StageOutput | None:
-        j = get_batch().new_job(
-            self.name,
-            attributes=self.get_job_attrs(sequencing_group),
-        )
-        return self.make_outputs(
-            sequencing_group,
-            self.expected_outputs(sequencing_group),
-            j,
-        )
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
+        j = get_batch().new_job(self.name, attributes=self.get_job_attrs(sequencing_group))
+        return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), j)
 
 
 class TestDatasetStage(DatasetStage):
@@ -142,11 +123,7 @@ class TestMultiCohortStage(MultiCohortStage):
     def expected_outputs(self, multicohort: MultiCohort) -> Path:
         return to_path(dataset_path(f'{multicohort.name}_{self.name}.tsv'))
 
-    def queue_jobs(
-        self,
-        multicohort: MultiCohort,
-        inputs: StageInput,
-    ) -> StageOutput | None:
+    def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
         j = get_batch().new_job(self.name, attributes=self.get_job_attrs(multicohort))
         return self.make_outputs(multicohort, self.expected_outputs(multicohort), j)
 
@@ -213,12 +190,7 @@ class MultiCohortStage1(TestMultiCohortStage):
     pass
 
 
-StageType = Union[
-    type[TestStage],
-    type[TestDatasetStage],
-    type[TestCohortStage],
-    type[TestMultiCohortStage],
-]
+StageType = Union[type[TestStage], type[TestDatasetStage], type[TestCohortStage], type[TestMultiCohortStage]]
 
 
 def run_workflow(
@@ -226,7 +198,8 @@ def run_workflow(
     cohort_mocker: Callable[..., Cohort | MultiCohort] = mock_cohort,
     stages: list[StageType] | None = None,
 ):
-    mocker.patch('cpg_flow.inputs.create_multicohort', cohort_mocker)
+    mocker.patch('cpg_workflows.inputs.deprecated_create_cohort', cohort_mocker)
+    mocker.patch('cpg_workflows.inputs.actual_get_multicohort', cohort_mocker)
 
     stages = stages or [C, C2]
     _run_workflow(stages)  # type: ignore
