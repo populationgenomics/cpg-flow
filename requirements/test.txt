@@ -9,9 +9,13 @@ aiodns==2.0.0
 aiohappyeyeballs==2.4.3
     # via aiohttp
 aiohttp==3.10.10
-    # via hail
+    # via
+    #   gql
+    #   hail
 aiosignal==1.3.1
     # via aiohttp
+anyio==4.6.2.post1
+    # via gql
 async-timeout==4.0.3
     # via aiohttp
 attrs==24.2.0
@@ -40,6 +44,10 @@ azure-storage-blob==12.23.1
     #   hail
 azure-storage-file-datalake==12.17.0
     # via cloudpathlib
+backoff==2.2.1
+    # via
+    #   gql
+    #   metamist
 bokeh==3.3.4
     # via hail
 boto3==1.35.53
@@ -66,7 +74,9 @@ cffi==1.17.1
 charset-normalizer==3.4.0
     # via requests
 click==8.1.7
-    # via typer
+    # via
+    #   metamist
+    #   typer
 cloudpathlib==0.20.0
     # via cpg-utils
 commonmark==0.9.1
@@ -76,7 +86,9 @@ contourpy==1.3.0
 coverage==7.6.4
     # via cpg-flow (pyproject.toml)
 cpg-utils==5.1.1
-    # via cpg-flow (pyproject.toml)
+    # via
+    #   cpg-flow (pyproject.toml)
+    #   metamist
 cryptography==43.0.3
     # via
     #   azure-identity
@@ -92,7 +104,9 @@ deprecated==1.2.14
 dill==0.3.9
     # via hail
 exceptiongroup==1.2.2
-    # via pytest
+    # via
+    #   anyio
+    #   pytest
 frozendict==2.4.6
     # via cpg-utils
 frozenlist==1.5.0
@@ -105,6 +119,7 @@ google-api-core==2.22.0
     #   google-cloud-core
     #   google-cloud-secret-manager
     #   google-cloud-storage
+    #   metamist
 google-auth==2.35.0
     # via
     #   cpg-utils
@@ -114,6 +129,7 @@ google-auth==2.35.0
     #   google-cloud-secret-manager
     #   google-cloud-storage
     #   hail
+    #   metamist
 google-auth-oauthlib==0.8.0
     # via hail
 google-cloud-core==2.4.1
@@ -133,6 +149,10 @@ googleapis-common-protos==1.65.0
     #   google-api-core
     #   grpc-google-iam-v1
     #   grpcio-status
+gql==3.5.0
+    # via metamist
+graphql-core==3.2.5
+    # via gql
 grpc-google-iam-v1==0.13.1
     # via google-cloud-secret-manager
 grpcio==1.49.1
@@ -146,12 +166,13 @@ grpcio-status==1.48.2
     # via
     #   cpg-flow (pyproject.toml)
     #   google-api-core
-hail==0.2.132
+hail==0.2.133
     # via cpg-flow (pyproject.toml)
-humanize==1.1.0
+humanize==4.11.0
     # via hail
 idna==3.10
     # via
+    #   anyio
     #   requests
     #   yarl
 iniconfig==2.0.0
@@ -173,6 +194,8 @@ jproperties==2.1.2
     # via hail
 markupsafe==3.0.2
     # via jinja2
+metamist==7.5.1
+    # via cpg-flow (pyproject.toml)
 msal==1.31.0
     # via
     #   azure-identity
@@ -261,6 +284,7 @@ pytest-mock==3.14.0
 python-dateutil==2.9.0.post0
     # via
     #   botocore
+    #   metamist
     #   pandas
 python-json-logger==2.0.7
     # via hail
@@ -278,14 +302,19 @@ requests==2.32.3
     #   cpg-utils
     #   google-api-core
     #   google-cloud-storage
+    #   gql
     #   hail
+    #   metamist
     #   msal
     #   msrest
     #   requests-oauthlib
+    #   requests-toolbelt
 requests-oauthlib==2.0.0
     # via
     #   google-auth-oauthlib
     #   msrest
+requests-toolbelt==1.0.0
+    # via gql
 rich==12.6.0
     # via
     #   hail
@@ -304,12 +333,15 @@ six==1.16.0
     #   grpcio
     #   jproperties
     #   python-dateutil
+sniffio==1.3.1
+    # via anyio
 sortedcontainers==2.4.0
     # via hail
 tabulate==0.9.0
     # via
     #   cpg-utils
     #   hail
+    #   metamist
 tenacity==9.0.0
     # via plotly
 toml==0.10.2
@@ -322,12 +354,14 @@ typer==0.12.5
     # via hail
 typing-extensions==4.12.2
     # via
+    #   anyio
     #   azure-core
     #   azure-identity
     #   azure-storage-blob
     #   azure-storage-file-datalake
     #   cloudpathlib
     #   janus
+    #   metamist
     #   multidict
     #   typer
 tzdata==2024.2
@@ -335,6 +369,7 @@ tzdata==2024.2
 urllib3==2.2.3
     # via
     #   botocore
+    #   metamist
     #   requests
 uvloop==0.21.0
     # via hail
@@ -343,4 +378,6 @@ wrapt==1.16.0
 xyzservices==2024.9.0
     # via bokeh
 yarl==1.17.1
-    # via aiohttp
+    # via
+    #   aiohttp
+    #   gql
