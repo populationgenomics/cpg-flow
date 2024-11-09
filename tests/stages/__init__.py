@@ -5,7 +5,7 @@ Test building stages DAG.
 from collections.abc import Callable
 from typing import Union
 
-from cpg_flow import (
+from cpg_flow.stage import (
     CohortStage,
     DatasetStage,
     MultiCohortStage,
