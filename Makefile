@@ -3,26 +3,37 @@ remove-deps:
 
 update-deps:
 	pre-commit autoupdate
-	python -m pip install --upgrade pip-tools pip wheel
-	python -m piptools compile --strip-extras --upgrade --resolver backtracking -o requirements/main.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra dev --upgrade --resolver backtracking -o requirements/dev.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra test --upgrade --resolver backtracking -o requirements/test.txt pyproject.toml
+	uv pip compile --upgrade --resolver backtracking -o requirements/main.txt pyproject.toml
+	uv pip compile --extra dev --upgrade --resolver backtracking -o requirements/dev.txt pyproject.toml
+	uv pip compile --extra test --upgrade --resolver backtracking -o requirements/test.txt pyproject.toml
 
 compile-deps:
-	python -m piptools compile --strip-extras -o requirements/main.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra dev -o requirements/dev.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra test -o requirements/test.txt pyproject.toml
+	uv pip compile -o requirements/main.txt pyproject.toml
+	uv pip compile --extra dev -o requirements/dev.txt pyproject.toml
+	uv pip compile --extra test -o requirements/test.txt pyproject.toml
 
-install-deps:
-	python -m pip install --upgrade pip-tools pip wheel
-	python -m pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt -e .
-	python -m pip check
+install-test:
+	uv pip install -r requirements/test.txt
+
+install-main:
+	uv pip install -r requirements/main.txt
+
+install-dev:
+	uv pip install -r requirements/dev.txt
+
+install-deps: install-dev install-test install-main
+	uv run pip check
+
+init:
+	uv venv --python=python3.10
+	pre-commit install
+	pre-commit install --hook-type commit-msg
+	make compile
+
+activate:
+	uv activate
 
 update: update-deps install-deps
 compile: compile-deps install-deps
 
-init: install-deps
-	pre-commit install
-	pre-commit install --hook-type commit-msg
-
-.PHONY: update-deps compile-deps install-deps update compile init
+.PHONY: activate compile compile-deps init install-deps install-dev install-main install-test remove-deps update update-deps

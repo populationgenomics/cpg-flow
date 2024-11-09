@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cpg-flow"
 description = "CPG Flow API for Hail Batch"
-requires-python = ">=3.10"
+requires-python = "==3.10"
 readme = "README.md"
 license = { "file" = "LICENSE" }
 dynamic = ["version"]
@@ -72,7 +72,6 @@ dev = [
     "cpg-utils>=5.0.11",
     "isort",
     "mypy",
-    "pip-tools",
     "pre-commit",
     "pylint",
     "pytest",
@@ -428,3 +427,11 @@ insecure = false
 [tool.semantic_release.publish]
 dist_glob_patterns = ["dist/*"]
 upload_to_vcs_release = true
+
+[tool.uv]
+dev-dependencies = [
+    "black>=24.10.0",
+    "bump2version>=1.0.1",
+    "pre-commit>=4.0.1",
+    "pylint>=3.3.1",
+]
