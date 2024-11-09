@@ -79,7 +79,7 @@ def set_config(
             f.write(config)
         else:
             raise TypeError(
-                f"Expected config to be a string, dict, or IDictRepresentable, but got {type(config)}"
+                f"Expected config to be a string, dict, or IDictRepresentable, but got {type(config)}",
             )
 
         f.flush()
