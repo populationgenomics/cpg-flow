@@ -5,9 +5,6 @@ Test workflow status reporter.
 import pytest
 from pytest_mock import MockFixture
 
-from cpg_utils import to_path
-from metamist.exceptions import ApiException, ServiceException
-
 from cpg_flow.metamist import (
     Analysis,
     AnalysisStatus,
@@ -16,6 +13,9 @@ from cpg_flow.metamist import (
     MetamistError,
     parse_reads,
 )
+from cpg_utils import to_path
+from metamist.exceptions import ApiException, ServiceException
+
 from tests import set_config
 
 

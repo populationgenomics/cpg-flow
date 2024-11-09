@@ -44,7 +44,7 @@ def test_force_stages(mocker: MockFixture, tmp_path):
     """
 
     # dummy mocking to avoid file system scanning
-    mocker.patch('cpg_workflows.utils.exists_not_cached', lambda *args: True)
+    mocker.patch('cpg_flow.utils.exists_not_cached', lambda *args: True)
     set_config(conf, tmp_path / 'config.toml')
 
     from cpg_utils.hail_batch import get_batch

@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING, Optional
 
-from cpg_utils import Path
-from cpg_utils.config import reference_path
-
 from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPairs, GvcfPath
 from cpg_flow.metamist import Assay
 from cpg_flow.targets import PedigreeInfo, Sex, Target
+from cpg_utils import Path
+from cpg_utils.config import reference_path
 
 if TYPE_CHECKING:
     from cpg_flow.targets import Dataset

@@ -27,13 +27,12 @@ from cloudpathlib import CloudPath
 
 from hailtop.batch.job import Job
 
-from cpg_utils import Path
-from cpg_utils.config import get_config
-from cpg_utils.hail_batch import get_batch
-
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Target
 from cpg_flow.utils import ExpectedResultT, exists
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
+from cpg_utils import Path
+from cpg_utils.config import get_config
+from cpg_utils.hail_batch import get_batch
 
 StageDecorator = Callable[..., 'Stage']
 

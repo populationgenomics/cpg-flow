@@ -91,9 +91,8 @@ def test_dataset_stages(mocker: MockFixture, tmp_path):
     """
     set_config_to_default(tmp_path)
 
-    from cpg_utils.hail_batch import get_batch
-
     from cpg_flow.inputs import get_multicohort
+    from cpg_utils.hail_batch import get_batch
 
     run_workflow(mocker, cohort_mocker=mock_multidataset_cohort, stages=[DatasetStage1])
     print_job_by_stage()
@@ -110,9 +109,8 @@ def test_multiple_dataset_stages(mocker: MockFixture, tmp_path):
 
     set_config_to_default(tmp_path)
 
-    from cpg_utils.hail_batch import get_batch
-
     from cpg_flow.inputs import get_multicohort
+    from cpg_utils.hail_batch import get_batch
 
     run_workflow(mocker, cohort_mocker=mock_multidataset_cohort, stages=[DatasetStage1, DatasetStage2])
     print_job_by_stage()
@@ -132,9 +130,8 @@ def test_mixture_dataset_stage_sg_stage(mocker: MockFixture, tmp_path):
 
     set_config_to_default(tmp_path)
 
-    from cpg_utils.hail_batch import get_batch
-
     from cpg_flow.inputs import get_multicohort
+    from cpg_utils.hail_batch import get_batch
 
     run_workflow(mocker, cohort_mocker=mock_multidataset_cohort, stages=[DatasetStage1, SGStage1])
     print_job_by_stage()
@@ -155,9 +152,8 @@ def test_mixture_of_multiple_dataset_and_sg_stages(mocker: MockFixture, tmp_path
 
     set_config_to_default(tmp_path)
 
-    from cpg_utils.hail_batch import get_batch
-
     from cpg_flow.inputs import get_multicohort
+    from cpg_utils.hail_batch import get_batch
 
     run_workflow(
         mocker,
@@ -187,9 +183,8 @@ def test_depcrecated_cohort_stage_implementation(mocker: MockFixture, tmp_path):
 
     set_config_to_default(tmp_path)
 
-    from cpg_utils.hail_batch import get_batch
-
     from cpg_flow.inputs import get_multicohort
+    from cpg_utils.hail_batch import get_batch
 
     run_workflow(mocker, cohort_mocker=mock_multidataset_cohort, stages=[CohortStage1])
     print_job_by_stage()
@@ -206,9 +201,8 @@ def test_mix_all_stage_types(mocker: MockFixture, tmp_path):
 
     set_config_to_default(tmp_path)
 
-    from cpg_utils.hail_batch import get_batch
-
     from cpg_flow.inputs import get_multicohort
+    from cpg_utils.hail_batch import get_batch
 
     run_workflow(
         mocker,
@@ -257,9 +251,8 @@ def test_mixture_multicohort_and_other_stages(mocker: MockFixture, tmp_path):
 
     set_config_to_default(tmp_path)
 
-    from cpg_utils.hail_batch import get_batch
-
     from cpg_flow.inputs import MultiCohort, get_multicohort
+    from cpg_utils.hail_batch import get_batch
 
     run_workflow(
         mocker,

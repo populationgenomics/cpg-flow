@@ -8,9 +8,8 @@ from collections.abc import Callable
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
 
+from cpg_flow.targets import Target
 from cpg_utils.config import get_config
-
-from .targets import Target
 
 
 def complete_analysis_job(
@@ -36,8 +35,8 @@ def complete_analysis_job(
         tolerate_missing (bool): if True, allow missing output
     """
 
+    from cpg_flow.metamist import AnalysisStatus, get_metamist
     from cpg_utils import to_path
-    from cpg_workflows.metamist import AnalysisStatus, get_metamist
 
     assert isinstance(output, str)
     output_cloudpath = to_path(output)

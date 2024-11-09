@@ -36,7 +36,7 @@ def test_the_thing():
         config=config,
         path="/tmp/config.toml",
         merge_with=[
-            Path(__file__).parent.parent / 'cpg_workflows' / 'defaults.toml',
+            Path(__file__).parent.parent / 'src' / 'cpg_flow' / 'defaults.toml',
             Path(__file__).parent.parent / 'configs' / 'defaults' / "gatk_sv.toml",
         ]
     )

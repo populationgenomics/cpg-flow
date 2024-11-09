@@ -347,7 +347,7 @@ cpg = [
     "analysis_runner",
     "cpg_infra",
     "cpg_utils",
-    "cpg_workflows",
+    "cpg_flow",
     "gnomad",
     "hail_scripts",
     "metamist",

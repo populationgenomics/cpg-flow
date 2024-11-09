@@ -23,11 +23,10 @@ from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 
-from cpg_utils import Path, to_path
-from cpg_utils.config import dataset_path, get_config, web_url
-
 from cpg_flow.filetypes import AlignmentInput
 from cpg_flow.targets import SequencingGroup, Target, seq_type_subdir
+from cpg_utils import Path, to_path
+from cpg_utils.config import dataset_path, get_config, web_url
 
 if TYPE_CHECKING:
     from cpg_flow.targets import PedigreeInfo, Sex

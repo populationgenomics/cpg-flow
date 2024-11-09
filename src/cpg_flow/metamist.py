@@ -18,15 +18,14 @@ from tenacity import (
     wait_exponential,
 )
 
+from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPair, FastqPairs
+from cpg_flow.utils import exists
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 from metamist import models
 from metamist.apis import AnalysisApi
 from metamist.exceptions import ApiException, ServiceException
 from metamist.graphql import gql, query
-
-from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPair, FastqPairs
-from cpg_flow.utils import exists
 
 GET_SEQUENCING_GROUPS_QUERY = gql(
     """

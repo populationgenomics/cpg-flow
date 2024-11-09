@@ -19,10 +19,9 @@ from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 
+from cpg_flow.targets import Cohort, Dataset, Target
 from cpg_utils import Path
 from cpg_utils.config import get_config
-
-from cpg_flow.targets import Cohort, Dataset, Target
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup

@@ -3,7 +3,7 @@
 """
 Test how Hail Batch attaches disks to instances. Motivation: job.storage(...) option
 does not directly translate into available_storage value that you can see in job logs.
-The `cpg_workflows.resources` module solves this problem by adding adjustments to the
+The `cpg_flow.resources` module solves this problem by adding adjustments to the
 requested storage, and this script runs some tests to determine those adjustments.
 Additionally, when a larger storage is requested than available on a worker by default,
 Hail Batch would attempt to attach an external disk. We want to determine at what
@@ -18,12 +18,12 @@ from cpg_utils.hail_batch import get_batch
 def main():
     """Test how Hail Batch attaches disks to instances."""
     update_dict(
-        get_config()["workflow"],
+        get_config()['workflow'],
         {
-            "name": "test_attach_disk",
-            "dataset": "fewgenomes",
-            "access_level": "test",
-            "datasets": ["fewgenomes"],
+            'name': 'test_attach_disk',
+            'dataset': 'fewgenomes',
+            'access_level': 'test',
+            'datasets': ['fewgenomes'],
         },
     )
     b = get_batch()
@@ -33,18 +33,18 @@ def main():
         ncpu: int | None = None,
         memory: float | None = None,
     ):
-        j = b.new_job(f"Disk {storage}G")
-        j.storage(f"{storage}G")
+        j = b.new_job(f'Disk {storage}G')
+        j.storage(f'{storage}G')
 
         if ncpu:
-            j.name += f" ncpu={ncpu}"
+            j.name += f' ncpu={ncpu}'
             j.cpu(ncpu)
 
         if memory:
-            j.name += f" memory={memory}G"
-            j.memory(f"{memory}G")
+            j.name += f' memory={memory}G'
+            j.memory(f'{memory}G')
 
-        j.command(f"sleep {60*6}")
+        j.command(f'sleep {60*6}')
         return j
 
     for _ in range(16):
@@ -53,5 +53,5 @@ def main():
     b.run(wait=False)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

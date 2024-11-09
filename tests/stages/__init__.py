@@ -5,10 +5,6 @@ Test building stages DAG.
 from collections.abc import Callable
 from typing import Union
 
-from cpg_utils import Path, to_path
-from cpg_utils.config import dataset_path
-from cpg_utils.hail_batch import get_batch
-
 from cpg_flow.stage import (
     CohortStage,
     DatasetStage,
@@ -20,6 +16,9 @@ from cpg_flow.stage import (
 )
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup
 from cpg_flow.workflow import run_workflow as _run_workflow
+from cpg_utils import Path, to_path
+from cpg_utils.config import dataset_path
+from cpg_utils.hail_batch import get_batch
 
 
 def add_sg(ds, id, external_id: str):
@@ -227,8 +226,7 @@ def run_workflow(
     cohort_mocker: Callable[..., Cohort | MultiCohort] = mock_cohort,
     stages: list[StageType] | None = None,
 ):
-    mocker.patch('cpg_workflows.inputs.deprecated_create_cohort', cohort_mocker)
-    mocker.patch('cpg_workflows.inputs.actual_get_multicohort', cohort_mocker)
+    mocker.patch('cpg_flow.inputs.create_multicohort', cohort_mocker)
 
     stages = stages or [C, C2]
     _run_workflow(stages)  # type: ignore

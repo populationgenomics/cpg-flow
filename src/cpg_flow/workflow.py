@@ -25,14 +25,13 @@ from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
 
-from cpg_utils import Path
-from cpg_utils.config import get_config
-from cpg_utils.hail_batch import get_batch, reset_batch
-
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
 from cpg_flow.utils import slugify, timestamp
+from cpg_utils import Path
+from cpg_utils.config import get_config
+from cpg_utils.hail_batch import get_batch, reset_batch
 
 if TYPE_CHECKING:
     from cpg_flow.stage import Stage, StageDecorator, StageOutput
