@@ -2,6 +2,7 @@
 Test reading inputs into a Cohort object.
 """
 
+import json
 import logging
 import re
 
@@ -91,547 +92,12 @@ def _custom_cohort_config(tmp_path) -> str:
 
 # endregion CONFIG MOCKS
 
-# region SG MOCKS
+# region DATA MOCKS
 
 
-def mock_get_sgs(*args, **kwargs) -> list[dict]:  # pylint: disable=unused-argument
-    return [
-        {
-            'id': 'CPGLCL17',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'genome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA12340',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': 'Male',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'reads': [
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1070968,
-                                'datetime_added': None,
-                            },
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1123158,
-                                'datetime_added': None,
-                            },
-                        ],
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGLCL25',
-            'meta': {'sample_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'genome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA12489',
-                'participant': {
-                    'id': 2,
-                    'externalId': '14',
-                    'reportedSex': None,
-                    'meta': {'participant_metadata': 'number_fourteen'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 2,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS29',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'reads': [
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 997128,
-                                'datetime_added': None,
-                            },
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1035385,
-                                'datetime_added': None,
-                            },
-                        ],
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-    ]
-
-
-def mock_get_sgs_with_missing_reads(*args, **kwargs) -> list[dict]:  # pylint: disable=unused-argument
-    return [
-        {
-            'id': 'CPGLCL17',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'genome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA12340',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': 'Male',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'reads': [
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1070968,
-                                'datetime_added': None,
-                            },
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1123158,
-                                'datetime_added': None,
-                            },
-                        ],
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGLCL25',
-            'meta': {'sample_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'genome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA12489',
-                'participant': {
-                    'id': 2,
-                    'externalId': '14',
-                    'reportedSex': None,
-                    'meta': {'participant_metadata': 'number_fourteen'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 2,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS29',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-    ]
-
-
-def mock_get_sgs_with_mixed_reads(*args, **kwargs) -> list[dict]:  # pylint: disable=unused-argument
-    return [
-        {
-            'id': 'CPGccc',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'genome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA12340',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': 'Male',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'reads': [
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1070968,
-                                'datetime_added': None,
-                            },
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'basename': 'HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1123158,
-                                'datetime_added': None,
-                            },
-                        ],
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGbbb',
-            'meta': {'sample_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'genome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA12489',
-                'participant': {
-                    'id': 2,
-                    'externalId': '14',
-                    'reportedSex': None,
-                    'meta': {'participant_metadata': 'number_fourteen'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 2,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS29',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGaaa',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'exome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA1000',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': 'Male',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'reads': [
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/exomeexample_r1.fastq.gz',
-                                'basename': 'exomeexample_r1.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1070968,
-                                'datetime_added': None,
-                            },
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/exomeexample_r2.fastq.gz',
-                                'basename': 'exomeexample_r2.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1123158,
-                                'datetime_added': None,
-                            },
-                        ],
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-    ]
-
-
-def mock_get_sgs_by_cohort(*args, **kwargs) -> list[dict]:
-    return [
-        {
-            'id': 'CPGXXXX',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'technology': 'short-read',
-            'type': 'genome',
-            'sample': {
-                'project': {
-                    'name': 'projecta',
-                },
-                'externalId': 'NA12340',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': 'Male',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGAAAA',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'technology': 'short-read',
-            'type': 'genome',
-            'sample': {
-                'project': {
-                    'name': 'projectb',
-                },
-                'externalId': 'NA12489',
-                'participant': {
-                    'id': 2,
-                    'externalId': '14',
-                    'reportedSex': None,
-                    'meta': {'participant_metadata': 'number_fourteen'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 2,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS29',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-    ]
-
-
-def mock_get_sgs_with_unknown_data(*args, **kwargs) -> list[dict]:  # pylint: disable=unused-argument
-    return [
-        {
-            'id': 'CPGccc',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'genome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA12340',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': 'Female',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'reads': [],
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGaaa',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'type': 'exome',
-            'technology': 'short-read',
-            'sample': {
-                'project': {
-                    'name': 'fewgenomes',
-                },
-                'externalId': 'NA1000',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': None,
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                        'reads': [
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/exomeexample_r1.fastq.gz',
-                                'basename': 'exomeexample_r1.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1070968,
-                                'datetime_added': None,
-                            },
-                            {
-                                'location': 'gs://cpg-fewgenomes-main/exomeexample_r2.fastq.gz',
-                                'basename': 'exomeexample_r2.fastq.gz',
-                                'class': 'File',
-                                'checksum': None,
-                                'size': 1123158,
-                                'datetime_added': None,
-                            },
-                        ],
-                        'sequencing_type': 'genome',
-                        'sequencing_technology': 'short-read',
-                        'sequencing_platform': 'illumina',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-    ]
-
-
-# endregion SG MOCKS
-
-# region OTHER MOCKS
+def load_mock_data(file_path: str) -> list[dict]:
+    with open(file_path, 'r') as file:
+        return json.load(file)
 
 
 def mock_get_analysis_by_sgs(*args, **kwargs) -> dict:
@@ -663,21 +129,22 @@ def mock_get_pedigree(*args, **kwargs):  # pylint: disable=unused-argument
     ]
 
 
-# endregion OTHER MOCKS
-
-
-def mock_get_cohorts(cohort_id: str, *args, **kwargs) -> list[dict]:
+def mock_get_cohort_sgs(cohort_id: str, *args, **kwargs) -> list[dict]:
     cohorts = {
-        'COH1': mock_get_sgs(),
-        'COH2': mock_get_sgs_with_missing_reads(),
-        'COH3': mock_get_sgs_with_mixed_reads(),
-        'COH4': mock_get_sgs_with_unknown_data(),
+        'COH1': load_mock_data('tests/assets/test_cohort/COH1.json'),
+        'COH2': load_mock_data('tests/assets/test_cohort/COH2.json'),
+        'COH3': load_mock_data('tests/assets/test_cohort/COH3.json'),
+        'COH4': load_mock_data('tests/assets/test_cohort/COH4.json'),
+        'COH5': load_mock_data('tests/assets/test_cohort/COH5.json'),
     }
 
     if cohort_id not in cohorts.keys():
         raise MetamistError(f"Error fetching cohort: The provided cohort ID was not valid: '{cohort_id}'")
 
     return cohorts[cohort_id]
+
+
+# endregion DATA MOCKS
 
 
 def test_no_input_cohorts(mocker: MockFixture, tmp_path, caplog):
@@ -701,7 +168,7 @@ def test_input_cohorts_dont_exist(mocker: MockFixture, tmp_path, caplog):
     missing_cohort_id = 'COH09876543'
     set_config(_cohort_config(tmp_path, cohort_ids=[missing_cohort_id]), tmp_path / 'config.toml')
 
-    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
     # Assert the value error is raised
     from cpg_flow.inputs import get_multicohort
@@ -733,10 +200,10 @@ def test_cohort(mocker: MockFixture, tmp_path, caplog):
 
     mocker.patch('cpg_flow.metamist.Metamist.get_ped_entries', mock_get_pedigree)
 
-    mocker.patch('cpg_flow.metamist.Metamist.get_sg_entries', mock_get_sgs)
+    mocker.patch('cpg_flow.metamist.Metamist.get_sg_entries', mock_get_cohort_sgs('COH1'))
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
     caplog.set_level(logging.WARNING)
 
@@ -792,14 +259,6 @@ def test_cohort(mocker: MockFixture, tmp_path, caplog):
     assert multicohort.get_datasets()[0]._sequencing_group_by_id['CPGLCL17'].id == 'CPGLCL17'
     assert multicohort.get_datasets()[0]._sequencing_group_by_id['CPGLCL25'].id == 'CPGLCL25'
 
-    # Test reads
-    # assert test_sg.alignment_input_by_seq_type['genome'][0].r1 == CloudPath(
-    #     'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz'
-    # )
-    # assert test_sg2.alignment_input_by_seq_type['genome'][0].r2 == CloudPath(
-    #     'gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS29_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz'
-    # )
-
 
 def test_missing_reads(mocker: MockFixture, tmp_path):
     """
@@ -814,11 +273,11 @@ def test_missing_reads(mocker: MockFixture, tmp_path):
 
     mocker.patch(
         'cpg_flow.metamist.Metamist.get_sg_entries',
-        mock_get_sgs_with_missing_reads,
+        mock_get_cohort_sgs('COH1'),
     )
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
     # from cpg_flow.filetypes import BamPath
     from cpg_flow.inputs import get_multicohort
@@ -886,11 +345,11 @@ def test_mixed_reads(mocker: MockFixture, tmp_path, caplog):
 
     mocker.patch(
         'cpg_flow.metamist.Metamist.get_sg_entries',
-        mock_get_sgs_with_mixed_reads,
+        mock_get_cohort_sgs('COH3'),
     )
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
     from cpg_flow.inputs import get_multicohort
 
@@ -931,11 +390,11 @@ def test_unknown_data(mocker: MockFixture, tmp_path, caplog):
 
     mocker.patch(
         'cpg_flow.metamist.Metamist.get_sg_entries',
-        mock_get_sgs_with_mixed_reads,
+        mock_get_cohort_sgs('COH3'),
     )
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
     from cpg_flow.inputs import get_multicohort
     from cpg_flow.targets import Sex
@@ -963,7 +422,7 @@ def test_custom_cohort(mocker: MockFixture, tmp_path, monkeypatch):
 
     def mock_query(query, variables):
         # Mocking the return value of the query function
-        return {'cohorts': [{'sequencingGroups': mock_get_sgs_by_cohort()}]}
+        return {'cohorts': [{'sequencingGroups': mock_get_cohort_sgs('COH5')}]}
 
     # Patching the query function to mock the GraphQL query
     monkeypatch.setattr('cpg_flow.metamist.query', mock_query)
