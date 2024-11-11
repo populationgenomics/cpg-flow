@@ -4,8 +4,6 @@ on:
   # publishing only to main pushes and manual dispatch with `if`s in specific steps.
   pull_request:
   push:
-    branches:
-      - main
 
 jobs:
   test:
