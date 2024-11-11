@@ -64,19 +64,18 @@ def get_multicohort() -> MultiCohort:
     """
     Return the cohort or multicohort object based on the workflow configuration.
     """
-    # TODO: Investigate if we actually require `input_datasets`
-    input_datasets = config_retrieve(['workflow', 'input_datasets'], [])
-    custom_cohort_ids = config_retrieve(['workflow', 'input_cohorts'], [])
+    input_datasets = config_retrieve(['workflow', 'input_datasets'], None)
+    custom_cohort_ids = config_retrieve(['workflow', 'input_cohorts'], None)
 
     if input_datasets:
         raise ValueError('Argument input_datasets is deprecated, use input_cohorts instead')
 
-    if len(custom_cohort_ids) <= 0:
+    if isinstance(custom_cohort_ids, list) and len(custom_cohort_ids) <= 0:
         raise ValueError('No custom_cohort_ids found in the config')
 
     # NOTE: When configuring sgs in the config is deprecated, this will be removed.
     if custom_cohort_ids and not isinstance(custom_cohort_ids, list):
-        raise ValueError('input_cohorts must be a list')
+        raise ValueError('Argument input_cohorts must be a list')
 
     return create_multicohort()
 

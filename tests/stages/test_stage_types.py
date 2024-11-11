@@ -34,7 +34,6 @@ def get_config(tmp_path) -> str:
     dataset = 'fewgenomes'
     sequencing_type = 'genome'
     driver_image = 'stub'
-    input_datasets = ['fewgenomes']
 
     check_inputs = false
     check_intermediates = false

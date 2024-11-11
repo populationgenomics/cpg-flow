@@ -507,7 +507,7 @@ def get_cohort_sgs(cohort_id: str) -> list[dict]:
     if len(entries['cohorts']) != 1:
         raise MetamistError('We only support one cohort at a time currently')
 
-    if entries['data'] is None and 'errors' in entries:
+    if entries.get('data') is None and 'errors' in entries:
         message = entries['errors'][0]['message']
         raise MetamistError(f'Error fetching cohort: {message}')
 

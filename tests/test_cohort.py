@@ -19,12 +19,14 @@ LOGGER = logging.getLogger(__name__)
 # region CONFIG MOCKS
 
 
-def _cohort_config(tmp_path, cohort_ids: list[str] = [], input_datasets: list[str] = []) -> str:
-    if cohort_ids:
+def _cohort_config(tmp_path, cohort_ids: list[str] | None = None, input_datasets: list[str] | None = None) -> str:
+    cohort_ids_string, input_datasets_string = '', ''
+
+    if cohort_ids is not None:
         cohort_ids = [f"'{cohort_id}'" for cohort_id in cohort_ids]
         cohort_ids_string = 'input_cohorts = [' + ', '.join(cohort_ids) + ']'
 
-    if input_datasets:
+    if input_datasets is not None:
         input_datasets = [f"'{dataset}'" for dataset in input_datasets]
         input_datasets_string = 'input_datasets = [' + ', '.join(input_datasets) + ']'
 
@@ -34,8 +36,8 @@ def _cohort_config(tmp_path, cohort_ids: list[str] = [], input_datasets: list[st
     access_level = 'test'
     dataset = 'fewgenomes'
     sequencing_type = 'genome'
-    {input_datasets_string if len(input_datasets) > 0 else ''}
-    {cohort_ids_string if len(cohort_ids) > 0 else ''}
+    {input_datasets_string if input_datasets is not None else ''}
+    {cohort_ids_string if cohort_ids is not None else ''}
 
     check_inputs = false
     check_intermediates = false
@@ -684,7 +686,7 @@ def test_no_input_cohorts(mocker: MockFixture, tmp_path, caplog):
     The code should error out with a helpful message and return None
     """
     # This config will have no 'input_cohorts' argument
-    set_config(_cohort_config(tmp_path), tmp_path / 'config.toml')
+    set_config(_cohort_config(tmp_path, cohort_ids=[]), tmp_path / 'config.toml')
 
     # Assert the value error is raised
     from cpg_flow.inputs import get_multicohort
@@ -699,7 +701,7 @@ def test_input_cohorts_dont_exist(mocker: MockFixture, tmp_path, caplog):
     missing_cohort_id = 'COH09876543'
     set_config(_cohort_config(tmp_path, cohort_ids=[missing_cohort_id]), tmp_path / 'config.toml')
 
-    mocker.patch('cpg_flow.metamist.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
 
     # Assert the value error is raised
     from cpg_flow.inputs import get_multicohort
@@ -734,7 +736,7 @@ def test_cohort(mocker: MockFixture, tmp_path, caplog):
     mocker.patch('cpg_flow.metamist.Metamist.get_sg_entries', mock_get_sgs)
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.metamist.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
 
     caplog.set_level(logging.WARNING)
 
@@ -816,7 +818,7 @@ def test_missing_reads(mocker: MockFixture, tmp_path):
     )
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.metamist.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
 
     # from cpg_flow.filetypes import BamPath
     from cpg_flow.inputs import get_multicohort
@@ -888,7 +890,7 @@ def test_mixed_reads(mocker: MockFixture, tmp_path, caplog):
     )
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.metamist.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
 
     from cpg_flow.inputs import get_multicohort
 
@@ -933,7 +935,7 @@ def test_unknown_data(mocker: MockFixture, tmp_path, caplog):
     )
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
-    mocker.patch('cpg_flow.metamist.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
 
     from cpg_flow.inputs import get_multicohort
     from cpg_flow.targets import Sex

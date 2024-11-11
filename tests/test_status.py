@@ -52,7 +52,7 @@ def _common(mocker, tmp_path):
         tmp_path / 'config.toml',
         merge_with=[
             Path(to_path(__file__).parent.parent / 'src' / 'cpg_flow' / 'defaults.toml'),
-            Path(to_path(__file__).parent.parent / 'tests' / 'assets' / 'seqr_loader.toml'),
+            Path(to_path(__file__).parent.parent / 'src' / 'cpg_flow' / 'seqr_loader.toml'),
         ],
     )
 
