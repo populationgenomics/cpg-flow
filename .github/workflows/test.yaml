@@ -34,9 +34,9 @@ jobs:
         id: runtests
         timeout-minutes: 20
         run: |
-          coverage run -m pytest tests --junitxml=test-execution.xml
+          uv run coverage run -m pytest tests --junitxml=test-execution.xml
           rc=$?
-          coverage xml
+          uv run coverage xml
           echo "rc=$rc" >> $GITHUB_OUTPUT
 
       - name: 'Save coverage report as an Artifact'
