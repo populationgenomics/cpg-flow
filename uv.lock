@@ -1,5 +1,5 @@
 version = 1
-requires-python = "==3.10"
+requires-python = "==3.10.*"
 
 [[package]]
 name = "aiodns"
@@ -523,7 +523,6 @@ dev = [
     { name = "black" },
     { name = "commitizen" },
     { name = "commitlint" },
-    { name = "coverage" },
     { name = "cpg-utils" },
     { name = "isort" },
     { name = "mypy" },
@@ -546,8 +545,11 @@ test = [
 dev = [
     { name = "black" },
     { name = "bump2version" },
+    { name = "coverage" },
     { name = "pre-commit" },
     { name = "pylint" },
+    { name = "pytest" },
+    { name = "toml" },
 ]
 
 [package.metadata]
@@ -555,7 +557,6 @@ requires-dist = [
     { name = "black", marker = "extra == 'dev'" },
     { name = "commitizen", marker = "extra == 'dev'" },
     { name = "commitlint", marker = "extra == 'dev'" },
-    { name = "coverage", marker = "extra == 'dev'" },
     { name = "coverage", marker = "extra == 'test'" },
     { name = "cpg-utils", specifier = ">=5.0.11" },
     { name = "cpg-utils", marker = "extra == 'dev'", specifier = ">=5.0.11" },
@@ -581,8 +582,11 @@ requires-dist = [
 dev = [
     { name = "black", specifier = ">=24.10.0" },
     { name = "bump2version", specifier = ">=1.0.1" },
+    { name = "coverage", specifier = ">=7.6.4" },
     { name = "pre-commit", specifier = ">=4.0.1" },
     { name = "pylint", specifier = ">=3.3.1" },
+    { name = "pytest", specifier = ">=8.3.3" },
+    { name = "toml", specifier = ">=0.10.2" },
 ]
 
 [[package]]

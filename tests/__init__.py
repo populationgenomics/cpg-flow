@@ -11,8 +11,8 @@ logging.basicConfig()
 logging.getLogger().setLevel(logging.WARN)
 
 # silence other loggers
-logging.getLogger("pyspark").setLevel(logging.ERROR)
-logging.getLogger("py4j").setLevel(logging.ERROR)
+logging.getLogger('pyspark').setLevel(logging.ERROR)
+logging.getLogger('py4j').setLevel(logging.ERROR)
 
 
 @runtime_checkable
@@ -70,7 +70,7 @@ def set_config(
             so that values in the right config will override values in the left config.
             Defaults to `None`.
     """
-    with path.open("w") as f:
+    with path.open('w') as f:
         if isinstance(config, dict):
             toml.dump(config, f, encoder=TomlAnyPathEncoder())
         elif isinstance(config, IDictRepresentable):
@@ -79,7 +79,7 @@ def set_config(
             f.write(config)
         else:
             raise TypeError(
-                f"Expected config to be a string, dict, or IDictRepresentable, but got {type(config)}",
+                f'Expected config to be a string, dict, or IDictRepresentable, but got {type(config)}',
             )
 
         f.flush()

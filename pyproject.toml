@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cpg-flow"
 description = "CPG Flow API for Hail Batch"
-requires-python = "==3.10"
+requires-python = ">=3.10,<3.11"
 readme = "README.md"
 license = { "file" = "LICENSE" }
 dynamic = ["version"]
@@ -13,11 +13,14 @@ dependencies = [
     "cpg-utils>=5.0.11",
     # "cyvcf2==0.30.18",
     # "analysis-runner>=2.43.3",
-    "hail==0.2.133", # Pin Hail at CPG"s installed version
+    "hail==0.2.133",
+    # Pin Hail at CPG"s installed version
     # "networkx>=2.8.3",
     # "obonet>=0.3.1",  # for HPO parsing
-    "grpcio>=1.48,<1.50",        # Avoid dependency resolution backtracking, Python 3.10 compatibility
-    "grpcio-status>=1.48,<1.50", # Avoid dependency resolution backtracking, Python 3.10 compatibility
+    "grpcio>=1.48,<1.50",
+    # Avoid dependency resolution backtracking, Python 3.10 compatibility
+    "grpcio-status>=1.48,<1.50",
+    # Avoid dependency resolution backtracking, Python 3.10 compatibility
     # "onnx",
     # "onnxruntime",
     # "skl2onnx",
@@ -68,7 +71,6 @@ dev = [
     "black",
     "commitizen",
     "commitlint",
-    "coverage",
     "cpg-utils>=5.0.11",
     "isort",
     "mypy",
@@ -77,7 +79,8 @@ dev = [
     "pytest",
     "pytest_mock",
     "ruff",
-    "setuptools>=65.5.1", # Pinned by pip-audit to avoid a vulnerability
+    "setuptools>=65.5.1",
+    # Pinned by pip-audit to avoid a vulnerability
     "tenacity",
 ]
 test = [
@@ -434,6 +437,9 @@ upload_to_vcs_release = true
 dev-dependencies = [
     "black>=24.10.0",
     "bump2version>=1.0.1",
+    "coverage>=7.6.4",
     "pre-commit>=4.0.1",
     "pylint>=3.3.1",
+    "pytest>=8.3.3",
+    "toml>=0.10.2",
 ]
