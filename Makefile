@@ -30,6 +30,9 @@ init:
 	pre-commit install --hook-type commit-msg
 	make compile
 
+test: install-test
+	coverage run -m pytest tests --junitxml=test-execution.xml
+
 activate:
 	uv activate
 
