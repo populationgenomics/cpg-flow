@@ -8,6 +8,9 @@ on:
       - alpha
       - main
 
+permissions:
+  id-token: write
+
 jobs:
   package:
     name: Package
@@ -38,6 +41,9 @@ jobs:
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.2
         if: steps.release.outputs.released == 'true'
+        with:
+          repository_url: https://test.pypi.org/legacy/
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
       - name: Publish | Upload to GitHub Release Assets
         uses: python-semantic-release/publish-action@v9.8.9
