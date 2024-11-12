@@ -46,30 +46,6 @@ keywords = ["hail", "flow", "api", "bioinformatics", "genomics"]
 [project.urls]
 Repository = "https://github.com/populationgenomics/cpg-flow"
 
-[project.optional-dependencies]
-dev = [
-    "black",
-    "commitizen",
-    "commitlint",
-    "cpg-utils>=5.0.11",
-    "isort",
-    "mypy",
-    "pre-commit",
-    "pylint",
-    "pytest",
-    "pytest_mock",
-    "ruff",
-    "setuptools>=65.5.1",
-    # Pinned by pip-audit to avoid a vulnerability
-    "tenacity",
-]
-test = [
-    "coverage",
-    "networkx",
-    "pytest",
-    "pytest-mock",
-]
-
 [tool.ruff]
 line-length = 120
 
@@ -410,6 +386,7 @@ dev-dependencies = [
     "black>=24.10.0",
     "build>=1.2.2.post1",
     "bump2version>=1.0.1",
+    "commitizen>=3.30.0",
     "coverage>=7.6.4",
     "networkx>=3.4.2",
     "pre-commit>=4.0.1",
