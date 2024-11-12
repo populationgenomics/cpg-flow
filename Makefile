@@ -16,7 +16,7 @@ clean:
 	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 
 build: clean
-	python -m build --sdist --wheel
+	python -m build --installer=uv --sdist --wheel
 
 install-build: build
 	uv pip install dist/*.whl
