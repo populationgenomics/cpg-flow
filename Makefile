@@ -1,24 +1,31 @@
-update-deps:
-	pre-commit autoupdate
-	python -m pip install --upgrade pip-tools pip wheel
-	python -m piptools compile --strip-extras --upgrade --resolver backtracking -o requirements/main.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra dev --upgrade --resolver backtracking -o requirements/dev.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra test --upgrade --resolver backtracking -o requirements/test.txt pyproject.toml
+# Environment Setup
+venv:
+	uv sync
 
-compile-deps:
-	python -m piptools compile --strip-extras -o requirements/main.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra dev -o requirements/dev.txt pyproject.toml
-	python -m piptools compile --strip-extras --extra test -o requirements/test.txt pyproject.toml
-
-install-deps:
-	python -m pip install --upgrade pip-tools pip wheel
-	python -m pip install -r requirements/main.txt -r requirements/dev.txt -r requirements/test.txt -e .
-	python -m pip check
-
-update: update-deps compile-deps install-deps
-
-init: install-deps
+init: venv
 	pre-commit install
 	pre-commit install --hook-type commit-msg
 
-.PHONY: update-deps compile-deps install-deps update init
+# Actions
+test:
+	coverage run -m pytest tests --junitxml=test-execution.xml
+
+clean:
+	rm -rf build dist *.egg-info
+	rm -rf src/__pycache__ src/*/__pycache__ src/*/*/__pycache__
+	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
+
+build: clean
+	python -m build --sdist --wheel
+
+install-build: build
+	uv pip install dist/*.whl
+
+install-local:
+	uv install -e .
+
+upload: clean build
+	uv run twine check dist/*
+	uv run twine upload -r testpypi dist/*
+
+.PHONY: venv init test
