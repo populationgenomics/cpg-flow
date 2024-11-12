@@ -22,11 +22,8 @@ jobs:
         with:
           uv-version: "0.4.22"
 
-      - name: Install Python
-        run: uv python install
-
-      - name: Install the project
-        run: uv sync --all-extras --dev
+      - name: Install project dev dependencies
+        run: uv sync --only-dev
 
       - name: Run unit tests
         id: runtests

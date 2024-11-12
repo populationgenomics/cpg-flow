@@ -2,9 +2,8 @@ name: Package
 on:
   # Building on pull-requests, manual dispatch, and pushes to main; but restricting
   # publishing only to main pushes and manual dispatch with `if`s in specific steps.
-  pull_request:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
       - alpha
@@ -14,7 +13,9 @@ jobs:
     name: Package
     environment: production
     runs-on: ubuntu-latest
-    needs: [lint, test]
+    # needs:
+    #   - Test
+    #   - Lint
     defaults:
       run:
         shell: bash -l {0}
@@ -23,23 +24,22 @@ jobs:
         with:
           submodules: "true"
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - name: Action | Semantic Version Release
+        id: release
+        # Adjust tag with desired version if applicable.
+        uses: python-semantic-release/python-semantic-release@v9.14.0
         with:
-          uv-version: "0.4.22"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_committer_name: "github-actions"
+          git_committer_email: "actions@users.noreply.github.com"
 
-      - name: Install Python
-        run: uv python install
+      # - name: Publish | Upload package to PyPI
+      #   uses: pypa/gh-action-pypi-publish@v1
+      #   if: steps.release.outputs.released == 'true'
 
-      - name: Run semantic-release version
-        env:
-          TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}  # Use the test PyPI token for authentication
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for authentication
-        run:
-          semantic-release version
-
-      - name: Build and install the build
-        run: make install-build
-
-      - name: Publish
-        run: make upload
+      # - name: Publish | Upload to GitHub Release Assets
+      #   uses: python-semantic-release/publish-action@v9.8.9
+      #   if: steps.release.outputs.released == 'true'
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: ${{ steps.release.outputs.tag }}

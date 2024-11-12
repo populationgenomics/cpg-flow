@@ -1,6 +1,5 @@
 # Environment Setup
 venv:
-	uv venv
 	uv sync
 
 init: venv
@@ -11,9 +10,6 @@ init: venv
 test:
 	coverage run -m pytest tests --junitxml=test-execution.xml
 
-install:
-	uv pip install dist/*.whl
-
 clean:
 	rm -rf build dist *.egg-info
 	rm -rf src/__pycache__ src/*/__pycache__ src/*/*/__pycache__
@@ -22,14 +18,14 @@ clean:
 build: clean
 	python -m build --sdist --wheel
 
-upload: clean build
-	uv run twine check dist/*
-	uv run twine upload -r testpypi dist/*
+install-build: build
+	uv pip install dist/*.whl
 
 install-local:
 	uv install -e .
 
-install-build: build
-	uv pip install dist/*.whl
+upload: clean build
+	uv run twine check dist/*
+	uv run twine upload -r testpypi dist/*
 
 .PHONY: venv init test
