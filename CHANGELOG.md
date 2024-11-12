@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.5 (2024-11-12)
+
+### Bug Fixes
+
+- **.dummy**: Fix forces a release
+  ([`6e34931`](https://github.com/populationgenomics/cpg-flow/commit/6e349310bf2b470952bcedcce28b47ae01cb8d8d))
+
+### Build System
+
+- **pyproject.toml**: Fix project version
+  ([`ddac37c`](https://github.com/populationgenomics/cpg-flow/commit/ddac37c3e53afd0a69b1f63abccb2cf239a36ec3))
+
+
 ## v0.1.0-alpha.4 (2024-11-12)
 
 ### Bug Fixes
