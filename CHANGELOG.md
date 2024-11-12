@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.4 (2024-11-12)
+
+### Bug Fixes
+
+- **pyproject.toml**: Remove dynamic version
+  ([`4dcc2b9`](https://github.com/populationgenomics/cpg-flow/commit/4dcc2b9aa219c9a2e3ba041db71f20800c5b17a6))
+
+- **pyproject.toml**: Remove dynamic version
+  ([`9beca1f`](https://github.com/populationgenomics/cpg-flow/commit/9beca1fa8d22edf373b998c7e6cddcfb41c5e11a))
+
+
 ## v0.1.0-alpha.3 (2024-11-12)
 
 ### Bug Fixes
