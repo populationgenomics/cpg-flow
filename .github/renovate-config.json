@@ -1,5 +1,4 @@
 {
-<<<<<<< Updated upstream
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "onboarding": true,
   "requireConfig": "ignored",
@@ -27,20 +26,6 @@
       ],
       "matchPackagePatterns": ["*"],
       "minimumReleaseAge": "48 hours"
-=======
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "onboarding": true,
-    "requireConfig": "ignored",
-    "platform": "github",
-    "repositories": ["populationgenomics/cpg-flow"],
-    "baseBranches": ["alpha"],
-    "prConcurrentLimit": 10,
-    "prHourlyLimit": 5,
-    "semanticCommits": "enabled",
-    "enabledManagers": ["pip-compile"],
-    "constraints": {
-      "python": "==3.10"
->>>>>>> Stashed changes
     },
     {
       "groupName": "all major dependencies",
