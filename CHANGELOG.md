@@ -1,6 +1,38 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.6 (2024-11-12)
+
+### Bug Fixes
+
+- **Makefile,pyproject.toml**: Debug ci-build command
+  ([`cdf2fcf`](https://github.com/populationgenomics/cpg-flow/commit/cdf2fcfe567ec0de7d7dc8fa3109cc6b28b744ad))
+
+- **package.yaml,pyproject.toml**: Rm uv, base build with version fix
+  ([`559d16b`](https://github.com/populationgenomics/cpg-flow/commit/559d16b10797927caee58cd1bf4245269271eac7))
+
+- **package.yaml**: Add git auth
+  ([`601669c`](https://github.com/populationgenomics/cpg-flow/commit/601669cbe7363dd56636d5ba96c345854e72e557))
+
+- **package.yaml**: Fix package.yaml manual semantic command
+  ([`f733c90`](https://github.com/populationgenomics/cpg-flow/commit/f733c90b050a012515284dc985d116b972744c71))
+
+- **package.yaml,.pypirc**: Run semantic release manually
+  ([`f872765`](https://github.com/populationgenomics/cpg-flow/commit/f8727656dd072635f87dde02f9b835cd9083c61b))
+
+- **.dummy,package.yaml**: Trigger release, use venv in workflow
+  ([`36a4057`](https://github.com/populationgenomics/cpg-flow/commit/36a405714c1eea6684c6308f001a7bbeddae0b31))
+
+- **pyproject.toml**: Fix build command
+  ([`37c43ec`](https://github.com/populationgenomics/cpg-flow/commit/37c43ec53d87948dc7db984d51d58dba92b1fafa))
+
+- **./,.github/workflows/**: Fix package.yaml build command
+  ([`e41138c`](https://github.com/populationgenomics/cpg-flow/commit/e41138c72fcf14bda795756f0c584f429cae37fd))
+
+- **Makefile,pyproject.toml**: Update build system
+  ([`759ef2d`](https://github.com/populationgenomics/cpg-flow/commit/759ef2dcacee15050d49fe006ff3f4815375f1b3))
+
+
 ## v0.1.0-alpha.5 (2024-11-12)
 
 ### Bug Fixes
