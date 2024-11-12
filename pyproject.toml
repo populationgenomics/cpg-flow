@@ -354,7 +354,7 @@ match = "main"
 prerelease = false
 
 [tool.semantic_release.branches.prerelease]
-match = "(alpha|migration-03)"
+match = "alpha"
 prerelease_token = "alpha"
 prerelease = true
 
