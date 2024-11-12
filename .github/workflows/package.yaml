@@ -35,18 +35,15 @@ jobs:
           uv-version: "0.4.22"
 
       - name: Install project dev dependencies
-        run: uv sync --only-dev && VIRTUAL_ENV=./.venv
+        run: uv sync --only-dev
 
       - name: Action | Semantic Version Release
         id: release
-        # Adjust tag with desired version if applicable.
-        uses: python-semantic-release/python-semantic-release@v9.14.0
-        env:
-          VIRUAL_ENV: ./.venv
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           git_committer_name: "github-actions"
           git_committer_email: "actions@users.noreply.github.com"
+        run: uv run semantic-release version
 
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.2
