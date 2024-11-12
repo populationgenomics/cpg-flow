@@ -2,9 +2,6 @@ name: Renovate
 on:
   schedule:
     - cron: '0 0 * * Sun'
-  push:
-    branches:
-      - dev
   workflow_dispatch:
     inputs:
       branch:
