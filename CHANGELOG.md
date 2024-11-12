@@ -34,6 +34,18 @@
 
 ### Build System
 
+- **.github/renovate-config.json**: Removed merge commit msg debris
+  ([`3f845a1`](https://github.com/populationgenomics/cpg-flow/commit/3f845a16fb849e3979ece711f1040ffe22f47866))
+
+- **.github/workflows/renovate.yaml**: Attempting to fix the code checkout
+  ([`3f326ba`](https://github.com/populationgenomics/cpg-flow/commit/3f326baf904b1226bcc36454e4afefff5ab48903))
+
+- **.github/workflows/renovate.yaml**: Fix how the workflow dispatch call works
+  ([`8190250`](https://github.com/populationgenomics/cpg-flow/commit/8190250a39ff05b9b1135ad8f7310722d7848f79))
+
+- **requirements/***: Potential fix to renovatebot detecting deps
+  ([`afaafd3`](https://github.com/populationgenomics/cpg-flow/commit/afaafd3eefd20cff9078fecb88cbbcbc0bb531a6))
+
 - **pyproject.toml**: Allow chore tag option
   ([`a85e24b`](https://github.com/populationgenomics/cpg-flow/commit/a85e24b7b8fe1f5034f0b65df8f228b7650b4a23))
 
@@ -94,6 +106,18 @@
   ([`54e8031`](https://github.com/populationgenomics/cpg-flow/commit/54e8031cbb82b252a016d5a3a19cf6ab24e85388))
 
 ### Continuous Integration
+
+- **.github/workflows/renovate.yaml,-uv.lock**: Removed push calls to the workflow
+  ([`cbb5004`](https://github.com/populationgenomics/cpg-flow/commit/cbb50049d508b4997333feb909f8c92cd876032f))
+
+- **.github/renovate-config.json**: Selected alpha as the target branch, and switched to uv
+  ([`f434110`](https://github.com/populationgenomics/cpg-flow/commit/f4341108fd87ed287a857b9c487d494e38afe1f5))
+
+- **.github/renovate-config.json**: Use uv to manage deps
+  ([`9724557`](https://github.com/populationgenomics/cpg-flow/commit/9724557eca258bb669bb0efdc1551d2700c9a851))
+
+- **package.yaml,pyproject.toml**: Modify semantic release build command
+  ([`b990638`](https://github.com/populationgenomics/cpg-flow/commit/b9906386085aed7c985332eee4360f468ce99ccf))
 
 - **package.yaml**: Add fetch-depth 0
   ([`b1500fe`](https://github.com/populationgenomics/cpg-flow/commit/b1500fef2d13444ba73b924bdb260e4886df648d))
