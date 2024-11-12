@@ -15,6 +15,10 @@ clean:
 	rm -rf src/__pycache__ src/*/__pycache__ src/*/*/__pycache__
 	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 
+ci-build: clean
+	python -m pip install build "setuptools>=42" setuptools-scm wheel
+	VERSION="$NEW_VERSION" python -m build --sdist --wheel
+
 build: clean
 	uv build --sdist --wheel
 
