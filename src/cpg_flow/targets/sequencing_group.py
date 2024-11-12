@@ -1,11 +1,13 @@
-from typing import Optional
-
-from cpg_utils import Path
-from cpg_utils.config import reference_path
+from typing import TYPE_CHECKING, Optional
 
 from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPairs, GvcfPath
 from cpg_flow.metamist import Assay
-from cpg_flow.targets import Dataset, PedigreeInfo, Sex, Target
+from cpg_flow.targets import PedigreeInfo, Sex, Target
+from cpg_utils import Path
+from cpg_utils.config import reference_path
+
+if TYPE_CHECKING:
+    from cpg_flow.targets import Dataset
 
 
 class SequencingGroup(Target):
@@ -16,7 +18,7 @@ class SequencingGroup(Target):
     def __init__(
         self,
         id: str,
-        dataset: "Dataset",
+        dataset: 'Dataset',
         *,
         sequencing_type: str,
         sequencing_technology: str,
@@ -25,7 +27,7 @@ class SequencingGroup(Target):
         participant_id: str | None = None,
         meta: dict | None = None,
         sex: Sex | None = None,
-        pedigree: Optional["PedigreeInfo"] = None,
+        pedigree: Optional['PedigreeInfo'] = None,
         alignment_input: AlignmentInput | None = None,
         assays: tuple[Assay, ...] | None = None,
         forced: bool = False,
@@ -58,38 +60,38 @@ class SequencingGroup(Target):
 
     def __repr__(self):
         values = {
-            "participant": self._participant_id if self._participant_id else "",
-            "sequencing_type": self.sequencing_type,
-            "sequencing_technology": self.sequencing_technology,
-            "sequencing_platform": self.sequencing_platform,
-            "forced": str(self.forced),
-            "active": str(self.active),
-            "meta": str(self.meta),
-            "alignment_inputs": self.alignment_input,
-            "pedigree": self.pedigree,
+            'participant': self._participant_id if self._participant_id else '',
+            'sequencing_type': self.sequencing_type,
+            'sequencing_technology': self.sequencing_technology,
+            'sequencing_platform': self.sequencing_platform,
+            'forced': str(self.forced),
+            'active': str(self.active),
+            'meta': str(self.meta),
+            'alignment_inputs': self.alignment_input,
+            'pedigree': self.pedigree,
         }
-        retval = f"SequencingGroup({self.dataset.name}/{self.id}"
+        retval = f'SequencingGroup({self.dataset.name}/{self.id}'
         if self._external_id:
-            retval += f"|{self._external_id}"
-        return retval + "".join(f", {k}={v}" for k, v in values.items())
+            retval += f'|{self._external_id}'
+        return retval + ''.join(f', {k}={v}' for k, v in values.items())
 
     def __str__(self):
-        ai_tag = ""
+        ai_tag = ''
         if self.alignment_input:
-            ai_tag += f"|SEQ={self.sequencing_type}:"
+            ai_tag += f'|SEQ={self.sequencing_type}:'
             if isinstance(self.alignment_input, CramPath):
-                ai_tag += "CRAM"
+                ai_tag += 'CRAM'
             elif isinstance(self.alignment_input, BamPath):
-                ai_tag += "BAM"
+                ai_tag += 'BAM'
             elif isinstance(self.alignment_input, FastqPairs):
-                ai_tag += f"{len(self.alignment_input)}FQS"
+                ai_tag += f'{len(self.alignment_input)}FQS'
             else:
                 raise ValueError(
-                    f"Unrecognised alignment input type {type(self.alignment_input)}",
+                    f'Unrecognised alignment input type {type(self.alignment_input)}',
                 )
 
-        ext_id = f"|{self._external_id}" if self._external_id else ""
-        return f"SequencingGroup({self.dataset.name}/{self.id}{ext_id}{ai_tag})"
+        ext_id = f'|{self._external_id}' if self._external_id else ''
+        return f'SequencingGroup({self.dataset.name}/{self.id}{ext_id}{ai_tag})'
 
     @property
     def participant_id(self) -> str:
@@ -119,7 +121,7 @@ class SequencingGroup(Target):
         ID for reporting purposes: composed of internal as well as external
         or participant IDs.
         """
-        return self.id + "|" + self.participant_id
+        return self.id + '|' + self.participant_id
 
     def get_ped_dict(self, use_participant_id: bool = False) -> dict[str, str]:
         """
@@ -132,25 +134,25 @@ class SequencingGroup(Target):
         """
         Path to a CRAM file. Not checking its existence here.
         """
-        path = self.dataset.prefix() / "cram" / f"{self.id}.cram"
+        path = self.dataset.prefix() / 'cram' / f'{self.id}.cram'
         return CramPath(
             path=path,
-            index_path=path.with_suffix(".cram.crai"),
-            reference_assembly=reference_path("broad/ref_fasta"),
+            index_path=path.with_suffix('.cram.crai'),
+            reference_assembly=reference_path('broad/ref_fasta'),
         )
 
     def make_gvcf_path(self) -> GvcfPath:
         """
         Path to a GVCF file. Not checking its existence here.
         """
-        return GvcfPath(self.dataset.prefix() / "gvcf" / f"{self.id}.g.vcf.gz")
+        return GvcfPath(self.dataset.prefix() / 'gvcf' / f'{self.id}.g.vcf.gz')
 
     @property
     def make_sv_evidence_path(self) -> Path:
         """
         Path to the evidence root for GATK-SV evidence files.
         """
-        return self.dataset.prefix() / "sv_evidence"
+        return self.dataset.prefix() / 'sv_evidence'
 
     @property
     def target_id(self) -> str:
@@ -158,8 +160,9 @@ class SequencingGroup(Target):
         return self.id
 
     def get_sequencing_groups(
-        self, only_active: bool = True,
-    ) -> list["SequencingGroup"]:
+        self,
+        only_active: bool = True,
+    ) -> list['SequencingGroup']:
         """
         Implementing the abstract method.
         """
@@ -172,16 +175,16 @@ class SequencingGroup(Target):
         Attributes for Hail Batch job.
         """
         attrs = {
-            "dataset": self.dataset.name,
-            "sequencing_group": self.id,
+            'dataset': self.dataset.name,
+            'sequencing_group': self.id,
         }
         _participant_id: str | None = self._participant_id or self._external_id
         if _participant_id:
-            attrs["participant_id"] = _participant_id
+            attrs['participant_id'] = _participant_id
         return attrs
 
     def get_job_prefix(self) -> str:
         """
         Prefix job names.
         """
-        return f"{self.dataset.name}/{self.id}: "
+        return f'{self.dataset.name}/{self.id}: '

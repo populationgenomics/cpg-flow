@@ -15,14 +15,16 @@ Functions:
 """
 
 import logging
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 
+from cpg_flow.targets import Cohort, Dataset, Target
 from cpg_utils import Path
 from cpg_utils.config import get_config
 
-from cpg_flow.targets import Cohort, Dataset, SequencingGroup, Target
+if TYPE_CHECKING:
+    from cpg_flow.targets import SequencingGroup
 
 
 class MultiCohort(Target):
@@ -34,27 +36,27 @@ class MultiCohort(Target):
         super().__init__()
 
         # NOTE: For a cohort, we simply pull the dataset name from the config.
-        input_cohorts = get_config()["workflow"].get("input_cohorts", [])
+        input_cohorts = get_config()['workflow'].get('input_cohorts', [])
         if input_cohorts:
-            self.name = "_".join(sorted(input_cohorts))
+            self.name = '_'.join(sorted(input_cohorts))
         else:
-            self.name = get_config()["workflow"]["dataset"]
+            self.name = get_config()['workflow']['dataset']
 
-        assert self.name, "Ensure cohorts or dataset is defined in the config file."
+        assert self.name, 'Ensure cohorts or dataset is defined in the config file.'
 
         self._cohorts_by_name: dict[str, Cohort] = {}
         self._datasets_by_name: dict[str, Dataset] = {}
-        self.analysis_dataset = Dataset(name=get_config()["workflow"]["dataset"])
+        self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
 
     def __repr__(self):
-        return f"MultiCohort({len(self.get_cohorts())} cohorts)"
+        return f'MultiCohort({len(self.get_cohorts())} cohorts)'
 
     @property
     def target_id(self) -> str:
         """Unique target ID"""
         return self.name
 
-    def create_dataset(self, name: str) -> "Dataset":
+    def create_dataset(self, name: str) -> 'Dataset':
         """
         Create a dataset and add it to the cohort.
         """
@@ -69,7 +71,7 @@ class MultiCohort(Target):
         self._datasets_by_name[ds.name] = ds
         return ds
 
-    def get_cohorts(self, only_active: bool = True) -> list["Cohort"]:
+    def get_cohorts(self, only_active: bool = True) -> list['Cohort']:
         """
         Gets list of all cohorts.
         Include only "active" cohorts (unless only_active is False)
@@ -80,15 +82,17 @@ class MultiCohort(Target):
         return cohorts
 
     def get_cohort_by_name(
-        self, name: str, only_active: bool = True,
-    ) -> Optional["Cohort"]:
+        self,
+        name: str,
+        only_active: bool = True,
+    ) -> Optional['Cohort']:
         """
         Get cohort by name.
         Include only "active" cohorts (unless only_active is False)
         """
         cohort = self._cohorts_by_name.get(name)
         if not cohort:
-            logging.warning(f"Cohort {name} not found in the multi-cohort")
+            logging.warning(f'Cohort {name} not found in the multi-cohort')
 
         if not only_active:  # Return cohort even if it's inactive
             return cohort
@@ -96,21 +100,20 @@ class MultiCohort(Target):
             return cohort
         return None
 
-    def get_datasets(self, only_active: bool = True) -> list["Dataset"]:
+    def get_datasets(self, only_active: bool = True) -> list['Dataset']:
         """
         Gets list of all datasets.
         Include only "active" datasets (unless only_active is False)
         """
         all_datasets = list(self._datasets_by_name.values())
         if only_active:
-            all_datasets = [
-                d for d in all_datasets if d.active and d.get_sequencing_groups()
-            ]
+            all_datasets = [d for d in all_datasets if d.active and d.get_sequencing_groups()]
         return all_datasets
 
     def get_sequencing_groups(
-        self, only_active: bool = True,
-    ) -> list["SequencingGroup"]:
+        self,
+        only_active: bool = True,
+    ) -> list['SequencingGroup']:
         """
         Gets a flat list of all sequencing groups from all datasets.
         uses a dictionary to avoid duplicates (we could have the same sequencing group in multiple cohorts)
@@ -127,14 +130,14 @@ class MultiCohort(Target):
         Create a cohort and add it to the multi-cohort.
         """
         if name in self._cohorts_by_name:
-            logging.debug(f"Cohort {name} already exists in the multi-cohort")
+            logging.debug(f'Cohort {name} already exists in the multi-cohort')
             return self._cohorts_by_name[name]
 
         c = Cohort(name=name)
         self._cohorts_by_name[c.name] = c
         return c
 
-    def add_dataset(self, d: "Dataset") -> "Dataset":
+    def add_dataset(self, d: 'Dataset') -> 'Dataset':
         """
         Add a Dataset to the MultiCohort
         Args:
@@ -142,7 +145,7 @@ class MultiCohort(Target):
         """
         if d.name in self._datasets_by_name:
             logging.debug(
-                f"Dataset {d.name} already exists in the MultiCohort {self.name}",
+                f'Dataset {d.name} already exists in the MultiCohort {self.name}',
             )
         else:
             # We need create a new dataset to avoid manipulating the cohort dataset at this point
@@ -150,8 +153,10 @@ class MultiCohort(Target):
         return self._datasets_by_name[d.name]
 
     def get_dataset_by_name(
-        self, name: str, only_active: bool = True,
-    ) -> Optional["Dataset"]:
+        self,
+        name: str,
+        only_active: bool = True,
+    ) -> Optional['Dataset']:
         """
         Get dataset by name.
         Include only "active" datasets (unless only_active is False)
@@ -165,12 +170,14 @@ class MultiCohort(Target):
         """
         return {
             # 'sequencing_groups': self.get_sequencing_group_ids(),
-            "datasets": [d.name for d in self.get_datasets()],
-            "cohorts": [c.name for c in self.get_cohorts()],
+            'datasets': [d.name for d in self.get_datasets()],
+            'cohorts': [c.name for c in self.get_cohorts()],
         }
 
     def write_ped_file(
-        self, out_path: Path | None = None, use_participant_id: bool = False,
+        self,
+        out_path: Path | None = None,
+        use_participant_id: bool = False,
     ) -> Path:
         """
         Create a PED file for all samples in the whole MultiCohort
@@ -185,17 +192,13 @@ class MultiCohort(Target):
                 ),
             )
         if not datas:
-            raise ValueError(f"No pedigree data found for {self.name}")
+            raise ValueError(f'No pedigree data found for {self.name}')
         df = pd.DataFrame(datas)
 
         if out_path is None:
-            out_path = (
-                self.analysis_dataset.tmp_prefix()
-                / "ped"
-                / f"{self.alignment_inputs_hash()}.ped"
-            )
+            out_path = self.analysis_dataset.tmp_prefix() / 'ped' / f'{self.alignment_inputs_hash()}.ped'
 
-        if not get_config()["workflow"].get("dry_run", False):
-            with out_path.open("w") as fp:
-                df.to_csv(fp, sep="\t", index=False, header=False)
+        if not get_config()['workflow'].get('dry_run', False):
+            with out_path.open('w') as fp:
+                df.to_csv(fp, sep='\t', index=False, header=False)
         return out_path

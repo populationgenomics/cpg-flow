@@ -2,16 +2,12 @@ name: Test
 on:
   # Building on pull-requests, manual dispatch, and pushes to main; but restricting
   # publishing only to main pushes and manual dispatch with `if`s in specific steps.
-  pull_request:
   push:
-    branches:
-      - main
 
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    if: false
     defaults:
       run:
         shell: bash -l {0}
@@ -20,22 +16,21 @@ jobs:
         with:
           submodules: "true"
 
-      - uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
         with:
-          python-version: "3.10"
+          uv-version: "0.4.22"
 
-      - name: Install
-        run: pip install -r requirements/test.txt
+      - name: Install project dev dependencies
+        run: uv sync --only-dev
 
       - name: Run unit tests
         id: runtests
         timeout-minutes: 20
         run: |
-          coverage run -m pytest tests --junitxml=test-execution.xml
-
+          uv run coverage run -m pytest tests --junitxml=test-execution.xml
           rc=$?
-          coverage xml
-
+          uv run coverage xml
           echo "rc=$rc" >> $GITHUB_OUTPUT
 
       - name: 'Save coverage report as an Artifact'
@@ -63,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     environment: production
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
         with:

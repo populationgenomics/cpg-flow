@@ -21,19 +21,20 @@ import logging
 from collections import defaultdict
 from collections.abc import Callable
 from enum import Enum
-from typing import Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
 
+from cpg_flow.inputs import get_multicohort
+from cpg_flow.status import MetamistStatusReporter
+from cpg_flow.targets import Cohort, MultiCohort
+from cpg_flow.utils import slugify, timestamp
 from cpg_utils import Path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
 
-from .inputs import get_multicohort
-from .stage import Stage, StageDecorator, StageOutput
-from .status import MetamistStatusReporter
-from .targets import Cohort, MultiCohort
-from .utils import slugify, timestamp
+if TYPE_CHECKING:
+    from cpg_flow.stage import Stage, StageDecorator, StageOutput
 
 
 def path_walk(expected, collected: set | None = None) -> set[Path]:
@@ -118,7 +119,7 @@ def skip(
         ...
     """
 
-    def decorator_stage(fun) -> StageDecorator:
+    def decorator_stage(fun) -> 'StageDecorator':
         """Implements decorator."""
 
         @functools.wraps(fun)
@@ -265,7 +266,7 @@ class Workflow:
 
     @staticmethod
     def _process_first_last_stages(
-        stages: list[Stage],
+        stages: list['Stage'],
         graph: nx.DiGraph,
         first_stages: list[str],
         last_stages: list[str],
@@ -343,7 +344,7 @@ class Workflow:
 
     @staticmethod
     def _process_only_stages(
-        stages: list[Stage],
+        stages: list['Stage'],
         graph: nx.DiGraph,
         only_stages: list[str],
     ):
@@ -514,7 +515,7 @@ class Workflow:
 
     @staticmethod
     def _process_stage_errors(
-        output_by_target: dict[str, StageOutput | None],
+        output_by_target: dict[str, Union['StageOutput', None]],
     ) -> list[str]:
         targets_by_error = defaultdict(list)
         for target, output in output_by_target.items():

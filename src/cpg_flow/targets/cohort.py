@@ -19,13 +19,16 @@ Example:
 """
 
 import logging
+from typing import TYPE_CHECKING
 
 import pandas as pd
 
+from cpg_flow.targets import Dataset, Target
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 
-from cpg_flow.targets import Dataset, SequencingGroup, Target
+if TYPE_CHECKING:
+    from cpg_flow.targets import SequencingGroup
 
 
 class Cohort(Target):
@@ -37,8 +40,8 @@ class Cohort(Target):
 
     def __init__(self, name: str | None = None) -> None:
         super().__init__()
-        self.name = name or get_config()["workflow"]["dataset"]
-        self.analysis_dataset = Dataset(name=get_config()["workflow"]["dataset"])
+        self.name = name or get_config()['workflow']['dataset']
+        self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
         self._sequencing_group_by_id: dict[str, SequencingGroup] = {}
 
     def __repr__(self):
@@ -50,7 +53,9 @@ class Cohort(Target):
         return self.name
 
     def write_ped_file(
-        self, out_path: Path | None = None, use_participant_id: bool = False,
+        self,
+        out_path: Path | None = None,
+        use_participant_id: bool = False,
     ) -> Path:
         """
         Create a PED file for all samples in the whole cohort
@@ -64,23 +69,21 @@ class Cohort(Target):
                 ),
             )
         if not datas:
-            raise ValueError(f"No pedigree data found for {self.name}")
+            raise ValueError(f'No pedigree data found for {self.name}')
         df = pd.DataFrame(datas)
 
         if out_path is None:
-            out_path = (
-                self.analysis_dataset.tmp_prefix()
-                / "ped"
-                / f"{self.alignment_inputs_hash()}.ped"
-            )
+            out_path = self.analysis_dataset.tmp_prefix() / 'ped' / f'{self.alignment_inputs_hash()}.ped'
 
-        if not get_config()["workflow"].get("dry_run", False):
-            with out_path.open("w") as fp:
-                df.to_csv(fp, sep="\t", index=False, header=False)
+        if not get_config()['workflow'].get('dry_run', False):
+            with out_path.open('w') as fp:
+                df.to_csv(fp, sep='\t', index=False, header=False)
         return out_path
 
     def add_sequencing_group_object(
-        self, s: "SequencingGroup", allow_duplicates: bool = True,
+        self,
+        s: 'SequencingGroup',
+        allow_duplicates: bool = True,
     ):
         """
         Add a sequencing group object to the Cohort.
@@ -91,27 +94,24 @@ class Cohort(Target):
         if s.id in self._sequencing_group_by_id:
             if allow_duplicates:
                 logging.debug(
-                    f"SequencingGroup {s.id} already exists in the Cohort {self.name}",
+                    f'SequencingGroup {s.id} already exists in the Cohort {self.name}',
                 )
                 return self._sequencing_group_by_id[s.id]
             else:
                 raise ValueError(
-                    f"SequencingGroup {s.id} already exists in the Cohort {self.name}",
+                    f'SequencingGroup {s.id} already exists in the Cohort {self.name}',
                 )
         self._sequencing_group_by_id[s.id] = s
 
     def get_sequencing_groups(
-        self, only_active: bool = True,
-    ) -> list["SequencingGroup"]:
+        self,
+        only_active: bool = True,
+    ) -> list['SequencingGroup']:
         """
         Gets a flat list of all sequencing groups from all datasets.
         Include only "active" sequencing groups (unless only_active is False)
         """
-        return [
-            s
-            for s in self._sequencing_group_by_id.values()
-            if (s.active or not only_active)
-        ]
+        return [s for s in self._sequencing_group_by_id.values() if (s.active or not only_active)]
 
     def get_job_attrs(self) -> dict:
         """
@@ -125,24 +125,24 @@ class Cohort(Target):
         """
         Prefix job names.
         """
-        return ""
+        return ''
 
     def to_tsv(self) -> str:
         """
         Export to a parsable TSV file
         """
         assert self.get_sequencing_groups()
-        tsv_path = self.analysis_dataset.tmp_prefix() / "samples.tsv"
+        tsv_path = self.analysis_dataset.tmp_prefix() / 'samples.tsv'
         df = pd.DataFrame(
             {
-                "s": s.id,
-                "gvcf": s.gvcf or "-",
-                "sex": s.meta.get("sex") or "-",
-                "continental_pop": s.meta.get("continental_pop") or "-",
-                "subcontinental_pop": s.meta.get("subcontinental_pop") or "-",
+                's': s.id,
+                'gvcf': s.gvcf or '-',
+                'sex': s.meta.get('sex') or '-',
+                'continental_pop': s.meta.get('continental_pop') or '-',
+                'subcontinental_pop': s.meta.get('subcontinental_pop') or '-',
             }
             for s in self.get_sequencing_groups()
-        ).set_index("s", drop=False)
-        with to_path(tsv_path).open("w") as f:
-            df.to_csv(f, index=False, sep="\t", na_rep="NA")
+        ).set_index('s', drop=False)
+        with to_path(tsv_path).open('w') as f:
+            df.to_csv(f, index=False, sep='\t', na_rep='NA')
         return tsv_path
