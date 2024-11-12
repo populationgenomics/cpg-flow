@@ -43,7 +43,7 @@ jobs:
         if: steps.release.outputs.released == 'true'
         with:
           repository-url: https://test.pypi.org/legacy/
-          username: __token__
+          user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
       - name: Publish | Upload to GitHub Release Assets

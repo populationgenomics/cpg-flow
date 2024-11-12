@@ -17,7 +17,7 @@ clean:
 
 ci-build: clean
 	python -m pip install build "setuptools>=42" setuptools-scm wheel
-	VERSION="$NEW_VERSION" python -m build --sdist --wheel
+	SETUPTOOLS_SCM_PRETEND_VERSION="$$NEW_VERSION" python -m build --sdist --wheel
 
 build: clean
 	uv build --sdist --wheel
@@ -32,4 +32,4 @@ upload: clean build
 	uv run twine check dist/*
 	uv run twine upload -r testpypi dist/*
 
-.PHONY: venv init test
+.PHONY: venv init test clean ci-build build install-build install-local upload
