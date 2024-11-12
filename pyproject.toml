@@ -324,7 +324,7 @@ allow_zero_version = true
 repo_dir = "."
 no_git_verify = false
 tag_format = "v{version}"
-build_command = "export VERSION=\"$NEW_VERSION\" uv build --sdist --wheel"
+build_command = "VERSION=\"$NEW_VERSION\" uv build --sdist --wheel"
 
 [tool.semantic_release.branches.main]
 match = "main"
