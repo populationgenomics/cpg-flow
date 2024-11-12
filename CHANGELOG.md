@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.2 (2024-11-12)
+
+### Bug Fixes
+
+- **.dummy**: Add dummy file to trigger fix change
+  ([`83546d3`](https://github.com/populationgenomics/cpg-flow/commit/83546d3d19108a9f089379e61e6de03b14002f7f))
+
+### Continuous Integration
+
+- **package.yaml**: Add contents write to package workflow
+  ([`366efd1`](https://github.com/populationgenomics/cpg-flow/commit/366efd1896d9142beb23c2cb4f59aef4add35bc8))
+
+- **package.yaml**: Upload to testpypi and fix gh permissions
+  ([`0a253d3`](https://github.com/populationgenomics/cpg-flow/commit/0a253d3499729a788bc047edbe32bc0d3b75bab1))
+
+
 ## v0.1.0-alpha.1 (2024-11-12)
 
 ### Bug Fixes
