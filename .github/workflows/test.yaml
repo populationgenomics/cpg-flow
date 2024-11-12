@@ -22,10 +22,8 @@ jobs:
         with:
           uv-version: "0.4.22"
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
+      - name: Install Python
+        run: uv python install
 
       - name: Install the project
         run: uv sync --all-extras --dev
@@ -64,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     environment: production
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
         with:

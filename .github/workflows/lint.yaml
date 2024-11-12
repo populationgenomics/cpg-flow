@@ -23,10 +23,8 @@ jobs:
         with:
           uv-version: "0.4.22"
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
+      - name: Install Python
+        run: uv python install
 
       - name: Install pre-commit from dev dependencies
         run: uv sync --only-dev
