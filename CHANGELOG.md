@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.3 (2024-11-12)
+
+### Bug Fixes
+
+- **.dummy**: Fix commit to trigger release
+  ([`e8a15a1`](https://github.com/populationgenomics/cpg-flow/commit/e8a15a1a2c5eec19c656a1832338ff736208db14))
+
+### Continuous Integration
+
+- **package.yaml**: Add verbose to pypi upload
+  ([`a431fa6`](https://github.com/populationgenomics/cpg-flow/commit/a431fa67a09e41a2f2527a128d264dfb007411ba))
+
+
 ## v0.1.0-alpha.2 (2024-11-12)
 
 ### Bug Fixes
