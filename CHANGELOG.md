@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.7 (2024-11-12)
+
+### Bug Fixes
+
+- **./,.github/workflows/**: Get package.yaml working
+  ([`c1992f7`](https://github.com/populationgenomics/cpg-flow/commit/c1992f7595684e0c6ae4852358ae09526e557fe0))
+
+
 ## v0.1.0-alpha.6 (2024-11-12)
 
 ### Bug Fixes
