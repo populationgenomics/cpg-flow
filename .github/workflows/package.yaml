@@ -42,9 +42,8 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.12.2
         if: steps.release.outputs.released == 'true'
         with:
-          repository-url: https://test.pypi.org/legacy/
           user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Publish | Upload to GitHub Release Assets
         uses: python-semantic-release/publish-action@v9.8.9
