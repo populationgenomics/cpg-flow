@@ -391,12 +391,10 @@ dev-dependencies = [
     "coverage>=7.6.4",
     "networkx>=3.4.2",
     "pre-commit>=4.0.1",
-    "prompt-toolkit==3.0.20",
     "pylint>=3.3.1",
     "pytest-mock>=3.14.0",
     "pytest>=8.3.3",
     "python-semantic-release>=9.4.1",
-    "questionary>=2.0.1",
     "toml>=0.10.2",
     "twine>=5.1.1",
 ]
