@@ -1,6 +1,64 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.8 (2024-11-15)
+
+### Bug Fixes
+
+- **package.yaml**: Fix setup step add git clone
+  ([`21c1400`](https://github.com/populationgenomics/cpg-flow/commit/21c1400a6083df40dffa66b9a642bf3f7d8892f4))
+
+- **package.yaml**: Remove redundant checkout step
+  ([`0634f44`](https://github.com/populationgenomics/cpg-flow/commit/0634f445361bf050d6243d142411c8738601c9e7))
+
+- **package.yaml**: Use github token in setup step
+  ([`8601d62`](https://github.com/populationgenomics/cpg-flow/commit/8601d62983cdac7b6a70429ac1d1c1c0aa4cf0f2))
+
+- **package.yaml**: Use bot token
+  ([`99814f6`](https://github.com/populationgenomics/cpg-flow/commit/99814f61d5f91bed00c49bf954da4c13b247a574))
+
+- **package.yaml**: Add verbose logging
+  ([`6fca5fb`](https://github.com/populationgenomics/cpg-flow/commit/6fca5fb4688840f38322db90eafb8183b9f5b835))
+
+- **pyproject.toml,uv.lock**: Rm unused dev
+  ([`26c9361`](https://github.com/populationgenomics/cpg-flow/commit/26c93615ed4a53ca8c239f57d98b99666dcaf6c6))
+
+- **package.yaml,pyproject.toml**: Add ignore token for push
+  ([`517d522`](https://github.com/populationgenomics/cpg-flow/commit/517d522fdfad4c4042f0dd4a472655ff0697c4b9))
+
+- **package.yaml**: Deploy key to exempt action from br protection rules
+  ([`5683a10`](https://github.com/populationgenomics/cpg-flow/commit/5683a10b95daa9a772360d75912572cac8dc9c9e))
+
+- **package.yaml**: Push to pypi not testpypi
+  ([`3a59082`](https://github.com/populationgenomics/cpg-flow/commit/3a59082568d6cf2d4394714020c6eb7101ea8ba3))
+
+### Chores
+
+- Merge pull request #16 from populationgenomics/pypi-deploy
+  ([`13a9f7d`](https://github.com/populationgenomics/cpg-flow/commit/13a9f7d737e1a73b86cca0c62c7c6c5c8aadf91a))
+
+Pypi deploy
+
+- Merge pull request #15 from populationgenomics/pypi-deploy
+  ([`20b4886`](https://github.com/populationgenomics/cpg-flow/commit/20b48861685b2927186f69fa6338cec4eeb5f1c3))
+
+fix(package.yaml): deploy key to exempt action from br protection rules
+
+### Refactoring
+
+- **.dummy**: Test token
+  ([`fc48eb5`](https://github.com/populationgenomics/cpg-flow/commit/fc48eb52dcd4bc8a409cf229b7a9c2ed10288939))
+
+- **.dummy**: Test token
+  ([`ec00646`](https://github.com/populationgenomics/cpg-flow/commit/ec006467788e26482fd06c639c649c38feaae597))
+
+- **.dummy**: Remove file, check token permissions
+  ([`a5a36df`](https://github.com/populationgenomics/cpg-flow/commit/a5a36df0760595a421f606dae431ebfd770aa37f))
+
+- **.dummy**: Test push to alpha using BOT_ACCESS_TOKEN
+  ([`8284ac1`](https://github.com/populationgenomics/cpg-flow/commit/8284ac14890432ba0182aec0f2fb1feb2f41f278))
+
+
 ## v0.1.0-alpha.7 (2024-11-12)
 
 ### Bug Fixes
