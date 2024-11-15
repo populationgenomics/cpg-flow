@@ -23,6 +23,7 @@ jobs:
     steps:
       - name: Setup | Force correct release branch on workflow sha
         run: |
+          git clone https://github.com/${{ github.repository }} .
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
