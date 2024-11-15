@@ -32,6 +32,7 @@ jobs:
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Action | Semantic Version Release
         id: release
