@@ -25,32 +25,22 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
       - name: Setup | Force correct release branch on workflow sha
         run: |
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
-
-      - name: Setup SSH for deploy key (if using SSH key for git operations)
-        env:
-          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          export GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key"
+          git config user.name "cpg-software-ci-bot"
+          git config user.email "software-team+githubcibot@populationgenomics.org.au"
 
       - name: Action | Semantic Version Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9.14.0
         with:
           root_options: "-vvv"
-          git_committer_email: "actions@users.noreply.github.com"
-          git_committer_name: "github-actions"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          ignore_token_for_push: true
-          ssh_private_signing_key: ${{ secrets.DEPLOY_KEY }}
+          git_committer_email: "software-team+githubcibot@populationgenomics.org.au"
+          git_committer_name: "cpg-software-ci-bot"
+          github_token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.2
@@ -63,5 +53,5 @@ jobs:
         uses: python-semantic-release/publish-action@v9.8.9
         if: steps.release.outputs.released == 'true'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.BOT_ACCESS_TOKEN }}
           tag: ${{ steps.release.outputs.tag }}
