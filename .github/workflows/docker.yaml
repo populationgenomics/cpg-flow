@@ -62,12 +62,12 @@ jobs:
 
       - name: build
         run: |
-          docker build . -f Dockerfile --tag $IMAGE_NAME:$GITHUB_SHA
+          docker build . -f Dockerfile --tag $IMAGE_NAME:${{ github.sha }}
 
       - name: push commit sha tag
         if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
         run: |
-          docker tag $IMAGE_NAME:${{ github.event.pull_request.head.sha }} $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
+          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
           docker push $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
 
       - name: push latest
