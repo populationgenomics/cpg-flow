@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Fail with warning if the most recent local commit is not pushed to the remote
-if test -n "$(git status --porcelain)"
-then
-    echo "There are uncommitted changes in the repository. Please commit and push them before running the tests."
-    exit 1
-fi
-
 # Check that the most recent commit has been pushed to the remote
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 if test -n "$(git log --oneline origin/$BRANCH_NAME..$BRANCH_NAME)"
@@ -55,8 +48,18 @@ done
 # Run the analysis-runner
 IMAGE_FULLNAME="$REGION-docker.pkg.dev/$REPO/$IMAGE_REPO/$IMAGE_NAME:$COMMIT_SHA"
 
-analysis-runner \
+echo "Running the analysis-runner with the image: $IMAGE_FULLNAME"
+
+echo "analysis-runner \
     --image "$IMAGE_FULLNAME" \
+    --dataset "fewgenomes" \
+    --description "cpg-flow_test" \
+    --access-level "test" \
+    --output-dir "cpg-flow_test" \
+    --config "config.toml" \
+    workflow.py"
+
+analysis-runner \
     --dataset "fewgenomes" \
     --description "cpg-flow_test" \
     --access-level "test" \
