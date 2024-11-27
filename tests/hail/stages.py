@@ -45,27 +45,30 @@ This task is simple, yet it combines loops, conditionals, and basic data manipul
 
 @stage
 class GeneratePrimes(SequencingGroupStage):
-    def output_file(self, sequencing_group: SequencingGroup) -> str:
-        return f'{sequencing_group.id}-primes.txt'
-
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, str]:
         return {
-            'primes': self.output_file(sequencing_group),
+            'id_sum': self.output_file(sequencing_group, 'primes'),
+            'primes': self.output_file(sequencing_group, 'primes'),
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        b = get_batch()
-        j = b.new_job(name='generate-primes')
-
         # Calculate sum of sg id digits
         id_sum = self.iterative_digit_sum_from_string(sequencing_group.id)
 
         # Generate id_sum number of primes
         primes = self.first_n_primes(id_sum)
 
+        # Get batch
+        b = get_batch()
+        j = b.new_job(name='generate-primes')
+
         # Write primes to output file
-        j.command(f"echo '{json.dumps(primes)}' > {j.outfile}")
-        j.write_output(j.outfile, self.output_file(sequencing_group))
+        j.command(f"echo '{json.dumps(primes)}' > {j.primes}")
+        j.write_output(j.primes, self.expected_outputs(sequencing_group).get('primes'))
+
+        # Write id_sum to output file
+        j.command(f"echo '{id_sum}' > {j.id_sum}")
+        j.write_output(j.id_sum, self.expected_outputs(sequencing_group).get('id_sum'))
 
         jobs = [j]
 
@@ -99,22 +102,46 @@ class GeneratePrimes(SequencingGroupStage):
         return primes
 
 
-@stage
+@stage(
+    requires=[GeneratePrimes],
+)
 class CumulativeCalc(SequencingGroupStage):
+    def output_file(self, sequencing_group: SequencingGroup) -> str:
+        return f'{sequencing_group.id}-cumulative.txt'
+
     def expected_outputs(self, sequencing_group: SequencingGroup):
-        """
-        Override to declare expected output paths.
-        """
-        pass
+        return {
+            'cumulative': self.output_file(sequencing_group),
+        }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        """
-        Override to add Hail Batch jobs.
-        """
-        pass
+        input_json = inputs.as_path(sequencing_group, GeneratePrimes, 'primes')
+        primes = json.load(open(input_json))
+
+        cumulative = self.cumulative_sum(primes)
+
+        b = get_batch()
+        j = b.new_job(name='cumulative-calc')
+
+        # Write cumulative sums to output file
+        j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
+        j.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('cumulative'))
+
+        return self.make_outputs(sequencing_group, data=self.expected_outputs(sequencing_group), jobs=[j])
+
+    def cumulative_sum(self, primes: list[int]) -> list[int]:
+        csum = 0
+        cumulative = []
+        for i in range(len(primes)):
+            csum += primes[i]
+            cumulative.append(csum)
+
+        return cumulative
 
 
-@stage
+@stage(
+    requires=[CumulativeCalc],
+)
 class FilterEvens(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         """
@@ -129,7 +156,9 @@ class FilterEvens(SequencingGroupStage):
         pass
 
 
-@stage
+@stage(
+    required_stage=[GeneratePrimes, FilterEvens],
+)
 class BuildAPrimePyramid(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         """

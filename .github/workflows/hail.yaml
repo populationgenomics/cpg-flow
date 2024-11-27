@@ -2,8 +2,6 @@ name: Hail Batch Job Workflow
 
 on:
   workflow_dispatch:
-  push:
-  pull_request:
 
 permissions:
   id-token: write

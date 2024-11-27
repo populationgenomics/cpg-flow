@@ -1,9 +1,14 @@
 name: Docker
 on:
-  #  pull_request:
+  pull_request:
+    branches:
+      - main
+      - alpha
   push:
     branches:
       - main
+      - alpha
+
   workflow_dispatch:
     inputs:
       tag:
