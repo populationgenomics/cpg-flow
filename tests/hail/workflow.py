@@ -3,7 +3,7 @@ import os
 import sys
 from pathlib import Path
 
-from stages import GeneratePrimes
+from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes
 
 import hailtop.batch as hb
 
@@ -36,6 +36,7 @@ def run_batch_workflow():
 
 
 def run_cpg_flow(dry_run=False):
+    workflow = [GeneratePrimes, CumulativeCalc, FilterEvens, BuildAPrimePyramid]
     workflow = [GeneratePrimes]
 
     set_config_paths([CONFIG_FILE])
@@ -56,7 +57,4 @@ def validate_batch_workflow():
 
 
 if __name__ == '__main__':
-    # run_batch_workflow()
-    # validate_batch_workflow()
-
     run_cpg_flow()

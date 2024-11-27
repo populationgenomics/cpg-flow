@@ -1,6 +1,6 @@
 import json
 
-from cpg_flow.stage import SequencingGroupStage, Stage, StageInput, StageOutput, stage
+from cpg_flow.stage import SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils.hail_batch import get_batch
 
@@ -47,8 +47,8 @@ This task is simple, yet it combines loops, conditionals, and basic data manipul
 class GeneratePrimes(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, str]:
         return {
-            'id_sum': self.output_file(sequencing_group, 'primes'),
-            'primes': self.output_file(sequencing_group, 'primes'),
+            'id_sum': f'{sequencing_group.id}_id_sum.txt',
+            'primes': f'{sequencing_group.id}_primes.json',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -106,12 +106,9 @@ class GeneratePrimes(SequencingGroupStage):
     requires=[GeneratePrimes],
 )
 class CumulativeCalc(SequencingGroupStage):
-    def output_file(self, sequencing_group: SequencingGroup) -> str:
-        return f'{sequencing_group.id}-cumulative.txt'
-
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
-            'cumulative': self.output_file(sequencing_group),
+            'cumulative': f'{sequencing_group.id}_cumulative.json',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -127,7 +124,11 @@ class CumulativeCalc(SequencingGroupStage):
         j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
         j.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('cumulative'))
 
-        return self.make_outputs(sequencing_group, data=self.expected_outputs(sequencing_group), jobs=[j])
+        return self.make_outputs(
+            sequencing_group,
+            data=self.expected_outputs(sequencing_group).get('cumulative'),
+            jobs=[j],
+        )
 
     def cumulative_sum(self, primes: list[int]) -> list[int]:
         csum = 0
@@ -144,16 +145,31 @@ class CumulativeCalc(SequencingGroupStage):
 )
 class FilterEvens(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
-        """
-        Override to declare expected output paths.
-        """
-        pass
+        return {
+            'no_evens': f'{sequencing_group.id}_no_evens.json',
+        }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        """
-        Override to add Hail Batch jobs.
-        """
-        pass
+        input_json = inputs.as_path(sequencing_group, CumulativeCalc, 'cumulative')
+        cumulative_primes = json.load(open(input_json))
+
+        no_evens = self.cumulative_sum(cumulative_primes)
+
+        b = get_batch()
+        j = b.new_job(name='filter-evens')
+
+        # Write cumulative sums to output file
+        j.command(f"echo '{json.dumps(no_evens)}' > {j.no_evens}")
+        j.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('no_evens'))
+
+        return self.make_outputs(
+            sequencing_group,
+            data=self.expected_outputs(sequencing_group).get('no_evens'),
+            jobs=[j],
+        )
+
+    def filter_evens(self, numbers: list[int]) -> list[int]:
+        return [num for num in numbers if num % 2 != 0]
 
 
 @stage(
@@ -161,13 +177,44 @@ class FilterEvens(SequencingGroupStage):
 )
 class BuildAPrimePyramid(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
-        """
-        Override to declare expected output paths.
-        """
-        pass
+        return {
+            'pyramid': f'{sequencing_group.id}_pyramid.txt',
+        }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        """
-        Override to add Hail Batch jobs.
-        """
-        pass
+        input_json = inputs.as_path(sequencing_group, FilterEvens, 'no_evens')
+        row_sizes = json.load(open(input_json))
+
+        input_n = inputs.as_path(sequencing_group, GeneratePrimes, 'id_sum')
+        n = int(open(input_n).read().strip())
+
+        pyramid = self.file_contents(sequencing_group, n, row_sizes)
+
+        b = get_batch()
+        j = b.new_job(name='filter-evens')
+
+        # Write pyramid to output file
+        j.command(f"echo '{json.dumps(pyramid)}' > {j.pyramid}")
+        j.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('pyramid'))
+
+        return self.make_outputs(
+            sequencing_group,
+            data=self.expected_outputs(sequencing_group).get('pyramid'),
+            jobs=[j],
+        )
+
+    def file_contents(self, sequencing_group: SequencingGroup, n: int, rows: list[int]) -> str:
+        pyramid = []
+        max_row_size = rows[-1]
+
+        # Add header
+        pyramid.append(f'Prime Pyramid for {sequencing_group.id}')
+        pyramid.append(f'Generated N: {n}')
+
+        for row in rows:
+            total_spaces = max_row_size - row
+            left_spaces = total_spaces // 2
+            right_spaces = total_spaces - left_spaces
+            pyramid.append(' ' * left_spaces + '*' * row + ' ' * right_spaces)
+
+        return '\n'.join(pyramid)
