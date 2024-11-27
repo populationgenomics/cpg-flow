@@ -7,7 +7,8 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 # Check that the most recent commit has been pushed to the remote
-if [ -n "$(git log origin/main..HEAD)" ]; then
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+if [ -n "$(git log --oneline origin/$BRANCH_NAME..$BRANCH_NAME)" ]; then
     echo "There are unpushed commits in the repository. Please push them before running the tests."
     exit 1
 fi
