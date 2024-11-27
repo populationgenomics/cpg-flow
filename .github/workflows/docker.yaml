@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 env:
-  VERSION: 1.29.6
+  VERSION: 0.1.0-alpha.8
 
 jobs:
   docker:
