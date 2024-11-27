@@ -15,34 +15,48 @@ then
     exit 1
 fi
 
-# Confirm that the image for this commit has been built and deployed
-DOCKER_IMAGE="australia-southeast1-docker.pkg.dev/cpg-common/images-tmp/cpg_flow"
-COMMIT_SHA=$(git rev-parse HEAD)
-WAIT_TIME=180  # 3 minutes
+# Variables
+REGION="australia-southeast1"
+REPO="cpg-common"
+IMAGE_REPO="images-tmp"
+IMAGE_NAME="cpg_flow"
+SLEEP_DURATION=180  # Sleep for 3 minutes (in seconds)
 
-function check_image_exists {
-    found=$(gcloud artifacts docker tags list $DOCKER_IMAGE | grep "$COMMIT_SHA")
-    if [ -n "$found" ]
-    then
-        return 0
-    else
-        return 1
-    fi
+# Get the latest commit SHA from the local Git repository
+COMMIT_SHA=$(git rev-parse HEAD)
+
+echo "Latest commit SHA: $COMMIT_SHA"
+
+# Function to check if the tag exists
+check_tag() {
+    gcloud artifacts docker tags list "$REGION-docker.pkg.dev/$REPO/$IMAGE_REPO/$IMAGE_NAME" | grep -q "$COMMIT_SHA"
 }
 
-while ! check_image_exists
-do
-    echo "The Docker image for this commit has not been built and deployed. Please wait for deploy to complete before running the test."
-    sleep $WAIT_TIME
-    WAIT_TIME=$((WAIT_TIME / 2))
+# Loop until the tag is found
+while true; do
+    echo "Checking for tag matching the latest commit SHA ($COMMIT_SHA)..."
+    if check_tag; then
+        echo "Tag matching the latest commit SHA ($COMMIT_SHA) exists in the repository."
+        break
+    else
+        echo "No tag matching the latest commit SHA ($COMMIT_SHA) found. Retrying in $SLEEP_DURATION seconds..."
+        sleep $SLEEP_DURATION
+        SLEEP_DURATION=$((SLEEP_DURATION / 2))
+
+        # Sleep duration should be minimum 10 seconds
+        if test $SLEEP_DURATION -lt 10
+        then
+            SLEEP_DURATION=10
+        fi
+    fi
 done
 
-# Get commit sha
-COMMIT_SHA=$(git rev-parse HEAD)
-IMAGE_NAME="australia-southeast1-docker.pkg.dev/cpg-common/images-tmp/cpg_flow:$COMMIT_SHA"
+
+# Run the analysis-runner
+IMAGE_FULLNAME="$REGION-docker.pkg.dev/$REPO/$IMAGE_REPO/$IMAGE_NAME:$COMMIT_SHA"
 
 analysis-runner \
-    --image "$IMAGE_NAME" \
+    --image "$IMAGE_FULLNAME" \
     --dataset "fewgenomes" \
     --description "cpg-flow_test" \
     --access-level "test" \
