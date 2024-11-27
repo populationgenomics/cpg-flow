@@ -25,6 +25,7 @@ env:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    environment: test
     defaults:
       run:
         shell: bash -l {0}
