@@ -40,6 +40,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Log the PR commit sha
+        if: ${{ github.event_name == 'pull_request' }}
+        run: "echo 'PR commit sha: ${{ github.event.pull_request.head.sha }}'"
+
       - id: 'google-cloud-auth'
         name: 'Authenticate to Google Cloud'
         uses: google-github-actions/auth@v2
