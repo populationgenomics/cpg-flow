@@ -7,10 +7,9 @@ ENV PATH=/root/.cargo/bin:$PATH
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # set up a virtual env to use for whatever app is destined for this container.
-RUN source $HOME/.local/bin/env
-RUN uv venv --python 3.10 /venv
+RUN $HOME/.local/bin/uv venv --python 3.10 /venv
 
-RUN uv pip install metamist
+RUN $HOME/.local/bin/uv pip install metamist
 COPY README.md .
 COPY . .
-RUN uv pip install -e .
+RUN $HOME/.local/bin/uv pip install -e .
