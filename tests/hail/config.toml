@@ -1,5 +1,4 @@
 [workflow]
-driver_image = 'australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_workflows:latest'
 dataset = 'fewgenomes'
 input_cohorts = ['COH2142']
 
