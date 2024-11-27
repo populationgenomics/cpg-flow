@@ -20,7 +20,7 @@ DOCKER_IMAGE="australia-southeast1-docker.pkg.dev/cpg-common/images-tmp/cpg_flow
 COMMIT_SHA=$(git rev-parse HEAD)
 WAIT_TIME=180  # 3 minutes
 
-check_image_exists() {
+function check_image_exists {
     found=$(gcloud artifacts docker tags list $DOCKER_IMAGE | grep "$COMMIT_SHA")
     if [ -n "$found" ]
     then
@@ -30,7 +30,7 @@ check_image_exists() {
     fi
 }
 
-while check_image_exists()
+while ! check_image_exists
 do
     echo "The Docker image for this commit has not been built and deployed. Please wait for deploy to complete before running the test."
     sleep $WAIT_TIME
