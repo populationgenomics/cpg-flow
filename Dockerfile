@@ -12,3 +12,6 @@ COPY README.md .
 COPY . .
 RUN UV_PROJECT_ENVIRONMENT=venv $HOME/.local/bin/uv sync
 RUN $HOME/.local/bin/uv pip install -e .
+
+# activate the virtual environment
+ENV PATH="/venv/bin:$PATH"
