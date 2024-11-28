@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/app/.venv/bin/python
 import os
 import sys
 from pathlib import Path
