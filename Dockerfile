@@ -8,8 +8,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # set up a virtual env to use for whatever app is destined for this container.
 RUN $HOME/.local/bin/uv venv --python 3.10 /venv
-
-RUN UV_PROJECT_ENVIRONMENT=venv $HOME/.local/bin/uv sync
 COPY README.md .
 COPY . .
+RUN UV_PROJECT_ENVIRONMENT=venv $HOME/.local/bin/uv sync
 RUN $HOME/.local/bin/uv pip install -e .
