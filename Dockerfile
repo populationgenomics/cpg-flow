@@ -1,15 +1,8 @@
 FROM australia-southeast1-docker.pkg.dev/analysis-runner/images/driver:latest
 COPY --from=ghcr.io/astral-sh/uv:0.5.5 /uv /uvx /bin/
 
-# set up a virtual env to use for whatever app is destined for this container.
-# RUN $HOME/.local/bin/uv venv --python 3.10 /venv
-# COPY README.md .
-# COPY . .
-# RUN UV_PROJECT_ENVIRONMENT=venv $HOME/.local/bin/uv sync
-# RUN $HOME/.local/bin/uv pip install -e .
-
-# Install the project into `/app`
-WORKDIR /app
+# Set up working directory for the project
+WORKDIR /cpg-flow
 
 # Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
@@ -23,14 +16,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project
 
-# Then, add the rest of the project source code and install it
-# Installing separately from its dependencies allows optimal layer caching
-ADD . /app
+# Add the project source code from src/cpg-flow
+ADD src/cpg-flow /cpg-flow
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen
 
 # Place executables in the environment at the front of the path
-ENV PATH="/app/.venv/bin:$PATH"
-
-# Reset the entrypoint, don't invoke `uv`
-ENTRYPOINT []
+ENV PATH="/cpg-flow/.venv/bin:$PATH"

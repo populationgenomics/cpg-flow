@@ -64,11 +64,11 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Write primes to output file
         j.command(f"echo '{json.dumps(primes)}' > {j.primes}")
-        j.write_output(j.primes, self.expected_outputs(sequencing_group).get('primes'))
+        b.write_output(j.primes, self.expected_outputs(sequencing_group).get('primes', ''))
 
         # Write id_sum to output file
         j.command(f"echo '{id_sum}' > {j.id_sum}")
-        j.write_output(j.id_sum, self.expected_outputs(sequencing_group).get('id_sum'))
+        b.write_output(j.id_sum, self.expected_outputs(sequencing_group).get('id_sum', ''))
 
         jobs = [j]
 
@@ -103,7 +103,7 @@ class GeneratePrimes(SequencingGroupStage):
 
 
 @stage(
-    requires=[GeneratePrimes],
+    required_stages=[GeneratePrimes],
 )
 class CumulativeCalc(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
@@ -122,7 +122,7 @@ class CumulativeCalc(SequencingGroupStage):
 
         # Write cumulative sums to output file
         j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
-        j.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('cumulative'))
+        b.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('cumulative', ''))
 
         return self.make_outputs(
             sequencing_group,
@@ -140,9 +140,7 @@ class CumulativeCalc(SequencingGroupStage):
         return cumulative
 
 
-@stage(
-    requires=[CumulativeCalc],
-)
+@stage(required_stages=[CumulativeCalc])
 class FilterEvens(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
@@ -153,14 +151,14 @@ class FilterEvens(SequencingGroupStage):
         input_json = inputs.as_path(sequencing_group, CumulativeCalc, 'cumulative')
         cumulative_primes = json.load(open(input_json))
 
-        no_evens = self.cumulative_sum(cumulative_primes)
+        no_evens = self.filter_evens(cumulative_primes)
 
         b = get_batch()
         j = b.new_job(name='filter-evens')
 
         # Write cumulative sums to output file
         j.command(f"echo '{json.dumps(no_evens)}' > {j.no_evens}")
-        j.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('no_evens'))
+        b.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('no_evens', ''))
 
         return self.make_outputs(
             sequencing_group,
@@ -173,7 +171,7 @@ class FilterEvens(SequencingGroupStage):
 
 
 @stage(
-    required_stage=[GeneratePrimes, FilterEvens],
+    required_stages=[GeneratePrimes, FilterEvens],
 )
 class BuildAPrimePyramid(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
@@ -195,7 +193,7 @@ class BuildAPrimePyramid(SequencingGroupStage):
 
         # Write pyramid to output file
         j.command(f"echo '{json.dumps(pyramid)}' > {j.pyramid}")
-        j.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('pyramid'))
+        b.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('pyramid', ''))
 
         return self.make_outputs(
             sequencing_group,

@@ -37,7 +37,6 @@ def run_batch_workflow():
 
 def run_cpg_flow(dry_run=False):
     workflow = [GeneratePrimes, CumulativeCalc, FilterEvens, BuildAPrimePyramid]
-    workflow = [GeneratePrimes]
 
     set_config_paths([CONFIG_FILE])
     run_workflow(stages=workflow, dry_run=dry_run)
