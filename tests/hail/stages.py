@@ -1,8 +1,9 @@
 import json
 
-from cpg_flow.stage import SequencingGroupStage, StageInput, StageOutput, stage
-from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils.hail_batch import get_batch
+
+from src.cpg_flow.stage import SequencingGroupStage, StageInput, StageOutput, stage
+from src.cpg_flow.targets.sequencing_group import SequencingGroup
 
 """
 Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:

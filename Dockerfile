@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project
 
 # Add the project source code from src/cpg-flow
-ADD src/cpg_flow /cpg-flow
+ADD . /cpg-flow
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen
 
