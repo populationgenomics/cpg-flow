@@ -545,7 +545,7 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "0.1.0a7+g517d522f.d20241113"
+version = "0.1.0a8+g637c523.d20241201"
 source = { editable = "." }
 dependencies = [
     { name = "cpg-utils" },
@@ -575,7 +575,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "cpg-utils", specifier = ">=5.0.11" },
-    { name = "grpcio", specifier = ">=1.48,<1.50" },
+    { name = "grpcio", specifier = ">=1.53,<1.54" },
     { name = "grpcio-status", specifier = ">=1.48,<1.50" },
     { name = "hail", specifier = "==0.2.133" },
     { name = "metamist", specifier = ">=6.9.0" },
@@ -986,22 +986,19 @@ wheels = [
 
 [[package]]
 name = "grpcio"
-version = "1.49.1"
+version = "1.53.2"
 source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "six" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a3/1c/c42834d4fee45c5cf2d9546e97e879a1cbcdecfd16eb1a12144dcb91edae/grpcio-1.49.1.tar.gz", hash = "sha256:d4725fc9ec8e8822906ae26bb26f5546891aa7fbc3443de970cc556d43a5c99f", size = 22059239 }
+sdist = { url = "https://files.pythonhosted.org/packages/13/a8/c224a9d9ae0a9a0866ec37d9951b4407c3df3343a6c0352554e5add9152a/grpcio-1.53.2.tar.gz", hash = "sha256:0c9e42f2499c8603af1d88771dc97e2c6b0310c278337058fd7fd1ddb35ab853", size = 22422194 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f9/6d/93395b8b765f52aad20ad7c42a8c8d375aaac7c314c239608371da5f2b08/grpcio-1.49.1-cp310-cp310-linux_armv7l.whl", hash = "sha256:fd86040232e805b8e6378b2348c928490ee595b058ce9aaa27ed8e4b0f172b20", size = 73214415 },
-    { url = "https://files.pythonhosted.org/packages/27/90/1bd5c85a622f689dee9947d2ef496456c12f8dafc6de141dc53e805c6119/grpcio-1.49.1-cp310-cp310-macosx_10_10_x86_64.whl", hash = "sha256:6fd0c9cede9552bf00f8c5791d257d5bf3790d7057b26c59df08be5e7a1e021d", size = 4307037 },
-    { url = "https://files.pythonhosted.org/packages/f8/31/5646c5b0aaf2068324e619bd17c7d8c8ac93d29c1a2f1ab34a63424f50f4/grpcio-1.49.1-cp310-cp310-manylinux_2_17_aarch64.whl", hash = "sha256:d0d402e158d4e84e49c158cb5204119d55e1baf363ee98d6cb5dce321c3a065d", size = 65023195 },
-    { url = "https://files.pythonhosted.org/packages/f7/26/6a8b0d6e8fb0c4e2eb24a9c42200a04e2319c8a6cd8e1ee22bef5689f9ae/grpcio-1.49.1-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:822ceec743d42a627e64ea266059a62d214c5a3cdfcd0d7fe2b7a8e4e82527c7", size = 4871892 },
-    { url = "https://files.pythonhosted.org/packages/2e/a5/eac322ac25833e5dbbacf5f1e17c1bb210c1c853eb4c353503fba431da4e/grpcio-1.49.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2106d9c16527f0a85e2eea6e6b91a74fc99579c60dd810d8690843ea02bc0f5f", size = 4657615 },
-    { url = "https://files.pythonhosted.org/packages/1d/0a/be7974883187a09b42d7ac4c244e30c4a0d1f9ea61782fc879676d1e2e7f/grpcio-1.49.1-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:52dd02b7e7868233c571b49bc38ebd347c3bb1ff8907bb0cb74cb5f00c790afc", size = 5104515 },
-    { url = "https://files.pythonhosted.org/packages/fc/65/518cf429ebf2aab711eeda4d533090af2b147e8e3d916dc64dcc840ae914/grpcio-1.49.1-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:120fecba2ec5d14b5a15d11063b39783fda8dc8d24addd83196acb6582cabd9b", size = 4888489 },
-    { url = "https://files.pythonhosted.org/packages/63/f0/0b1527fb941451b0efdf139424ff44f27ffde23e1b7292406027346e8e18/grpcio-1.49.1-cp310-cp310-win32.whl", hash = "sha256:f1a3b88e3c53c1a6e6bed635ec1bbb92201bb6a1f2db186179f7f3f244829788", size = 3056370 },
-    { url = "https://files.pythonhosted.org/packages/97/63/ac37a55e15e13866ce36ebe91dcb9bdd0bb392336cc5e3010e528e26f59d/grpcio-1.49.1-cp310-cp310-win_amd64.whl", hash = "sha256:a7d0017b92d3850abea87c1bdec6ea41104e71c77bca44c3e17f175c6700af62", size = 3621151 },
+    { url = "https://files.pythonhosted.org/packages/c8/d8/7ac01cc692eaf752a000747aebba64f8142874a13de218ff0ab9b1e1a726/grpcio-1.53.2-cp310-cp310-linux_armv7l.whl", hash = "sha256:18afdda2bbe0c615da4daff754cab0df9bbd859c415d85e7e741a2975b3208b4", size = 88540431 },
+    { url = "https://files.pythonhosted.org/packages/7c/02/9c112b966d26cc69c6e60aa8005ded6e7802597c6a147ae2ac6a21ec94ba/grpcio-1.53.2-cp310-cp310-macosx_12_0_universal2.whl", hash = "sha256:33f7678287ac330c94e25f96cdb951e0861e206115ba4d8ea66cf6546b1a09d0", size = 8435670 },
+    { url = "https://files.pythonhosted.org/packages/ac/8a/421ff1b4ae7b41ae486c11c1ac47f498f06eb5a5bc6fc73c2f7a9132cafd/grpcio-1.53.2-cp310-cp310-manylinux_2_17_aarch64.whl", hash = "sha256:1af074f28a56425e4f4d99761708981543a27ae963f5b4b0a36ff71f3483479d", size = 4325100 },
+    { url = "https://files.pythonhosted.org/packages/1b/18/dac3632611a671a101f6749a9b16bca3064f1f4d1d4d4090da1acd321094/grpcio-1.53.2-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:df07843c8c0dc71a56d3af3dfe19165fb0d3af7d3354a72185f6fa1b4ac05cab", size = 5232131 },
+    { url = "https://files.pythonhosted.org/packages/56/c2/72585ea14b9bb6314ac3a66ccbff2ff1981f10f4a1d556062f79274c2281/grpcio-1.53.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5b403c4ad22f3ba37c7720547d8888a1e4b74ad980a94332bbbc50330b623abc", size = 4964576 },
+    { url = "https://files.pythonhosted.org/packages/5b/bf/a618f8161c6b1d994b6739f6c36d30576649648fd57fe04e1dd0d5d55642/grpcio-1.53.2-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:6275a54b41d6b1ec539b019bc3affaf6d05b0a0ba36af1a65b8a2810ef69e07d", size = 5455875 },
+    { url = "https://files.pythonhosted.org/packages/4e/74/8caf7d6ee177aaa3b4d8dee7a0d74689264506726da52431a77f03bd237f/grpcio-1.53.2-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:0e92dc6a85cd1de42527812ef1276095e62169d002d86c888b6e889fcda1dd29", size = 5179742 },
+    { url = "https://files.pythonhosted.org/packages/ec/dc/707d8bd3d71e26ef8beb04519bfd1f8111eac80fec065432f2222022d34b/grpcio-1.53.2-cp310-cp310-win32.whl", hash = "sha256:6be86e8d5cf47415968588e5dfbfb92ee8757fb41139584192b67050d1a72c58", size = 3312330 },
+    { url = "https://files.pythonhosted.org/packages/3b/a1/652bbe3f6b62b246b03d00e6492a07b45967db8fbba30485323ab57458b5/grpcio-1.53.2-cp310-cp310-win_amd64.whl", hash = "sha256:5b49f372df33f5f84865aef5d46cacd23180b586c80e8cbe0ce149b96dfa8c4c", size = 3954159 },
 ]
 
 [[package]]

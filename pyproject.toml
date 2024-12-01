@@ -13,7 +13,7 @@ dependencies = [
     "cpg-utils>=5.0.11",
     # Pin Hail at CPG"s installed version
     "hail==0.2.133",
-    "grpcio>=1.48,<1.50",
+    "grpcio>=1.53,<1.54",
     # Avoid dependency resolution backtracking, Python 3.10 compatibility
     "grpcio-status>=1.48,<1.50",
     "metamist>=6.9.0",
