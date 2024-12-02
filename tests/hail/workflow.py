@@ -8,7 +8,7 @@ from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrim
 import hailtop.batch as hb
 
 from cpg_flow.workflow import run_workflow
-from cpg_utils.config import set_config_paths
+from cpg_utils.config import get_config, set_config_paths
 
 TMP_DIR = os.getenv('TMP_DIR')
 GSA_KEY_FILE = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
@@ -39,6 +39,11 @@ def run_cpg_flow(dry_run=False):
     workflow = [GeneratePrimes, CumulativeCalc, FilterEvens, BuildAPrimePyramid]
 
     set_config_paths([CONFIG_FILE])
+    config_paths = os.environ['CPG_CONFIG_PATH'].split(',')
+
+    # Inserting after the "defaults" config, but before user configs:
+    set_config_paths(config_paths[:1] + [CONFIG_FILE] + config_paths[1:])
+    get_config(print_config=True)
     run_workflow(stages=workflow, dry_run=dry_run)
 
 
