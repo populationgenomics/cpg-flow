@@ -7,9 +7,8 @@ from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrim
 
 import hailtop.batch as hb
 
+from cpg_flow.workflow import run_workflow
 from cpg_utils.config import set_config_paths
-
-from src.cpg_flow.workflow import run_workflow
 
 TMP_DIR = os.getenv('TMP_DIR')
 GSA_KEY_FILE = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')

@@ -60,6 +60,7 @@ echo "analysis-runner \
     workflow.py"
 
 analysis-runner \
+    --image "$IMAGE_FULLNAME" \
     --dataset "fewgenomes" \
     --description "cpg-flow_test" \
     --access-level "test" \
