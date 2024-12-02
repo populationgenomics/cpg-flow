@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 
+import toml
 from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes
 
 import hailtop.batch as hb
@@ -38,12 +39,15 @@ def run_batch_workflow():
 def run_cpg_flow(dry_run=False):
     workflow = [GeneratePrimes, CumulativeCalc, FilterEvens, BuildAPrimePyramid]
 
-    set_config_paths([CONFIG_FILE])
     config_paths = os.environ['CPG_CONFIG_PATH'].split(',')
 
     # Inserting after the "defaults" config, but before user configs:
     set_config_paths(config_paths[:1] + [CONFIG_FILE] + config_paths[1:])
-    get_config(print_config=True)
+    _config = get_config(print_config=True)
+    print('---------------HERE---------------')
+    print(
+        f'Configuration at \n{toml.dumps(dict(_config))}',
+    )
     run_workflow(stages=workflow, dry_run=dry_run)
 
 
