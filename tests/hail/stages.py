@@ -129,8 +129,7 @@ class CumulativeCalc(SequencingGroupStage):
         # print(primes)
 
         j = b.new_job(name='cumulative-calc')
-
-        j.command(f"cat '{primes_file}' > {j.cumulative}")
+        j.command(f'cat {primes_file} > {j.cumulative}')
         # cumulative = self.cumulative_sum(j.primes)
 
         # Write cumulative sums to output file
