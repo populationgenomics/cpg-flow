@@ -43,11 +43,6 @@ def run_cpg_flow(dry_run=False):
 
     # Inserting after the "defaults" config, but before user configs:
     set_config_paths(config_paths[:1] + [CONFIG_FILE] + config_paths[1:])
-    _config = get_config(print_config=True)
-    print('---------------HERE---------------')
-    print(
-        f'Configuration at \n{toml.dumps(dict(_config))}',
-    )
     run_workflow(stages=workflow, dry_run=dry_run)
 
 

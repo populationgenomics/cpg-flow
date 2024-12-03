@@ -2,6 +2,7 @@ import json
 
 from cpg_flow.stage import SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
 
 """
@@ -45,10 +46,10 @@ This task is simple, yet it combines loops, conditionals, and basic data manipul
 
 @stage
 class GeneratePrimes(SequencingGroupStage):
-    def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, str]:
+    def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path | str]:
         return {
-            'id_sum': f'{sequencing_group.id}_id_sum.txt',
-            'primes': f'{sequencing_group.id}_primes.json',
+            'id_sum': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_id_sum.txt',
+            'primes': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_primes.json',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -64,15 +65,15 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Write primes to output file
         j.command(f"echo '{json.dumps(primes)}' > {j.primes}")
-        b.write_output(j.primes, self.expected_outputs(sequencing_group).get('primes', ''))
+        b.write_output(j.primes, str(self.expected_outputs(sequencing_group).get('primes', '')))
 
         # Write id_sum to output file
         j.command(f"echo '{id_sum}' > {j.id_sum}")
-        b.write_output(j.id_sum, self.expected_outputs(sequencing_group).get('id_sum', ''))
+        b.write_output(j.id_sum, str(self.expected_outputs(sequencing_group).get('id_sum', '')))
 
         jobs = [j]
 
-        return self.make_outputs(sequencing_group, data=self.expected_outputs(sequencing_group), jobs=jobs)
+        return self.make_outputs(sequencing_group, data=self.expected_outputs(sequencing_group), jobs=jobs)  # type: ignore
 
     def iterative_digit_sum_from_string(self, s):
         # Extract digits from the string
@@ -108,7 +109,7 @@ class GeneratePrimes(SequencingGroupStage):
 class CumulativeCalc(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
-            'cumulative': f'{sequencing_group.id}_cumulative.json',
+            'cumulative': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_cumulative.json',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -122,7 +123,7 @@ class CumulativeCalc(SequencingGroupStage):
 
         # Write cumulative sums to output file
         j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
-        b.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('cumulative', ''))
+        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('cumulative', '')))
 
         return self.make_outputs(
             sequencing_group,
@@ -144,7 +145,7 @@ class CumulativeCalc(SequencingGroupStage):
 class FilterEvens(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
-            'no_evens': f'{sequencing_group.id}_no_evens.json',
+            'no_evens': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_no_evens.json',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -158,7 +159,7 @@ class FilterEvens(SequencingGroupStage):
 
         # Write cumulative sums to output file
         j.command(f"echo '{json.dumps(no_evens)}' > {j.no_evens}")
-        b.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('no_evens', ''))
+        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('no_evens', '')))
 
         return self.make_outputs(
             sequencing_group,
@@ -176,7 +177,7 @@ class FilterEvens(SequencingGroupStage):
 class BuildAPrimePyramid(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
-            'pyramid': f'{sequencing_group.id}_pyramid.txt',
+            'pyramid': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_pyramid.txt',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -193,7 +194,7 @@ class BuildAPrimePyramid(SequencingGroupStage):
 
         # Write pyramid to output file
         j.command(f"echo '{json.dumps(pyramid)}' > {j.pyramid}")
-        b.write_output(j.cumulative, self.expected_outputs(sequencing_group).get('pyramid', ''))
+        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('pyramid', '')))
 
         return self.make_outputs(
             sequencing_group,
