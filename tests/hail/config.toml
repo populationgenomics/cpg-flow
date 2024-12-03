@@ -81,8 +81,8 @@ sequencing_type = 'genome'
 # By default, BamToCram stage will create CRAM analysis types, this can be overridden
 # bam_to_cram_analysis_type = 'pacbio_cram'
 
-[hail]
-backend = "local"
+# [hail]
+# backend = "local"
 # delete_scratch_on_exit = false
 
 [resource_overrides]
