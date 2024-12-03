@@ -130,12 +130,12 @@ class CumulativeCalc(SequencingGroupStage):
 
         j = b.new_job(name='cumulative-calc')
 
-        j.command(f"cat '{primes_file}'")
+        j.command(f"cat '{primes_file}' > {j.cumulative}")
         # cumulative = self.cumulative_sum(j.primes)
 
         # Write cumulative sums to output file
         # j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
-        # b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('cumulative', '')))
+        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('cumulative', '')))
 
         return self.make_outputs(
             sequencing_group,
