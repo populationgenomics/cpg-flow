@@ -65,10 +65,14 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Write primes to output file
         j.command(f"echo '{json.dumps(primes)}' > {j.primes}")
+        print('-----PRINT PRIMES-----')
+        print(self.expected_outputs(sequencing_group).get('primes', ''))
         b.write_output(j.primes, str(self.expected_outputs(sequencing_group).get('primes', '')))
 
         # Write id_sum to output file
         j.command(f"echo '{id_sum}' > {j.id_sum}")
+        print('-----PRINT ID_SUM-----')
+        print(self.expected_outputs(sequencing_group).get('id_sum', ''))
         b.write_output(j.id_sum, str(self.expected_outputs(sequencing_group).get('id_sum', '')))
 
         jobs = [j]
@@ -114,12 +118,18 @@ class CumulativeCalc(SequencingGroupStage):
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
         input_json = inputs.as_path(sequencing_group, GeneratePrimes, 'primes')
-        primes = json.load(open(input_json))
+        print('-----PRINT INPUT JSON-----')
+        print(input_json)
+        b = get_batch()
+        primes_file = b.read_input(str(input_json))
+        print('-----PRINT PRIMES FILE-----')
+        print(primes_file)
+        primes = json.load(open(primes_file))
+        print('-----PRINT PRIMES-----')
+        print(primes)
+        j = b.new_job(name='cumulative-calc')
 
         cumulative = self.cumulative_sum(primes)
-
-        b = get_batch()
-        j = b.new_job(name='cumulative-calc')
 
         # Write cumulative sums to output file
         j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
