@@ -392,6 +392,7 @@ dev-dependencies = [
     "cpg-flow",
     "hail>=0.2.133",
     "networkx>=3.4.2",
+    "pip-audit>=2.7.3",
     "pre-commit>=4.0.1",
     "pylint>=3.3.1",
     "pytest-mock>=3.14.0",
