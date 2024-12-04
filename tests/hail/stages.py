@@ -67,14 +67,10 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Write primes to output file
         j.command(f"echo '{json.dumps(primes)}' > {j.primes}")
-        print('-----PRINT PRIMES-----')
-        print(self.expected_outputs(sequencing_group).get('primes', ''))
         b.write_output(j.primes, str(self.expected_outputs(sequencing_group).get('primes', '')))
 
         # Write id_sum to output file
         j.command(f"echo '{id_sum}' > {j.id_sum}")
-        print('-----PRINT ID_SUM-----')
-        print(self.expected_outputs(sequencing_group).get('id_sum', ''))
         b.write_output(j.id_sum, str(self.expected_outputs(sequencing_group).get('id_sum', '')))
 
         jobs = [j]
@@ -109,6 +105,18 @@ class GeneratePrimes(SequencingGroupStage):
         return primes
 
 
+def load_primes_json(self, file_path: str):
+    print('-----PRINT FILE PATH-----')
+    print(file_path)
+    # import json
+
+    # with open(file_path) as f:
+    #     primes = json.load(f)
+    #     print('-----PRINT PRIMES CONTENT-----')
+    #     print(primes)
+    # return primes
+
+
 @stage(
     required_stages=[GeneratePrimes],
 )
@@ -129,7 +137,7 @@ class CumulativeCalc(SequencingGroupStage):
         # print(primes)
 
         j = b.new_python_job(name='cumulative-calc')
-        j.call(self.load_primes_json, str(input_json))
+        j.call(load_primes_json, str(input_json))
         # cumulative = self.cumulative_sum(primes.)
 
         # Write cumulative sums to output file
@@ -141,17 +149,6 @@ class CumulativeCalc(SequencingGroupStage):
             data=self.expected_outputs(sequencing_group).get('cumulative'),
             jobs=[j],
         )
-
-    def load_primes_json(self, file_path: str):
-        print('-----PRINT FILE PATH-----')
-        print(file_path)
-        # import json
-
-        # with open(file_path) as f:
-        #     primes = json.load(f)
-        #     print('-----PRINT PRIMES CONTENT-----')
-        #     print(primes)
-        # return primes
 
     def cumulative_sum(self, primes: list[int]) -> list[int]:
         csum = 0
@@ -181,7 +178,7 @@ class FilterEvens(DatasetStage):
 
         # Write cumulative sums to output file
         j.command(f"echo '{json.dumps(no_evens)}' > {j.no_evens}")
-        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('no_evens', '')))
+        b.write_output(j.no_evens, str(self.expected_outputs(sequencing_group).get('no_evens', '')))
 
         return self.make_outputs(
             sequencing_group,
@@ -212,11 +209,11 @@ class BuildAPrimePyramid(CohortStage):
         pyramid = self.file_contents(sequencing_group, n, row_sizes)
 
         b = get_batch()
-        j = b.new_job(name='filter-evens')
+        j = b.new_job(name='build-pyramid')
 
         # Write pyramid to output file
         j.command(f"echo '{json.dumps(pyramid)}' > {j.pyramid}")
-        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('pyramid', '')))
+        b.write_output(j.pyramid, str(self.expected_outputs(sequencing_group).get('pyramid', '')))
 
         return self.make_outputs(
             sequencing_group,

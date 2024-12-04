@@ -3,6 +3,14 @@ dataset = 'fewgenomes'
 input_cohorts = ['COH2142']
 access_level = 'test'
 
+# Force stage rerun
+force_stages = [
+    'GeneratePrimes',
+    'CumulativeCalc',
+    # 'FilterEvens',
+    # 'BuildAPrimePyramid',
+]
+
 # Cohorts to use as inputs.
 #input_cohorts = []
 
@@ -19,14 +27,6 @@ access_level = 'test'
 
 # Finish at this stage:
 #last_stages = []
-
-# Force stage rerun
-force_stages = [
-    'GeneratePrimes',
-    'CumulativeCalc',
-    # 'FilterEvens',
-    # 'BuildAPrimePyramid',
-]
 
 # Map of stages to lists of sequencing groups, to skip for specific stages
 #[workflow.skip_stages_for_sgs]
