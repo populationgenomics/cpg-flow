@@ -3,8 +3,6 @@ import os
 import sys
 from pathlib import Path
 
-from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes
-
 import hailtop.batch as hb
 
 from cpg_flow.workflow import run_workflow
@@ -36,6 +34,8 @@ def run_batch_workflow():
 
 
 def run_cpg_flow(dry_run=False):
+    from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes
+
     workflow = [GeneratePrimes, CumulativeCalc]
 
     config_paths = os.environ['CPG_CONFIG_PATH'].split(',')
