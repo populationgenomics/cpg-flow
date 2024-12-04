@@ -105,7 +105,7 @@ class GeneratePrimes(SequencingGroupStage):
         return primes
 
 
-def load_primes_json(self, file_path: str):
+def load_primes_json(file_path: str):
     print('-----PRINT FILE PATH-----')
     print(file_path)
     # import json
