@@ -1,5 +1,7 @@
 import json
 
+from hailtop.batch.resource import InputResourceFile
+
 from cpg_flow.stage import SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
@@ -124,23 +126,31 @@ class CumulativeCalc(SequencingGroupStage):
         primes_file = b.read_input(str(input_json))
         print('-----PRINT PRIMES FILE-----')
         print(primes_file)
-        # primes = json.load(open(primes_file))
+
+        # primes = self.load_primes_json(primes_file)
         # print('-----PRINT PRIMES-----')
         # print(primes)
 
-        j = b.new_job(name='cumulative-calc')
-        j.command(f'cat {primes_file} > {j.cumulative}')
-        # cumulative = self.cumulative_sum(j.primes)
+        j = b.new_python_job(name='cumulative-calc')
+        primes = j.call(self.load_primes_json, primes_file)
+        # cumulative = self.cumulative_sum(primes.)
 
         # Write cumulative sums to output file
         # j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
-        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('cumulative', '')))
+        b.write_output(primes.as_json(), str(self.expected_outputs(sequencing_group).get('cumulative', '')))
 
         return self.make_outputs(
             sequencing_group,
             data=self.expected_outputs(sequencing_group).get('cumulative'),
             jobs=[j],
         )
+
+    def load_primes_json(self, file_path: InputResourceFile) -> list[int]:
+        with open(file_path) as f:
+            primes = json.load(f)
+            print('-----PRINT PRIMES-----')
+            print(primes)
+        return primes
 
     def cumulative_sum(self, primes: list[int]) -> list[int]:
         csum = 0
