@@ -129,12 +129,12 @@ class CumulativeCalc(SequencingGroupStage):
         # print(primes)
 
         j = b.new_python_job(name='cumulative-calc')
-        primes = j.call(self.load_primes_json, str(input_json))
+        j.call(self.load_primes_json, str(input_json))
         # cumulative = self.cumulative_sum(primes.)
 
         # Write cumulative sums to output file
         # j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
-        b.write_output(primes.as_json(), str(self.expected_outputs(sequencing_group).get('cumulative', '')))
+        # b.write_output(primes.as_json(), str(self.expected_outputs(sequencing_group).get('cumulative', '')))
 
         return self.make_outputs(
             sequencing_group,
@@ -142,14 +142,16 @@ class CumulativeCalc(SequencingGroupStage):
             jobs=[j],
         )
 
-    def load_primes_json(self, file_path: str) -> list[int]:
-        import json
+    def load_primes_json(self, file_path: str):
+        print('-----PRINT FILE PATH-----')
+        print(file_path)
+        # import json
 
-        with open(file_path) as f:
-            primes = json.load(f)
-            print('-----PRINT PRIMES-----')
-            print(primes)
-        return primes
+        # with open(file_path) as f:
+        #     primes = json.load(f)
+        #     print('-----PRINT PRIMES CONTENT-----')
+        #     print(primes)
+        # return primes
 
     def cumulative_sum(self, primes: list[int]) -> list[int]:
         csum = 0
