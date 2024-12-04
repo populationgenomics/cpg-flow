@@ -21,7 +21,12 @@ access_level = 'test'
 #last_stages = []
 
 # Force stage rerun
-#force_stages = []
+force_stages = [
+    'GeneratePrimes',
+    'CumulativeCalc',
+    # 'FilterEvens',
+    # 'BuildAPrimePyramid',
+]
 
 # Map of stages to lists of sequencing groups, to skip for specific stages
 #[workflow.skip_stages_for_sgs]

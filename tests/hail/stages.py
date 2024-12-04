@@ -2,7 +2,7 @@ import json
 
 from hailtop.batch.resource import InputResourceFile
 
-from cpg_flow.stage import SequencingGroupStage, StageInput, StageOutput, stage
+from cpg_flow.stage import CohortStage, DatasetStage, SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
@@ -123,16 +123,13 @@ class CumulativeCalc(SequencingGroupStage):
         print('-----PRINT INPUT JSON-----')
         print(input_json)
         b = get_batch()
-        primes_file = b.read_input(str(input_json))
-        print('-----PRINT PRIMES FILE-----')
-        print(primes_file)
 
         # primes = self.load_primes_json(primes_file)
         # print('-----PRINT PRIMES-----')
         # print(primes)
 
         j = b.new_python_job(name='cumulative-calc')
-        primes = j.call(self.load_primes_json, str(primes_file))
+        primes = j.call(self.load_primes_json, str(input_json))
         # cumulative = self.cumulative_sum(primes.)
 
         # Write cumulative sums to output file
@@ -165,7 +162,7 @@ class CumulativeCalc(SequencingGroupStage):
 
 
 @stage(required_stages=[CumulativeCalc])
-class FilterEvens(SequencingGroupStage):
+class FilterEvens(DatasetStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
             'no_evens': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_no_evens.json',
@@ -197,7 +194,7 @@ class FilterEvens(SequencingGroupStage):
 @stage(
     required_stages=[GeneratePrimes, FilterEvens],
 )
-class BuildAPrimePyramid(SequencingGroupStage):
+class BuildAPrimePyramid(CohortStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
             'pyramid': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_pyramid.txt',
