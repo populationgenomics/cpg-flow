@@ -389,6 +389,7 @@ dev-dependencies = [
     "bump2version>=1.0.1",
     "commitizen>=3.30.0",
     "coverage>=7.6.4",
+    "cpg-flow",
     "hail>=0.2.133",
     "networkx>=3.4.2",
     "pre-commit>=4.0.1",
@@ -399,6 +400,9 @@ dev-dependencies = [
     "toml>=0.10.2",
     "twine>=5.1.1",
 ]
+
+[tool.uv.sources]
+cpg-flow = { workspace = true }
 
 [tool.setuptools_scm]
 version_scheme = "only-version"

@@ -3,13 +3,12 @@ import os
 import sys
 from pathlib import Path
 
-import toml
-from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes
-
 import hailtop.batch as hb
 
 from cpg_flow.workflow import run_workflow
 from cpg_utils.config import get_config, set_config_paths
+
+from tests.hail.stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes
 
 TMP_DIR = os.getenv('TMP_DIR')
 GSA_KEY_FILE = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')

@@ -1,7 +1,5 @@
 import json
 
-from hailtop.batch.resource import InputResourceFile
-
 from cpg_flow.stage import CohortStage, DatasetStage, SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
@@ -67,10 +65,14 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Write primes to output file
         j.command(f"echo '{json.dumps(primes)}' > {j.primes}")
+        print('-----PRINT PRIMES-----')
+        print(self.expected_outputs(sequencing_group).get('primes', ''))
         b.write_output(j.primes, str(self.expected_outputs(sequencing_group).get('primes', '')))
 
         # Write id_sum to output file
         j.command(f"echo '{id_sum}' > {j.id_sum}")
+        print('-----PRINT ID_SUM-----')
+        print(self.expected_outputs(sequencing_group).get('id_sum', ''))
         b.write_output(j.id_sum, str(self.expected_outputs(sequencing_group).get('id_sum', '')))
 
         jobs = [j]
@@ -132,13 +134,8 @@ class CumulativeCalc(SequencingGroupStage):
         print(input_json)
         b = get_batch()
 
-        # primes = self.load_primes_json(primes_file)
-        # print('-----PRINT PRIMES-----')
-        # print(primes)
-
         j = b.new_python_job(name='cumulative-calc')
         j.call(load_primes_json, str(input_json))
-        # cumulative = self.cumulative_sum(primes.)
 
         # Write cumulative sums to output file
         # j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
@@ -178,7 +175,7 @@ class FilterEvens(DatasetStage):
 
         # Write cumulative sums to output file
         j.command(f"echo '{json.dumps(no_evens)}' > {j.no_evens}")
-        b.write_output(j.no_evens, str(self.expected_outputs(sequencing_group).get('no_evens', '')))
+        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('no_evens', '')))
 
         return self.make_outputs(
             sequencing_group,
@@ -209,11 +206,11 @@ class BuildAPrimePyramid(CohortStage):
         pyramid = self.file_contents(sequencing_group, n, row_sizes)
 
         b = get_batch()
-        j = b.new_job(name='build-pyramid')
+        j = b.new_job(name='filter-evens')
 
         # Write pyramid to output file
         j.command(f"echo '{json.dumps(pyramid)}' > {j.pyramid}")
-        b.write_output(j.pyramid, str(self.expected_outputs(sequencing_group).get('pyramid', '')))
+        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('pyramid', '')))
 
         return self.make_outputs(
             sequencing_group,
