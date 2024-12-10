@@ -3,11 +3,6 @@ on:
   schedule:
     - cron: '0 0 * * Sun'
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to run on'
-        default: 'dev'
-        required: true
 
 permissions:
   contents: write
@@ -25,8 +20,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.branch }}
 
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@v40.3.5

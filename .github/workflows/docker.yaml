@@ -1,9 +1,14 @@
 name: Docker
 on:
-  #  pull_request:
+  pull_request:
+    branches:
+      - main
+      - alpha
   push:
     branches:
       - main
+      - alpha
+
   workflow_dispatch:
     inputs:
       tag:
@@ -15,11 +20,12 @@ permissions:
   contents: read
 
 env:
-  VERSION: 1.29.6
+  VERSION: 0.1.0-alpha.8
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    environment: test
     defaults:
       run:
         shell: bash -l {0}
@@ -30,10 +36,13 @@ jobs:
       IMAGE_NAME: cpg_flow
       DOCKER_DEV: australia-southeast1-docker.pkg.dev/cpg-common/images-dev
       DOCKER_MAIN: australia-southeast1-docker.pkg.dev/cpg-common/images
+      DOCKER_TMP: australia-southeast1-docker.pkg.dev/cpg-common/images-tmp
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Log the PR commit sha
+        if: ${{ github.event_name == 'pull_request' }}
+        run: "echo 'PR commit sha: ${{ github.event.pull_request.head.sha }}'"
 
       - id: 'google-cloud-auth'
         name: 'Authenticate to Google Cloud'
@@ -55,16 +64,20 @@ jobs:
         run: |
           docker build . -f Dockerfile --tag $IMAGE_NAME:${{ github.sha }}
 
-      - name: push latest
-        if: ${{ github.ref_name == 'main' }}
+      - name: push commit sha tag
+        if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
+        run: |
+          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
+          docker push $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
+
+      - name: push production
+        if: ${{ github.ref_name == 'main' || github.ref_name == 'alpha' }}
         run: |
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_MAIN/$IMAGE_NAME:$VERSION
-          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_MAIN/$IMAGE_NAME:latest
           docker push $DOCKER_MAIN/$IMAGE_NAME:$VERSION
-          docker push $DOCKER_MAIN/$IMAGE_NAME:latest
 
       - name: manually triggered build
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
         run: |
-          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:${{github.event.inputs.tag}}
-          docker push $DOCKER_DEV/$IMAGE_NAME:${{github.event.inputs.tag}}
+          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }}
+          docker push $DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }}
