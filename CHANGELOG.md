@@ -1,6 +1,224 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.9 (2024-12-10)
+
+### Bug Fixes
+
+- **.dummy**: Force release of alpha
+  ([`41dfb46`](https://github.com/populationgenomics/cpg-flow/commit/41dfb460d30c386ea82e6cb06cfebd2a982c1d5f))
+
+### Build System
+
+- **pyproject.toml,uv.lock**: Add networkx to core deps
+  ([`e6a0826`](https://github.com/populationgenomics/cpg-flow/commit/e6a08265a18da34df9eb93a4db0b0ffd3ce24e8e))
+
+- **uv.lock**: Bumped tornado dep
+  ([`58a713f`](https://github.com/populationgenomics/cpg-flow/commit/58a713f25b3c4f6f7cd7be7ad59df2a1681e3029))
+
+- **uv.lock,pyproject.toml**: Bumped grpcio dep
+  ([`256552f`](https://github.com/populationgenomics/cpg-flow/commit/256552f31d32788a4bbcf1bab5b9392d3a9e37a6))
+
+- **uv.lock,pyproject.toml,.github/workflows/security.yaml**: Bumped deps, improved security
+  workflow
+  ([`52449a8`](https://github.com/populationgenomics/cpg-flow/commit/52449a8cb05a5601fc859e19894e609e49902d6a))
+
+- **Dockerfile**: Add explicit copying of deps files
+  ([`693b3da`](https://github.com/populationgenomics/cpg-flow/commit/693b3daa4a11b68bc72a8ded3a7c550287442dda))
+
+- **Dockerfile**: Fix typo in path
+  ([`d181a83`](https://github.com/populationgenomics/cpg-flow/commit/d181a83b2ffdfb001f233b2852f601231b1a46e0))
+
+- **Dockerfile,-tests/hail/workflow.py**: Force install of dev deps
+  ([`10beaea`](https://github.com/populationgenomics/cpg-flow/commit/10beaeae82dbc461bce7c10f314c545716bc5622))
+
+- **.dockerignore,-Dockerfile,-tests/hail/config.toml**: Improve uv setup in docker
+  ([`652cbee`](https://github.com/populationgenomics/cpg-flow/commit/652cbeeb1cc0510b7110614b8cbfb04a719f8e36))
+
+- **Dockerfile**: Activate venv in dockerfile
+  ([`b086e9b`](https://github.com/populationgenomics/cpg-flow/commit/b086e9b54674ee378602249a0b7a0e86a4c56e01))
+
+- **Dockerfile**: Uv sync after copying dir contents
+  ([`2bb9dc8`](https://github.com/populationgenomics/cpg-flow/commit/2bb9dc8430602a92e258c4b64f14ec3c2d024c4e))
+
+- **Dockerfile**: Use uv sync to install reqs
+  ([`2ff5933`](https://github.com/populationgenomics/cpg-flow/commit/2ff59333f1b97132f17510e8a0f5d426189aa75a))
+
+- **Dockerfile**: Test running uv from local bin
+  ([`11b3477`](https://github.com/populationgenomics/cpg-flow/commit/11b3477af856bec94d2a50b5f06c85dff8f02dcf))
+
+- **Dockerfile**: Adding source shell to Docker stage
+  ([`4aa8e1f`](https://github.com/populationgenomics/cpg-flow/commit/4aa8e1f5cf0fba99dd0998c10a8bb01b04794297))
+
+- **Dockerfile**: Test using uv docker img
+  ([`6f2ec8f`](https://github.com/populationgenomics/cpg-flow/commit/6f2ec8fd4c34864fc35220e7a1660e7afa04473e))
+
+- **Dockerfile**: Switch to uv and fix dir copy
+  ([`b2db11d`](https://github.com/populationgenomics/cpg-flow/commit/b2db11d087e0a370bb4445fb8c8aa1de4d78048d))
+
+### Code Style
+
+- **.dummy**: Rm file
+  ([`087f7d9`](https://github.com/populationgenomics/cpg-flow/commit/087f7d9f84b0c2c268a2af722ceee57fc6999cb3))
+
+### Continuous Integration
+
+- **hail.yaml**: Rm uneeded workflow
+  ([`54ac1a9`](https://github.com/populationgenomics/cpg-flow/commit/54ac1a99731b3f2f7312086d66645eca1105329b))
+
+- **.github/workflows/,tests/hail/**: Fix tests script again
+  ([`03dd3a6`](https://github.com/populationgenomics/cpg-flow/commit/03dd3a651a849351dfc64927079aaa5ffffebdc1))
+
+- **docker.yaml**: Fix build github sha
+  ([`5cf3a7a`](https://github.com/populationgenomics/cpg-flow/commit/5cf3a7a7943e91aeed244396a384bcfff329cfad))
+
+- **docker.yaml**: Echo sha
+  ([`01f64d1`](https://github.com/populationgenomics/cpg-flow/commit/01f64d1e2052abeda3219d8d2de6c87cad6da4e2))
+
+- **docker.yaml**: Fix push to images-tmp sha
+  ([`df24a1e`](https://github.com/populationgenomics/cpg-flow/commit/df24a1e2141229becbe4f3a6a34ed2c8cc2c0e0f))
+
+- **docker.yaml**: Change to $GITHUB_SHA
+  ([`7d582c0`](https://github.com/populationgenomics/cpg-flow/commit/7d582c0c59f077565d70e577432afa93e08951ad))
+
+- **manual-test.yaml**: Change to echo
+  ([`0157daf`](https://github.com/populationgenomics/cpg-flow/commit/0157daf1b6b856931aa9d2abcf06207d042f9364))
+
+- **manual-test.yaml**: Add a manual check for running workflow test
+  ([`9a809cc`](https://github.com/populationgenomics/cpg-flow/commit/9a809ccc79188d412313239e5dc38ac737d27689))
+
+- **.dummy**: Trigger commit docker build
+  ([`d1e84bc`](https://github.com/populationgenomics/cpg-flow/commit/d1e84bcc2caaf4ec7eb54088f06793bc24826d66))
+
+- **docker.yaml,pyproject.toml**: Get sem ver to update docker version
+  ([`b0279b0`](https://github.com/populationgenomics/cpg-flow/commit/b0279b0cee7517ecbe5d66879f975d60b10457bb))
+
+- **docker.yaml**: Push commit images to images-tmp
+  ([`743a533`](https://github.com/populationgenomics/cpg-flow/commit/743a533fb28f7b8b657748b8184c01489e0b94d2))
+
+- **docker.yaml**: Add push commit sha step
+  ([`3d13938`](https://github.com/populationgenomics/cpg-flow/commit/3d1393817db9df8f01bd46219405975576fcaf7f))
+
+- **.github/workflows/docker.yaml**: Added test environment
+  ([`eff9cdc`](https://github.com/populationgenomics/cpg-flow/commit/eff9cdc1ecd3a0966c7e7ff4a6e3eee457e36b1f))
+
+- **.github/workflows/renovate.yaml**: Removed input on workflow dispatch
+  ([`aad0f9b`](https://github.com/populationgenomics/cpg-flow/commit/aad0f9bd4f3e3c14ca062012d76fc85c2ffe1196))
+
+### Refactoring
+
+- **.dummy**: Add dummy file
+  ([`6317611`](https://github.com/populationgenomics/cpg-flow/commit/63176114962beefc3277701437e97eec57330dae))
+
+- **tests/hail/**: Move to test_workflows_shared repo
+  ([`c146832`](https://github.com/populationgenomics/cpg-flow/commit/c1468327bb71507d4ac89862266d307c4374515f))
+
+### Testing
+
+- **Dockerfile**: Add PYTHONPATH to Dockerfile
+  ([`fddd50e`](https://github.com/populationgenomics/cpg-flow/commit/fddd50ef32f934e89f2ea4f43be85fe527c11004))
+
+- **tests/hail/workflow.py**: Add import to run_cpg_flow
+  ([`a48b8dc`](https://github.com/populationgenomics/cpg-flow/commit/a48b8dcedd7dda713fce5977e0f9f73de54c4a58))
+
+- **tests/hail/workflow.py**: Revert stages import
+  ([`d998be7`](https://github.com/populationgenomics/cpg-flow/commit/d998be748d36f5ffd6eb6aa83a09877ba483020b))
+
+- **./,tests/hail/**: Make tests importable
+  ([`7af791d`](https://github.com/populationgenomics/cpg-flow/commit/7af791dd249f29cce38b85abe7b2adac154265c0))
+
+- **tests/hail/stages.py**: Fix?
+  ([`765f65e`](https://github.com/populationgenomics/cpg-flow/commit/765f65ee83791b8e40c68165128ab156c1d96b04))
+
+- **tests/hail/config.toml,tests/hail/stages.py**: Fix?
+  ([`e113af2`](https://github.com/populationgenomics/cpg-flow/commit/e113af2f2bfef49260da7e44765b3a81bc95d47f))
+
+- **tests/hail/stages.py**: Trying print dump in a python job
+  ([`26a69d9`](https://github.com/populationgenomics/cpg-flow/commit/26a69d9fe6f46b33db81a5082398235f61bbb613))
+
+- **tests/hail/stages.py**: Remove use of read_input for cumulative_calc
+  ([`ada778e`](https://github.com/populationgenomics/cpg-flow/commit/ada778e85b629ab6ec679a34cbd4ec05941555e9))
+
+- **tests/hail/stages.py**: Testing python jobs in stages
+  ([`374c383`](https://github.com/populationgenomics/cpg-flow/commit/374c38397698204f84a6c53c474b2feb42206d99))
+
+- **tests/hail/stages.py**: Testing python jobs within stages
+  ([`5eeaa84`](https://github.com/populationgenomics/cpg-flow/commit/5eeaa84b38652c8a70ba24bb9b989fe257546883))
+
+- **tests/hail/stages.py**: Removed single quote bug
+  ([`30947c1`](https://github.com/populationgenomics/cpg-flow/commit/30947c178e67eb13e33dfe957d3c599e4e231dd0))
+
+- **tests/hail/config.toml**: Remove local backend setting
+  ([`9fdc5af`](https://github.com/populationgenomics/cpg-flow/commit/9fdc5af7adf1ed0759ecba051e718afba1c0cb2b))
+
+- **tests/hail/workflow.py**: Temp removal of last 2 stages
+  ([`c3d607d`](https://github.com/populationgenomics/cpg-flow/commit/c3d607d14793977345c97b63dbcbac54b6876fd5))
+
+- **tests/hail/stage.py**: More testing
+  ([`c044488`](https://github.com/populationgenomics/cpg-flow/commit/c044488333ed18f711e2c130273661585f1ada11))
+
+- **tests/hail/stages.py**: Testing cumulative calc
+  ([`af682c9`](https://github.com/populationgenomics/cpg-flow/commit/af682c9fcf2dd5fa0da95bb2be8d99e3e73da708))
+
+- **tests/hail/*.py**: Added logging
+  ([`03daed8`](https://github.com/populationgenomics/cpg-flow/commit/03daed807827c59aa30d9fba8e1f82bf30c31adf))
+
+- **tests/hail/*.py**: Fix path reference for expected_outputs
+  ([`31a14eb`](https://github.com/populationgenomics/cpg-flow/commit/31a14eba8b4c573847c0f7a8e2de19c5b35fd742))
+
+- **tests/hail/workflow.py**: Better logging for config
+  ([`b67dab4`](https://github.com/populationgenomics/cpg-flow/commit/b67dab4e0bec1df6b63606bd2294b6a91c7b492a))
+
+- **tests/hail/workflow.py**: Fixed config compilation
+  ([`20d56ce`](https://github.com/populationgenomics/cpg-flow/commit/20d56ceb528e2dc6652db27a13ed794943f443d7))
+
+- **tests/hail/config.toml**: Added access_level and sequencing_type vars
+  ([`5ec3812`](https://github.com/populationgenomics/cpg-flow/commit/5ec38124307e16a451989f141ac0a3c3e9e9bef0))
+
+- **tests/hail/***: Fix linting, missing image arg to analysis-runner
+  ([`7350986`](https://github.com/populationgenomics/cpg-flow/commit/735098694f1a2a1bc2be07aab38ff1ee9263637b))
+
+- **tests/hail/workflow.py**: Standardise shebang
+  ([`b405406`](https://github.com/populationgenomics/cpg-flow/commit/b4054060698dbb523165be9213227db7471079c8))
+
+- **tests/hail/*.py,-Dockerfile**: Add explicit imports from src
+  ([`ed0ddf3`](https://github.com/populationgenomics/cpg-flow/commit/ed0ddf3d8eb790d78575570d560b2b23e0662df0))
+
+- **tests/hail/stages.py,tests/hail/workflow.py,Dockerfile**: Fixed some bugs, and refactored
+  dockerfile for more accurate paths
+  ([`41d86e6`](https://github.com/populationgenomics/cpg-flow/commit/41d86e62639b1752397e8f4eff220023a8ce55c3))
+
+- **tests/hail/workflow.py**: Switch back shebang
+  ([`71de065`](https://github.com/populationgenomics/cpg-flow/commit/71de0655a96362188184b32bdc2c251d8dcbc85b))
+
+- **tests/hail/workflow.py**: Change shebang venv path
+  ([`96c31b9`](https://github.com/populationgenomics/cpg-flow/commit/96c31b972c7390dd29b19ad02a54f5edfbbceb41))
+
+- **tests/hail/run-test.sh**: Write better wait for docker loop
+  ([`91a55ea`](https://github.com/populationgenomics/cpg-flow/commit/91a55ea459889b359f30e0e278e1f7f85f9dfe50))
+
+- **tests/hail/run-test.sh**: Fix our script
+  ([`3b9e782`](https://github.com/populationgenomics/cpg-flow/commit/3b9e78257cdaeed274b7469d927902b3e2af208d))
+
+- **tests/hail/run-test.sh**: Check the image exists
+  ([`8ea7013`](https://github.com/populationgenomics/cpg-flow/commit/8ea7013d35ef62ef10b32219bc24107fc93cec5e))
+
+- **tests/hail/run-test.sh**: Check commit has pushed
+  ([`191f4ca`](https://github.com/populationgenomics/cpg-flow/commit/191f4cacf8c96452442b4721c00c55239ad4e58b))
+
+- **tests/hail/config.toml,tests/hail/run-test.sh**: Add warnings
+  ([`12fa5bd`](https://github.com/populationgenomics/cpg-flow/commit/12fa5bd351a8f8344fc4f697c8bc71f328f48a25))
+
+- **tests/hail/stages.py,tests/hail/workflow.py**: Complete workflow
+  ([`2f63d3d`](https://github.com/populationgenomics/cpg-flow/commit/2f63d3d0d08ffed5eb5b3b58f5d44e0fb3135464))
+
+- **.github/workflows/,tests/hail/**: Adding more to workflow test
+  ([`eea12e7`](https://github.com/populationgenomics/cpg-flow/commit/eea12e7cd5e5c222f60056642b19d9868b430ac4))
+
+- **tests/hail/**: Start writing cpg-flow workflow test
+  ([`930790a`](https://github.com/populationgenomics/cpg-flow/commit/930790a89d9d0720c7def8eb2e4784ea17db1641))
+
+
 ## v0.1.0-alpha.8 (2024-11-15)
 
 ### Bug Fixes
