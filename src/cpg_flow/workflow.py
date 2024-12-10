@@ -176,6 +176,7 @@ class Workflow:
 
         self.dry_run = dry_run or get_config(True)['workflow'].get('dry_run')
 
+        # TODO: should the ['dataset'] be a get? should we rename it to analysis dataset?
         analysis_dataset = get_config(True)['workflow']['dataset']
         name = get_config()['workflow'].get('name', analysis_dataset)
         description = get_config()['workflow'].get('description', name)
