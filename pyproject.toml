@@ -17,6 +17,7 @@ dependencies = [
     # Avoid dependency resolution backtracking, Python 3.10 compatibility
     "grpcio-status>=1.48,<1.50",
     "metamist>=6.9.0",
+    "networkx>=3.4.2",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -391,7 +392,6 @@ dev-dependencies = [
     "coverage>=7.6.4",
     "cpg-flow",
     "hail>=0.2.133",
-    "networkx>=3.4.2",
     "pip-audit>=2.7.3",
     "pre-commit>=4.0.1",
     "pylint>=3.3.1",
