@@ -387,8 +387,8 @@ class Metamist:
         output: Path | str,
         type_: str | AnalysisType,
         status: str | AnalysisStatus,
-        cohort_ids: list[str],
-        sequencing_group_ids: list[str],
+        cohort_ids: list[str] | None = None,
+        sequencing_group_ids: list[str] | None = None,
         dataset: str | None = None,
         meta: dict | None = None,
     ) -> int | None:
@@ -401,6 +401,12 @@ class Metamist:
             type_ = type_.value
         if isinstance(status, AnalysisStatus):
             status = status.value
+
+        if not cohort_ids:
+            cohort_ids = []
+
+        if not sequencing_group_ids:
+            sequencing_group_ids = []
 
         am = models.Analysis(
             type=type_,
