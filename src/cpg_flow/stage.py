@@ -421,6 +421,7 @@ class Stage(Generic[TargetT], ABC):
         Can be a str, a Path object, or a dictionary of str/Path objects.
         """
 
+    # TODO: remove this method
     def deprecated_queue_for_cohort(
         self,
         cohort: Cohort,
@@ -457,7 +458,7 @@ class Stage(Generic[TargetT], ABC):
     def make_outputs(
         self,
         target: Target,
-        data: ExpectedResultT = None,
+        data: ExpectedResultT = None,  # TODO: ExpectedResultT is probably too broad, our code only really support dict
         jobs: Sequence[Job | None] | Job | None = None,
         meta: dict | None = None,
         reusable: bool = False,

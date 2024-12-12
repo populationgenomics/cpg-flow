@@ -387,6 +387,7 @@ class Metamist:
         output: Path | str,
         type_: str | AnalysisType,
         status: str | AnalysisStatus,
+        cohort_ids: list[str],
         sequencing_group_ids: list[str],
         dataset: str | None = None,
         meta: dict | None = None,
@@ -405,6 +406,7 @@ class Metamist:
             type=type_,
             status=models.AnalysisStatus(status),
             output=str(output),
+            cohort_ids=list(cohort_ids),
             sequencing_group_ids=list(sequencing_group_ids),
             meta=meta or {},
         )

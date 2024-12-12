@@ -9,12 +9,15 @@ from hailtop.batch import Batch
 from hailtop.batch.job import Job
 
 from cpg_flow.targets import Target
+from cpg_flow.targets.cohort import Cohort
+from cpg_flow.targets.multicohort import MultiCohort
 from cpg_utils.config import get_config
 
 
 def complete_analysis_job(
     output: str,
     analysis_type: str,
+    cohort_ids: list[str],
     sg_ids: list[str],
     project_name: str,
     meta: dict,
@@ -76,6 +79,7 @@ def complete_analysis_job(
         output=output,
         type_=analysis_type,
         status=AnalysisStatus('completed'),
+        cohort_ids=cohort_ids,
         sequencing_group_ids=sg_ids,
         dataset=project_name,
         meta=meta,
@@ -153,7 +157,18 @@ class MetamistStatusReporter(StatusReporter):
             meta = {}
 
         # find all relevant SG IDs
-        sg_ids = target.get_sequencing_group_ids()
+        # Currently this implementation will only return sg ids or cohort ids
+        # The other list of ids will be empty
+        # It is unclear if metamist would accept both list of ids and succeed
+        cohort_ids = []
+        sequencing_group_ids = []
+        if target is None:
+            raise ValueError('Target is required to create analysis')
+        elif isinstance(target, MultiCohort | Cohort):
+            cohort_ids = target.get_cohort_ids()
+        else:
+            sequencing_group_ids = target.get_sequencing_group_ids()
+
         py_job = b.new_python_job(
             f'Register analysis output {output}',
             job_attr or {} | {'tool': 'metamist'},
@@ -163,7 +178,8 @@ class MetamistStatusReporter(StatusReporter):
             complete_analysis_job,
             str(output),
             analysis_type,
-            sg_ids,
+            cohort_ids,
+            sequencing_group_ids,
             project_name,
             meta,
             update_analysis_meta,
