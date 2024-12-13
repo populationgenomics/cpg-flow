@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.10 (2024-12-13)
+
+### Bug Fixes
+
+- **src/cpg_flow/,src/cpg_flow/targets/**: Add missing methods
+  ([`22edaf2`](https://github.com/populationgenomics/cpg-flow/commit/22edaf2d1f07a3a456e16faa4dfd11b22f530d4c))
+
+- **src/cpg_flow/status.py**: Cohort has no method .target_id
+  ([`f5f2264`](https://github.com/populationgenomics/cpg-flow/commit/f5f22648d1996043521860075573d25f4804e261))
+
+- **src/cpg_flow/metamist.py**: Create_analysis make id lists optional
+  ([`b3ef85c`](https://github.com/populationgenomics/cpg-flow/commit/b3ef85cc9c14a8acf7e84227d931e76399b7110b))
+
+- **src/cpg_flow/**: Add passing cohort ids to create analysis
+  ([`d2fa675`](https://github.com/populationgenomics/cpg-flow/commit/d2fa67559f74e6e7ae1108611e3df5cd838179be))
+
+
 ## v0.1.0-alpha.9 (2024-12-10)
 
 ### Bug Fixes
