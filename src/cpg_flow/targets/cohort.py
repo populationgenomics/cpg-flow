@@ -18,14 +18,16 @@ Example:
 
 """
 
-import logging
 from typing import TYPE_CHECKING
 
 import pandas as pd
 
 from cpg_flow.targets import Dataset, Target
+from cpg_flow.utils import get_logger
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
+
+LOGGER = get_logger(__name__)
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
@@ -97,7 +99,7 @@ class Cohort(Target):
         """
         if s.id in self._sequencing_group_by_id:
             if allow_duplicates:
-                logging.debug(
+                LOGGER.debug(
                     f'SequencingGroup {s.id} already exists in the Cohort {self.name}',
                 )
                 return self._sequencing_group_by_id[s.id]

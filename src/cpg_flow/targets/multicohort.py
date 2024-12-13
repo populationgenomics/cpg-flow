@@ -14,14 +14,16 @@ Functions:
     seq_type_subdir: Returns a subdirectory parametrized by sequencing type.
 """
 
-import logging
 from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 
 from cpg_flow.targets import Cohort, Dataset, Target
+from cpg_flow.utils import get_logger
 from cpg_utils import Path
 from cpg_utils.config import get_config
+
+LOGGER = get_logger(__name__)
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
@@ -99,7 +101,7 @@ class MultiCohort(Target):
         """
         cohort = self._cohorts_by_name.get(name)
         if not cohort:
-            logging.warning(f'Cohort {name} not found in the multi-cohort')
+            LOGGER.warning(f'Cohort {name} not found in the multi-cohort')
 
         if not only_active:  # Return cohort even if it's inactive
             return cohort
@@ -137,7 +139,7 @@ class MultiCohort(Target):
         Create a cohort and add it to the multi-cohort.
         """
         if name in self._cohorts_by_name:
-            logging.debug(f'Cohort {name} already exists in the multi-cohort')
+            LOGGER.debug(f'Cohort {name} already exists in the multi-cohort')
             return self._cohorts_by_name[name]
 
         c = Cohort(name=name)
@@ -151,7 +153,7 @@ class MultiCohort(Target):
             d: Dataset object
         """
         if d.name in self._datasets_by_name:
-            logging.debug(
+            LOGGER.debug(
                 f'Dataset {d.name} already exists in the MultiCohort {self.name}',
             )
         else:

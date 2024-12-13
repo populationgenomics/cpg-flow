@@ -375,7 +375,7 @@ def test_mixed_reads(mocker: MockFixture, tmp_path, caplog):
     # TODO: check expected output
     assert test_none.alignment_input is None
     assert re.search(
-        r'WARNING\s+root:inputs\.py:\d+\s+No reads found for sequencing group CPGbbb of type genome',
+        r'WARNING\s+cpg_flow\.inputs:inputs\.py:\d+\s+No reads found for sequencing group CPGbbb of type genome',
         caplog.text,
     )
 
