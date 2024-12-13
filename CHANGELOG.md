@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.11 (2024-12-13)
+
+### Bug Fixes
+
+- **target.py**: Add fix for alignment has to target
+  ([`8e7b6a9`](https://github.com/populationgenomics/cpg-flow/commit/8e7b6a9268b3f09bd37d808f7720591305c24225))
+
+- **src/cpg_flow/targets/**: Improve hashing efficiency
+  ([`b3715e8`](https://github.com/populationgenomics/cpg-flow/commit/b3715e8b68d2fb58a3922730f845cd34e2325b68))
+
+
 ## v0.1.0-alpha.10 (2024-12-13)
 
 ### Bug Fixes
