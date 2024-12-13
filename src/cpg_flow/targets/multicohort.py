@@ -81,6 +81,13 @@ class MultiCohort(Target):
             cohorts = [c for c in cohorts if c.active]
         return cohorts
 
+    def get_cohort_ids(self, only_active: bool = True) -> list['str']:
+        """
+        Get list of cohort IDs.
+        Include only "active" cohorts (unless only_active is False)
+        """
+        return [c.get_cohort_id() for c in self.get_cohorts(only_active)]
+
     def get_cohort_by_name(
         self,
         name: str,

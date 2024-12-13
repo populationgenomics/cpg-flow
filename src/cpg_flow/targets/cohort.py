@@ -52,6 +52,10 @@ class Cohort(Target):
         """Unique target ID"""
         return self.name
 
+    def get_cohort_id(self) -> str:
+        """Get the cohort ID"""
+        return self.name
+
     def write_ped_file(
         self,
         out_path: Path | None = None,
