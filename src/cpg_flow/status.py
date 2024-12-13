@@ -167,7 +167,7 @@ class MetamistStatusReporter(StatusReporter):
         elif isinstance(target, MultiCohort):
             cohort_ids = target.get_cohort_ids()
         elif isinstance(target, Cohort):
-            cohort_ids = [target.target_id]
+            cohort_ids = [target.get_cohort_id()]
         else:
             sequencing_group_ids = target.get_sequencing_group_ids()
 
