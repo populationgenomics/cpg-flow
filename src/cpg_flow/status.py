@@ -164,8 +164,10 @@ class MetamistStatusReporter(StatusReporter):
         sequencing_group_ids = []
         if target is None:
             raise ValueError('Target is required to create analysis')
-        elif isinstance(target, MultiCohort | Cohort):
+        elif isinstance(target, MultiCohort):
             cohort_ids = target.get_cohort_ids()
+        elif isinstance(target, Cohort):
+            cohort_ids = [target.target_id]
         else:
             sequencing_group_ids = target.get_sequencing_group_ids()
 
