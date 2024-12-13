@@ -15,7 +15,7 @@ Methods:
     get_sequencing_group_ids(only_active: bool = True) -> list[str]:
         Get a flat list of all sequencing group IDs corresponding to this target.
 
-    alignment_inputs_hash() -> str:
+    get_alignment_inputs_hash() -> str:
         Compute a hash for the alignment inputs of the sequencing groups.
 
     target_id() -> str:
