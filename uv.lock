@@ -622,7 +622,7 @@ dev = [
     { name = "coverage", specifier = ">=7.6.4" },
     { name = "cpg-flow", editable = "." },
     { name = "hail", specifier = ">=0.2.133" },
-    { name = "pdoc" },
+    { name = "pdoc", specifier = ">=15.0.1" },
     { name = "pip-audit", specifier = ">=2.7.3" },
     { name = "pre-commit", specifier = ">=4.0.1" },
     { name = "pylint", specifier = ">=3.3.1" },

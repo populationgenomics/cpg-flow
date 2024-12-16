@@ -48,19 +48,13 @@ CPG Flow supports various stages of genomic data processing, from raw data inges
 
 ### 🌐 Production
 
-The production version of this API is available at **[api.populationgenomics.com](https://api.populationgenomics.com/docs)**.
-
-This API is used by the **[Population Genomics Web App](https://populationgenomics.com)**.
-
-The production server is updated automatically with the latest version of the API when a new release is created. (When a new tag is pushed on the `main` branch)
+The production version of this API is documented at **[populationgenomics.github.io/cpg-flow](https://populationgenomics.github.io/cpg-flow/main/cpg_flow.html)**.
 
 ### 🛠️ Development
 
-The development version of this API is available at **[preprod.api.populationgenomics.com](https://preprod.api.populationgenomics.com/docs)**.
+The development version of this API is available at **[populationgenomics.github.io/cpg-flow](https://populationgenomics.github.io/cpg-flow/alpha/cpg_flow.html)**.
 
-This API is used by the **[Population Genomics Web App](https://preprod.populationgenomics.com)**.
-
-The development server is updated automatically when a commit is pushed on the `develop` branch.
+The documentation is updated automatically when a commit is pushed on the `alpha` (prerelease) or `main` (release) branch.
 
 ## <a name="installation">🔨 Installation</a>
 

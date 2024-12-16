@@ -15,8 +15,12 @@ clean:
 	rm -rf src/__pycache__ src/*/__pycache__ src/*/*/__pycache__
 	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 
-ci-build: clean
-	pdoc cpg_flow --output-dir docs
+docs:
+	@BRANCH_NAME=$(shell git rev-parse --abbrev-ref HEAD) && \
+	echo "Building docs for branch $$BRANCH_NAME" && \
+	uv run pdoc cpg_flow --output-dir "docs/$$BRANCH_NAME"
+
+ci-build: clean docs
 	python -m pip install build "setuptools>=42" setuptools-scm wheel
 	SETUPTOOLS_SCM_PRETEND_VERSION="$$NEW_VERSION" python -m build --sdist --wheel
 
@@ -33,4 +37,4 @@ upload: clean build
 	uv run twine check dist/*
 	uv run twine upload -r testpypi dist/*
 
-.PHONY: venv init test clean ci-build build install-build install-local upload
+.PHONY: venv init test docs clean ci-build build install-build install-local upload
