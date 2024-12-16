@@ -5,23 +5,18 @@
 
 ![Python](https://img.shields.io/badge/-Python-black?style=for-the-badge&logoColor=white&logo=python&color=2F73BF)
 
-TODO: Badges
-Will look something like this
-
-[![⚙️ Build Workflow](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/build.yml/badge.svg)](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/build.yml)
-[![🚀 Deploy To Production Workflow](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/deploy-to-production.yml/badge.svg)](https://github.com/antoinezanardi/werewolves-assistant-api-next/actions/workflows/deploy-to-production.yml)
-
-[![GitHub release](https://img.shields.io/github/release/antoinezanardi/werewolves-assistant-api-next.svg)](https://GitHub.com/antoinezanardi/werewolves-assistant-api-next/releases/)
+[![⚙️ Test Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/build.yml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)
+[![🚀 Deploy To Production Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/deploy-to-production.yml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)
+[![GitHub release](https://img.shields.io/github/release/populationgenomics/cpg-flow.svg)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
 [![semantic-release: conventional commits](https://img.shields.io/badge/semantic--release-conventional%20commits-Æ1A7DBD?logo=semantic-release&color=1E7FBF)](https://github.com/semantic-release/semantic-release)
-[![GitHub license](https://img.shields.io/github/license/antoinezanardi/werewolves-assistant-api-next.svg)](https://github.com/antoinezanardi/https://img.shields.io/github/license/werewolves-assistant-api-next.svg/blob/main/LICENSE)
-![Dependencies](https://img.shields.io/badge/-dependencies-black?style=flat-square&logoColor=white&logo=pnpm&color=B76507)[![Known Vulnerabilities](https://snyk.io/test/github/antoinezanardi/werewolves-assistant-api-next/badge.svg?targetFile=package.json&style=flat-square)](https://snyk.io/test/github/antoinezanardi/werewolves-assistant-api-next?targetFile=package.json)
+[![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
 
-[![Tests count](https://byob.yarr.is/antoinezanardi/werewolves-assistant-api-next/tests-count)](https://byob.yarr.is/antoinezanardi/werewolves-assistant-api-next/tests-count)
-[![Scenarios](https://byob.yarr.is/antoinezanardi/werewolves-assistant-api-next/scenarios)](https://byob.yarr.is/antoinezanardi/werewolves-assistant-api-next/scenarios)
+[![Tests count](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)
+[![Scenarios](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)
 
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=antoinezanardi_werewolves-assistant-api-next&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=antoinezanardi_werewolves-assistant-api-next)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=antoinezanardi_werewolves-assistant-api-next&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=antoinezanardi_werewolves-assistant-api-next)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=antoinezanardi_werewolves-assistant-api-next&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=antoinezanardi_werewolves-assistant-api-next)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=populationgenomics_cpg-flow)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=populationgenomics_cpg-flow)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=populationgenomics_cpg-flow)
 
 <br />
 
@@ -53,17 +48,17 @@ CPG Flow supports various stages of genomic data processing, from raw data inges
 
 ### 🌐 Production
 
-The production version of this API is available at **[api.werewolves-assistant.com](https://api.werewolves-assistant.com/docs)**.
+The production version of this API is available at **[api.populationgenomics.com](https://api.populationgenomics.com/docs)**.
 
-This API is used by the **[Werewolves Assistant Web App](https://werewolves-assistant.com)**.
+This API is used by the **[Population Genomics Web App](https://populationgenomics.com)**.
 
 The production server is updated automatically with the latest version of the API when a new release is created. (When a new tag is pushed on the `main` branch)
 
 ### 🛠️ Development
 
-The development version of this API is available at **[preprod.api.werewolves-assistant.com](https://preprod.api.werewolves-assistant.com/docs)**.
+The development version of this API is available at **[preprod.api.populationgenomics.com](https://preprod.api.populationgenomics.com/docs)**.
 
-This API is used by the **[Werewolves Assistant Web App](https://preprod.werewolves-assistant.com)**.
+This API is used by the **[Population Genomics Web App](https://preprod.populationgenomics.com)**.
 
 The development server is updated automatically when a commit is pushed on the `develop` branch.
 
@@ -95,11 +90,13 @@ You can also run the app in development mode with Docker, more information in th
 
 ## <a name="build">🚀 Build</a>
 
-TODO
+To build the project, run the following command:
+
+```bash
+pnpm run build
+```
 
 ## <a name="docker">🐳 Docker</a>
-
-TODO
 
 ### 🔨 Development mode
 
@@ -112,11 +109,19 @@ make init
 
 ### 🚀 Production mode
 
-TODO
+To run the project in production mode, use the following command:
+
+```bash
+docker-compose up -d
+```
 
 ### 🧪 Test mode
 
-TODO
+To run the tests in Docker, use the following command:
+
+```bash
+docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+```
 
 ## <a name="tests">💯 Tests</a>
 
@@ -162,9 +167,6 @@ TODO
 
 ## <a name="env-variables">🌿 Env variables</a>
 
-TODO
-
-<!--
 Environment variables are :
 
 |        Name         |               Description               | Required | Default value |                   Limitations                    |
@@ -178,8 +180,6 @@ Environment variables are :
 | `DATABASE_USERNAME` |          MongoDB database user          |    ✅     |       ❌       |              Can't be empty string               |
 | `DATABASE_PASSWORD` |        MongoDB database password        |    ✅     |       ❌       |              Can't be empty string               |
 |    `CORS_ORIGIN`    |           CORS allowed origin           |    ❌     |      `*`      |          If set, can't be empty string           |
--->
-
 
 ## <a name="code-analysis-and-consistency">☑️ Code analysis and consistency</a>
 
@@ -238,22 +238,17 @@ SonarCloud summary is available **[here](https://sonarcloud.io/summary/new_code?
 
 ## <a name="versions">📈 Releases & Changelog</a>
 
-TODO:
-
-<!--
 Releases on **main** branch are generated and published automatically by :
 
 ![Semantic Release](https://img.shields.io/badge/-Semantic%20Release-black?style=for-the-badge&logoColor=white&logo=semantic-release&color=000000)
 
 It uses the **[conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)** strategy.
 
-Each change when a new release comes up is listed in the **<a href="https://github.com/antoinezanardi/werewolves-assistant-api-next/blob/master/CHANGELOG.md" target="_blank">CHANGELOG.md file</a>**.
+Each change when a new release comes up is listed in the **<a href="https://github.com/populationgenomics/cpg-flow/blob/main/CHANGELOG.md" target="_blank">CHANGELOG.md file</a>**.
 
 Also, you can keep up with changes by watching releases via the **Watch GitHub button** at the top of this page.
 
-#### 🏷️ <a href="https://github.com/antoinezanardi/werewolves-assistant-api-next/releases" target="_blank">All releases for this project are available here</a>.
-
--->
+#### 🏷️ <a href="https://github.com/populationgenomics/cpg-flow/releases" target="_blank">All releases for this project are available here</a>.
 
 ## <a name="github-actions">🎬 GitHub Actions</a>
 
