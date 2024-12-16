@@ -16,6 +16,7 @@ clean:
 	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 
 ci-build: clean
+	pdoc cpg_flow --output-dir docs
 	python -m pip install build "setuptools>=42" setuptools-scm wheel
 	SETUPTOOLS_SCM_PRETEND_VERSION="$$NEW_VERSION" python -m build --sdist --wheel
 

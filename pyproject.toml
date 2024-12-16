@@ -392,6 +392,7 @@ dev-dependencies = [
     "coverage>=7.6.4",
     "cpg-flow",
     "hail>=0.2.133",
+    "pdoc>=15.0.1",
     "pip-audit>=2.7.3",
     "pre-commit>=4.0.1",
     "pylint>=3.3.1",

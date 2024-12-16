@@ -5,8 +5,8 @@
 
 ![Python](https://img.shields.io/badge/-Python-black?style=for-the-badge&logoColor=white&logo=python&color=2F73BF)
 
-[![⚙️ Test Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/build.yml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)
-[![🚀 Deploy To Production Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/deploy-to-production.yml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)
+[![⚙️ Test Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)
+[![🚀 Deploy To Production Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)
 [![GitHub release](https://img.shields.io/github/release/populationgenomics/cpg-flow.svg)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
 [![semantic-release: conventional commits](https://img.shields.io/badge/semantic--release-conventional%20commits-Æ1A7DBD?logo=semantic-release&color=1E7FBF)](https://github.com/semantic-release/semantic-release)
 [![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
@@ -14,9 +14,9 @@
 [![Tests count](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)
 [![Scenarios](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)
 
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=populationgenomics_cpg-flow)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=populationgenomics_cpg-flow)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=populationgenomics_cpg-flow)
+[![Technical Debt](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
+[![Duplicated Lines (%)](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=duplicated_lines_density&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
+[![Code Smells](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=code_smells&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
 
 <br />
 
