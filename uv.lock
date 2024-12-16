@@ -573,7 +573,7 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "0.1.0a11+gcd4a722a.d20241216"
+version = "0.1.0a11+g991cf578.d20241216"
 source = { editable = "." }
 dependencies = [
     { name = "cpg-utils" },
@@ -599,6 +599,7 @@ dev = [
     { name = "pytest" },
     { name = "pytest-mock" },
     { name = "python-semantic-release" },
+    { name = "pyyaml" },
     { name = "toml" },
     { name = "twine" },
 ]
@@ -629,6 +630,7 @@ dev = [
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "pytest-mock", specifier = ">=3.14.0" },
     { name = "python-semantic-release", specifier = ">=9.4.1" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "toml", specifier = ">=0.10.2" },
     { name = "twine", specifier = ">=5.1.1" },
 ]

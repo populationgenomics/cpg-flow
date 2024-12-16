@@ -6,6 +6,9 @@ init: venv
 	pre-commit install
 	pre-commit install --hook-type commit-msg
 
+init-dev: init
+	uv sync --dev
+
 # Actions
 test:
 	coverage run -m pytest tests --junitxml=test-execution.xml
@@ -19,6 +22,11 @@ docs:
 	@BRANCH_NAME=$(shell git rev-parse --abbrev-ref HEAD) && \
 	echo "Building docs for branch $$BRANCH_NAME" && \
 	uv run pdoc cpg_flow --output-dir "docs/$$BRANCH_NAME"
+
+docs-serve:
+	@BRANCH_NAME=$(shell git rev-parse --abbrev-ref HEAD) && \
+	echo "Serving docs for branch $$BRANCH_NAME" && \
+	uv run pdoc cpg_flow
 
 ci-build: clean docs
 	python -m pip install build "setuptools>=42" setuptools-scm wheel
