@@ -3,13 +3,21 @@ import os
 import yaml
 
 # Path to the workflows directory
-WORKFLOWS_DIR = '.'
-README_FILE = '../../README.md'
+WORKFLOWS_DIR = '.github/workflows'
+README_FILE = 'README.md'
+DESCRIPTION_FILE = 'docs/workflow_descriptions.yaml'
 
 REPO_URL = 'https://github.com/populationgenomics/cpg-flow'
 
 
-def parse_workflows(directory):
+def load_descriptions(description_file):
+    with open(description_file, 'r') as f:
+        descriptions = yaml.safe_load(f)
+        return descriptions
+
+
+def parse_workflows(directory, description_file):
+    descriptions = load_descriptions(description_file)
     workflows = []
     for filename in os.listdir(directory):
         if filename.endswith('.yaml') or filename.endswith('.yml'):
@@ -19,7 +27,7 @@ def parse_workflows(directory):
                     data = yaml.load(file, Loader=yaml.BaseLoader)
                     workflow_name = data.get('name', 'Unnamed Workflow')
                     triggers = parse_triggers(data.get('on'))
-                    description = data.get('description', 'No description provided')
+                    description = descriptions.get(filename)
                     workflows.append(
                         {
                             'file': filename,
@@ -92,7 +100,7 @@ def update_readme(markdown, readme_file):
 
 if __name__ == '__main__':
     if os.path.exists(WORKFLOWS_DIR):
-        workflows = parse_workflows(WORKFLOWS_DIR)
+        workflows = parse_workflows(WORKFLOWS_DIR, DESCRIPTION_FILE)
         if workflows:
             markdown = generate_markdown(workflows)
             update_readme(markdown, README_FILE)

@@ -1,0 +1,7 @@
+test.yaml: "Runs unit tests and generates coverage reports."
+web_docs.yaml: "Deploys API documentation to GitHub Pages."
+security.yaml: "Performs security checks using pip-audit."
+renovate.yaml: "Runs Renovate to update dependencies."
+package.yaml: "Packages the project and publishes it to PyPI and GitHub Releases."
+lint.yaml: "Runs linting checks using pre-commit hooks."
+docker.yaml: "Builds and pushes Docker images for the project."
