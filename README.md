@@ -28,12 +28,11 @@
 4. 🚀 [Build](#build)
 5. 🐳 [Docker](#docker)
 6. 💯 [Tests](#tests)
-8. ☑️ [Code analysis and consistency](#code-analysis-and-consistency)
-9. 📈 [Releases & Changelog](#versions)
-10. 🎬 [GitHub Actions](#github-actions)
-11. ✨ [Misc commands](#misc-commands)
-12. ©️ [License](#license)
-13. ❤️ [Contributors](#contributors)
+7. ☑️ [Code analysis and consistency](#code-analysis-and-consistency)
+8. 📈 [Releases & Changelog](#versions)
+9. 🎬 [GitHub Actions](#github-actions)
+10. ©️ [License](#license)
+11. ❤️ [Contributors](#contributors)
 
 ## <a name="what-is-this-api">🐙 What is this API ?</a>
 
@@ -274,35 +273,6 @@ You can find all the workflows in the **[.github/workflows directory](https://gi
 | **[Lint](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml)** | Runs linting checks using pre-commit hooks.<br/><br/>[![Lint](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml) | `push` |
 | **[Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)** | Builds and pushes Docker images for the project.<br/><br/>[![Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) | `pull_request` on `main, alpha` and `push` on `main, alpha` and `workflow_dispatch` |
 
-
-## <a name="misc-commands">✨ Misc commands</a>
-
-TODO
-
-<!--
-### 🌳 Animated tree visualisation of the project's evolution with **[Gource](https://gource.io/)**
-```shell
-# Please ensure that `gource` is installed on your system.
-pnpm run gource
-```
-
-### 🔀 Create git branch with a conventional name
-```shell
-pnpm run script:create-branch
-```
-
-### ⤴️ Create pull request against the `develop` branch from current branch
-```shell
-pnpm run script:create-pull-request
-```
-
-### 📣 To all IntelliJ IDEs users (IntelliJ, Webstorm, PHPStorm, etc.)
-
-All the above commands are available in the **.run directory** at the root of the project.
-
-You can add them as **run configurations** in your IDE.
-
--->
 
 ## <a name="license">©️ License</a>
 
