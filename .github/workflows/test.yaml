@@ -60,7 +60,7 @@ jobs:
           echo "TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)" >> $GITHUB_ENV
           echo "TEST_PASSED=$(($(grep -o '<testcase ' test-execution.xml | wc -l) - $(grep -o '<failure ' test-execution.xml | wc -l)))" >> $GITHUB_ENV
           echo "COVERAGE=$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%" >> $GITHUB_ENV
-          echo "COVERAGE_COLOR=$(if [ $(echo $COVERAGE | cut -d'%' -f1) -ge 80 ]; then echo 'green'; elif [ $(echo $COVERAGE | cut -d'%' -f1) -ge 50 ]; then echo 'orange'; else echo 'red'; fi)" >> $GITHUB_ENV
+          echo "COVERAGE_COLOR=$(if [ $(echo $COVERAGE | cut -d'.' -f1) -ge 80 ]; then echo 'green'; elif [ $(echo $COVERAGE | cut -d'.' -f1) -ge 50 ]; then echo 'orange'; else echo 'red'; fi)" >> $GITHUB_ENV
 
       - name: Test Count Badge
         uses: RubbaBoy/BYOB@v1.3.0
