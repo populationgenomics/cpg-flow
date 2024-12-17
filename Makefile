@@ -9,7 +9,6 @@ init: venv
 init-dev: init
 	uv sync --dev
 
-# Actions
 test:
 	coverage run -m pytest tests --junitxml=test-execution.xml
 
@@ -19,7 +18,7 @@ clean:
 	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 
 readme:
-	python docs/document_readme.py
+	python docs/update_readme.py
 
 docs: readme
 	@BRANCH_NAME=$(shell git rev-parse --abbrev-ref HEAD) && \
