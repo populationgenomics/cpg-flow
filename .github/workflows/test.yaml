@@ -72,6 +72,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add docs/badges.yaml
           git commit -m "chore: update badges.yaml with test results and coverage"
+          git pull --rebase
           git push
 
       - name: Fail if unit tests are not passing
