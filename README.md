@@ -60,14 +60,11 @@ The documentation is updated automatically when a commit is pushed on the `alpha
 To install this project, you will need to have on your machine :
 
 ![PyPI](https://img.shields.io/badge/-PyPI-black?style=for-the-badge&logoColor=white&logo=pypi&color=3776AB)
-![pip](https://img.shields.io/badge/-pip-black?style=for-the-badge&logoColor=white&logo=pip&color=3776AB)
 ![uv](https://img.shields.io/badge/-uv-black?style=for-the-badge&logoColor=white&logo=uv&color=3776AB)
 
-To install this project, you will need to have Python and `pip` or `uv` installed on your machine.
+To install this project, you will need to have Python and `uv` installed on your machine.
 
 We recommend using a virtual environment to manage your dependencies.
-
-**If you don't have `uv` installed, you can still use `pip` for all commands below, but we recommend using `uv` for faster and more reliable installs.**
 
 Then, run the following commands:
 
@@ -77,18 +74,6 @@ uv sync
 
 # Or equivalently
 make init
-```
-
-Alternatively using pip
-```bash
-# Create a virtual environment
-python -m venv venv
-
-# Activate the virtual environment
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-
-# Install the package using pip
-pip install cpg-flow
 ```
 
 ### 🛠️ Development
