@@ -2,7 +2,6 @@
 Helpers to communicate with the metamist database.
 """
 
-import logging
 import pprint
 import traceback
 from collections.abc import Callable
@@ -19,13 +18,15 @@ from tenacity import (
 )
 
 from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPair, FastqPairs
-from cpg_flow.utils import exists
+from cpg_flow.utils import exists, get_logger
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 from metamist import models
 from metamist.apis import AnalysisApi
 from metamist.exceptions import ApiException, ServiceException
 from metamist.graphql import gql, query
+
+LOGGER = get_logger(__name__)
 
 GET_SEQUENCING_GROUPS_QUERY = gql(
     """
@@ -220,7 +221,7 @@ class Analysis:
         if any(k not in data for k in req_keys):
             for key in req_keys:
                 if key not in data:
-                    logging.error(f'"Analysis" data does not have {key}: {data}')
+                    LOGGER.error(f'"Analysis" data does not have {key}: {data}')
             raise ValueError(f'Cannot parse metamist Sequence {data}')
 
         output = data.get('output')
@@ -265,7 +266,7 @@ class Metamist:
             return api_func(**kwargv)
         except ServiceException:
             # raise here so the retry occurs
-            logging.warning(
+            LOGGER.warning(
                 f'Retrying {api_func} ...',
             )
             raise
@@ -273,7 +274,7 @@ class Metamist:
     def make_aapi_call(self, api_func: Callable, **kwargv: Any):
         """
         Make a generic API call to self.aapi.
-        This is a wrapper around retry of API call to handle exceptions and logging.
+        This is a wrapper around retry of API call to handle exceptions and LOGGER.
         """
         try:
             return self.make_retry_aapi_call(api_func, **kwargv)
@@ -281,7 +282,7 @@ class Metamist:
             # Metamist API failed even after retries
             # log the error and continue
             traceback.print_exc()
-            logging.error(
+            LOGGER.error(
                 f'Error: {e} Call {api_func} failed with payload:\n{str(kwargv)}',
             )
         # TODO: discuss should we catch all here as well?
@@ -302,7 +303,7 @@ class Metamist:
         and filtering options.
         """
         metamist_proj = self.get_metamist_proj(dataset_name)
-        logging.info(f'Getting sequencing groups for dataset {metamist_proj}')
+        LOGGER.info(f'Getting sequencing groups for dataset {metamist_proj}')
 
         skip_sgs = get_config()['workflow'].get('skip_sgs', [])
         only_sgs = get_config()['workflow'].get('only_sgs', [])
@@ -371,13 +372,13 @@ class Metamist:
             assert a.status == analysis_status, analysis
             assert a.type == analysis_type, analysis
             if len(a.sequencing_group_ids) < 1:
-                logging.warning(f'Analysis has no sequencing group ids. {analysis}')
+                LOGGER.warning(f'Analysis has no sequencing group ids. {analysis}')
                 continue
 
             assert len(a.sequencing_group_ids) == 1, analysis
             analysis_per_sid[list(a.sequencing_group_ids)[0]] = a
 
-        logging.info(
+        LOGGER.info(
             f'Querying {analysis_type} analysis entries for {metamist_proj}: found {len(analysis_per_sid)}',
         )
         return analysis_per_sid
@@ -422,12 +423,12 @@ class Metamist:
             analysis=am,
         )
         if aid is None:
-            logging.error(
+            LOGGER.error(
                 f'Failed to create Analysis(type={type_}, status={status}, output={str(output)}) in {metamist_proj}',
             )
             return None
         else:
-            logging.info(
+            LOGGER.info(
                 f'Created Analysis(id={aid}, type={type_}, status={status}, '
                 f'output={str(output)}) in {metamist_proj}',
             )
