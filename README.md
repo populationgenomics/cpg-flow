@@ -11,8 +11,8 @@
 [![semantic-release: conventional commits](https://img.shields.io/badge/semantic--release-conventional%20commits-Æ1A7DBD?logo=semantic-release&color=1E7FBF)](https://github.com/semantic-release/semantic-release)
 [![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
 
-[![Tests count](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)
-[![Coverage](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)
+![Tests count](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/populationgenomics/cpg-flow/HEAD/docs/badges.yaml&label=Tests&query=$.test-badge.status&color=green)
+![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/populationgenomics/cpg-flow/HEAD/docs/badges.yaml&label=Coverage&query=$.coverage-badge.status&color=green)
 
 [![Technical Debt](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
 [![Duplicated Lines (%)](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=duplicated_lines_density&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
@@ -46,11 +46,11 @@ CPG Flow supports various stages of genomic data processing, from raw data inges
 
 ### 🌐 Production
 
-The production version of this API is documented at **[populationgenomics.github.io/cpg-flow](https://populationgenomics.github.io/cpg-flow/main/cpg_flow.html)**.
+The production version of this API is documented at **[populationgenomics.github.io/cpg-flow/main/cpg_flow.html](https://populationgenomics.github.io/cpg-flow/main/cpg_flow.html)**.
 
 ### 🛠️ Development
 
-The development version of this API is available at **[populationgenomics.github.io/cpg-flow](https://populationgenomics.github.io/cpg-flow/alpha/cpg_flow.html)**.
+The development version of this API is available at **[populationgenomics.github.io/cpg-flow/alpha/cpg_flow.html](https://populationgenomics.github.io/cpg-flow/alpha/cpg_flow.html)**.
 
 The documentation is updated automatically when a commit is pushed on the `alpha` (prerelease) or `main` (release) branch.
 
@@ -172,9 +172,9 @@ Ensure you have the necessary permissions and are authenticated with Google Clou
 
 #### Unit Tests
 
-[![Tests count](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/test-badge)
+![Tests count](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/populationgenomics/cpg-flow/HEAD/docs/badges.yaml&label=Tests&query=$.test-badge.status&color=green)
 
-[![Coverage](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)](https://byob.yarr.is/populationgenomics/cpg-flow/coverage-badge)
+![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/populationgenomics/cpg-flow/HEAD/docs/badges.yaml&label=Coverage&query=$.coverage-badge.status&color=green)
 
 
 #### E2E Test

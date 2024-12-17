@@ -46,15 +46,6 @@ jobs:
           name: execution-report
           path: ./test-execution.xml
 
-      # - name: Test Report
-      #   uses: dorny/test-reporter@v1
-      #   if: always()
-      #   with:
-      #     name: Test Results
-      #     path: test-execution.xml
-      #     reporter: java-junit
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Save badge env variables
         run: |
           echo "TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)" >> $GITHUB_ENV
