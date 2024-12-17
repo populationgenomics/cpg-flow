@@ -7,11 +7,12 @@
 
 [![⚙️ Test Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)
 [![🚀 Deploy To Production Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)
-[![GitHub release](https://img.shields.io/github/release/populationgenomics/cpg-flow.svg)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
+[![GitHub Latest Main Release](https://img.shields.io/github/v/release/populationgenomics/cpg-flow)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
+[![GitHub Release](https://img.shields.io/github/v/release/populationgenomics/cpg-flow?include_prereleases&label=latest)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
 [![semantic-release: conventional commits](https://img.shields.io/badge/semantic--release-conventional%20commits-Æ1A7DBD?logo=semantic-release&color=1E7FBF)](https://github.com/semantic-release/semantic-release)
 [![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
 
-![Tests count](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/populationgenomics/cpg-flow/HEAD/docs/badges.yaml&label=Tests&query=$.test-badge.status&color=green)
+![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2FHEAD%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
 ![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https://raw.githubusercontent.com/populationgenomics/cpg-flow/HEAD/docs/badges.yaml&label=Coverage&query=$.coverage-badge.status&color=green)
 
 [![Technical Debt](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
