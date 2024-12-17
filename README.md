@@ -57,12 +57,14 @@ The documentation is updated automatically when a commit is pushed on the `alpha
 
 ## <a name="installation">🔨 Installation</a>
 
-To install this project, you will need to have on your machine :
+The packages are hosted on:
 
 ![PyPI](https://img.shields.io/badge/-PyPI-black?style=for-the-badge&logoColor=white&logo=pypi&color=3776AB)
-![uv](https://img.shields.io/badge/-uv-black?style=for-the-badge&logoColor=white&logo=uv&color=3776AB)
 
-To install this project, you will need to have Python and `uv` installed on your machine.
+To install this project, you will need to have Python and `uv` installed on your machine:
+
+![uv](https://img.shields.io/badge/-uv-black?style=for-the-badge&logoColor=white&logo=uv&color=3776AB)
+![Python](https://img.shields.io/badge/-Python-black?style=for-the-badge&logoColor=white&logo=python&color=3776AB)
 
 We recommend using a virtual environment to manage your dependencies.
 
@@ -107,7 +109,7 @@ make install-build
 
 ## <a name="docker">🐳 Docker</a>
 
-"""
+
 ## Docker Image Usage for cpg-flow Python Package
 
 ### Pulling and Using the Docker Image
