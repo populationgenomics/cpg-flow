@@ -3,4 +3,4 @@ test-badge:
   color: green
 coverage-badge:
   status: 83.44%
-  color: green
+  color: red
