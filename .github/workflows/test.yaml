@@ -51,7 +51,7 @@ jobs:
           echo "TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)" >> $GITHUB_ENV
           echo "TEST_PASSED=$(($(grep -o '<testcase ' test-execution.xml | wc -l) - $(grep -o '<failure ' test-execution.xml | wc -l)))" >> $GITHUB_ENV
           echo "TEST_COLOR=$(if [ $(echo $TEST_PASSED) -eq $(echo $TEST_COUNT) ]; then echo 'green'; else echo 'red'; fi)" >> $GITHUB_ENV
-          COVERAGE="$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%""
+          COVERAGE="$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%"
           echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
           echo "COVERAGE_COLOR=$(if [ $(echo ${COVERAGE:-0} | cut -d'.' -f1) -ge 80 ]; then echo 'green'; elif [ $(echo ${COVERAGE:-0} | cut -d'.' -f1) -ge 50 ]; then echo 'orange'; else echo 'red'; fi)" >> $GITHUB_ENV
 
