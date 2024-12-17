@@ -250,6 +250,10 @@ pre-releases on the **alpha** branch are also generated and published by:
 
 It uses the **[conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)** strategy.
 
+This is enforced using the **[commitlint](https://github.com/opensource-nepal/commitlint)** pre-commit hook that checks commit messages conform to the conventional commit standard.
+
+We recommend installing and using the tool **[commitizen](https://commitizen-tools.github.io/commitizen/) in order to create commit messages. Once installed, you can use either `cz commit` or `git cz` to create a commitizen generated commit message.
+
 Each change when a new release comes up is listed in the **<a href="https://github.com/populationgenomics/cpg-flow/blob/main/CHANGELOG.md" target="_blank">CHANGELOG.md file</a>**.
 
 Also, you can keep up with changes by watching releases via the **Watch GitHub button** at the top of this page.
