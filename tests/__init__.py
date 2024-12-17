@@ -7,8 +7,7 @@ import toml
 from cpg_utils import Path as AnyPath
 from cpg_utils.config import set_config_paths
 
-logging.basicConfig()
-logging.getLogger().setLevel(logging.WARN)
+logging.basicConfig(level=logging.WARN)
 
 # silence other loggers
 logging.getLogger('pyspark').setLevel(logging.ERROR)

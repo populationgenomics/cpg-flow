@@ -15,50 +15,68 @@ from os.path import basename, dirname, join
 from random import choices
 from typing import Union, cast
 
+import coloredlogs
+
 import hail as hl
 from hailtop.batch import ResourceFile
 
 from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
-LOGGER: logging.Logger | None = None
+DEFAULT_LOG_FORMAT = config_retrieve(
+    ['workflow', 'logger', 'default_format'],
+    '%(asctime)s - %(name)s - %(pathname)s: %(lineno)d - %(levelname)s - %(message)s',
+)
+LOGGERS: dict[str, logging.Logger] = {}
 
 ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
 
 
 def get_logger(
-    logger_name: str | None = None, log_level: int = logging.INFO,
+    logger_name: str = 'cpg_workflows',
+    log_level: int = logging.INFO,
+    fmt_string: str = DEFAULT_LOG_FORMAT,
 ) -> logging.Logger:
     """
     creates a logger instance (so as not to use the root logger)
     Args:
         logger_name (str):
-        log_level (int): logging level, defaults to INFO
+        log_level (int): logging level, defaults to INFO. Can be overridden by config
+        fmt_string (str): format string for this logger, defaults to DEFAULT_LOG_FORMAT
     Returns:
-        a logger instance, or the global logger if already defined
+        a logger instance, if required create it first
     """
-    global LOGGER
 
-    if LOGGER is None:
-        # this very verbose logging is to ensure that the log level requested (INFO)
+    if logger_name not in LOGGERS:
+        # allow a log-level & format override on a name basis
+        log_level = config_retrieve(['workflow', 'logger', logger_name, 'level'], log_level)
+        fmt_string = config_retrieve(['workflow', 'logger', logger_name, 'format'], fmt_string)
+
         # create a named logger
-        LOGGER = logging.getLogger(logger_name)
-        LOGGER.setLevel(log_level)
+        new_logger = logging.getLogger(logger_name)
+        new_logger.setLevel(log_level)
+
+        # unless otherwise specified, use coloredlogs
+        if config_retrieve(['workflow', 'logger', logger_name, 'use_colored_logs'], True):
+            coloredlogs.install(level=log_level, fmt=fmt_string, logger=new_logger)
 
         # create a stream handler to write output
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setLevel(log_level)
 
         # create format string for messages
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s %(lineno)d - %(levelname)s - %(message)s",
-        )
+        formatter = logging.Formatter(fmt_string)
         stream_handler.setFormatter(formatter)
 
         # set the logger to use this handler
-        LOGGER.addHandler(stream_handler)
+        new_logger.addHandler(stream_handler)
 
-    return LOGGER
+        LOGGERS[logger_name] = new_logger
+
+    return LOGGERS[logger_name]
+
+
+LOGGER = get_logger(__name__)
 
 
 def chunks(iterable, chunk_size):
@@ -104,12 +122,12 @@ def read_hail(path):
     Returns:
         hail object (hl.MatrixTable or hl.Table)
     """
-    if path.strip("/").endswith(".ht"):
+    if path.strip('/').endswith('.ht'):
         t = hl.read_table(str(path))
     else:
-        assert path.strip("/").endswith(".mt")
+        assert path.strip('/').endswith('.mt')
         t = hl.read_matrix_table(str(path))
-    logging.info(f"Read data from {path}")
+    LOGGER.info(f'Read data from {path}')
     return t
 
 
@@ -137,17 +155,17 @@ def checkpoint_hail(
     t.describe()
 
     # log the current number of partitions
-    logging.info(f"Checkpointing object as {t.n_partitions()} partitions")
+    LOGGER.info(f'Checkpointing object as {t.n_partitions()} partitions')
 
     if checkpoint_prefix is None:
         return t
 
     path = join(checkpoint_prefix, file_name)
     if can_reuse(path) and allow_reuse:
-        logging.info(f"Re-using {path}")
+        LOGGER.info(f'Re-using {path}')
         return read_hail(path)
 
-    logging.info(f"Checkpointing {path}")
+    LOGGER.info(f'Checkpointing {path}')
     return t.checkpoint(path, overwrite=True)
 
 
@@ -178,10 +196,10 @@ def exists_not_cached(path: Path | str, verbose: bool = True) -> bool:
     """
     path = cast(Path, to_path(path))
 
-    if path.suffix in [".mt", ".ht"]:
-        path /= "_SUCCESS"
-    if path.suffix in [".vds"]:
-        path /= "variant_data/_SUCCESS"
+    if path.suffix in ['.mt', '.ht']:
+        path /= '_SUCCESS'
+    if path.suffix in ['.vds']:
+        path /= 'variant_data/_SUCCESS'
 
     if verbose:
         # noinspection PyBroadException
@@ -192,14 +210,14 @@ def exists_not_cached(path: Path | str, verbose: bool = True) -> bool:
         # instead stick to a core responsibility -
         # existence = False
         except FileNotFoundError as fnfe:
-            logging.error(f"Failed checking {path}")
-            logging.error(f"{fnfe}")
+            LOGGER.error(f'Failed checking {path}')
+            LOGGER.error(f'{fnfe}')
             return False
         except BaseException:
             traceback.print_exc()
-            logging.error(f"Failed checking {path}")
+            LOGGER.error(f'Failed checking {path}')
             sys.exit(1)
-        logging.debug(f"Checked {path} [" + ("exists" if res else "missing") + "]")
+        LOGGER.debug(f'Checked {path} [' + ('exists' if res else 'missing') + ']')
         return res
 
     return check_exists_path(path)
@@ -224,7 +242,7 @@ def get_contents_of_path(test_path: str) -> set[str]:
         'my-file.txt'
 
     """
-    return {f.name for f in to_path(test_path.rstrip("/")).iterdir()}
+    return {f.name for f in to_path(test_path.rstrip('/')).iterdir()}
 
 
 def can_reuse(
@@ -242,7 +260,7 @@ def can_reuse(
     if overwrite:
         return False
 
-    if not get_config()["workflow"].get("check_intermediates", True):
+    if not get_config()['workflow'].get('check_intermediates', True):
         return False
 
     if not path:
@@ -252,7 +270,7 @@ def can_reuse(
     if not all(exists(fp, overwrite) for fp in paths):
         return False
 
-    logging.debug(f"Reusing existing {path}")
+    LOGGER.debug(f'Reusing existing {path}')
     return True
 
 
@@ -261,12 +279,12 @@ def timestamp(rand_suffix_len: int = 5) -> str:
     Generate a timestamp string. If `rand_suffix_len` is set, adds a short random
     string of this length for uniqueness.
     """
-    result = time.strftime("%Y_%m%d_%H%M")
+    result = time.strftime('%Y_%m%d_%H%M')
     if rand_suffix_len:
-        rand_bit = "".join(
+        rand_bit = ''.join(
             choices(string.ascii_uppercase + string.digits, k=rand_suffix_len),
         )
-        result += f"_{rand_bit}"
+        result += f'_{rand_bit}'
     return result
 
 
@@ -279,11 +297,11 @@ def slugify(line: str):
     'hello-w-1'
     """
 
-    line = unicodedata.normalize("NFKD", line).encode("ascii", "ignore").decode()
+    line = unicodedata.normalize('NFKD', line).encode('ascii', 'ignore').decode()
     line = line.strip().lower()
     line = re.sub(
-        r"[\s.]+",
-        "-",
+        r'[\s.]+',
+        '-',
         line,
     )
     return line
@@ -302,11 +320,11 @@ def rich_sequencing_group_id_seds(
     @param file_names: file names and Hail Batch Resource files where to replace IDs
     @return: bash command that does replacement
     """
-    cmd = ""
+    cmd = ''
     for sgid, rich_sgid in rich_id_map.items():
         for fname in file_names:
             cmd += f"sed -iBAK 's/{sgid}/{rich_sgid}/g' {fname}"
-            cmd += "\n"
+            cmd += '\n'
     return cmd
 
 
@@ -325,12 +343,10 @@ def tshirt_mt_sizing(sequencing_type: str, cohort_size: int) -> int:
     """
 
     # allow for an override from config
-    if preset := config_retrieve(["workflow", "es_storage"], False):
+    if preset := config_retrieve(['workflow', 'es_storage'], False):
         return preset
 
-    if (sequencing_type == "genome" and cohort_size < 100) or (
-        sequencing_type == "exome" and cohort_size < 1000
-    ):
+    if (sequencing_type == 'genome' and cohort_size < 100) or (sequencing_type == 'exome' and cohort_size < 1000):
         return 50
     return 500
 
@@ -343,11 +359,11 @@ def get_intervals_from_bed(intervals_path: Path) -> list[str]:
 
     Returns a list of interval strings in the format 'chrN:start-end'.
     """
-    with intervals_path.open("r") as f:
+    with intervals_path.open('r') as f:
         intervals = []
         for line in f:
-            chrom, start, end = line.strip().split("\t")
-            intervals.append(f"{chrom}:{int(start)+1}-{end}")
+            chrom, start, end = line.strip().split('\t')
+            intervals.append(f'{chrom}:{int(start)+1}-{end}')
     return intervals
 
 
@@ -362,11 +378,11 @@ def make_job_name(
     Extend the descriptive job name to reflect job attributes.
     """
     if sequencing_group and participant_id:
-        sequencing_group = f"{sequencing_group}/{participant_id}"
+        sequencing_group = f'{sequencing_group}/{participant_id}'
     if sequencing_group and dataset:
-        name = f"{dataset}/{sequencing_group}: {name}"
+        name = f'{dataset}/{sequencing_group}: {name}'
     elif dataset:
-        name = f"{dataset}: {name}"
+        name = f'{dataset}: {name}'
     if part:
-        name += f", {part}"
+        name += f', {part}'
     return name

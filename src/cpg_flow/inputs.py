@@ -2,8 +2,6 @@
 Metamist wrapper to get input sequencing groups.
 """
 
-import logging
-
 from cpg_flow.filetypes import CramPath, GvcfPath
 from cpg_flow.metamist import (
     AnalysisType,
@@ -14,8 +12,10 @@ from cpg_flow.metamist import (
     parse_reads,
 )
 from cpg_flow.targets import Dataset, MultiCohort, PedigreeInfo, SequencingGroup, Sex
-from cpg_flow.utils import exists
+from cpg_flow.utils import exists, get_logger
 from cpg_utils.config import config_retrieve, update_dict
+
+LOGGER = get_logger(__name__)
 
 
 def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
@@ -169,7 +169,7 @@ def _populate_alignment_inputs(
         )
         sequencing_group.alignment_input = alignment_input
     else:
-        logging.warning(
+        LOGGER.warning(
             f'No reads found for sequencing group {sequencing_group.id} of type {entry["type"]}',
         )
 
@@ -198,7 +198,7 @@ def _populate_analysis(dataset: Dataset) -> None:
             )
             sequencing_group.gvcf = GvcfPath(path=analysis.output)
         elif exists(sequencing_group.make_gvcf_path()):
-            logging.warning(
+            LOGGER.warning(
                 f'We found a gvcf file in the expected location {sequencing_group.make_gvcf_path()},'
                 'but it is not logged in metamist. Skipping. You may want to update the metadata and try again. ',
             )
@@ -214,7 +214,7 @@ def _populate_analysis(dataset: Dataset) -> None:
             sequencing_group.cram = CramPath(analysis.output, crai_path)
 
         elif exists(sequencing_group.make_cram_path()):
-            logging.warning(
+            LOGGER.warning(
                 f'We found a cram file in the expected location {sequencing_group.make_cram_path()},'
                 'but it is not logged in metamist. Skipping. You may want to update the metadata and try again. ',
             )
@@ -229,7 +229,7 @@ def _populate_pedigree(dataset: Dataset) -> None:
     for sg in dataset.get_sequencing_groups():
         sg_by_participant_id[sg.participant_id] = sg
 
-    logging.info(f'Reading pedigree for dataset {dataset}')
+    LOGGER.info(f'Reading pedigree for dataset {dataset}')
     ped_entries = get_metamist().get_ped_entries(dataset=dataset.name)
     ped_entry_by_participant_id = {}
     for ped_entry in ped_entries:
@@ -254,7 +254,7 @@ def _populate_pedigree(dataset: Dataset) -> None:
             phenotype=ped_entry['affected'] or '0',
         )
     if sgids_wo_ped:
-        logging.warning(
+        LOGGER.warning(
             f'No pedigree data found for '
             f'{len(sgids_wo_ped)}/{len(dataset.get_sequencing_groups())} sequencing groups',
         )

@@ -1,6 +1,9 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.12 (2024-12-17)
+
+
 ## v0.1.0-alpha.11 (2024-12-13)
 
 ### Bug Fixes
@@ -10,6 +13,9 @@
 
 - **src/cpg_flow/targets/**: Improve hashing efficiency
   ([`b3715e8`](https://github.com/populationgenomics/cpg-flow/commit/b3715e8b68d2fb58a3922730f845cd34e2325b68))
+
+- **pyproject.toml,src/cpg_flow/inputs.py-,+10**: Use better logger
+  ([`057ab0e`](https://github.com/populationgenomics/cpg-flow/commit/057ab0e17bebc0f07797bf695c64a74cdec15c14))
 
 
 ## v0.1.0-alpha.10 (2024-12-13)
