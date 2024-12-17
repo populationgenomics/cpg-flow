@@ -50,32 +50,28 @@ jobs:
         run: |
           echo "TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)" >> $GITHUB_ENV
           echo "TEST_PASSED=$(($(grep -o '<testcase ' test-execution.xml | wc -l) - $(grep -o '<failure ' test-execution.xml | wc -l)))" >> $GITHUB_ENV
+          echo "TEST_COLOR=$(if [ $(echo $TEST_PASSED) -eq $(echo $TEST_COUNT) ]; then echo 'green'; else echo 'red'; fi)" >> $GITHUB_ENV
           echo "COVERAGE=$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%" >> $GITHUB_ENV
           echo "COVERAGE_COLOR=$(if [ $(echo $COVERAGE | cut -d'.' -f1) -ge 80 ]; then echo 'green'; elif [ $(echo $COVERAGE | cut -d'.' -f1) -ge 50 ]; then echo 'orange'; else echo 'red'; fi)" >> $GITHUB_ENV
 
-      - name: Test Count Badge
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          name: test-badge
-          label: Tests
-          status: "${{ env.TEST_PASSED }} / ${{ env.TEST_COUNT }} passed"
-          color: 'green'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update badges.yaml
+        run: |
+          cat <<EOF > docs/badges.yaml
+          test-badge:
+            status: ${{ env.TEST_PASSED }} / ${{ env.TEST_COUNT }} passed
+            color: ${{ env.TEST_COLOR }}
+          coverage-badge:
+            status: ${{ env.COVERAGE }}
+            color: ${{ env.COVERAGE_COLOR }}
+          EOF
 
-      - name: Coverage Badge
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          name: coverage-badge
-          label: Coverage
-          status: "${{ env.COVERAGE }}"
-          color: "${{ env.COVERAGE_COLOR }}"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload BYOB badges
-        uses: actions/upload-artifact@v4
-        with:
-          name: byob-badges
-          path: ./badges
+      - name: Commit and push badges.yaml
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs/badges.yaml
+          git commit -m "chore: update badges.yaml with test results and coverage"
+          git push
 
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
