@@ -173,7 +173,6 @@ def _populate_alignment_inputs(
             f'No reads found for sequencing group {sequencing_group.id} of type {entry["type"]}',
         )
 
-    return None
 
 
 def _populate_analysis(dataset: Dataset) -> None:

@@ -11,7 +11,7 @@ REPO_URL = 'https://github.com/populationgenomics/cpg-flow'
 
 
 def load_descriptions(description_file):
-    with open(description_file, 'r') as f:
+    with open(description_file) as f:
         descriptions = yaml.safe_load(f)
         return descriptions
 
@@ -22,7 +22,7 @@ def parse_workflows(directory, description_file):
     for filename in os.listdir(directory):
         if filename.endswith('.yaml') or filename.endswith('.yml'):
             filepath = os.path.join(directory, filename)
-            with open(filepath, 'r') as file:
+            with open(filepath) as file:
                 try:
                     data = yaml.load(file, Loader=yaml.BaseLoader)
                     workflow_name = data.get('name', 'Unnamed Workflow')
@@ -57,9 +57,9 @@ def parse_triggers(on_field):
             else:
                 triggers.append(f'`{trigger}`')
         return ' and '.join(triggers)
-    elif isinstance(on_field, list):  # Handle `on: [event1, event2]`
+    if isinstance(on_field, list):  # Handle `on: [event1, event2]`
         return ', '.join([f'`{event}`' for event in on_field])
-    elif isinstance(on_field, str):  # Handle `on: event`
+    if isinstance(on_field, str):  # Handle `on: event`
         return f'`{on_field}`'
     return '`manual`'  # Default if `on` is missing
 
@@ -77,7 +77,7 @@ def generate_markdown(workflows):
 
 
 def update_readme(markdown, readme_file):
-    with open(readme_file, 'r') as file:
+    with open(readme_file) as file:
         content = file.read()
 
     start_marker = '### 🎢 Workflows'
