@@ -51,7 +51,7 @@ jobs:
           TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)
           TEST_PASSED=$((TEST_COUNT - $(grep -o '<failure ' test-execution.xml | wc -l)))
           TEST_COLOR=$(if [ "$TEST_PASSED" -eq "$TEST_COUNT" ]; then echo "green"; else echo "red"; fi)
-          COVERAGE=$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')
+          COVERAGE="$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%"
           COVERAGE_COLOR=$(if [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 80 ]; then echo "green"; elif [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 50 ]; then echo "orange"; else echo "red"; fi)
 
           echo "TEST_COUNT=$TEST_COUNT" > badge_data.env
