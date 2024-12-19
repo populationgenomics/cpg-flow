@@ -67,7 +67,6 @@ jobs:
           script: |
             core.setFailed('Unit tests failed with rc = ${{ steps.runtests.outputs.rc }}')
 
-
   sonarqube:
     name: SonarQube scan
     runs-on: ubuntu-latest
