@@ -5,6 +5,24 @@ on:
     types:
       - completed
 
+  workflow_dispatch:
+    inputs:
+      test_count:
+        required: true
+        type: string
+      test_passed:
+        required: true
+        type: string
+      test_color:
+        required: true
+        type: string
+      coverage:
+        required: true
+        type: string
+      coverage_color:
+        required: true
+        type: string
+
 jobs:
   update-badges:
     name: Update Badges
