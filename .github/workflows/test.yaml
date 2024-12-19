@@ -63,7 +63,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: badge-data
-          path: badge_data.env
+          path: ./badge_data.env
 
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
