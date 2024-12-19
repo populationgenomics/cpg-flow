@@ -1,0 +1,33 @@
+name: Update Badges
+on:
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
+
+jobs:
+  update-badges:
+    name: Update Badges
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update badges.yaml
+        run: |
+          cat <<EOF > docs/badges.yaml
+          test-badge:
+            status: ${{ github.event.workflow_run.output.TEST_PASSED }} / ${{ github.event.workflow_run.output.TEST_COUNT }} passed
+            color: ${{ github.event.workflow_run.output.TEST_COLOR }}
+          coverage-badge:
+            status: ${{ github.event.workflow_run.output.COVERAGE }}
+            color: ${{ github.event.workflow_run.output.COVERAGE_COLOR }}
+          EOF
+
+      - name: Commit and push badges.yaml
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs/badges.yaml
+          git commit -m "chore: update badges.yaml with test results and coverage"
+          git push

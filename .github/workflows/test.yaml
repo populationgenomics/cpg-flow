@@ -1,7 +1,5 @@
 name: Test
 on:
-  # Building on pull-requests, manual dispatch, and pushes to main; but restricting
-  # publishing only to main pushes and manual dispatch with `if`s in specific steps.
   push:
 
 jobs:
@@ -47,40 +45,27 @@ jobs:
           path: ./test-execution.xml
 
       - name: Save badge env variables
+        id: save_badge_env
         run: |
-          echo "TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)" >> $GITHUB_ENV
-          echo "TEST_PASSED=$(($(grep -o '<testcase ' test-execution.xml | wc -l) - $(grep -o '<failure ' test-execution.xml | wc -l)))" >> $GITHUB_ENV
-          echo "TEST_COLOR=$(if [ $(echo $TEST_PASSED) -eq $(echo $TEST_COUNT) ]; then echo 'green'; else echo 'red'; fi)" >> $GITHUB_ENV
-          COVERAGE="$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%"
-          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
-          echo "COVERAGE_COLOR=$(if [ $(echo ${COVERAGE:-0} | cut -d'.' -f1) -ge 80 ]; then echo 'green'; elif [ $(echo ${COVERAGE:-0} | cut -d'.' -f1) -ge 50 ]; then echo 'orange'; else echo 'red'; fi)" >> $GITHUB_ENV
+          TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)
+          TEST_PASSED=$((TEST_COUNT - $(grep -o '<failure ' test-execution.xml | wc -l)))
+          TEST_COLOR=$(if [ "$TEST_PASSED" -eq "$TEST_COUNT" ]; then echo "green"; else echo "red"; fi)
+          COVERAGE=$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')
+          COVERAGE_COLOR=$(if [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 80 ]; then echo "green"; elif [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 50 ]; then echo "orange"; else echo "red"; fi)
 
-      - name: Update badges.yaml
-        run: |
-          cat <<EOF > docs/badges.yaml
-          test-badge:
-            status: ${{ env.TEST_PASSED }} / ${{ env.TEST_COUNT }} passed
-            color: ${{ env.TEST_COLOR }}
-          coverage-badge:
-            status: ${{ env.COVERAGE }}
-            color: ${{ env.COVERAGE_COLOR }}
-          EOF
-
-      - name: Commit and push badges.yaml
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add docs/badges.yaml
-          git commit -m "chore: update badges.yaml with test results and coverage"
-          git pull --rebase
-          git push
+          echo "TEST_COUNT=$TEST_COUNT" >> $GITHUB_OUTPUT
+          echo "TEST_PASSED=$TEST_PASSED" >> $GITHUB_OUTPUT
+          echo "TEST_COLOR=$TEST_COLOR" >> $GITHUB_OUTPUT
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR" >> $GITHUB_OUTPUT
 
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
         uses: actions/github-script@v6
         with:
           script: |
-            core.setFailed('Unittests failed with rc = ${{ steps.runtests.outputs.rc }}')
+            core.setFailed('Unit tests failed with rc = ${{ steps.runtests.outputs.rc }}')
+
 
   sonarqube:
     name: SonarQube scan
