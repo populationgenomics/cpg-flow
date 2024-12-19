@@ -88,10 +88,9 @@ def complete_analysis_job(
         _msg = f'Creation of Analysis failed (type={analysis_type}, output={output}) in {project_name}'
         print(_msg)
         raise ConnectionError(_msg)
-    else:
-        print(
-            f'Created Analysis(id={a_id}, type={analysis_type}, output={output}) in {project_name}',
-        )
+    print(
+        f'Created Analysis(id={a_id}, type={analysis_type}, output={output}) in {project_name}',
+    )
 
 
 class StatusReporterError(Exception):
@@ -164,7 +163,7 @@ class MetamistStatusReporter(StatusReporter):
         sequencing_group_ids = []
         if target is None:
             raise ValueError('Target is required to create analysis')
-        elif isinstance(target, MultiCohort):
+        if isinstance(target, MultiCohort):
             cohort_ids = target.get_cohort_ids()
         elif isinstance(target, Cohort):
             cohort_ids = [target.get_cohort_id()]

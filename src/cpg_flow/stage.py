@@ -20,7 +20,7 @@ import functools
 import pathlib
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Generic, Optional, TypeVar, Union, cast
+from typing import Generic, Optional, TypeVar, cast
 
 from cloudpathlib import CloudPath
 
@@ -633,12 +633,11 @@ class Stage(Generic[TargetT], ABC):
                     f'workflow/allow_missing_outputs_for_stages)',
                 )
                 return Action.REUSE
-            else:
-                raise WorkflowError(
-                    f'{self.name}: stage is required, but is skipped, and '
-                    f'the following expected outputs for target {target} do not exist: '
-                    f'{first_missing_path}',
-                )
+            raise WorkflowError(
+                f'{self.name}: stage is required, but is skipped, and '
+                f'the following expected outputs for target {target} do not exist: '
+                f'{first_missing_path}',
+            )
 
         if reusable and not first_missing_path:
             if target.forced:
@@ -646,16 +645,15 @@ class Stage(Generic[TargetT], ABC):
                     f'{self.name}: {target} [QUEUE] (can reuse, but forcing the target to rerun this stage)',
                 )
                 return Action.QUEUE
-            elif self.forced:
+            if self.forced:
                 LOGGER.info(
                     f'{self.name}: {target} [QUEUE] (can reuse, but forcing the stage to rerun)',
                 )
                 return Action.QUEUE
-            else:
-                LOGGER.info(
-                    f'{self.name}: {target} [REUSE] (expected outputs exist: {expected_out})',
-                )
-                return Action.REUSE
+            LOGGER.info(
+                f'{self.name}: {target} [REUSE] (expected outputs exist: {expected_out})',
+            )
+            return Action.REUSE
 
         LOGGER.info(f'{self.name}: {target} [QUEUE]')
 
@@ -698,13 +696,12 @@ class Stage(Generic[TargetT], ABC):
                 return False, first_missing_path
 
             return True, None
-        else:
-            if self.skipped:
-                # Do not check the files' existence, trust they exist.
-                # note that for skipped stages, we automatically assume outputs exist
-                return True, None
-            # Do not check the files' existence, assume they don't exist:
-            return False, None
+        if self.skipped:
+            # Do not check the files' existence, trust they exist.
+            # note that for skipped stages, we automatically assume outputs exist
+            return True, None
+        # Do not check the files' existence, assume they don't exist:
+        return False, None
 
     def get_job_attrs(self, target: TargetT | None = None) -> dict[str, str]:
         """
@@ -719,7 +716,7 @@ class Stage(Generic[TargetT], ABC):
 
 
 def stage(
-    cls: Optional[type['Stage']] = None,
+    cls: type['Stage'] | None = None,
     *,
     analysis_type: str | None = None,
     analysis_keys: list[str | Path] | None = None,
@@ -729,7 +726,7 @@ def stage(
     skipped: bool = False,
     assume_outputs_exist: bool = False,
     forced: bool = False,
-) -> Union[StageDecorator, Callable[..., StageDecorator]]:
+) -> StageDecorator | Callable[..., StageDecorator]:
     """
     Implements a standard class decorator pattern with optional arguments.
     The goal is to allow declaring workflow stages without requiring to implement
@@ -781,8 +778,7 @@ def stage(
 
     if cls is None:
         return decorator_stage
-    else:
-        return decorator_stage(cls)
+    return decorator_stage(cls)
 
 
 class SequencingGroupStage(Stage[SequencingGroup], ABC):
@@ -805,7 +801,6 @@ class SequencingGroupStage(Stage[SequencingGroup], ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,
@@ -849,7 +844,6 @@ class DatasetStage(Stage, ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,
@@ -886,7 +880,6 @@ class CohortStage(Stage, ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,
@@ -916,7 +909,6 @@ class MultiCohortStage(Stage, ABC):
         """
         Override to declare expected output paths.
         """
-        pass
 
     @abstractmethod
     def queue_jobs(
@@ -927,7 +919,6 @@ class MultiCohortStage(Stage, ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,

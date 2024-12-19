@@ -140,7 +140,6 @@ class MetamistError(Exception):
     Error while interacting with Metamist.
     """
 
-    pass
 
 
 class AnalysisStatus(Enum):
@@ -283,7 +282,7 @@ class Metamist:
             # log the error and continue
             traceback.print_exc()
             LOGGER.error(
-                f'Error: {e} Call {api_func} failed with payload:\n{str(kwargv)}',
+                f'Error: {e} Call {api_func} failed with payload:\n{kwargv!s}',
             )
         # TODO: discuss should we catch all here as well?
         # except Exception as e:
@@ -424,15 +423,14 @@ class Metamist:
         )
         if aid is None:
             LOGGER.error(
-                f'Failed to create Analysis(type={type_}, status={status}, output={str(output)}) in {metamist_proj}',
+                f'Failed to create Analysis(type={type_}, status={status}, output={output!s}) in {metamist_proj}',
             )
             return None
-        else:
-            LOGGER.info(
-                f'Created Analysis(id={aid}, type={type_}, status={status}, '
-                f'output={str(output)}) in {metamist_proj}',
-            )
-            return aid
+        LOGGER.info(
+            f'Created Analysis(id={aid}, type={type_}, status={status}, '
+            f'output={output!s}) in {metamist_proj}',
+        )
+        return aid
 
     def get_ped_entries(self, dataset: str | None = None) -> list[dict[str, str]]:
         """
@@ -595,35 +593,33 @@ def parse_reads(  # pylint: disable=too-many-return-statements
                 index_path=index_location,
                 reference_assembly=reference_assembly,
             )
-        else:
-            assert location.endswith('.bam')
-            return BamPath(location, index_path=index_location)
+        assert location.endswith('.bam')
+        return BamPath(location, index_path=index_location)
 
-    else:
-        fastq_pairs = FastqPairs()
+    fastq_pairs = FastqPairs()
 
-        for lane_pair in reads_data:
-            if len(lane_pair) != 2:
-                raise ValueError(
-                    f'Sequence data for sequencing group {sequencing_group_id} is incorrectly '
-                    f'formatted. Expecting 2 entries per lane (R1 and R2 fastqs), '
-                    f'but got {len(lane_pair)}. '
-                    f'Read data: {pprint.pformat(lane_pair)}',
-                )
-            if check_existence and not exists(lane_pair[0]['location']):
-                raise MetamistError(
-                    f'{sequencing_group_id}: ERROR: read 1 file does not exist: {lane_pair[0]["location"]}',
-                )
-            if check_existence and not exists(lane_pair[1]['location']):
-                raise MetamistError(
-                    f'{sequencing_group_id}: ERROR: read 2 file does not exist: {lane_pair[1]["location"]}',
-                )
-
-            fastq_pairs.append(
-                FastqPair(
-                    to_path(lane_pair[0]['location']),
-                    to_path(lane_pair[1]['location']),
-                ),
+    for lane_pair in reads_data:
+        if len(lane_pair) != 2:
+            raise ValueError(
+                f'Sequence data for sequencing group {sequencing_group_id} is incorrectly '
+                f'formatted. Expecting 2 entries per lane (R1 and R2 fastqs), '
+                f'but got {len(lane_pair)}. '
+                f'Read data: {pprint.pformat(lane_pair)}',
+            )
+        if check_existence and not exists(lane_pair[0]['location']):
+            raise MetamistError(
+                f'{sequencing_group_id}: ERROR: read 1 file does not exist: {lane_pair[0]["location"]}',
+            )
+        if check_existence and not exists(lane_pair[1]['location']):
+            raise MetamistError(
+                f'{sequencing_group_id}: ERROR: read 2 file does not exist: {lane_pair[1]["location"]}',
             )
 
-        return fastq_pairs
+        fastq_pairs.append(
+            FastqPair(
+                to_path(lane_pair[0]['location']),
+                to_path(lane_pair[1]['location']),
+            ),
+        )
+
+    return fastq_pairs
