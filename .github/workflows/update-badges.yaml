@@ -1,80 +1,48 @@
 name: Update Badges
 on:
-  push:
-
-  workflow_dispatch:
-    inputs:
-      test_count:
-        required: true
-        type: string
-      test_passed:
-        required: true
-        type: string
-      test_color:
-        required: true
-        type: string
-      coverage:
-        required: true
-        type: string
-      coverage_color:
-        required: true
-        type: string
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
 
 jobs:
-  wait-for-test:
-    name: Wait for Test Workflow
-    runs-on: ubuntu-latest
+  # wait-for-test:
+  #   name: Wait for Test Workflow
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
 
-      - name: Wait for Test Workflow Completion
-        id: wait_test
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          echo "Waiting for the 'Test' workflow to finish..."
-          while true; do
-            BRANCH_NAME=$(git branch --show-current)
-            STATUS=$(gh run list --branch $BRANCH_NAME --workflow Test --json status --jq '.[0].status')
-            echo "Test workflow status: $STATUS"
-            if [ "$STATUS" == "completed" ]; then
-              exit 0
-            fi
-            sleep 10
-          done
+  #     - name: Wait for Test Workflow Completion
+  #       id: wait_test
+  #       env:
+  #         GH_TOKEN: ${{ github.token }}
+  #       run: |
+  #         echo "Waiting for the 'Test' workflow to finish..."
+  #         while true; do
+  #           BRANCH_NAME=$(git branch --show-current)
+  #           STATUS=$(gh run list --branch $BRANCH_NAME --workflow Test --json status --jq '.[0].status')
+  #           echo "Test workflow status: $STATUS"
+  #           if [ "$STATUS" == "completed" ]; then
+  #             exit 0
+  #           fi
+  #           sleep 10
+  #         done
 
   update_badges:
     name: Update Badges
     runs-on: ubuntu-latest
-    needs: wait-for-test
+    # needs: wait-for-test
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Retry downloading badge data artifact
-        id: download-artifact
-        run: |
-          max_retries=3
-          attempt=0
-          success=false
-          while [ $attempt -lt $max_retries ]; do
-            echo "Attempt $((attempt + 1)) to download artifact"
-            if actions/download-artifact@v4 --name badge-data; then
-              success=true
-              break
-            else
-              attempt=$((attempt + 1))
-              echo "Download failed. Retrying..."
-              sleep 10
-            fi
-          done
-          if [ "$success" = false ]; then
-            echo "Failed to download artifact after $max_retries attempts. Exiting."
-            exit 1
-          fi
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: badge-data
 
       - name: "Load Badge Data"
         run: |
