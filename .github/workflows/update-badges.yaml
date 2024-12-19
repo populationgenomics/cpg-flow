@@ -1,5 +1,9 @@
 name: Update Badges
 on:
+  push:
+    branches:
+      - readme
+
   workflow_run:
     workflows: ["Test"]
     types:
