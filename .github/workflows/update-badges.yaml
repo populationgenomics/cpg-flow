@@ -31,6 +31,8 @@ jobs:
 
       - name: Wait for Test Workflow Completion
         id: wait_test
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           echo "Waiting for the 'Test' workflow to finish..."
           while true; do
