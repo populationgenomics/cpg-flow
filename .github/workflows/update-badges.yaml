@@ -43,6 +43,9 @@ jobs:
             }
             fs.writeFileSync(path.join(temp, 'badge_data.zip'), Buffer.from(download.data));
 
+      - name: 'List artifacts'
+        run: ls -l "${{ runner.temp }}/artifacts"
+
       - name: 'Unzip artifact'
         run: unzip badge_data.zip -d "${{ runner.temp }}/artifacts"
 
