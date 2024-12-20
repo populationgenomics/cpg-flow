@@ -17,15 +17,34 @@ jobs:
           ref: ${{ github.event.workflow_run.head_branch }}
           repository: ${{ github.event.workflow_run.head_repository.full_name }}
 
+      - name: "Load badge data"
+        uses: actions/download-artifact@v4
+        with:
+          name: badge-data
+
+      - name: "Load badge data environment variables"
+        run: |
+          set -a
+          source badge_data.env
+          set +a
+
+      - name: "Echo badge data"
+        run: |
+          echo "TEST_COUNT=$TEST_COUNT"
+          echo "TEST_PASSED=$TEST_PASSED"
+          echo "TEST_COLOR=$TEST_COLOR"
+          echo "COVERAGE=$COVERAGE"
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR
+
       - name: "Update badges.yaml"
         run: |
           cat <<EOF > docs/badges.yaml
           test-badge:
-            status: ${{ github.event.workflow_run.output.TEST_PASSED }} / ${{ github.event.workflow_run.output.TEST_COUNT }} passed
-            color: ${{ github.event.workflow_run.output.TEST_COLOR }}
+            status: $TEST_PASSED / $TEST_COUNT passed
+            color: $TEST_COLOR
           coverage-badge:
-            status: ${{ github.event.workflow_run.output.COVERAGE }}
-            color: ${{ github.event.workflow_run.output.COVERAGE_COLOR }}
+            status: $COVERAGE
+            color: $COVERAGE_COLOR
           EOF
 
       - name: "Commit and Push Changes"
