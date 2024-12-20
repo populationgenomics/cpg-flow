@@ -1,6 +1,6 @@
 test-badge:
-  status:  /  passed
-  color: 
+  status: 42 / 42 passed
+  color: green
 coverage-badge:
-  status: 
-  color: 
+  status: 84.00%
+  color: green
