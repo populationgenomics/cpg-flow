@@ -103,10 +103,9 @@ class Cohort(Target):
                     f'SequencingGroup {s.id} already exists in the Cohort {self.name}',
                 )
                 return self._sequencing_group_by_id[s.id]
-            else:
-                raise ValueError(
-                    f'SequencingGroup {s.id} already exists in the Cohort {self.name}',
-                )
+            raise ValueError(
+                f'SequencingGroup {s.id} already exists in the Cohort {self.name}',
+            )
         self._sequencing_group_by_id[s.id] = s
 
     def get_sequencing_groups(

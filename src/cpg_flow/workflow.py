@@ -135,8 +135,7 @@ def skip(
 
     if _fun is None:
         return decorator_stage
-    else:
-        return decorator_stage(_fun)
+    return decorator_stage(_fun)
 
 
 _workflow: Optional['Workflow'] = None
