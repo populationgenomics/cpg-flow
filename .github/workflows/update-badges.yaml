@@ -70,11 +70,11 @@ jobs:
         run: |
           cat <<EOF > docs/badges.yaml
           test-badge:
-            status: ${{ github.env.TEST_PASSED }} / ${{ github.env.TEST_COUNT }} passed
-            color: ${{ github.env.TEST_COLOR }}
+            status: $TEST_PASSED / $TEST_COUNT passed
+            color: $TEST_COLOR
           coverage-badge:
-            status: ${{ github.env.COVERAGE }}
-            color: ${{ github.env.COVERAGE_COLOR }}
+            status: $COVERAGE
+            color: $COVERAGE_COLOR
           EOF
 
       - name: "Commit and Push Changes"
