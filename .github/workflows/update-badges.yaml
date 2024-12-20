@@ -47,7 +47,7 @@ jobs:
         run: ls -l "${{ runner.temp }}/artifacts"
 
       - name: 'Unzip artifact'
-        run: unzip badge_data.zip -d "${{ runner.temp }}/artifacts"
+        run: unzip "${{ runner.temp }}/artifacts/badge_data.zip" -d "$GITHUB_WORKSPACE"
 
       - name: "Load badge data environment variables"
         run: |
