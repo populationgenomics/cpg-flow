@@ -50,28 +50,31 @@ jobs:
         run: unzip "${{ runner.temp }}/artifacts/badge_data.zip" -d "$GITHUB_WORKSPACE"
 
       - name: "Load badge data environment variables"
+        id: load_badge_data
         run: |
-          set -a
           source badge_data.env
-          set +a
 
-      - name: "Echo badge data"
-        run: |
           echo "TEST_COUNT=$TEST_COUNT"
           echo "TEST_PASSED=$TEST_PASSED"
           echo "TEST_COLOR=$TEST_COLOR"
           echo "COVERAGE=$COVERAGE"
-          echo "COVERAGE_COLOR=$COVERAGE_COLOR
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR"
+
+          echo "TEST_COUNT=$TEST_COUNT" >> $GITHUB_ENV
+          echo "TEST_PASSED=$TEST_PASSED" >> $GITHUB_ENV
+          echo "TEST_COLOR=$TEST_COLOR" >> $GITHUB_ENV
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR" >> $GITHUB_ENV
 
       - name: "Update badges.yaml"
         run: |
           cat <<EOF > docs/badges.yaml
           test-badge:
-            status: $TEST_PASSED / $TEST_COUNT passed
-            color: $TEST_COLOR
+            status: ${{ github.env.TEST_PASSED }} / ${{ github.env.TEST_COUNT }} passed
+            color: ${{ github.env.TEST_COLOR }}
           coverage-badge:
-            status: $COVERAGE
-            color: $COVERAGE_COLOR
+            status: ${{ github.env.COVERAGE }}
+            color: ${{ github.env.COVERAGE_COLOR }}
           EOF
 
       - name: "Commit and Push Changes"
