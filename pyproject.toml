@@ -15,7 +15,7 @@ dependencies = [
     "hail==0.2.133",
     "grpcio>=1.53.0",
     # Avoid dependency resolution backtracking, Python 3.10 compatibility
-    "grpcio-status>=1.48,<1.50",
+    "grpcio-status>=1.68,<1.69",
     "metamist>=6.9.0",
     "networkx>=3.4.2",
     "coloredlogs>=15.0.1",
