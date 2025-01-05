@@ -4,7 +4,7 @@ on:
   # publishing only to main pushes and manual dispatch with `if`s in specific steps.
   workflow_dispatch:
   workflow_run:
-    workflows: ["Package"]
+    workflows: ["Test"]
     types:
       - completed
 
