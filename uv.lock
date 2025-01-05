@@ -585,7 +585,7 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "0.1.0a12+g2c877ea5"
+version = "0.1.0a12+g75e772ed.d20250105"
 source = { editable = "." }
 dependencies = [
     { name = "coloredlogs" },
@@ -595,6 +595,7 @@ dependencies = [
     { name = "hail" },
     { name = "metamist" },
     { name = "networkx" },
+    { name = "pyyaml" },
 ]
 
 [package.dev-dependencies]
@@ -626,6 +627,7 @@ requires-dist = [
     { name = "hail", specifier = "==0.2.133" },
     { name = "metamist", specifier = ">=6.9.0" },
     { name = "networkx", specifier = ">=3.4.2" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata.requires-dev]
