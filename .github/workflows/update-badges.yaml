@@ -1,7 +1,7 @@
 name: Update Badges
 on:
   workflow_run:
-    workflows: ["Package"]
+    workflows: ["Test"]
     types:
       - completed
 
