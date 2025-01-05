@@ -1,7 +1,5 @@
 name: Test
 on:
-  # Building on pull-requests, manual dispatch, and pushes to main; but restricting
-  # publishing only to main pushes and manual dispatch with `if`s in specific steps.
   push:
 
 jobs:
@@ -46,12 +44,34 @@ jobs:
           name: execution-report
           path: ./test-execution.xml
 
+      - name: Save badge data
+        id: save_badge_env
+        if: always()
+        run: |
+          TEST_COUNT=$(grep -o '<testcase ' test-execution.xml | wc -l)
+          TEST_PASSED=$((TEST_COUNT - $(grep -o '<failure ' test-execution.xml | wc -l)))
+          TEST_COLOR=$(if [ "$TEST_PASSED" -eq "$TEST_COUNT" ]; then echo "green"; else echo "red"; fi)
+          COVERAGE="$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%"
+          COVERAGE_COLOR=$(if [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 80 ]; then echo "green"; elif [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 50 ]; then echo "orange"; else echo "red"; fi)
+
+          echo "TEST_COUNT=$TEST_COUNT" >> badge_data.env
+          echo "TEST_PASSED=$TEST_PASSED" >> badge_data.env
+          echo "TEST_COLOR=$TEST_COLOR" >> badge_data.env
+          echo "COVERAGE=$COVERAGE" >> badge_data.env
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR" >> badge_data.env
+
+      - name: 'Save badge data as an Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: badge-data
+          path: ./badge_data.env
+
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
         uses: actions/github-script@v6
         with:
           script: |
-            core.setFailed('Unittests failed with rc = ${{ steps.runtests.outputs.rc }}')
+            core.setFailed('Unit tests failed with rc = ${{ steps.runtests.outputs.rc }}')
 
   sonarqube:
     name: SonarQube scan

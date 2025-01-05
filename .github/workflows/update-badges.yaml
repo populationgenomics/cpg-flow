@@ -1,0 +1,86 @@
+name: Update Badges
+on:
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
+
+jobs:
+  update_badges:
+    name: Update Badges
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+
+      - name: 'Download badge data'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.payload.workflow_run.id,
+            });
+            let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "badge-data";
+            })[0];
+            let download = await github.rest.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: matchArtifact.id,
+              archive_format: 'zip',
+            });
+            const fs = require('fs');
+            const path = require('path');
+            const temp = '${{ runner.temp }}/artifacts';
+            if (!fs.existsSync(temp)){
+              fs.mkdirSync(temp);
+            }
+            fs.writeFileSync(path.join(temp, 'badge_data.zip'), Buffer.from(download.data));
+
+      - name: 'List artifacts'
+        run: ls -l "${{ runner.temp }}/artifacts"
+
+      - name: 'Unzip artifact'
+        run: unzip "${{ runner.temp }}/artifacts/badge_data.zip" -d "$GITHUB_WORKSPACE"
+
+      - name: "Load badge data environment variables"
+        id: load_badge_data
+        run: |
+          source badge_data.env
+
+          echo "TEST_COUNT=$TEST_COUNT"
+          echo "TEST_PASSED=$TEST_PASSED"
+          echo "TEST_COLOR=$TEST_COLOR"
+          echo "COVERAGE=$COVERAGE"
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR"
+
+          echo "TEST_COUNT=$TEST_COUNT" >> $GITHUB_ENV
+          echo "TEST_PASSED=$TEST_PASSED" >> $GITHUB_ENV
+          echo "TEST_COLOR=$TEST_COLOR" >> $GITHUB_ENV
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR" >> $GITHUB_ENV
+
+      - name: "Update badges.yaml"
+        run: |
+          cat <<EOF > docs/badges.yaml
+          test-badge:
+            status: $TEST_PASSED / $TEST_COUNT passed
+            color: $TEST_COLOR
+          coverage-badge:
+            status: $COVERAGE
+            color: $COVERAGE_COLOR
+          EOF
+
+      - name: "Commit and Push Changes"
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/badges.yaml
+          git commit -m "chore: update badges.yaml with test results and coverage"
+          git push

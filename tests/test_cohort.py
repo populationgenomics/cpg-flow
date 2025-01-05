@@ -96,7 +96,7 @@ def _custom_cohort_config(tmp_path) -> str:
 
 
 def load_mock_data(file_path: str) -> list[dict]:
-    with open(file_path, 'r') as file:
+    with open(file_path) as file:
         return json.load(file)
 
 
@@ -138,7 +138,7 @@ def mock_get_cohort_sgs(cohort_id: str, *args, **kwargs) -> list[dict]:
         'COH5': load_mock_data('tests/assets/test_cohort/COH5.json'),
     }
 
-    if cohort_id not in cohorts.keys():
+    if cohort_id not in cohorts:
         raise MetamistError(f"Error fetching cohort: The provided cohort ID was not valid: '{cohort_id}'")
 
     return cohorts[cohort_id]
@@ -375,7 +375,7 @@ def test_mixed_reads(mocker: MockFixture, tmp_path, caplog):
     # TODO: check expected output
     assert test_none.alignment_input is None
     assert re.search(
-        r'WARNING\s+root:inputs\.py:\d+\s+No reads found for sequencing group CPGbbb of type genome',
+        r'WARNING\s+cpg_flow\.inputs:inputs\.py:\d+\s+No reads found for sequencing group CPGbbb of type genome',
         caplog.text,
     )
 

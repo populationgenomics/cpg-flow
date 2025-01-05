@@ -17,7 +17,6 @@ main.py, which provides a way to choose a workflow using a CLI argument.
 """
 
 import functools
-import logging
 from collections import defaultdict
 from collections.abc import Callable
 from enum import Enum
@@ -28,10 +27,12 @@ import networkx as nx
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
-from cpg_flow.utils import slugify, timestamp
+from cpg_flow.utils import get_logger, slugify, timestamp
 from cpg_utils import Path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
+
+LOGGER = get_logger(__name__)
 
 if TYPE_CHECKING:
     from cpg_flow.stage import Stage, StageDecorator, StageOutput
@@ -134,8 +135,7 @@ def skip(
 
     if _fun is None:
         return decorator_stage
-    else:
-        return decorator_stage(_fun)
+    return decorator_stage(_fun)
 
 
 _workflow: Optional['Workflow'] = None
@@ -306,13 +306,13 @@ class Workflow:
         for fs in first_stages:
             for descendant in nx.descendants(graph, fs):
                 if not stages_d[descendant].skipped:
-                    logging.info(
+                    LOGGER.info(
                         f'Skipping stage {descendant} (precedes {fs} listed in first_stages)',
                     )
                     stages_d[descendant].skipped = True
                 for grand_descendant in nx.descendants(graph, descendant):
                     if not stages_d[grand_descendant].assume_outputs_exist:
-                        logging.info(
+                        LOGGER.info(
                             f'Not checking expected outputs of not immediately '
                             f'required stage {grand_descendant} (< {descendant} < {fs})',
                         )
@@ -331,7 +331,7 @@ class Workflow:
             for ancestor in ancestors:
                 if stages_d[ancestor].skipped:
                     continue  # already skipped
-                logging.info(f'Skipping stage {ancestor} (after last {ls})')
+                LOGGER.info(f'Skipping stage {ancestor} (after last {ls})')
                 stages_d[ancestor].skipped = True
                 stages_d[ancestor].assume_outputs_exist = True
 
@@ -403,14 +403,14 @@ class Workflow:
                 + "'first_stages', 'last_stages' and/or 'skip_stages'",
             )
 
-        logging.info(
+        LOGGER.info(
             f'End stages for the workflow "{self.name}": {[cls.__name__ for cls in requested_stages]}',
         )
-        logging.info('Stages additional configuration:')
-        logging.info(f'  workflow/skip_stages: {skip_stages}')
-        logging.info(f'  workflow/only_stages: {only_stages}')
-        logging.info(f'  workflow/first_stages: {first_stages}')
-        logging.info(f'  workflow/last_stages: {last_stages}')
+        LOGGER.info('Stages additional configuration:')
+        LOGGER.info(f'  workflow/skip_stages: {skip_stages}')
+        LOGGER.info(f'  workflow/only_stages: {only_stages}')
+        LOGGER.info(f'  workflow/first_stages: {first_stages}')
+        LOGGER.info(f'  workflow/last_stages: {last_stages}')
 
         # Round 1: initialising stage objects.
         _stages_d: dict[str, Stage] = {}
@@ -441,7 +441,7 @@ class Workflow:
                     newly_implicitly_added_d[reqstg.name] = reqstg
 
             if newly_implicitly_added_d:
-                logging.info(
+                LOGGER.info(
                     f'Additional implicit stages: {list(newly_implicitly_added_d.keys())}',
                 )
                 _stages_d |= newly_implicitly_added_d
@@ -463,30 +463,30 @@ class Workflow:
         try:
             stage_names = list(reversed(list(nx.topological_sort(dag))))
         except nx.NetworkXUnfeasible:
-            logging.error('Circular dependencies found between stages')
+            LOGGER.error('Circular dependencies found between stages')
             raise
 
-        logging.info(f'Stages in order of execution:\n{stage_names}')
+        LOGGER.info(f'Stages in order of execution:\n{stage_names}')
         stages = [_stages_d[name] for name in stage_names]
 
         # Round 5: applying workflow options first_stages and last_stages.
         if first_stages or last_stages:
-            logging.info('Applying workflow/first_stages and workflow/last_stages')
+            LOGGER.info('Applying workflow/first_stages and workflow/last_stages')
             self._process_first_last_stages(stages, dag, first_stages, last_stages)
         elif only_stages:
-            logging.info('Applying workflow/only_stages')
+            LOGGER.info('Applying workflow/only_stages')
             self._process_only_stages(stages, dag, only_stages)
 
         if not (final_set_of_stages := [s.name for s in stages if not s.skipped]):
             raise WorkflowError('No stages to run')
 
-        logging.info(
+        LOGGER.info(
             f'Final list of stages after applying stage configuration options:\n{final_set_of_stages}',
         )
 
         required_skipped_stages = [s for s in stages if s.skipped]
         if required_skipped_stages:
-            logging.info(
+            LOGGER.info(
                 f'Skipped stages: {", ".join(s.name for s in required_skipped_stages)}',
             )
 
@@ -494,8 +494,8 @@ class Workflow:
         if not self.dry_run:
             inputs = get_multicohort()  # Would communicate with metamist.
             for i, stg in enumerate(stages):
-                logging.info('*' * 60)
-                logging.info(f'Stage #{i + 1}: {stg}')
+                LOGGER.info('*' * 60)
+                LOGGER.info(f'Stage #{i + 1}: {stg}')
                 # pipeline setup is now done in MultiCohort only
                 # the legacy version (input_datasets) is still supported
                 # that will create a MultiCohort with a single Cohort
@@ -508,11 +508,11 @@ class Workflow:
                         f'Stage {stg} failed to queue jobs with errors: ' + '\n'.join(errors),
                     )
 
-                logging.info('')
+                LOGGER.info('')
 
         else:
             self.queued_stages = [stg for stg in _stages_d.values() if not stg.skipped]
-            logging.info(f'Queued stages: {self.queued_stages}')
+            LOGGER.info(f'Queued stages: {self.queued_stages}')
 
     @staticmethod
     def _process_stage_errors(

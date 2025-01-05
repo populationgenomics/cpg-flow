@@ -17,22 +17,23 @@ main.py, which provides a way to choose a workflow using a CLI argument.
 """
 
 import functools
-import logging
 import pathlib
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Generic, Optional, TypeVar, Union, cast
+from typing import Generic, Optional, TypeVar, cast
 
 from cloudpathlib import CloudPath
 
 from hailtop.batch.job import Job
 
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Target
-from cpg_flow.utils import ExpectedResultT, exists
+from cpg_flow.utils import ExpectedResultT, exists, get_logger
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
 from cpg_utils import Path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch
+
+LOGGER = get_logger(__name__)
 
 StageDecorator = Callable[..., 'Stage']
 
@@ -588,13 +589,13 @@ class Stage(Generic[TargetT], ABC):
         to do with the target: queue, skip or reuse, etc...
         """
         if target.forced and not self.skipped:
-            logging.info(f'{self.name}: {target} [QUEUE] (target is forced)')
+            LOGGER.info(f'{self.name}: {target} [QUEUE] (target is forced)')
             return Action.QUEUE
 
         if (d := get_config()['workflow'].get('skip_stages_for_sgs')) and self.name in d:
             skip_targets = d[self.name]
             if target.target_id in skip_targets:
-                logging.info(
+                LOGGER.info(
                     f'{self.name}: {target} [SKIP] (is in workflow/skip_stages_for_sgs)',
                 )
                 return Action.SKIP
@@ -604,12 +605,12 @@ class Stage(Generic[TargetT], ABC):
 
         if self.skipped:
             if reusable and not first_missing_path:
-                logging.debug(
+                LOGGER.debug(
                     f'{self.name}: {target} [REUSE] (stage skipped, and outputs exist)',
                 )
                 return Action.REUSE
             if get_config()['workflow'].get('skip_sgs_with_missing_input'):
-                logging.warning(
+                LOGGER.warning(
                     f'{self.name}: {target} [SKIP] (stage is required, '
                     f'but is marked as "skipped", '
                     f'workflow/skip_sgs_with_missing_input=true '
@@ -626,37 +627,35 @@ class Stage(Generic[TargetT], ABC):
                 'allow_missing_outputs_for_stages',
                 [],
             ):
-                logging.info(
+                LOGGER.info(
                     f'{self.name}: {target} [REUSE] (stage is skipped, some outputs are'
                     f'missing, but stage is listed in '
                     f'workflow/allow_missing_outputs_for_stages)',
                 )
                 return Action.REUSE
-            else:
-                raise WorkflowError(
-                    f'{self.name}: stage is required, but is skipped, and '
-                    f'the following expected outputs for target {target} do not exist: '
-                    f'{first_missing_path}',
-                )
+            raise WorkflowError(
+                f'{self.name}: stage is required, but is skipped, and '
+                f'the following expected outputs for target {target} do not exist: '
+                f'{first_missing_path}',
+            )
 
         if reusable and not first_missing_path:
             if target.forced:
-                logging.info(
+                LOGGER.info(
                     f'{self.name}: {target} [QUEUE] (can reuse, but forcing the target to rerun this stage)',
                 )
                 return Action.QUEUE
-            elif self.forced:
-                logging.info(
+            if self.forced:
+                LOGGER.info(
                     f'{self.name}: {target} [QUEUE] (can reuse, but forcing the stage to rerun)',
                 )
                 return Action.QUEUE
-            else:
-                logging.info(
-                    f'{self.name}: {target} [REUSE] (expected outputs exist: {expected_out})',
-                )
-                return Action.REUSE
+            LOGGER.info(
+                f'{self.name}: {target} [REUSE] (expected outputs exist: {expected_out})',
+            )
+            return Action.REUSE
 
-        logging.info(f'{self.name}: {target} [QUEUE]')
+        LOGGER.info(f'{self.name}: {target} [QUEUE]')
 
         return Action.QUEUE
 
@@ -672,38 +671,37 @@ class Stage(Generic[TargetT], ABC):
                 Path | None: first missing path, if any
         """
         if self.assume_outputs_exist:
-            logging.debug(f'Assuming outputs exist. Expected output is {expected_out}')
+            LOGGER.debug(f'Assuming outputs exist. Expected output is {expected_out}')
             return True, None
 
         if not expected_out:
             # Marking is reusable. If the stage does not naturally produce any outputs,
             # it would still need to create some flag file.
-            logging.debug('No expected outputs, assuming outputs exist')
+            LOGGER.debug('No expected outputs, assuming outputs exist')
             return True, None
 
         if get_config()['workflow'].get('check_expected_outputs'):
             paths = path_walk(expected_out)
-            logging.info(
+            LOGGER.info(
                 f'Checking if {paths} from expected output {expected_out} exist',
             )
             if not paths:
-                logging.info(f'{expected_out} is not reusable. No paths found.')
+                LOGGER.info(f'{expected_out} is not reusable. No paths found.')
                 return False, None
 
             if first_missing_path := next((p for p in paths if not exists(p)), None):
-                logging.info(
+                LOGGER.info(
                     f'{expected_out} is not reusable, {first_missing_path} is missing',
                 )
                 return False, first_missing_path
 
             return True, None
-        else:
-            if self.skipped:
-                # Do not check the files' existence, trust they exist.
-                # note that for skipped stages, we automatically assume outputs exist
-                return True, None
-            # Do not check the files' existence, assume they don't exist:
-            return False, None
+        if self.skipped:
+            # Do not check the files' existence, trust they exist.
+            # note that for skipped stages, we automatically assume outputs exist
+            return True, None
+        # Do not check the files' existence, assume they don't exist:
+        return False, None
 
     def get_job_attrs(self, target: TargetT | None = None) -> dict[str, str]:
         """
@@ -718,7 +716,7 @@ class Stage(Generic[TargetT], ABC):
 
 
 def stage(
-    cls: Optional[type['Stage']] = None,
+    cls: type['Stage'] | None = None,
     *,
     analysis_type: str | None = None,
     analysis_keys: list[str | Path] | None = None,
@@ -728,7 +726,7 @@ def stage(
     skipped: bool = False,
     assume_outputs_exist: bool = False,
     forced: bool = False,
-) -> Union[StageDecorator, Callable[..., StageDecorator]]:
+) -> StageDecorator | Callable[..., StageDecorator]:
     """
     Implements a standard class decorator pattern with optional arguments.
     The goal is to allow declaring workflow stages without requiring to implement
@@ -780,8 +778,7 @@ def stage(
 
     if cls is None:
         return decorator_stage
-    else:
-        return decorator_stage(cls)
+    return decorator_stage(cls)
 
 
 class SequencingGroupStage(Stage[SequencingGroup], ABC):
@@ -804,7 +801,6 @@ class SequencingGroupStage(Stage[SequencingGroup], ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,
@@ -816,7 +812,7 @@ class SequencingGroupStage(Stage[SequencingGroup], ABC):
         output_by_target: dict[str, StageOutput | None] = dict()
         if not (active_sgs := multicohort.get_sequencing_groups()):
             all_sgs = len(multicohort.get_sequencing_groups(only_active=False))
-            logging.warning(
+            LOGGER.warning(
                 f'{len(active_sgs)}/{all_sgs} usable (active=True) SGs found in the multicohort. '
                 'Check that input_cohorts` or `input_datasets` are provided and not skipped',
             )
@@ -848,7 +844,6 @@ class DatasetStage(Stage, ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,
@@ -861,7 +856,7 @@ class DatasetStage(Stage, ABC):
         # iterate directly over the datasets in this multicohort
         for dataset_i, dataset in enumerate(multicohort.get_datasets()):
             action = self._get_action(dataset)
-            logging.info(f'{self.name}: #{dataset_i + 1}/{dataset} [{action.name}]')
+            LOGGER.info(f'{self.name}: #{dataset_i + 1}/{dataset} [{action.name}]')
             output_by_target[dataset.target_id] = self._queue_jobs_with_checks(
                 dataset,
                 action,
@@ -885,7 +880,6 @@ class CohortStage(Stage, ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,
@@ -897,7 +891,7 @@ class CohortStage(Stage, ABC):
         output_by_target: dict[str, StageOutput | None] = dict()
         for cohort in multicohort.get_cohorts():
             action = self._get_action(cohort)
-            logging.info(f'{self.name}: {cohort} [{action.name}]')
+            LOGGER.info(f'{self.name}: {cohort} [{action.name}]')
             output_by_target[cohort.target_id] = self._queue_jobs_with_checks(
                 cohort,
                 action,
@@ -915,7 +909,6 @@ class MultiCohortStage(Stage, ABC):
         """
         Override to declare expected output paths.
         """
-        pass
 
     @abstractmethod
     def queue_jobs(
@@ -926,7 +919,6 @@ class MultiCohortStage(Stage, ABC):
         """
         Override to add Hail Batch jobs.
         """
-        pass
 
     def queue_for_multicohort(
         self,
@@ -937,7 +929,7 @@ class MultiCohortStage(Stage, ABC):
         """
         output_by_target: dict[str, StageOutput | None] = dict()
         action = self._get_action(multicohort)
-        logging.info(f'{self.name}: {multicohort} [{action.name}]')
+        LOGGER.info(f'{self.name}: {multicohort} [{action.name}]')
         output_by_target[multicohort.target_id] = self._queue_jobs_with_checks(
             multicohort,
             action,
