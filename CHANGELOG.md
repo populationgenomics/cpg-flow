@@ -1,7 +1,219 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.13 (2025-01-05)
+
+### Bug Fixes
+
+- **pyproject.toml**: Import coloredlogs
+  ([`6a875cf`](https://github.com/populationgenomics/cpg-flow/commit/6a875cf3e82009ee376d1e790b79993f440c927c))
+
+- **docs/update_readme.py,pyproject.toml-,+7**: Fix linter warnings
+  ([`97acdb8`](https://github.com/populationgenomics/cpg-flow/commit/97acdb8db163e29b31832d0ccc4219cce1dbf8cd))
+
+### Build System
+
+- **pyproject.toml,uv.lock**: Add pyyaml
+  ([`9171532`](https://github.com/populationgenomics/cpg-flow/commit/9171532d4c239a1c24e674b046ae68c89719f0a7))
+
+### Chores
+
+- Update badges.yaml with test results and coverage
+  ([`9304439`](https://github.com/populationgenomics/cpg-flow/commit/9304439f6d4d9da58f411917022378e8557b3f0f))
+
+- Update badges.yaml with test results and coverage
+  ([`db932a4`](https://github.com/populationgenomics/cpg-flow/commit/db932a461e39596a99cbdc81104a8c36f53008a7))
+
+- Update badges.yaml with test results and coverage
+  ([`a750689`](https://github.com/populationgenomics/cpg-flow/commit/a750689bbd61c98bf5a11a6ff0ff137dd3dc3936))
+
+- Merge alpha
+  ([`b009c47`](https://github.com/populationgenomics/cpg-flow/commit/b009c471b2e1e425d0f07de394fc83b86da7649b))
+
+- Update badges.yaml with test results and coverage
+  ([`ea440eb`](https://github.com/populationgenomics/cpg-flow/commit/ea440eb37ff244f04be2c5924e15032f5926a53a))
+
+- Update badges.yaml with test results and coverage
+  ([`16f13be`](https://github.com/populationgenomics/cpg-flow/commit/16f13be0d764ebd3f48d9b8f842bc3e845434dc6))
+
+- Update badges.yaml with test results and coverage
+  ([`eb8be5b`](https://github.com/populationgenomics/cpg-flow/commit/eb8be5bbc01d4b75cfd9b6a193d96d2721464d2b))
+
+- Update badges.yaml with test results and coverage
+  ([`d3f6b6b`](https://github.com/populationgenomics/cpg-flow/commit/d3f6b6ba013f29a0ed6b0e371f4223c278bb0a54))
+
+### Continuous Integration
+
+- **.github/workflows/**: Package and web docs after test
+  ([`adaa682`](https://github.com/populationgenomics/cpg-flow/commit/adaa682c990e87869e07c97a81d9ea6c2ce235b3))
+
+- **update-badges.yaml**: Use env correctly
+  ([`e337b5a`](https://github.com/populationgenomics/cpg-flow/commit/e337b5a97b45febdc30a0690e8d441aef7ddd482))
+
+- **update-badges.yaml**: Use env variables
+  ([`47bd7fd`](https://github.com/populationgenomics/cpg-flow/commit/47bd7fd4ab4167e32904700af49da93e63155979))
+
+- **update-badges.yaml**: Save env variables to GITHUB_ENV
+  ([`3816a41`](https://github.com/populationgenomics/cpg-flow/commit/3816a413035c27d19e9610b6d66a98eaa4809647))
+
+- **update-badges.yaml**: Fix unzip
+  ([`653851b`](https://github.com/populationgenomics/cpg-flow/commit/653851b79666e3ae6708ca7bdef03c7a8adea9d6))
+
+- **update-badges.yaml**: List downloaded artifacts
+  ([`2240494`](https://github.com/populationgenomics/cpg-flow/commit/2240494135cf38546b9dbd3e7356175f692690b6))
+
+- **update-badges.yaml**: Custom download artifact
+  ([`415a376`](https://github.com/populationgenomics/cpg-flow/commit/415a3762d79cee8cbbe9b373ce7391df584e90bd))
+
+- **update-badges.yaml,docs/badges.yaml**: Custom download artifact
+  ([`fb177f2`](https://github.com/populationgenomics/cpg-flow/commit/fb177f2a16e1e10ccdf6c982bd03e9630e107449))
+
+- **test.yaml,update-badges.yaml**: Change to using artifacts
+  ([`6fea9f6`](https://github.com/populationgenomics/cpg-flow/commit/6fea9f6c7a84582c9ae9888de1f7cd83634fe30d))
+
+- **package.yaml**: Add step to update alpha on package of main
+  ([`4d9eb8a`](https://github.com/populationgenomics/cpg-flow/commit/4d9eb8a06fac89570144504334dec1c85a31f161))
+
+- **update-badges.yaml**: Checkout the branch so push works
+  ([`2393d2a`](https://github.com/populationgenomics/cpg-flow/commit/2393d2a1c805654a2f2a03aed7066261c44606e6))
+
+- **update-badges.yaml**: Checkout the triggering workflow ref
+  ([`f1c09c9`](https://github.com/populationgenomics/cpg-flow/commit/f1c09c94cc3b681d0f3a94b5ceb77d9b8d29d5b0))
+
+- **test.yaml,update-badges.yaml**: Merge main
+  ([`01d6bd7`](https://github.com/populationgenomics/cpg-flow/commit/01d6bd7e3a0c1ce2b4ea732e36c18c31956517b9))
+
+- **test.yaml,update-badges.yaml**: Add to default branch
+  ([`20ca3a4`](https://github.com/populationgenomics/cpg-flow/commit/20ca3a47ed28a8fde5228c7a16e54275743fb086))
+
+- **test.yaml,update-badges.yaml**: Back to workflow_run trigger
+  ([`a1bed2d`](https://github.com/populationgenomics/cpg-flow/commit/a1bed2d93c02a0a92de3324d873efacef919e780))
+
+- **test.yaml,update-badges.yaml**: Download manually
+  ([`1375dd6`](https://github.com/populationgenomics/cpg-flow/commit/1375dd62c06c73dacdccb90477bd2e2f0e00c286))
+
+- **update-badges.yaml**: Back to workflow_run
+  ([`551bd32`](https://github.com/populationgenomics/cpg-flow/commit/551bd32d4f5aed67951e806f85188afb28ae9f0f))
+
+- **test.yaml,update-badges.yaml**: Retry download-artifact
+  ([`471c125`](https://github.com/populationgenomics/cpg-flow/commit/471c12597d4187480962601c1b91f981c6b09e73))
+
+- **.github/workflows/,docs/**: Test workflow upload artifact
+  ([`390d162`](https://github.com/populationgenomics/cpg-flow/commit/390d1622ae1e64e4d59c75c2e397616fbddfa07d))
+
+- **update-badges.yaml**: Add token
+  ([`0bd20ee`](https://github.com/populationgenomics/cpg-flow/commit/0bd20eec5232397e58b892acf192d7a88b6c72e5))
+
+- **update-badges.yaml**: Try wait-for-test job
+  ([`46cf28a`](https://github.com/populationgenomics/cpg-flow/commit/46cf28a718476d23e2ee65a58c30f7a01849b896))
+
+- **update-badges.yaml**: Remove push trigger
+  ([`d73a32b`](https://github.com/populationgenomics/cpg-flow/commit/d73a32b1c431af6cd234c81ffbfcd26cde47e40e))
+
+- **update-badges.yaml**: Trigger on push to readme
+  ([`4152cdf`](https://github.com/populationgenomics/cpg-flow/commit/4152cdf390922affa1b1756d959327b3eaac67e0))
+
+- **update-badges.yaml**: Add manual run
+  ([`ca01baf`](https://github.com/populationgenomics/cpg-flow/commit/ca01bafe8f98f3325299ec276b29dd43e347af5a))
+
+- **web-docs.yaml**: Rename to kebab case
+  ([`67b1e94`](https://github.com/populationgenomics/cpg-flow/commit/67b1e9422f3c1b3ea306182598bc5aea88c1d465))
+
+- **.github/workflows/,docs/**: Mv update-badges from test workflow
+  ([`3b90377`](https://github.com/populationgenomics/cpg-flow/commit/3b90377104969a03e2f2dda1127564a294b716a9))
+
+### Documentation
+
+- **docs/alpha/**: Create the docs page
+  ([`75e772e`](https://github.com/populationgenomics/cpg-flow/commit/75e772edee1095440008adff8b5d4d9e779ac891))
+
+### Refactoring
+
+- **.dummy**: Dummy commit
+  ([`258223b`](https://github.com/populationgenomics/cpg-flow/commit/258223b297fd327ac804c50d316edf518a896b07))
+
+- **.dummy**: Dummy commit
+  ([`62038c0`](https://github.com/populationgenomics/cpg-flow/commit/62038c03d17d779852c1fa2644d78f15b28a69af))
+
+
 ## v0.1.0-alpha.12 (2024-12-17)
+
+### Bug Fixes
+
+- **pyproject.toml,src/cpg_flow/inputs.py-,+10**: Use better logger
+  ([`057ab0e`](https://github.com/populationgenomics/cpg-flow/commit/057ab0e17bebc0f07797bf695c64a74cdec15c14))
+
+### Chores
+
+- Update badges.yaml with test results and coverage
+  ([`792f640`](https://github.com/populationgenomics/cpg-flow/commit/792f64026d064cfb3e9bfac1f91ee32cb7c8239f))
+
+- Update badges.yaml with test results and coverage
+  ([`02011fe`](https://github.com/populationgenomics/cpg-flow/commit/02011fe31f8bc3e5662d62057f41615433104c19))
+
+### Continuous Integration
+
+- **web_docs.yaml,Makefile**: Rm excessive permissions, fix script name
+  ([`febaf9c`](https://github.com/populationgenomics/cpg-flow/commit/febaf9c92e5fc68b6157c791c68476a1880b2c70))
+
+- **test.yaml**: Add git pull
+  ([`f9477f6`](https://github.com/populationgenomics/cpg-flow/commit/f9477f62c580f91489acbe33bd3bf0bf4ab0b92e))
+
+- **test.yaml**: Fix save badge env step
+  ([`2a37f74`](https://github.com/populationgenomics/cpg-flow/commit/2a37f7420d23b4a8ee1a74f0e2a5990b702570d1))
+
+- **test.yaml**: Fix for coverage_color calculation
+  ([`a57972f`](https://github.com/populationgenomics/cpg-flow/commit/a57972f4dd151a98eab8ebb2c3bffa4846e78b10))
+
+- **./,.github/workflows/,docs/**: Update badge values in test workflow
+  ([`0f02c23`](https://github.com/populationgenomics/cpg-flow/commit/0f02c230f521b4901026a64d16383a7ce4fecc6c))
+
+- **web_docs.yaml**: Only build docs on alpha and main
+  ([`63adf12`](https://github.com/populationgenomics/cpg-flow/commit/63adf12c955419edac30c0cfcc971eb1b2105a51))
+
+- **web_docs.yaml**: Add web doc deploy
+  ([`b81dca5`](https://github.com/populationgenomics/cpg-flow/commit/b81dca5bcd1037876700be9b8015ade223c0e1b0))
+
+- **test.yaml**: Fix coverage color logic
+  ([`cd4a722`](https://github.com/populationgenomics/cpg-flow/commit/cd4a722a0950bd107f6d47f0f72488f5a1728d84))
+
+- **test.yaml,README.md**: Create badges
+  ([`630911b`](https://github.com/populationgenomics/cpg-flow/commit/630911b933833e26c88919843c636934ae88b64c))
+
+### Documentation
+
+- **README.md**: Clean up
+  ([`e22d96d`](https://github.com/populationgenomics/cpg-flow/commit/e22d96d17718b9836b44bf10afc6c4678a956a5b))
+
+- **README.md**: Remove pip as suggestion
+  ([`0a34d54`](https://github.com/populationgenomics/cpg-flow/commit/0a34d54d647fdd055f849426e8c0ddd0ac3f81e4))
+
+- **CONTRIBUTING.md**: Add notes on commitlint and commitizen
+  ([`8609727`](https://github.com/populationgenomics/cpg-flow/commit/8609727be4bfb5bcdd66c404473eeeae7b0c75d2))
+
+- **README.md**: Add notes about commitlint and commitizen
+  ([`396adc7`](https://github.com/populationgenomics/cpg-flow/commit/396adc742294c37a2ccbca8f318230ed65bf4dc3))
+
+- **README.md**: Test badge
+  ([`50ba1af`](https://github.com/populationgenomics/cpg-flow/commit/50ba1af626264e4aa29a9cd9d167c9d5bab7ba47))
+
+- **./,.github/workflows/,docs/**: Replace badges, fix urls
+  ([`97a7977`](https://github.com/populationgenomics/cpg-flow/commit/97a797732e6c86e9a84298b2c3356de323c7e57b))
+
+- **DEVELOPERS.md,README.md**: Finish readme, rm old dev docs
+  ([`a1e4676`](https://github.com/populationgenomics/cpg-flow/commit/a1e46767dc266e3fc811d54620923335ca6cae95))
+
+- **./,.github/workflows/,docs/**: Document workflow update
+  ([`3eff1de`](https://github.com/populationgenomics/cpg-flow/commit/3eff1deee0534005f2928fa6611de2c7e7fd3aad))
+
+- **./,.github/workflows/**: Script to document all of our workflows
+  ([`4ffadab`](https://github.com/populationgenomics/cpg-flow/commit/4ffadab227c2a27ffc3d960cb422d1dd064474c9))
+
+- **web_docs.yaml,Makefile-,+22**: Generate docs on all branches
+  ([`991cf57`](https://github.com/populationgenomics/cpg-flow/commit/991cf5783d7d35dee56a7ab0452d54e69c695c4e))
+
+- **.pre-commit-config.yaml,Makefile,docs/**: Use pydoc to document api
+  ([`341f0ff`](https://github.com/populationgenomics/cpg-flow/commit/341f0ff17e4a11b9805dc73a4a0e2bbe9e265d74))
 
 
 ## v0.1.0-alpha.11 (2024-12-13)
@@ -13,9 +225,6 @@
 
 - **src/cpg_flow/targets/**: Improve hashing efficiency
   ([`b3715e8`](https://github.com/populationgenomics/cpg-flow/commit/b3715e8b68d2fb58a3922730f845cd34e2325b68))
-
-- **pyproject.toml,src/cpg_flow/inputs.py-,+10**: Use better logger
-  ([`057ab0e`](https://github.com/populationgenomics/cpg-flow/commit/057ab0e17bebc0f07797bf695c64a74cdec15c14))
 
 
 ## v0.1.0-alpha.10 (2024-12-13)
