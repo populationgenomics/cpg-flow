@@ -46,6 +46,24 @@ jobs:
           name: execution-report
           path: ./test-execution.xml
 
+      - name: Save badge data
+        id: save_badge_env
+        if: always()
+        run: |
+          COVERAGE="$(grep -o 'line-rate="[^"]*"' coverage.xml | head -1 | cut -d'"' -f2 | awk '{printf "%.2f", $1 * 100}')%"
+          COVERAGE_COLOR=$(if [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 80 ]; then echo "green"; elif [ "$(echo "$COVERAGE" | cut -d'.' -f1)" -ge 50 ]; then echo "orange"; else echo "red"; fi)
+          echo "TEST_COUNT=$TEST_COUNT" >> badge_data.env
+          echo "TEST_PASSED=$TEST_PASSED" >> badge_data.env
+          echo "TEST_COLOR=$TEST_COLOR" >> badge_data.env
+          echo "COVERAGE=$COVERAGE" >> badge_data.env
+          echo "COVERAGE_COLOR=$COVERAGE_COLOR" >> badge_data.env
+
+      - name: 'Save badge data as an Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: badge-data
+          path: ./badge_data.env
+
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
         uses: actions/github-script@v6
