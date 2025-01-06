@@ -87,5 +87,5 @@ jobs:
           git config --global user.email "software-team+githubcibot@populationgenomics.org.au"
           git add docs/badges.yaml
           git commit -m "chore: update badges.yaml with test results and coverage"
-          git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.gitit -m "chore: update badges.yaml with test results and coverage"
+          git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
           git push
