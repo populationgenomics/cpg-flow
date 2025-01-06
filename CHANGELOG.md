@@ -1,6 +1,53 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.14 (2025-01-06)
+
+### Bug Fixes
+
+- **.dummy**: Force release
+  ([`15b8906`](https://github.com/populationgenomics/cpg-flow/commit/15b8906cbc07338f3ab730a365e89feeecbc4c7a))
+
+### Build System
+
+- **pyproject.toml,uv.lock**: Update jinja2 to 3.1.5
+  ([`4dbdf15`](https://github.com/populationgenomics/cpg-flow/commit/4dbdf15a031ee8cd010efb9884458670bfecdaaf))
+
+- **uv.lock**: Upgrade jinja2 to 3.1.5
+  ([`f833517`](https://github.com/populationgenomics/cpg-flow/commit/f8335170ce585158110283d2ecc2926f065c2ab9))
+
+- **pyproject.toml,uv.lock**: Upgrade jinja2 as pip-audit logs
+  ([`101bff5`](https://github.com/populationgenomics/cpg-flow/commit/101bff5becb27435819059f888dd9536efa5bfd3))
+
+### Continuous Integration
+
+- **test.yaml,update-badges.yaml**: Add save badge data back to test
+  ([`d2aab13`](https://github.com/populationgenomics/cpg-flow/commit/d2aab13f16853a69741d2f05174609c4b2a8558a))
+
+- **update-badges.yaml**: Run after Test
+  ([`22819cf`](https://github.com/populationgenomics/cpg-flow/commit/22819cf11266c5d8f407d9e77513109253e756cc))
+
+- **.github/workflows/**: Change run order
+  ([`84cfa2c`](https://github.com/populationgenomics/cpg-flow/commit/84cfa2cbee3da9659e9e99075f343a77b8efbb16))
+
+- **package.yaml**: Run after update badges
+  ([`de2fa6c`](https://github.com/populationgenomics/cpg-flow/commit/de2fa6c6147676072a8ba583885059d012b996c9))
+
+- **web-docs.yaml**: Run after badge update
+  ([`d986ecd`](https://github.com/populationgenomics/cpg-flow/commit/d986ecdd0330c59d2ef1cd8a7c74c169fb462e70))
+
+- **package.yaml**: Run on completion of Test
+  ([`d9af0a4`](https://github.com/populationgenomics/cpg-flow/commit/d9af0a42864ffee7716f2907ac0408c57638cb20))
+
+- **package.yaml,web-docs.yaml**: Package on alpha/main only
+  ([`4734447`](https://github.com/populationgenomics/cpg-flow/commit/4734447246f6e055c8e2c3264a69ed4a77db2f80))
+
+### Refactoring
+
+- **.dummy**: Add file
+  ([`4648964`](https://github.com/populationgenomics/cpg-flow/commit/464896412a0113ae6dc69025eb60e7344ee31aee))
+
+
 ## v0.1.0-alpha.13 (2025-01-05)
 
 ### Bug Fixes
