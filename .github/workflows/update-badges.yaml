@@ -7,6 +7,7 @@ on:
 
 jobs:
   update_badges:
+    environment: production
     name: Update Badges
     runs-on: ubuntu-latest
 
@@ -29,6 +30,9 @@ jobs:
             let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "badge-data";
             })[0];
+            if (!matchArtifact) {
+              throw new Error("No artifact found with the name 'badge-data'");
+            }
             let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -79,8 +83,9 @@ jobs:
 
       - name: "Commit and Push Changes"
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "cpg-software-ci-bot"
+          git config --global user.email "software-team+githubcibot@populationgenomics.org.au"
           git add docs/badges.yaml
           git commit -m "chore: update badges.yaml with test results and coverage"
+          git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.gitit -m "chore: update badges.yaml with test results and coverage"
           git push
