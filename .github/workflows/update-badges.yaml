@@ -7,6 +7,7 @@ on:
 
 jobs:
   update_badges:
+    environment: production
     name: Update Badges
     runs-on: ubuntu-latest
 
@@ -82,8 +83,9 @@ jobs:
 
       - name: "Commit and Push Changes"
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "cpg-software-ci-bot"
+          git config --global user.email "software-team+githubcibot@populationgenomics.org.au"
           git add docs/badges.yaml
           git commit -m "chore: update badges.yaml with test results and coverage"
+          git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.gitit -m "chore: update badges.yaml with test results and coverage"
           git push
