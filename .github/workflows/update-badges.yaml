@@ -82,6 +82,7 @@ jobs:
             color: $COVERAGE_COLOR
           EOF
           truncate -s -1 docs/badges.yaml
+          rm badge_data.env
 
       - name: "Commit and Push Changes"
         run: |
@@ -89,4 +90,9 @@ jobs:
           git config --global user.email "software-team+githubcibot@populationgenomics.org.au"
           git add docs/badges.yaml
           git commit -m "chore: update badges.yaml with test results and coverage"
-          git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
+          if git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git | grep -q "Your branch is up to date"
+          then
+            echo "No changes to commit"
+          else
+            exit $?
+          fi
