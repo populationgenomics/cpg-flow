@@ -16,11 +16,8 @@ clean:
 	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 
 docs:
-	export BRANCH_NAME=$(shell git rev-parse --abbrev-ref HEAD)
-	# echo the branch name
-	echo "Building docs for branch $${BRANCH_NAME}"
-	# echo "Building docs for branch $${BRANCH_NAME}"
-	# uv run pdoc cpg_flow --output-dir "docs/$${BRANCH_NAME}"
+	uv run python docs/update_readme.py
+	uv run pdoc cpg_flow --output-dir "docs/$(shell git rev-parse --abbrev-ref HEAD)"
 
 ci-build: clean docs
 	python -m pip install build "setuptools>=42" setuptools-scm wheel

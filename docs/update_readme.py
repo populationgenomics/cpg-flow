@@ -1,4 +1,5 @@
 import os
+import re
 
 import yaml
 
@@ -76,35 +77,54 @@ def generate_markdown(workflows):
     return markdown
 
 
-def update_readme(markdown, readme_file):
+def update_readme(readme_file):
     with open(readme_file) as file:
         content = file.read()
 
+    content = update_workflow_table(content)
+    content = update_readme_links(content)
+
+    with open(readme_file, 'w') as file:
+        file.write(content)
+
+    print(f'Readme updated: {readme_file}')
+
+
+def update_workflow_table(content):
+    if os.path.exists(WORKFLOWS_DIR):
+        workflows = parse_workflows(WORKFLOWS_DIR, DESCRIPTION_FILE)
+        workflows_md_table = generate_markdown(workflows)
+
+    if not workflows:
+        print('No workflows found in the directory.')
+        return content
+
     start_marker = '### 🎢 Workflows'
-    end_marker = '## <a name="misc-commands">✨ Misc commands</a>'
+    end_marker = '## <a name="license">©️ License</a>'
 
     start_index = content.find(start_marker)
     end_index = content.find(end_marker)
 
     if start_index == -1 or end_index == -1:
         print('Markers not found in README.md')
-        return
+        return content
 
-    new_content = content[: start_index + len(start_marker)] + '\n\n' + markdown + '\n\n' + content[end_index:]
+    return content[: start_index + len(start_marker)] + '\n\n' + workflows_md_table + '\n\n' + content[end_index:]
 
-    with open(readme_file, 'w') as file:
-        file.write(new_content)
 
-    print(f'Readme updated: {readme_file}')
+def update_readme_links(content):
+    slash = r'(%2F|\/)'
+    pattern = rf'(cpg-flow{slash}refs{slash}heads{slash}\w+{slash})'
+
+    # Find all the raw content links and replace the branch name with the current branch
+    current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
+    print(f'Current branch: {current_branch}')
+
+    print('URL Matches:')
+    print([x[0] for x in re.findall(pattern, content)])
+
+    return re.sub(pattern, f'cpg-flow%2Frefs%2Fheads%2F{current_branch}%2F', content)
 
 
 if __name__ == '__main__':
-    if os.path.exists(WORKFLOWS_DIR):
-        workflows = parse_workflows(WORKFLOWS_DIR, DESCRIPTION_FILE)
-        if workflows:
-            markdown = generate_markdown(workflows)
-            update_readme(markdown, README_FILE)
-        else:
-            print('No workflows found in the directory.')
-    else:
-        print(f'Directory {WORKFLOWS_DIR} does not exist.')
+    update_readme(README_FILE)
