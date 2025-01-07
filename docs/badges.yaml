@@ -1,6 +1,6 @@
 test-badge:
-  status:  /  passed
-  color:
+  status: No result found
+  color: red
 coverage-badge:
   status: 84.00%
   color: green
