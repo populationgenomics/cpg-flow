@@ -141,7 +141,6 @@ class MetamistError(Exception):
     """
 
 
-
 class AnalysisStatus(Enum):
     """
     Corresponds to metamist Analysis statuses:
@@ -427,8 +426,7 @@ class Metamist:
             )
             return None
         LOGGER.info(
-            f'Created Analysis(id={aid}, type={type_}, status={status}, '
-            f'output={output!s}) in {metamist_proj}',
+            f'Created Analysis(id={aid}, type={type_}, status={status}, ' f'output={output!s}) in {metamist_proj}',
         )
         return aid
 
