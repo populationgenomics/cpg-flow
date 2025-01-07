@@ -107,6 +107,7 @@ jobs:
           rm badge_data.env
 
       - name: "Commit and Push Changes"
+        continue-on-error: true
         run: |
           git config --global user.name "cpg-software-ci-bot"
           git config --global user.email "software-team+githubcibot@populationgenomics.org.au"
@@ -121,7 +122,7 @@ jobs:
           if $PUSH | grep -q "up to date"
           then
             echo "No changes to commit"
-            exit 0
-          else
-            exit $STATUS
-          fi
+          exit 0
+            else
+          exit $STATUS
+            fi

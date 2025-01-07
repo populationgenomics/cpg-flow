@@ -8,7 +8,8 @@ init: venv
 
 # Actions
 test:
-	coverage run -m pytest tests --junitxml=test-execution.xml
+	uv run coverage run -m pytest tests --junitxml=test-execution.xml
+	uv run coverage xml
 
 clean:
 	rm -rf build dist *.egg-info
