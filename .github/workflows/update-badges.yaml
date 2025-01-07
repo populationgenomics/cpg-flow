@@ -65,23 +65,45 @@ jobs:
           echo "COVERAGE=$COVERAGE"
           echo "COVERAGE_COLOR=$COVERAGE_COLOR"
 
-          echo "TEST_COUNT=$TEST_COUNT" >> $GITHUB_ENV
-          echo "TEST_PASSED=$TEST_PASSED" >> $GITHUB_ENV
+          if [ -z "$TEST_COUNT" ] && [ -z "$TEST_PASSED" ]
+          then
+            echo "TEST_STATUS=No result found" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=$TEST_PASSED / $TEST_COUNT passed" >> $GITHUB_ENV
+          fi
+
+          if [ -z "$TEST_COLOR" ]
+          then
+            TEST_COLOR="red"
+          fi
           echo "TEST_COLOR=$TEST_COLOR" >> $GITHUB_ENV
-          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
+          # Do the same for coverage
+          if [ -z "$COVERAGE" ]
+          then
+            echo "COVERAGE_STATUS=No result found" >> $GITHUB_ENV
+          else
+            echo "COVERAGE_STATUS=$COVERAGE" >> $GITHUB_ENV
+          fi
+
+          if [ -z "$COVERAGE_COLOR" ]
+          then
+            COVERAGE_COLOR="red"
+          fi
           echo "COVERAGE_COLOR=$COVERAGE_COLOR" >> $GITHUB_ENV
+
+          echo $GITHUB_ENV
 
       - name: "Update badges.yaml"
         run: |
           cat <<EOF > docs/badges.yaml
           test-badge:
-            status: $TEST_PASSED / $TEST_COUNT passed
+            status: $TEST_STATUS
             color: $TEST_COLOR
           coverage-badge:
-            status: $COVERAGE
+            status: $COVERAGE_STATUS
             color: $COVERAGE_COLOR
           EOF
-          truncate -s -1 docs/badges.yaml
           rm badge_data.env
 
       - name: "Commit and Push Changes"
@@ -90,9 +112,16 @@ jobs:
           git config --global user.email "software-team+githubcibot@populationgenomics.org.au"
           git add docs/badges.yaml
           git commit -m "chore: update badges.yaml with test results and coverage"
-          if git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git | grep -q "Your branch is up to date"
+          PUSH=$(git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git)
+          STATUS=$?
+
+          echo $($PUSH | grep "up to date")
+          echo $STATUS
+
+          if $PUSH | grep -q "up to date"
           then
             echo "No changes to commit"
+            exit 0
           else
-            exit $?
+            exit $STATUS
           fi
