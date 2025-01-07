@@ -58,6 +58,8 @@ jobs:
           echo "COVERAGE=$COVERAGE" >> badge_data.env
           echo "COVERAGE_COLOR=$COVERAGE_COLOR" >> badge_data.env
 
+          cat badge_data.env
+
       - name: 'Save badge data as an Artifact'
         uses: actions/upload-artifact@v4
         with:
