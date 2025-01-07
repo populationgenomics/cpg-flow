@@ -81,6 +81,7 @@ jobs:
             status: $COVERAGE
             color: $COVERAGE_COLOR
           EOF
+          truncate -s -1 docs/badges.yaml
 
       - name: "Commit and Push Changes"
         run: |
