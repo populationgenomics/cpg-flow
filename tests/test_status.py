@@ -46,13 +46,11 @@ cpg_flow = "stub"
 def _common(mocker, tmp_path):
     conf = TOML.format(directory=tmp_path)
 
-    # TODO: remove the dependency on seqr_loader.toml for this test
     set_config(
         conf,
         tmp_path / 'config.toml',
         merge_with=[
             Path(to_path(__file__).parent.parent / 'src' / 'cpg_flow' / 'defaults.toml'),
-            Path(to_path(__file__).parent.parent / 'src' / 'cpg_flow' / 'seqr_loader.toml'),
         ],
     )
 
