@@ -69,15 +69,21 @@ jobs:
         run: |
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
           docker push $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
+          echo "DOCKER_IMAGE=$DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
       - name: push production
         if: ${{ github.ref_name == 'main' || github.ref_name == 'alpha' }}
         run: |
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_MAIN/$IMAGE_NAME:$VERSION
           docker push $DOCKER_MAIN/$IMAGE_NAME:$VERSION
+          echo "DOCKER_IMAGE=$DOCKER_MAIN/$IMAGE_NAME:$VERSION" >> $GITHUB_ENV
 
       - name: manually triggered build
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
         run: |
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }}
           docker push $DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }}
+          echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+
+      - name: print docker tag
+        run: echo "Pushed Docker Tag ${{ env.DOCKER_IMAGE }}"
