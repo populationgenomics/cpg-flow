@@ -526,7 +526,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
         raise MetamistError(f'Error fetching cohort: {message}')
 
     cohort_name = entries['cohorts'][0]['name']
-    sequencing_groups = entries['cohorts'][0]['sequencing_groups']
+    sequencing_groups = entries['cohorts'][0]['sequencingGroups']
 
     return {
         'name': cohort_name,

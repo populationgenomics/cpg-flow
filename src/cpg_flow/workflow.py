@@ -559,9 +559,10 @@ class Workflow:
             # If we have a web bucket path
             if web_bucket := get_web_bucket():
                 web_prefix = Path(web_bucket)
-                fig.save(web_prefix / f'{self.name}_workflow.html')
+                html_path = web_prefix / f'{self.name}_workflow.html'
+                fig.save(html_path)
 
-                print(f'Workflow graph saved to {web_prefix / f"{self.name}_workflow.html"}')
+                LOGGER.info(f'Workflow graph saved to {html_path}')
 
     @staticmethod
     def _process_stage_errors(
