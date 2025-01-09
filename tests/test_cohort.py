@@ -95,7 +95,7 @@ def _custom_cohort_config(tmp_path) -> str:
 # region DATA MOCKS
 
 
-def load_mock_data(file_path: str) -> list[dict]:
+def load_mock_data(file_path: str) -> dict:
     with open(file_path) as file:
         return json.load(file)
 
@@ -129,7 +129,7 @@ def mock_get_pedigree(*args, **kwargs):  # pylint: disable=unused-argument
     ]
 
 
-def mock_get_cohort_sgs(cohort_id: str, *args, **kwargs) -> list[dict]:
+def mock_get_cohort_sgs(cohort_id: str, *args, **kwargs) -> dict:
     cohorts = {
         'COH1': load_mock_data('tests/assets/test_cohort/COH1.json'),
         'COH2': load_mock_data('tests/assets/test_cohort/COH2.json'),
@@ -422,7 +422,7 @@ def test_custom_cohort(mocker: MockFixture, tmp_path, monkeypatch):
 
     def mock_query(query, variables):
         # Mocking the return value of the query function
-        return {'cohorts': [{'sequencingGroups': mock_get_cohort_sgs('COH5')}]}
+        return {'cohorts': [mock_get_cohort_sgs('COH5')]}
 
     # Patching the query function to mock the GraphQL query
     monkeypatch.setattr('cpg_flow.metamist.query', mock_query)

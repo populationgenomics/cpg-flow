@@ -109,17 +109,20 @@ def create_multicohort() -> MultiCohort:
     for cohort_id in custom_cohort_ids_unique:
         # get the dictionary representation of all SGs in this cohort
         # dataset_id is sequencing_group_dict['sample']['project']['name']
-        cohort_sg_dicts = get_cohort_sgs(cohort_id)
-        if len(cohort_sg_dicts) == 0:
+        cohort_sg_dict = get_cohort_sgs(cohort_id)
+        cohort_name = cohort_sg_dict.get('name', cohort_id)
+        cohort_sgs = cohort_sg_dict.get('sequencing_groups', [])
+
+        if len(cohort_sgs) == 0:
             raise MetamistError(f'Cohort {cohort_id} has no sequencing groups')
 
         # create a new Cohort object
-        cohort = multicohort.create_cohort(cohort_id)
+        cohort = multicohort.create_cohort(id=cohort_id, name=cohort_name)
 
         # first populate these SGs into their Datasets
         # required so that the SG objects can be referenced in the collective Datasets
         # SG.dataset.prefix is meaningful, to correctly store outputs in the project location
-        for entry in cohort_sg_dicts:
+        for entry in cohort_sgs:
             sg_dataset = entry['sample']['project']['name']
             dataset = multicohort.create_dataset(sg_dataset)
 

@@ -1,22 +1,22 @@
 {
-    "name": "Cohort #2",
+    "name": "Cohort #456",
     "sequencing_groups": [
         {
-            "id": "CPGLCL17",
+            "id": "CPGCCCCCC",
             "meta": {
-                "sg_meta": "is_fun"
+                "sg_meta": "is_awesome"
             },
             "platform": "illumina",
-            "type": "genome",
             "technology": "short-read",
+            "type": "genome",
             "sample": {
                 "project": {
-                    "name": "fewgenomes"
+                    "name": "projectb"
                 },
-                "externalId": "NA12340",
+                "externalId": "NA111111",
                 "participant": {
                     "id": 1,
-                    "externalId": "8",
+                    "externalId": "10",
                     "reportedSex": "Male",
                     "meta": {
                         "participant_meta": "is_here"
@@ -33,44 +33,23 @@
                         "reference_genome": "Homo sapiens (b37d5)",
                         "volume": "100",
                         "reads_type": "fastq",
-                        "batch": "1",
-                        "reads": [
-                            {
-                                "location": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
-                                "basename": "HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R1.fastq.gz",
-                                "class": "File",
-                                "checksum": null,
-                                "size": 1070968,
-                                "datetime_added": null
-                            },
-                            {
-                                "location": "gs://cpg-fewgenomes-main/HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
-                                "basename": "HG3FMDSX3_2_220405_FS28_Homo-sapiens_AACGAGGCCG-ATCCAGGTAT_R_220208_BINKAN1_FEWGENOMES_M001_R2.fastq.gz",
-                                "class": "File",
-                                "checksum": null,
-                                "size": 1123158,
-                                "datetime_added": null
-                            }
-                        ],
-                        "sequencing_type": "genome",
-                        "sequencing_technology": "short-read",
-                        "sequencing_platform": "illumina"
+                        "batch": "1"
                     },
                     "type": "sequencing"
                 }
             ]
         },
         {
-            "id": "CPGLCL25",
+            "id": "CPGDDDDDD",
             "meta": {
-                "sample_meta": "is_fun"
+                "sg_meta": "is_fun"
             },
             "platform": "illumina",
-            "type": "genome",
             "technology": "short-read",
+            "type": "genome",
             "sample": {
                 "project": {
-                    "name": "fewgenomes"
+                    "name": "projectb"
                 },
                 "externalId": "NA12489",
                 "participant": {
@@ -92,10 +71,7 @@
                         "reference_genome": "Homo sapiens (b37d5)",
                         "volume": "100",
                         "reads_type": "fastq",
-                        "batch": "1",
-                        "sequencing_type": "genome",
-                        "sequencing_technology": "short-read",
-                        "sequencing_platform": "illumina"
+                        "batch": "1"
                     },
                     "type": "sequencing"
                 }
