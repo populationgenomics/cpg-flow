@@ -23,7 +23,6 @@ class GraphPlot:
 
         script_location = os.path.dirname(os.path.abspath(__file__))
         self.stages_folder = os.path.abspath(f'{script_location}/stages/')
-        self.node_locaitons = self._get_node_file_locations()
 
         # Text and sizes
         self.title = 'Workflow Graph'
@@ -169,15 +168,6 @@ class GraphPlot:
         node_trace.text = node_name
         node_trace.hovertext = node_hovertext
         node_trace.marker.color = node_color
-        # node_trace.marker.colorbar = custom_colorbar
-
-        # Add trace callbacks
-        def node_click(trace, points, state):
-            name = points.name
-            url = self.get_node_file_location(name)
-            webbrowser.open_new_tab(url)
-
-        node_trace.on_click(node_click)
 
         return [edge_trace_dark, edge_trace_grey, node_trace]
 
@@ -367,28 +357,3 @@ class GraphPlot:
         layer = nx.get_node_attributes(self.G, self.partite_key)
         layer = set([val for node, val in layer.items() if node in nodes])
         return min(layer), max(layer)
-
-    def _get_node_file_locations(self) -> dict:
-        def file_search(file: str, regex: re.Pattern):
-            matches = {}
-            for i, line in enumerate(open(file, 'r')):
-                for match in re.finditer(regex, line):
-                    matches[match.group(1)] = {
-                        'line': i + 1,
-                        'file': 'file:///' + file.lstrip('/'),
-                    }
-
-            return matches
-
-        file_scan = os.scandir(self.stages_folder)
-        files: list = [f.path for f in file_scan if f.is_file()]
-
-        # Search these files for all of the Stage classes
-        pattern = re.compile('class\s+(.+)\s*\(.*Stage\)')
-        all_matches_search = [file_search(f, pattern) for f in files]
-        all_matches = {k: v for d in all_matches_search for k, v in d.items()}
-
-        return all_matches
-
-    def get_node_file_location(self, node: str) -> dict:
-        return self.node_locaitons.get(node)
