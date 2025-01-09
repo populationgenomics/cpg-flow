@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING, Optional, Union
 import networkx as nx
 
 from cpg_flow.inputs import get_multicohort
+from cpg_flow.show_workflow.graph import GraphPlot
 from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
 from cpg_flow.utils import get_logger, slugify, timestamp
@@ -175,6 +176,7 @@ class Workflow:
             )
 
         self.dry_run = dry_run or get_config(True)['workflow'].get('dry_run')
+        self.show_workflow = get_config()['workflow'].get('show_workflow', False)
 
         # TODO: should the ['dataset'] be a get? should we rename it to analysis dataset?
         analysis_dataset = get_config(True)['workflow']['dataset']
@@ -343,6 +345,13 @@ class Workflow:
                 _stage.skipped = True
                 _stage.assume_outputs_exist = True
 
+        # Update dag with the skipped attribute
+        nx.set_node_attributes(graph, False, name='skipped')
+
+        for stage in stages:
+            if stage.skipped:
+                graph.nodes[stage.name]['skipped'] = True
+
     @staticmethod
     def _process_only_stages(
         stages: list['Stage'],
@@ -460,6 +469,7 @@ class Workflow:
         for stg in _stages_d.values():
             dag_node2nodes[stg.name] = set(dep.name for dep in stg.required_stages)
         dag = nx.DiGraph(dag_node2nodes)
+
         try:
             stage_names = list(reversed(list(nx.topological_sort(dag))))
         except nx.NetworkXUnfeasible:
@@ -468,6 +478,9 @@ class Workflow:
 
         LOGGER.info(f'Stages in order of execution:\n{stage_names}')
         stages = [_stages_d[name] for name in stage_names]
+
+        # Set order attribute to stages
+        nx.set_node_attributes(dag, {s.name: num for num, s in enumerate(stages)}, name='order')
 
         # Round 5: applying workflow options first_stages and last_stages.
         if first_stages or last_stages:
@@ -513,6 +526,28 @@ class Workflow:
         else:
             self.queued_stages = [stg for stg in _stages_d.values() if not stg.skipped]
             LOGGER.info(f'Queued stages: {self.queued_stages}')
+
+        # Round 7: show the workflow
+
+        def format_meta(attr: list):
+            return {s: s in attr for s in dag.nodes}
+
+        # First add remaining metadata
+        nx.set_node_attributes(dag, format_meta(skip_stages), name='skip_stages')
+        nx.set_node_attributes(dag, format_meta(only_stages), name='only_stages')
+        nx.set_node_attributes(dag, format_meta(first_stages), name='first_stages')
+        nx.set_node_attributes(dag, format_meta(last_stages), name='last_stages')
+
+        if self.show_workflow:
+            gp = GraphPlot(dag, title='Full Workflow Graph')
+
+            # Removed skipped steps for simple graph
+            all_nodes = list(dag.nodes)
+            _ = [dag.remove_node(n) for n in all_nodes if dag.nodes[n]['skipped']]
+            gp2 = GraphPlot(dag, title='Sub-Workflow Graph')
+
+            fig = gp + gp2
+            fig.show()
 
     @staticmethod
     def _process_stage_errors(
