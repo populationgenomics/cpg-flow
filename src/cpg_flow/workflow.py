@@ -345,9 +345,6 @@ class Workflow:
                 _stage.skipped = True
                 _stage.assume_outputs_exist = True
 
-        # Update dag with the skipped attribute
-        nx.set_node_attributes(graph, False, name='skipped')
-
         for stage in stages:
             if stage.skipped:
                 graph.nodes[stage.name]['skipped'] = True
@@ -481,6 +478,9 @@ class Workflow:
 
         # Set order attribute to stages
         nx.set_node_attributes(dag, {s.name: num for num, s in enumerate(stages)}, name='order')
+
+        # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
+        nx.set_node_attributes(dag, False, name='skipped')
 
         # Round 5: applying workflow options first_stages and last_stages.
         if first_stages or last_stages:
