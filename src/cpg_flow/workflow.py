@@ -552,7 +552,7 @@ class Workflow:
             fig.show()
 
             # If we have a web bucket path
-            if web_prefix := self.web_prefix():
+            if web_prefix := self.web_prefix:
                 html_path = web_prefix / f'{self.name}_workflow.html'
                 fig.save(html_path)
 
