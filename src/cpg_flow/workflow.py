@@ -552,11 +552,14 @@ class Workflow:
             fig.show()
 
             # If we have a web bucket path
-            if web_prefix := self.web_prefix:
-                html_path = web_prefix / f'{self.name}_workflow.html'
-                fig.save(html_path)
+            try:
+                if web_prefix := self.web_prefix:
+                    html_path = web_prefix / f'{self.name}_workflow.html'
+                    fig.save(html_path)
 
-                LOGGER.info(f'Workflow graph saved to {html_path}')
+                    LOGGER.info(f'Workflow graph saved to {html_path}')
+            except ConnectionError as e:
+                LOGGER.error(f'Failed to save workflow graph: {e}')
 
     @staticmethod
     def _process_stage_errors(
