@@ -538,6 +538,11 @@ class Workflow:
         nx.set_node_attributes(dag, format_meta(first_stages), name='first_stages')
         nx.set_node_attributes(dag, format_meta(last_stages), name='last_stages')
 
+        def get_web_bucket() -> str | None:
+            dataset = get_config()['workflow']['dataset']
+            web_bucket = get_config().get('storage', {}).get(dataset, {}).get('web', None)
+            return web_bucket
+
         if self.show_workflow:
             gp = GraphPlot(dag, title='Full Workflow Graph')
 
@@ -547,7 +552,16 @@ class Workflow:
             gp2 = GraphPlot(dag, title='Sub-Workflow Graph')
 
             fig = gp + gp2
+
+            # Show the figure
             fig.show()
+
+            # If we have a web bucket path
+            if web_bucket := get_web_bucket():
+                web_prefix = Path(web_bucket)
+                fig.save(web_prefix / f'{self.name}_workflow.html')
+
+                print(f'Workflow graph saved to {web_prefix / f"{self.name}_workflow.html"}')
 
     @staticmethod
     def _process_stage_errors(
