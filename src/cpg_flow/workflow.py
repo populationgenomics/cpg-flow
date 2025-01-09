@@ -23,6 +23,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
+import plotly.io as pio
 
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.show_workflow.graph import GraphPlot
@@ -555,7 +556,7 @@ class Workflow:
             try:
                 if web_prefix := self.web_prefix:
                     html_path = web_prefix / f'{self.name}_workflow.html'
-                    fig.save(html_path)
+                    pio.write_html(fig, file=str(html_path), auto_open=False)
 
                     LOGGER.info(f'Workflow graph saved to {html_path}')
             except ConnectionError as e:
