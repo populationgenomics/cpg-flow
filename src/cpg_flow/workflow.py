@@ -538,11 +538,6 @@ class Workflow:
         nx.set_node_attributes(dag, format_meta(first_stages), name='first_stages')
         nx.set_node_attributes(dag, format_meta(last_stages), name='last_stages')
 
-        def get_web_bucket() -> str | None:
-            dataset = get_config()['workflow']['dataset']
-            web_bucket = get_config().get('storage', {}).get(dataset, {}).get('web', None)
-            return web_bucket
-
         if self.show_workflow:
             gp = GraphPlot(dag, title='Full Workflow Graph')
 
@@ -557,8 +552,7 @@ class Workflow:
             fig.show()
 
             # If we have a web bucket path
-            if web_bucket := get_web_bucket():
-                web_prefix = Path(web_bucket)
+            if web_prefix := self.web_prefix():
                 html_path = web_prefix / f'{self.name}_workflow.html'
                 fig.save(html_path)
 
