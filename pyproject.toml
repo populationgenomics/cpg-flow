@@ -388,7 +388,6 @@ dev-dependencies = [
     "bump2version>=1.0.1",
     "commitizen>=3.30.0",
     "coverage>=7.6.4",
-    "cpg-flow",
     "hail>=0.2.133",
     "pdoc>=15.0.1",
     "pip-audit>=2.7.3",
@@ -403,7 +402,6 @@ dev-dependencies = [
 ]
 
 [tool.uv.sources]
-cpg-flow = { workspace = true }
 
 [tool.setuptools_scm]
 version_scheme = "only-version"

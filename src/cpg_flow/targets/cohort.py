@@ -40,23 +40,24 @@ class Cohort(Target):
     cohort.
     """
 
-    def __init__(self, name: str | None = None) -> None:
+    def __init__(self, id: str | None = None, name: str | None = None) -> None:
         super().__init__()
+        self.id = id or get_config()['workflow']['dataset']
         self.name = name or get_config()['workflow']['dataset']
         self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
         self._sequencing_group_by_id: dict[str, SequencingGroup] = {}
 
     def __repr__(self):
-        return f'Cohort("{self.name}", {len(self._sequencing_group_by_id)} SGs)'
+        return f'Cohort("{self.id}", {len(self._sequencing_group_by_id)} SGs)'
 
     @property
     def target_id(self) -> str:
         """Unique target ID"""
-        return self.name
+        return self.id
 
     def get_cohort_id(self) -> str:
         """Get the cohort ID"""
-        return self.name
+        return self.id
 
     def write_ped_file(
         self,
@@ -75,7 +76,7 @@ class Cohort(Target):
                 ),
             )
         if not datas:
-            raise ValueError(f'No pedigree data found for {self.name}')
+            raise ValueError(f'No pedigree data found for {self.id}')
         df = pd.DataFrame(datas)
 
         if out_path is None:

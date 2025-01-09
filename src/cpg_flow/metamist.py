@@ -63,6 +63,7 @@ GET_SEQUENCING_GROUPS_BY_COHORT_QUERY = gql(
     """
     query SGByCohortQuery($cohort_id: String!) {
         cohorts(id: {eq: $cohort_id}) {
+            name
             sequencingGroups {
                 id
                 meta
@@ -503,12 +504,20 @@ class Assay:
         return mm_seq
 
 
-def get_cohort_sgs(cohort_id: str) -> list[dict]:
+def get_cohort_sgs(cohort_id: str) -> dict:
     """
     Retrieve sequencing group entries for a single cohort.
     """
     entries = query(GET_SEQUENCING_GROUPS_BY_COHORT_QUERY, {'cohort_id': cohort_id})
 
+    # Create dictionary keying sequencing groups by project and including cohort name
+    # {
+    #     "sequencing_groups": {
+    #         project_id: [sequencing_group_1, sequencing_group_2, ...],
+    #         ...
+    #     },
+    #     "name": "CohortName"
+    # }
     if len(entries['cohorts']) != 1:
         raise MetamistError('We only support one cohort at a time currently')
 
@@ -516,7 +525,13 @@ def get_cohort_sgs(cohort_id: str) -> list[dict]:
         message = entries['errors'][0]['message']
         raise MetamistError(f'Error fetching cohort: {message}')
 
-    return entries['cohorts'][0]['sequencingGroups']
+    cohort_name = entries['cohorts'][0]['name']
+    sequencing_groups = entries['cohorts'][0]['sequencing_groups']
+
+    return {
+        'name': cohort_name,
+        'sequencing_groups': sequencing_groups,
+    }
 
 
 def parse_reads(  # pylint: disable=too-many-return-statements

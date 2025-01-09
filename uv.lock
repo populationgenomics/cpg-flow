@@ -662,7 +662,6 @@ dev = [
     { name = "bump2version", specifier = ">=1.0.1" },
     { name = "commitizen", specifier = ">=3.30.0" },
     { name = "coverage", specifier = ">=7.6.4" },
-    { name = "cpg-flow", editable = "." },
     { name = "hail", specifier = ">=0.2.133" },
     { name = "pdoc", specifier = ">=15.0.1" },
     { name = "pip-audit", specifier = ">=2.7.3" },

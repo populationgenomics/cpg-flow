@@ -36,7 +36,7 @@ def add_sg(ds, id, external_id: str) -> SequencingGroup:
 
 def mock_cohort() -> MultiCohort:
     m = MultiCohort()
-    c = m.create_cohort('fewgenomes')
+    c = m.create_cohort(id='COH123', name='fewgenomes')
     d = m.create_dataset('my_dataset')
 
     sg1 = add_sg(d, 'CPGAA', external_id='SAMPLE1')
@@ -46,7 +46,7 @@ def mock_cohort() -> MultiCohort:
 
 def mock_multidataset_cohort() -> MultiCohort:
     m = MultiCohort()
-    c = m.create_cohort('fewgenomes')
+    c = m.create_cohort(id='COH123', name='fewgenomes')
 
     ds = m.create_dataset('my_dataset')
 
@@ -70,7 +70,7 @@ def mock_multicohort() -> MultiCohort:
     mc = MultiCohort()
 
     # Create a cohort with two datasets
-    cohort_a = mc.create_cohort('CohortA')
+    cohort_a = mc.create_cohort(id='COH111', name='CohortA')
     # Create a dataset in the cohort (legacy)
     ds = mc.create_dataset('projecta')
 
@@ -84,7 +84,7 @@ def mock_multicohort() -> MultiCohort:
     cohort_a.add_sequencing_group_object(add_sg(ds2, 'CPGDDDD', external_id='SAMPLE4'))
 
     # second cohort, third dataset
-    cohort_b = mc.create_cohort('CohortB')
+    cohort_b = mc.create_cohort(id='COH222', name='CohortB')
     ds3 = mc.create_dataset('projectb')
     cohort_b.add_sequencing_group_object(add_sg(ds3, 'CPGEEEEEE', external_id='SAMPLE5'))
     cohort_b.add_sequencing_group_object(add_sg(ds3, 'CPGFFFFFF', external_id='SAMPLE6'))

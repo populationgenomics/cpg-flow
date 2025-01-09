@@ -2,6 +2,7 @@
 Test reading inputs into a Cohort object.
 """
 
+import json
 import logging
 
 from pytest_mock import MockFixture
@@ -37,163 +38,27 @@ def _multicohort_config(tmp_path) -> str:
     return conf
 
 
-def mock_get_sgs_by_cohort_project_a(*args, **kwargs) -> list[dict]:
-    return [
-        {
-            'id': 'CPGXXXX',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'technology': 'short-read',
-            'type': 'genome',
-            'sample': {
-                'project': {
-                    'name': 'projecta',
-                },
-                'externalId': 'NA12340',
-                'participant': {
-                    'id': 1,
-                    'externalId': '8',
-                    'reportedSex': 'Male',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGAAAA',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'technology': 'short-read',
-            'type': 'genome',
-            'sample': {
-                'project': {
-                    'name': 'projecta',
-                },
-                'externalId': 'NA12489',
-                'participant': {
-                    'id': 2,
-                    'externalId': '14',
-                    'reportedSex': None,
-                    'meta': {'participant_metadata': 'number_fourteen'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 2,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS29',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-    ]
+def load_mock_data(file_path: str) -> dict:
+    with open(file_path) as file:
+        return json.load(file)
 
 
-def mock_get_sgs_by_cohort_project_b(*args, **kwargs) -> list[dict]:
-    return [
-        {
-            'id': 'CPGCCCCCC',
-            'meta': {'sg_meta': 'is_awesome'},
-            'platform': 'illumina',
-            'technology': 'short-read',
-            'type': 'genome',
-            'sample': {
-                'project': {
-                    'name': 'projectb',
-                },
-                'externalId': 'NA111111',
-                'participant': {
-                    'id': 1,
-                    'externalId': '10',
-                    'reportedSex': 'Male',
-                    'meta': {'participant_meta': 'is_here'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 1,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS28',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-        {
-            'id': 'CPGDDDDDD',
-            'meta': {'sg_meta': 'is_fun'},
-            'platform': 'illumina',
-            'technology': 'short-read',
-            'type': 'genome',
-            'sample': {
-                'project': {
-                    'name': 'projectb',
-                },
-                'externalId': 'NA12489',
-                'participant': {
-                    'id': 2,
-                    'externalId': '14',
-                    'reportedSex': None,
-                    'meta': {'participant_metadata': 'number_fourteen'},
-                },
-            },
-            'assays': [
-                {
-                    'id': 2,
-                    'meta': {
-                        'platform': '30x Illumina PCR-Free',
-                        'concentration': '25',
-                        'fluid_x_tube_id': '220405_FS29',
-                        'reference_genome': 'Homo sapiens (b37d5)',
-                        'volume': '100',
-                        'reads_type': 'fastq',
-                        'batch': '1',
-                    },
-                    'type': 'sequencing',
-                },
-            ],
-        },
-    ]
-
-
-def mock_get_cohorts(cohort_id: str, *args, **kwargs) -> list[dict]:
+def mock_get_cohorts(cohort_id: str, *args, **kwargs) -> dict:
     return {
-        'COH123': mock_get_sgs_by_cohort_project_a(),
-        'COH456': mock_get_sgs_by_cohort_project_b(),
+        'COH123': load_mock_data('tests/assets/test_multicohort/COH123.json'),
+        'COH456': load_mock_data('tests/assets/test_multicohort/COH456.json'),
     }[cohort_id]
 
 
-def mock_get_overlapping_cohorts(cohort_id: str, *args, **kwargs) -> list[dict]:
+def mock_get_overlapping_cohorts(cohort_id: str, *args, **kwargs) -> dict:
+    data = load_mock_data('tests/assets/test_multicohort/COH123.json')
+
+    name = data['name']
+    sgs = data['sequencing_groups']
+
     return {
-        'COH123': [mock_get_sgs_by_cohort_project_a()[0]],
-        'COH456': [mock_get_sgs_by_cohort_project_a()[1]],
+        'COH123': {'name': name, 'sequencing_groups': sgs},
+        'COH456': {'name': name + ' duplicate', 'sequencing_groups': sgs},
     }[cohort_id]
 
 
@@ -243,6 +108,11 @@ def test_multicohort(mocker: MockFixture, tmp_path):
     assert isinstance(multicohort, MultiCohort)
 
     # Testing Cohort Information
+    cohorts = multicohort.get_cohorts()
+    assert len(cohorts) == 2
+    assert cohorts[0].name == 'Cohort #123'
+    assert cohorts[1].name == 'Cohort #456'
+
     assert len(multicohort.get_sequencing_groups()) == 4
     assert sorted(multicohort.get_sequencing_group_ids()) == [
         'CPGAAAA',
@@ -302,10 +172,17 @@ def test_overlapping_multicohort(mocker: MockFixture, tmp_path):
     test_sg_a = multicohort.get_sequencing_groups()[0]
 
     # Test SequenceGroup Population
+
+    # Validate Cohort Names
+    cohorts = multicohort.get_cohorts()
+    assert len(cohorts) == 2
+    assert cohorts[0].name == 'Cohort #123'
+    assert cohorts[1].name == 'Cohort #123 duplicate'
+
     assert test_sg_a.id == 'CPGXXXX'
     assert test_sg_a.external_id == 'NA12340'
     assert test_sg_a.participant_id == '8'
     assert test_sg_a.meta == {'sg_meta': 'is_fun', 'participant_meta': 'is_here', 'phenotypes': {}}
 
     for cohort in multicohort.get_cohorts():
-        assert len(cohort.get_sequencing_group_ids()) == 1
+        assert len(cohort.get_sequencing_group_ids()) == 2

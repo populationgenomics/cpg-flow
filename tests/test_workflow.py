@@ -38,7 +38,7 @@ backend = 'local'
 
 def mock_create_create_cohort() -> MultiCohort:
     m = MultiCohort()
-    c = m.create_cohort('fewgenomes')
+    c = m.create_cohort(id='COH123', name='fewgenomes')
     ds = m.create_dataset('my_dataset')
 
     def add_sg(id, external_id):
