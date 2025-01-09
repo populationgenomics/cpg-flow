@@ -1,23 +1,23 @@
 {
-    "name": "Cohort #4",
+    "name": "Cohort #123",
     "sequencing_groups": [
         {
-            "id": "CPGccc",
+            "id": "CPGXXXX",
             "meta": {
                 "sg_meta": "is_fun"
             },
             "platform": "illumina",
-            "type": "genome",
             "technology": "short-read",
+            "type": "genome",
             "sample": {
                 "project": {
-                    "name": "fewgenomes"
+                    "name": "projecta"
                 },
                 "externalId": "NA12340",
                 "participant": {
                     "id": 1,
                     "externalId": "8",
-                    "reportedSex": "Female",
+                    "reportedSex": "Male",
                     "meta": {
                         "participant_meta": "is_here"
                     }
@@ -33,70 +33,45 @@
                         "reference_genome": "Homo sapiens (b37d5)",
                         "volume": "100",
                         "reads_type": "fastq",
-                        "batch": "1",
-                        "reads": [],
-                        "sequencing_type": "genome",
-                        "sequencing_technology": "short-read",
-                        "sequencing_platform": "illumina"
+                        "batch": "1"
                     },
                     "type": "sequencing"
                 }
             ]
         },
         {
-            "id": "CPGaaa",
+            "id": "CPGAAAA",
             "meta": {
                 "sg_meta": "is_fun"
             },
             "platform": "illumina",
-            "type": "exome",
             "technology": "short-read",
+            "type": "genome",
             "sample": {
                 "project": {
-                    "name": "fewgenomes"
+                    "name": "projecta"
                 },
-                "externalId": "NA1000",
+                "externalId": "NA12489",
                 "participant": {
-                    "id": 1,
-                    "externalId": "8",
+                    "id": 2,
+                    "externalId": "14",
                     "reportedSex": null,
                     "meta": {
-                        "participant_meta": "is_here"
+                        "participant_metadata": "number_fourteen"
                     }
                 }
             },
             "assays": [
                 {
-                    "id": 1,
+                    "id": 2,
                     "meta": {
                         "platform": "30x Illumina PCR-Free",
                         "concentration": "25",
-                        "fluid_x_tube_id": "220405_FS28",
+                        "fluid_x_tube_id": "220405_FS29",
                         "reference_genome": "Homo sapiens (b37d5)",
                         "volume": "100",
                         "reads_type": "fastq",
-                        "batch": "1",
-                        "reads": [
-                            {
-                                "location": "gs://cpg-fewgenomes-main/exomeexample_r1.fastq.gz",
-                                "basename": "exomeexample_r1.fastq.gz",
-                                "class": "File",
-                                "checksum": null,
-                                "size": 1070968,
-                                "datetime_added": null
-                            },
-                            {
-                                "location": "gs://cpg-fewgenomes-main/exomeexample_r2.fastq.gz",
-                                "basename": "exomeexample_r2.fastq.gz",
-                                "class": "File",
-                                "checksum": null,
-                                "size": 1123158,
-                                "datetime_added": null
-                            }
-                        ],
-                        "sequencing_type": "genome",
-                        "sequencing_technology": "short-read",
-                        "sequencing_platform": "illumina"
+                        "batch": "1"
                     },
                     "type": "sequencing"
                 }

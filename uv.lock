@@ -585,7 +585,7 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "0.1.0a13+gd9af0a42.d20250105"
+version = "0.1.0a14+gd62e5fee.d20250109"
 source = { editable = "." }
 dependencies = [
     { name = "coloredlogs" },
@@ -637,7 +637,6 @@ dev = [
     { name = "bump2version", specifier = ">=1.0.1" },
     { name = "commitizen", specifier = ">=3.30.0" },
     { name = "coverage", specifier = ">=7.6.4" },
-    { name = "cpg-flow", editable = "." },
     { name = "hail", specifier = ">=0.2.133" },
     { name = "pdoc", specifier = ">=15.0.1" },
     { name = "pip-audit", specifier = ">=2.7.3" },
