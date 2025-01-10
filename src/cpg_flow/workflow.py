@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
 import plotly.io as pio
+from google.cloud import storage
 
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.show_workflow.graph import GraphPlot
@@ -38,6 +39,23 @@ LOGGER = get_logger(__name__)
 
 if TYPE_CHECKING:
     from cpg_flow.stage import Stage, StageDecorator, StageOutput
+
+
+def write_to_gcs_bucket(contents, path: Path):
+    client = storage.Client()
+
+    if not path.as_posix().startswith('gs:/'):
+        raise ValueError(f'Path {path} must be a GCS path')
+
+    path = path.as_posix().removeprefix('gs:/').removeprefix('/')
+    bucket_name, blob_name = path.rsplit('/', 1)
+
+    bucket = client.bucket(bucket_name)
+    if not bucket.exists():
+        bucket = client.create_bucket(bucket_name)
+
+    blob = bucket.blob(blob_name)
+    blob.upload_from_string(contents)
 
 
 def path_walk(expected, collected: set | None = None) -> set[Path]:
@@ -556,7 +574,11 @@ class Workflow:
             try:
                 if web_prefix := self.web_prefix:
                     html_path = web_prefix / f'{self.name}_workflow.html'
-                    pio.write_html(fig, file=str(html_path), auto_open=False)
+                    if html_path.as_posix().startswith('gs:/'):
+                        html_file = pio.to_html(fig, full_html=True)
+                        write_to_gcs_bucket(html_file, html_path)
+                    else:
+                        pio.write_html(fig, file=str(html_path), auto_open=False)
 
                     LOGGER.info(f'Workflow graph saved to {html_path}')
             except ConnectionError as e:
