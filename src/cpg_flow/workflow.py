@@ -574,7 +574,7 @@ class Workflow:
             try:
                 if web_prefix := self.web_prefix:
                     html_path = web_prefix / f'{self.name}_workflow.html'
-                    if html_path.as_posix().startswith('gs:/'):
+                    if str(html_path).startswith('gs:/'):
                         html_file = pio.to_html(fig, full_html=True)
                         write_to_gcs_bucket(html_file, html_path)
                     else:
