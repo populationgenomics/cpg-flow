@@ -48,11 +48,11 @@ def write_to_gcs_bucket(contents, path: Path):
         raise ValueError(f'Path {path} must be a GCS path')
 
     path = str(path).removeprefix('gs:/').removeprefix('/')
-    bucket_name, blob_name = path.rsplit('/', 1)
+    bucket_name, blob_name = path.split('/', 1)
 
     bucket = client.bucket(bucket_name)
     if not bucket.exists():
-        bucket = client.create_bucket(bucket_name)
+        raise ValueError(f'Bucket {bucket_name} does not exist')
 
     blob = bucket.blob(blob_name)
     blob.upload_from_string(contents)
