@@ -44,10 +44,10 @@ if TYPE_CHECKING:
 def write_to_gcs_bucket(contents, path: Path):
     client = storage.Client()
 
-    if not path.as_posix().startswith('gs:/'):
+    if not str(path).startswith('gs:/'):
         raise ValueError(f'Path {path} must be a GCS path')
 
-    path = path.as_posix().removeprefix('gs:/').removeprefix('/')
+    path = str(path).removeprefix('gs:/').removeprefix('/')
     bucket_name, blob_name = path.rsplit('/', 1)
 
     bucket = client.bucket(bucket_name)
