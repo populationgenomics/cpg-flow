@@ -124,7 +124,7 @@ def create_multicohort() -> MultiCohort:
         # SG.dataset.prefix is meaningful, to correctly store outputs in the project location
         for entry in cohort_sgs:
             sg_dataset = entry['sample']['project']['name']
-            dataset = multicohort.create_dataset(sg_dataset)
+            dataset = multicohort.create_dataset(sg_dataset.removesuffix('-test'))
 
             sequencing_group = add_sg_to_dataset(dataset, entry)
 

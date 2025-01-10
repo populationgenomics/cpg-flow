@@ -50,6 +50,13 @@ def mock_get_cohorts(cohort_id: str, *args, **kwargs) -> dict:
     }[cohort_id]
 
 
+def mock_get_test_project_cohorts(cohort_id: str, *args, **kwargs) -> dict:
+    return {
+        'COH123': load_mock_data('tests/assets/test_multicohort/COH1.json'),
+        'COH456': load_mock_data('tests/assets/test_multicohort/COH2.json'),
+    }[cohort_id]
+
+
 def mock_get_overlapping_cohorts(cohort_id: str, *args, **kwargs) -> dict:
     data = load_mock_data('tests/assets/test_multicohort/COH123.json')
 
@@ -186,3 +193,40 @@ def test_overlapping_multicohort(mocker: MockFixture, tmp_path):
 
     for cohort in multicohort.get_cohorts():
         assert len(cohort.get_sequencing_group_ids()) == 2
+
+
+def test_multicohort_dataset_config(mocker: MockFixture, tmp_path):
+    """
+    This test is to ensure that the dataset name is stripped of the '-test' suffix.
+    """
+    set_config(_multicohort_config(tmp_path), tmp_path / 'config.toml')
+
+    mocker.patch('cpg_flow.utils.exists_not_cached', lambda *args: False)
+
+    mocker.patch('cpg_flow.metamist.Metamist.get_ped_entries', mock_get_pedigree)
+    mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
+    # mockup the cohort data with '-test' suffix
+    mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_test_project_cohorts)
+
+    from cpg_flow.inputs import get_multicohort
+
+    multicohort = get_multicohort()
+
+    assert multicohort
+    assert isinstance(multicohort, MultiCohort)
+
+    # Testing Cohort Information
+    cohorts = multicohort.get_cohorts()
+    assert len(cohorts) == 2
+    assert cohorts[0].name == 'Cohort #1'
+    assert cohorts[1].name == 'Cohort #2'
+
+    assert len(multicohort.get_sequencing_groups()) == 4
+    assert sorted(multicohort.get_sequencing_group_ids()) == ['CPGAAAA', 'CPGCCCCCC', 'CPGDDDDDD', 'CPGXXXX']
+
+    # Test the projects they belong to
+    # Datasets name should be without '-test' suffix
+    assert multicohort.get_sequencing_groups()[0].dataset.name == 'projecta'
+    assert multicohort.get_sequencing_groups()[1].dataset.name == 'projecta'
+    assert multicohort.get_sequencing_groups()[2].dataset.name == 'projectb'
+    assert multicohort.get_sequencing_groups()[3].dataset.name == 'projectb'
