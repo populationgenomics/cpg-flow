@@ -36,6 +36,7 @@ from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
 
 LOGGER = get_logger(__name__)
+URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/'
 
 if TYPE_CHECKING:
     from cpg_flow.stage import Stage, StageDecorator, StageOutput
@@ -56,6 +57,8 @@ def write_to_gcs_bucket(contents, path: Path):
 
     blob = bucket.blob(blob_name)
     blob.upload_from_string(contents)
+
+    return bucket_name, blob_name
 
 
 def path_walk(expected, collected: set | None = None) -> set[Path]:
@@ -196,6 +199,7 @@ class Workflow:
 
         self.dry_run = dry_run or get_config(True)['workflow'].get('dry_run')
         self.show_workflow = get_config()['workflow'].get('show_workflow', False)
+        self.access_level = get_config()['workflow'].get('access_level', 'test')
 
         # TODO: should the ['dataset'] be a get? should we rename it to analysis dataset?
         analysis_dataset = get_config(True)['workflow']['dataset']
@@ -576,11 +580,15 @@ class Workflow:
                     html_path = web_prefix / f'{self.name}_workflow.html'
                     if str(html_path).startswith('gs:/'):
                         html_file = pio.to_html(fig, full_html=True)
-                        write_to_gcs_bucket(html_file, html_path)
+                        _, file_path = write_to_gcs_bucket(html_file, html_path)
+                        url = URL_BASENAME.format(access_level=self.access_level) + str(file_path)
+
+                        LOGGER.info(f'Link to the graph: {url}')
                     else:
                         pio.write_html(fig, file=str(html_path), auto_open=False)
 
                     LOGGER.info(f'Workflow graph saved to {html_path}')
+
             except ConnectionError as e:
                 LOGGER.error(f'Failed to save workflow graph: {e}')
 
