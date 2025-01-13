@@ -422,7 +422,8 @@ def test_custom_cohort(mocker: MockFixture, tmp_path, monkeypatch):
 
     def mock_query(query, variables):
         # Mocking the return value of the query function
-        return {'cohorts': [mock_get_cohort_sgs('COH5')]}
+        data = mock_get_cohort_sgs('COH5')
+        return {'cohorts': [{'name': data.get('name'), 'sequencingGroups': data.get('sequencing_groups')}]}
 
     # Patching the query function to mock the GraphQL query
     monkeypatch.setattr('cpg_flow.metamist.query', mock_query)
