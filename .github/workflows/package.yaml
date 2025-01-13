@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   package:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/alpha'
+    # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/alpha'
     name: Package
     environment: production
     runs-on: ubuntu-latest
