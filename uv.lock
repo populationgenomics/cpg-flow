@@ -652,7 +652,7 @@ requires-dist = [
     { name = "metamist", specifier = ">=6.9.0" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "plotly", specifier = ">=5.24.1" },
-    { name = "pre-commit" },
+    { name = "pre-commit", specifier = ">=4.0.1" },
     { name = "pyyaml", specifier = ">=6.0.2" },
 ]
 
