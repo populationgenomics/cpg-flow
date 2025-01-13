@@ -3,8 +3,8 @@ venv:
 	uv sync
 
 init: venv
-	pre-commit install
-	pre-commit install --hook-type commit-msg
+	uv run pre-commit install
+	uv run pre-commit install --hook-type commit-msg
 
 # Actions
 test:
