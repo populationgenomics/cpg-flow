@@ -36,7 +36,7 @@ from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
 
 LOGGER = get_logger(__name__)
-URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/'
+URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/{name}/'
 
 if TYPE_CHECKING:
     from cpg_flow.stage import Stage, StageDecorator, StageOutput
@@ -581,7 +581,7 @@ class Workflow:
                     if str(html_path).startswith('gs:/'):
                         html_file = pio.to_html(fig, full_html=True)
                         _, file_path = write_to_gcs_bucket(html_file, html_path)
-                        url = URL_BASENAME.format(access_level=self.access_level) + str(file_path)
+                        url = URL_BASENAME.format(access_level=self.access_level, name=self.name) + str(file_path)
 
                         LOGGER.info(f'Link to the graph: {url}')
                     else:
