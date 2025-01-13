@@ -20,9 +20,8 @@ docs:
 	uv run python docs/update_readme.py
 	uv run pdoc cpg_flow --output-dir "docs/$(shell git rev-parse --abbrev-ref HEAD)"
 	pre-commit run --all-files
-	exit 1
 
-ci-build: clean docs
+ci-build: clean
 	python -m pip install build "setuptools>=42" setuptools-scm wheel
 	SETUPTOOLS_SCM_PRETEND_VERSION="$$NEW_VERSION" python -m build --sdist --wheel
 
