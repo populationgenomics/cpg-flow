@@ -17,6 +17,7 @@ from random import choices
 from typing import Union, cast
 
 import coloredlogs
+from google.cloud import storage
 
 import hail as hl
 from hailtop.batch import ResourceFile
@@ -388,6 +389,7 @@ def make_job_name(
         name += f', {part}'
     return name
 
+
 def hash_from_list_of_strings(string_list: list[str], hash_length: int = 10, suffix: str | None = None) -> str:
     """
     Create a hash from a list of strings
@@ -403,3 +405,22 @@ def hash_from_list_of_strings(string_list: list[str], hash_length: int = 10, suf
     if suffix:
         full_hash += f'_{suffix}'
     return full_hash
+
+
+def write_to_gcs_bucket(contents, path: Path):
+    client = storage.Client()
+
+    if not str(path).startswith('gs:/'):
+        raise ValueError(f'Path {path} must be a GCS path')
+
+    path = str(path).removeprefix('gs:/').removeprefix('/')
+    bucket_name, blob_name = path.split('/', 1)
+
+    bucket = client.bucket(bucket_name)
+    if not bucket.exists():
+        raise ValueError(f'Bucket {bucket_name} does not exist')
+
+    blob = bucket.blob(blob_name)
+    blob.upload_from_string(contents)
+
+    return bucket_name, blob_name
