@@ -24,13 +24,12 @@ from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
 import plotly.io as pio
-from google.cloud import storage
 
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.show_workflow.graph import GraphPlot
 from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
-from cpg_flow.utils import get_logger, slugify, timestamp
+from cpg_flow.utils import get_logger, slugify, timestamp, write_to_gcs_bucket
 from cpg_utils import Path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
@@ -40,25 +39,6 @@ URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/{name}/'
 
 if TYPE_CHECKING:
     from cpg_flow.stage import Stage, StageDecorator, StageOutput
-
-
-def write_to_gcs_bucket(contents, path: Path):
-    client = storage.Client()
-
-    if not str(path).startswith('gs:/'):
-        raise ValueError(f'Path {path} must be a GCS path')
-
-    path = str(path).removeprefix('gs:/').removeprefix('/')
-    bucket_name, blob_name = path.split('/', 1)
-
-    bucket = client.bucket(bucket_name)
-    if not bucket.exists():
-        raise ValueError(f'Bucket {bucket_name} does not exist')
-
-    blob = bucket.blob(blob_name)
-    blob.upload_from_string(contents)
-
-    return bucket_name, blob_name
 
 
 def path_walk(expected, collected: set | None = None) -> set[Path]:
