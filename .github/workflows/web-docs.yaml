@@ -57,6 +57,9 @@ jobs:
       - name: Build documentation
         run: make docs
 
+      - name: Show documentation to be uploaded
+        run: ls -l docs/generated/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
