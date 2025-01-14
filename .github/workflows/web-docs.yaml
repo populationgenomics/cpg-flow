@@ -3,6 +3,10 @@ name: Deploy API Documentation
 
 on:
   # Runs on pushes targeting the default branch
+  pull_request:
+    branches:
+      - alpha
+
   workflow_run:
     workflows: ["Package"]
     types:
@@ -39,9 +43,15 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Install uv
-        run: sudo apt-get install -y uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: '0.5.6'
+          enable-cache: true
 
-      - name: Install dependencies
+      - name: Install Python
+        run: uv python install
+
+      - name: Install pre-commit from dev dependencies
         run: uv sync
 
       - name: Build documentation
