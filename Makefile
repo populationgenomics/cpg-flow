@@ -21,6 +21,7 @@ docs:
 	uv run python docs/update_readme.py
 	uv run pdoc cpg_flow --output-dir "docs/generated/$(shell git rev-parse --abbrev-ref HEAD)"
 	ls -la docs/
+	ls -la docs/generated/
 
 ci-build: clean
 	python -m pip install build "setuptools>=42" setuptools-scm wheel
