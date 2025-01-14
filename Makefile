@@ -21,7 +21,7 @@ clean:
 # This will allow us to generate the documentation for the current branch
 # and not the default branch
 docs:
-	if [ -z "$(BRANCH)" ] then; export BRANCH="$(shell git rev-parse --abbrev-ref HEAD)" fi
+	if [ -z "$(BRANCH)" ]; then export BRANCH="$(shell git rev-parse --abbrev-ref HEAD)"; fi
 	echo $(BRANCH)
 	echo $BRANCH
 	uv run python docs/update_readme.py
