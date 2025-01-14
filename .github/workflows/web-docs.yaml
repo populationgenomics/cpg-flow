@@ -2,15 +2,16 @@
 name: Deploy API Documentation
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes targeting main or alpha
+  push:
+    branches:
+      - alpha
+      - main
+
   pull_request:
     branches:
       - alpha
-
-  workflow_run:
-    workflows: ["Package"]
-    types:
-      - completed
+      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -56,9 +57,6 @@ jobs:
 
       - name: Build documentation
         run: make docs
-
-      - name: Show documentation to be uploaded
-        run: ls -l docs/generated/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
