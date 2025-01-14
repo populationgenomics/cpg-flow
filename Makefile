@@ -21,11 +21,11 @@ clean:
 # This will allow us to generate the documentation for the current branch
 # and not the default branch
 docs:
-	if [ -z "$(BRANCH)" ]
-	then
-		set -e "BRANCH=$(shell git rev-parse --abbrev-ref HEAD)"
+	if [ -z "$BRANCH" ] then; \
+		set -e "BRANCH=$(shell git rev-parse --abbrev-ref HEAD)" \
 	fi
-
+	echo $(BRANCH)
+	echo $BRANCH
 	uv run python docs/update_readme.py
 	uv run pdoc cpg_flow --output-dir "docs/generated/$(BRANCH)"
 	ls -la docs/
