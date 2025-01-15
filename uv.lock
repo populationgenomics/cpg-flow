@@ -606,7 +606,7 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "0.1.0a14+g4df965bf.d20250113"
+version = "0.1.0a15+g15d3024.d20250115"
 source = { editable = "." }
 dependencies = [
     { name = "coloredlogs" },
