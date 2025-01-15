@@ -67,15 +67,15 @@ jobs:
           # Upload documentation folder
           path: 'docs/generated/'
 
-      - name: Remove generated docs and push to branch
+      - name: Commit changes before switching branch
         run: |
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
           rm -r docs/generated/
+          git commit -a -m "chore: make docs"
           git checkout ${{ github.base_ref }}
           git pull
           git status
-          git commit -a -m "chore: make docs"
           git push
 
       - name: Deploy to GitHub Pages
