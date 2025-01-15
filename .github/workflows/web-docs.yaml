@@ -2,8 +2,11 @@
 name: Deploy API Documentation
 
 on:
-  # Runs on pushes targeting main or alpha
-  push:
+  # Run after Test
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -44,9 +47,6 @@ jobs:
           version: '0.5.6'
           enable-cache: true
 
-      - name: Install Python
-        run: uv python install
-
       - name: Install dependencies
         run: uv sync
 
@@ -59,19 +59,26 @@ jobs:
           # Upload documentation folder
           path: 'docs/generated/'
 
-      - name: Commit changes before switching branch
+      - name: Commit any changes to docs
         run: |
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
           rm -r docs/generated/
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
-          git status
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -a -m "chore: make docs update"
-            git push
-          else
+          git commit -a -m "chore: update badges.yaml with test results and coverage"
+          PUSH=$(git push https://x-access-token:${{ secrets.BOT_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git)
+          STATUS=$?
+
+          echo $($PUSH | grep "up to date")
+          echo $STATUS
+
+          if $PUSH | grep -q "up to date"
+          then
             echo "No changes to commit"
-          fi
+          exit 0
+            else
+          exit $STATUS
+            fi
 
       - name: Deploy to GitHub Pages
         id: deployment
