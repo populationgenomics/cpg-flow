@@ -233,12 +233,14 @@ class StageInput:
         stage: StageDecorator,
     ):
         if not self._outputs_by_target_by_stage.get(stage.__name__):
+            LOGGER.error(f'Available: {self._outputs_by_target_by_stage}, trying to find {stage.__name__}')
             raise StageInputNotFoundError(
                 f'Not found output from stage {stage.__name__}, required for stage '
                 f'{self.stage.name}. Is {stage.__name__} in the `required_stages`'
                 f'decorator? Available: {self._outputs_by_target_by_stage}',
             )
         if not self._outputs_by_target_by_stage[stage.__name__].get(target.target_id):
+            LOGGER.error(f'Available: {self._outputs_by_target_by_stage[stage.__name__]}, trying to find {target.target_id}')
             raise StageInputNotFoundError(
                 f'Not found output for {target} from stage {stage.__name__}, required for stage {self.stage.name}',
             )
