@@ -67,8 +67,7 @@ jobs:
       - name: Remove generated docs and push to branch
         run: |
           git status
-          ls -la
-          git rm -r docs/generated/
+          rm -r docs/generated/
           git add .
           git commit -m "chore: make docs"
           git push
