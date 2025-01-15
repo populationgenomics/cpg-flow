@@ -4,14 +4,6 @@ name: Deploy API Documentation
 on:
   # Runs on pushes targeting main or alpha
   push:
-    branches:
-      - alpha
-      - main
-
-  pull_request:
-    branches:
-      - alpha
-      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -72,8 +64,9 @@ jobs:
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
           rm -r docs/generated/
+          git status
           git stash
-          git checkout ${{ github.base_ref }}
+          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
           git pull
           git stash pop
           git status
