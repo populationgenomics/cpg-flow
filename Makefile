@@ -20,10 +20,9 @@ clean:
 # Pass the git branch as an argument to the pdoc command
 # This will allow us to generate the documentation for the current branch
 # and not the default branch
+BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 docs:
-	if [ -z "$(BRANCH)" ]; then export BRANCH="$(shell git rev-parse --abbrev-ref HEAD)"; fi
-	echo $(BRANCH)
-	echo $BRANCH
+	@echo "Branch is '$(BRANCH)'"
 	uv run python docs/update_readme.py
 	uv run pdoc cpg_flow --output-dir "docs/generated/$(BRANCH)"
 	ls -la docs/
