@@ -26,7 +26,7 @@ concurrency:
 jobs:
   # Single deploy job since we're just deploying
   deploy:
-    if: github.event.workflow_run.conclusion == 'success' && (github.ref == 'refs/heads/alpha' || github.ref == 'refs/heads/main')
+    if: github.event.workflow_run.conclusion == 'success' && (github.base_ref == 'alpha' || github.base_ref == 'main')
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
