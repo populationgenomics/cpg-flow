@@ -72,10 +72,12 @@ jobs:
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
           rm -r docs/generated/
-          git commit -a -m "chore: make docs"
+          git stash
           git checkout ${{ github.base_ref }}
           git pull
+          git stash pop
           git status
+          git commit -a -m "chore: make docs update"
           git push
 
       - name: Deploy to GitHub Pages
