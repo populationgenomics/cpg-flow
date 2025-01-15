@@ -39,6 +39,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CI_BOT_ACCESS_TOKEN }}
+          fetch-depth: 0 # Ensure the full history is fetched for merging
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -68,6 +71,8 @@ jobs:
         run: |
           git status
           rm -r docs/generated/
+          git config user.name "cpg-software-ci-bot"
+          git config user.email "software-team+githubcibot@populationgenomics.org.au"
           git add .
           git commit -m "chore: make docs"
           git push
