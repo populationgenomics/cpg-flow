@@ -86,10 +86,10 @@ def parse_triggers(on_field):
     return '`manual`'  # Default if `on` is missing
 
 
-def generate_markdown(workflows):
+def generate_markdown(workflows: list[dict]) -> str:
     markdown = '| Name | Description & Status | Triggered on |\n'
     markdown += '| :---------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------: |\n'
-    for workflow in workflows:
+    for workflow in sorted(workflows, key=lambda x: x['name']):
         file_url = f"{REPO_URL}/actions/workflows/{workflow['file']}"
         badge_url = f'{file_url}/badge.svg'
         workflow_name = f"**[{workflow['name']}]({file_url})**"
