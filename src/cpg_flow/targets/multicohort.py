@@ -43,7 +43,9 @@ class MultiCohort(Target):
         # the exact cohorts can be obtained from the config associated with the ar-guid
         input_cohorts = get_config()['workflow'].get('input_cohorts', [])
         if input_cohorts:
-            self.name = hash_from_list_of_strings(sorted(input_cohorts), suffix='cohorts')
+            self.name = '_'.join(sorted(input_cohorts))
+            LOGGER.warning(f'Using input cohorts as name: {self.name} rather than hash {hash_from_list_of_strings(sorted(input_cohorts), suffix="cohorts")}')
+            # self.name = hash_from_list_of_strings(sorted(input_cohorts), suffix='cohorts')
         else:
             self.name = get_config()['workflow']['dataset']
 
