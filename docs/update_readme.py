@@ -1,3 +1,4 @@
+import difflib
 import os
 import re
 import sys
@@ -11,6 +12,24 @@ README_FILE = 'README.md'
 DESCRIPTION_FILE = 'docs/workflow_descriptions.yaml'
 
 REPO_URL = 'https://github.com/populationgenomics/cpg-flow'
+
+
+def diff_files(content1, content2):
+    """
+    Compare two pieces of text and return a human-readable diff.
+
+    Args:
+        content1 (str): The content of the first file.
+        content2 (str): The content of the second file.
+
+    Returns:
+        str: A unified diff string showing the changes.
+    """
+    lines1 = content1.splitlines(keepends=True)
+    lines2 = content2.splitlines(keepends=True)
+
+    diff = difflib.unified_diff(lines1, lines2, fromfile='file1', tofile='file2', lineterm='')
+    return '\n'.join(diff)
 
 
 def load_descriptions(description_file):
@@ -91,11 +110,14 @@ def update_readme(readme_file):
         print('No changes detected in the README.md')
         sys.exit(0)
 
+    # Show the diff
+    print(diff_files(previous_content, content))
+
     with open(readme_file, 'w') as file:
         file.write(content)
 
     print(f'Readme updated: {readme_file}')
-    sys.exit(100)
+    sys.exit(0)
 
 
 def update_workflow_table(content):
@@ -126,11 +148,11 @@ def update_readme_links(content):
 
     # Find all the raw content links and replace the branch name with the current branch
     current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
-    print(f'Current branch: {current_branch}')
+    # print(f'Current branch: {current_branch}')
 
-    print(f'Pattern: {pattern}')
-    print('URL Matches:')
-    print([x[0] for x in re.findall(pattern, content)])
+    # print(f'Pattern: {pattern}')
+    # print('URL Matches:')
+    # print([x[0] for x in re.findall(pattern, content)])
 
     return re.sub(pattern, f'cpg-flow%2Frefs%2Fheads%2F{current_branch}%2F', content)
 
