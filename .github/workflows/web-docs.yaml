@@ -47,7 +47,7 @@ jobs:
       - name: Install Python
         run: uv python install
 
-      - name: Install pre-commit from dev dependencies
+      - name: Install dependencies
         run: uv sync
 
       - name: Build documentation
@@ -64,11 +64,7 @@ jobs:
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
           rm -r docs/generated/
-          git status
-          git stash
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
-          git pull
-          git stash pop
           git status
           git commit -a -m "chore: make docs update"
           git push
