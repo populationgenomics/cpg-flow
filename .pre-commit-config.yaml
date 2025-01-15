@@ -58,4 +58,3 @@ repos:
         name: Update README
         entry: make readme
         language: system
-        stages: [manual]

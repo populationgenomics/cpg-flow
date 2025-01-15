@@ -21,6 +21,7 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+
     steps:
       - name: Setup | Force correct release branch on workflow sha
         run: |

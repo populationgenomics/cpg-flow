@@ -114,12 +114,13 @@ def update_workflow_table(content):
 
 def update_readme_links(content):
     slash = r'(%2F|\/)'
-    pattern = rf'(cpg-flow{slash}refs{slash}heads{slash}\w+{slash})'
+    pattern = rf'(cpg-flow{slash}refs{slash}heads{slash}[\w-]+{slash})'
 
     # Find all the raw content links and replace the branch name with the current branch
     current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
     print(f'Current branch: {current_branch}')
 
+    print(f'Pattern: {pattern}')
     print('URL Matches:')
     print([x[0] for x in re.findall(pattern, content)])
 
