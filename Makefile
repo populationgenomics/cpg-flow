@@ -17,13 +17,15 @@ clean:
 	rm -rf src/*.egg-info src/*/*.egg-info src/*/*/*.egg-info
 	rm -rf docs/generated
 
+readme:
+	uv run python docs/update_readme.py
+
 # Pass the git branch as an argument to the pdoc command
 # This will allow us to generate the documentation for the current branch
 # and not the default branch
 BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 docs:
 	@echo "Branch is '$(BRANCH)'"
-	uv run python docs/update_readme.py
 	uv run pdoc cpg_flow --output-dir "docs/generated/$(BRANCH)"
 	ls -la docs/
 	ls -la docs/generated/
