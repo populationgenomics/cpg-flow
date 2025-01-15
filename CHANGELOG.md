@@ -1,6 +1,34 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.16 (2025-01-15)
+
+### Bug Fixes
+
+- **graph.py**: Fix bug with _get_node_color default
+  ([`7bd8093`](https://github.com/populationgenomics/cpg-flow/commit/7bd8093d7f4828f81b2bb65400d4cfc139d13407))
+
+### Build System
+
+- **sonar-project.properties**: Optimise settings
+  ([`78f9f50`](https://github.com/populationgenomics/cpg-flow/commit/78f9f50fe4688605dad88bd55480bd3e1c812db4))
+
+### Continuous Integration
+
+- **package.yaml**: Only package on test success or workflow_dispatch
+  ([`75ff6c7`](https://github.com/populationgenomics/cpg-flow/commit/75ff6c7a261a92457f74ec22dfeff7f9040aebf6))
+
+### Documentation
+
+- **workflow_descriptions.yaml**: Fix typo in web-docs.yaml key
+  ([`d5ceb8e`](https://github.com/populationgenomics/cpg-flow/commit/d5ceb8e07fb1125a083cd816b3c90c50c03a0d62))
+
+### Refactoring
+
+- **package.yaml,web-docs.yaml-,+17**: Rm generated code
+  ([`53d53da`](https://github.com/populationgenomics/cpg-flow/commit/53d53da512ec2624d6d202edf0f0e5e4a0b865bb))
+
+
 ## v0.1.0-alpha.15 (2025-01-13)
 
 ### Bug Fixes
