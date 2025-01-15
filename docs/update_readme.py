@@ -1,5 +1,7 @@
 import os
 import re
+import sys
+from copy import deepcopy
 
 import yaml
 
@@ -81,13 +83,19 @@ def update_readme(readme_file):
     with open(readme_file) as file:
         content = file.read()
 
+    previous_content = deepcopy(content)
     content = update_workflow_table(content)
     content = update_readme_links(content)
+
+    if content == previous_content:
+        print('No changes detected in the README.md')
+        sys.exit(0)
 
     with open(readme_file, 'w') as file:
         file.write(content)
 
     print(f'Readme updated: {readme_file}')
+    sys.exit(100)
 
 
 def update_workflow_table(content):

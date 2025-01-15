@@ -1,12 +1,14 @@
 name: Package
 on:
-  # Building on pull-requests, manual dispatch, and pushes to main; but restricting
-  # publishing only to main pushes and manual dispatch with `if`s in specific steps.
-  workflow_dispatch:
-  workflow_run:
-    workflows: ["Test"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - alpha
+
+  pull_request:
+    branches:
+      - main
+      - alpha
 
 permissions:
   id-token: write
@@ -14,7 +16,6 @@ permissions:
 
 jobs:
   package:
-    if: github.ref_name == 'main' || github.ref_name == 'alpha'
     name: Package
     environment: production
     runs-on: ubuntu-latest

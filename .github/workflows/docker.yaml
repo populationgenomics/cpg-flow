@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - alpha
+
   push:
     branches:
       - main

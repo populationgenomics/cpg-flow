@@ -2,11 +2,15 @@
 name: Deploy API Documentation
 
 on:
-  # Run after Test
-  workflow_run:
-    workflows: ["Test"]
-    types:
-      - completed
+  pull_request:
+    branches:
+      - main
+      - alpha
+
+  push:
+    branches:
+      - main
+      - alpha
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -26,7 +30,6 @@ concurrency:
 jobs:
   # Single deploy job since we're just deploying
   deploy:
-    if: github.event.workflow_run.conclusion == 'success' && (github.base_ref == 'alpha' || github.base_ref == 'main')
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
