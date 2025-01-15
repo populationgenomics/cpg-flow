@@ -66,8 +66,12 @@ jobs:
           rm -r docs/generated/
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
           git status
-          git commit -a -m "chore: make docs update"
-          git push
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -a -m "chore: make docs update"
+            git push
+          else
+            echo "No changes to commit"
+          fi
 
       - name: Deploy to GitHub Pages
         id: deployment
