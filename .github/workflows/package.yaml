@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   package:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/alpha'
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/alpha') && (github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch')
     name: Package
     environment: production
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
         id: release
         uses: python-semantic-release/python-semantic-release@v9.14.0
         with:
-          root_options: "-vvv"
+          root_options: "-v"
           git_committer_email: "software-team+githubcibot@populationgenomics.org.au"
           git_committer_name: "cpg-software-ci-bot"
           github_token: ${{ secrets.BOT_ACCESS_TOKEN }}
