@@ -168,6 +168,7 @@ class StageInput:
         if stage_name not in self._outputs_by_target_by_stage:
             self._outputs_by_target_by_stage[stage_name] = dict()
         self._outputs_by_target_by_stage[stage_name][target_id] = output
+        LOGGER.debug(f'Added output from stage_name:{stage_name} for target_id:{target_id} which was {output}')
 
     def _each(
         self,
