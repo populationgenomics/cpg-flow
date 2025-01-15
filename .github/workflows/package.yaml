@@ -5,11 +5,6 @@ on:
       - main
       - alpha
 
-  pull_request:
-    branches:
-      - main
-      - alpha
-
 permissions:
   id-token: write
   contents: write
