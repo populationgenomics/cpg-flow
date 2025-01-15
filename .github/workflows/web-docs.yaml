@@ -2,11 +2,10 @@
 name: Deploy API Documentation
 
 on:
-  # Runs on pushes targeting the default branch
-  workflow_run:
-    workflows: ["Package"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - alpha
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -31,21 +30,35 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+        with:
+          token: ${{ secrets.CI_BOT_ACCESS_TOKEN }}
+          fetch-depth: 0 # Ensure the full history is fetched for merging
 
       - name: Install uv
-        run: sudo apt-get install -y uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
         run: uv sync
 
-      - name: Build documentation
-        run: make docs
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build alpha docs
+        run: |
+          git checkout alpha
+          make docs BRANCH=alpha
+
+      - name: Build main docs
+        run: |
+          git checkout main
+          make docs BRANCH=main
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,12 +1,9 @@
 name: Package
 on:
-  # Building on pull-requests, manual dispatch, and pushes to main; but restricting
-  # publishing only to main pushes and manual dispatch with `if`s in specific steps.
-  workflow_dispatch:
-  workflow_run:
-    workflows: ["Test"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+      - alpha
 
 permissions:
   id-token: write
@@ -14,13 +11,13 @@ permissions:
 
 jobs:
   package:
-    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/alpha') && (github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch')
     name: Package
     environment: production
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash -l {0}
+
     steps:
       - name: Setup | Force correct release branch on workflow sha
         run: |
@@ -54,7 +51,7 @@ jobs:
           tag: ${{ steps.release.outputs.tag }}
 
   update-alpha:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref_name == 'main'
     name: Update Alpha
     runs-on: ubuntu-latest
     needs: package
@@ -62,7 +59,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BOT_ACCESS_TOKEN }}
           fetch-depth: 0 # Ensure the full history is fetched for merging
 
       - name: Merge main into alpha

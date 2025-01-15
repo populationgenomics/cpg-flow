@@ -1,5 +1,8 @@
+import difflib
 import os
 import re
+import sys
+from copy import deepcopy
 
 import yaml
 
@@ -9,6 +12,24 @@ README_FILE = 'README.md'
 DESCRIPTION_FILE = 'docs/workflow_descriptions.yaml'
 
 REPO_URL = 'https://github.com/populationgenomics/cpg-flow'
+
+
+def diff_files(content1, content2):
+    """
+    Compare two pieces of text and return a human-readable diff.
+
+    Args:
+        content1 (str): The content of the first file.
+        content2 (str): The content of the second file.
+
+    Returns:
+        str: A unified diff string showing the changes.
+    """
+    lines1 = content1.splitlines(keepends=True)
+    lines2 = content2.splitlines(keepends=True)
+
+    diff = difflib.unified_diff(lines1, lines2, fromfile='file1', tofile='file2', lineterm='')
+    return '\n'.join(diff)
 
 
 def load_descriptions(description_file):
@@ -65,10 +86,10 @@ def parse_triggers(on_field):
     return '`manual`'  # Default if `on` is missing
 
 
-def generate_markdown(workflows):
+def generate_markdown(workflows: list[dict]) -> str:
     markdown = '| Name | Description & Status | Triggered on |\n'
     markdown += '| :---------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------: |\n'
-    for workflow in workflows:
+    for workflow in sorted(workflows, key=lambda x: x['name']):
         file_url = f"{REPO_URL}/actions/workflows/{workflow['file']}"
         badge_url = f'{file_url}/badge.svg'
         workflow_name = f"**[{workflow['name']}]({file_url})**"
@@ -81,13 +102,22 @@ def update_readme(readme_file):
     with open(readme_file) as file:
         content = file.read()
 
+    previous_content = deepcopy(content)
     content = update_workflow_table(content)
     content = update_readme_links(content)
+
+    if content == previous_content:
+        print('No changes detected in the README.md')
+        sys.exit(0)
+
+    # Show the diff
+    print(diff_files(previous_content, content))
 
     with open(readme_file, 'w') as file:
         file.write(content)
 
     print(f'Readme updated: {readme_file}')
+    sys.exit(0)
 
 
 def update_workflow_table(content):
@@ -114,14 +144,15 @@ def update_workflow_table(content):
 
 def update_readme_links(content):
     slash = r'(%2F|\/)'
-    pattern = rf'(cpg-flow{slash}refs{slash}heads{slash}\w+{slash})'
+    pattern = rf'(cpg-flow{slash}refs{slash}heads{slash}[\w-]+{slash})'
 
     # Find all the raw content links and replace the branch name with the current branch
     current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
-    print(f'Current branch: {current_branch}')
+    # print(f'Current branch: {current_branch}')
 
-    print('URL Matches:')
-    print([x[0] for x in re.findall(pattern, content)])
+    # print(f'Pattern: {pattern}')
+    # print('URL Matches:')
+    # print([x[0] for x in re.findall(pattern, content)])
 
     return re.sub(pattern, f'cpg-flow%2Frefs%2Fheads%2F{current_branch}%2F', content)
 
