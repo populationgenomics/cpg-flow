@@ -212,7 +212,7 @@ class GraphPlot:
         node_name = [n for n in self.G.nodes]
 
         def special_labels(n):
-            _, label = self._get_node_color(n, None)
+            _, label = self._get_node_color(n)
             return label + '<br>' if label else ''
 
         node_hovertext = list(
@@ -236,7 +236,7 @@ class GraphPlot:
         )
         return node_name, node_hovertext, node_color
 
-    def _get_node_color(self, n: str, default: str | int):
+    def _get_node_color(self, n: str, default: str | int = None):
         if self.G.nodes[n]['skip_stages']:
             return '#5A5A5A', 'Skip stage'
         elif self.G.nodes[n]['only_stages']:
