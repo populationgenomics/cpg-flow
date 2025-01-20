@@ -2,6 +2,7 @@
 Utility functions and constants.
 """
 
+import hashlib
 import logging
 import re
 import string
@@ -387,6 +388,23 @@ def make_job_name(
     if part:
         name += f', {part}'
     return name
+
+
+def hash_from_list_of_strings(string_list: list[str], hash_length: int = 10, suffix: str | None = None) -> str:
+    """
+    Create a hash from a list of strings
+    Args:
+        string_list ():
+        hash_length (int): how many characters to use from the hash
+        suffix (str): optional, clarify the type of value which was hashed
+    Returns:
+    """
+    hash_portion = hashlib.sha256(' '.join(string_list).encode()).hexdigest()[:hash_length]
+    full_hash = f'{hash_portion}_{len(string_list)}'
+
+    if suffix:
+        full_hash += f'_{suffix}'
+    return full_hash
 
 
 def write_to_gcs_bucket(contents, path: Path):

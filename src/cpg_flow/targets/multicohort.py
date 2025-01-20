@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, Optional
 import pandas as pd
 
 from cpg_flow.targets import Cohort, Dataset, Target
-from cpg_flow.utils import get_logger
+from cpg_flow.utils import get_logger, hash_from_list_of_strings
 from cpg_utils import Path
 from cpg_utils.config import get_config
 
@@ -37,10 +37,13 @@ class MultiCohort(Target):
     def __init__(self) -> None:
         super().__init__()
 
-        # NOTE: For a cohort, we simply pull the dataset name from the config.
+        # Previously MultiCohort.name was an underscore-delimited string of all the input cohorts
+        # this was expanding to the point where filenames including this String were too long for *nix
+        # instead we can create a hash of the input cohorts, and use that as the name
+        # the exact cohorts can be obtained from the config associated with the ar-guid
         input_cohorts = get_config()['workflow'].get('input_cohorts', [])
         if input_cohorts:
-            self.name = '_'.join(sorted(input_cohorts))
+            self.name = hash_from_list_of_strings(sorted(input_cohorts), suffix='cohorts')
         else:
             self.name = get_config()['workflow']['dataset']
 
