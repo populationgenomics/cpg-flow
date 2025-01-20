@@ -113,7 +113,7 @@ make install-build
 ## <a name="usage">🤖 Usage</a>
 
 This project provides the framework to construct pipelines but does not offer hosting the logic of any pipelines themselves. This approach offers the benefit of making all components more modular, manageable and decoupled. Pipelines themselves are hosted in a separate repository.
-For demonstration, the [`test_workflows_shared` repository](https://github.com/populationgenomics/test_workflows_shared) serves as a template for a good pipeline, and contains a collection of stages and jobs that constructs a Prime Pyramid.
+The [test_workflows_shared repository](https://github.com/populationgenomics/test_workflows_shared) acts as a template and demonstrates how to structure a pipeline using CPG Flow.
 
 For a pipeline to successfully execute, there a few required components:
 
