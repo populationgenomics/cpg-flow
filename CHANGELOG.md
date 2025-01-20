@@ -1,6 +1,76 @@
 # CHANGELOG
 
 
+## v0.1.0-alpha.17 (2025-01-15)
+
+### Bug Fixes
+
+- **README.md,docs/update_readme.py**: Sort list of workflows
+  ([`249399d`](https://github.com/populationgenomics/cpg-flow/commit/249399d7cd7bef2f34a1b335595ef5064e729831))
+
+- **docs/update_readme.py**: Show diff on edit
+  ([`fcc990f`](https://github.com/populationgenomics/cpg-flow/commit/fcc990ff0dff954b74c4ab67faae13a701fde7ce))
+
+- **./,.github/workflows/,docs/**: Fix when CI runs
+  ([`516eedd`](https://github.com/populationgenomics/cpg-flow/commit/516eedd4e11ad6b0245bb5a5faa561f7ce1b57e2))
+
+- **./,.github/workflows/,docs/**: Bug in update_readme
+  ([`8f37ef2`](https://github.com/populationgenomics/cpg-flow/commit/8f37ef25dec0f0ab13e2bcdbc3ae7dcfb0292cea))
+
+- **./,.github/workflows/**: Mv update readme to pre-commit
+  ([`3afe591`](https://github.com/populationgenomics/cpg-flow/commit/3afe5918e71991ac58244dea2583c7060d4a9fff))
+
+### Build System
+
+- **.pre-commit-config.yaml**: Update-readme config
+  ([`b6451a2`](https://github.com/populationgenomics/cpg-flow/commit/b6451a28241705e71696c16dd58af31ecfa6d333))
+
+### Chores
+
+- Update badges.yaml with test results and coverage
+  ([`f482f9b`](https://github.com/populationgenomics/cpg-flow/commit/f482f9bd8d5475d56f0467312ca664cca049eba2))
+
+- Update badges.yaml with test results and coverage
+  ([`5574626`](https://github.com/populationgenomics/cpg-flow/commit/5574626f58d312a30a065ede403d07b6317a719a))
+
+- Update badges.yaml with test results and coverage
+  ([`cb52d5e`](https://github.com/populationgenomics/cpg-flow/commit/cb52d5e2d739785bc8900ebca4e2e3376f537ea8))
+
+### Code Style
+
+- **.github/workflows/lint.yaml,security.yaml**: Formatting
+  ([`fe55314`](https://github.com/populationgenomics/cpg-flow/commit/fe55314ab85b450eb998ff049315cac8f7c44eaa))
+
+### Continuous Integration
+
+- **./,.github/workflows/**: Rm pull_request
+  ([`a4eec4d`](https://github.com/populationgenomics/cpg-flow/commit/a4eec4dc549c00c66764444911fcdc4d4847ef1b))
+
+- **package.yaml,test.yaml**: Github.ref -> github.ref_name
+  ([`b1311b5`](https://github.com/populationgenomics/cpg-flow/commit/b1311b54503f21e371af83a9723921622ff44fdd))
+
+- **web-docs.yaml**: Update if
+  ([`9b05cb2`](https://github.com/populationgenomics/cpg-flow/commit/9b05cb22629cc5c0c8a03ba7f01b690a5dde633f))
+
+- **web-docs.yaml**: Change var name
+  ([`f7406eb`](https://github.com/populationgenomics/cpg-flow/commit/f7406eb6bf1607adc4f57e24bbf624655f682f19))
+
+- **web-docs.yaml**: Run on push
+  ([`bc721a4`](https://github.com/populationgenomics/cpg-flow/commit/bc721a4f48e17d2a2508685f0999088e3afd8fa9))
+
+- **web-docs.yaml**: Reorder steps
+  ([`9ca2194`](https://github.com/populationgenomics/cpg-flow/commit/9ca2194ddb369306a319051ed485c685a177da48))
+
+- **.github/workflows/test.yaml,web-docs.yaml**: Update Install uv
+  ([`6efe601`](https://github.com/populationgenomics/cpg-flow/commit/6efe601a9e2a94faf51a0529fddb3c5f0d98f05b))
+
+- **web-docs.yaml**: Fix uv install
+  ([`b1761ac`](https://github.com/populationgenomics/cpg-flow/commit/b1761ac21627232e0f72c84589dbfb0ec8d28c67))
+
+- **.github/workflows/package.yaml**: Fix condition
+  ([`31f5464`](https://github.com/populationgenomics/cpg-flow/commit/31f54642f9d20652709d81192232effd9b231e16))
+
+
 ## v0.1.0-alpha.16 (2025-01-15)
 
 ### Bug Fixes
@@ -13,7 +83,96 @@
 - **sonar-project.properties**: Optimise settings
   ([`78f9f50`](https://github.com/populationgenomics/cpg-flow/commit/78f9f50fe4688605dad88bd55480bd3e1c812db4))
 
+### Chores
+
+- Make docs update
+  ([`4aa5dca`](https://github.com/populationgenomics/cpg-flow/commit/4aa5dcae37b7609b29dbaee3f5651580079bc613))
+
+- Make docs update
+  ([`4842144`](https://github.com/populationgenomics/cpg-flow/commit/484214478fd017375b05101515565afc100b4dc3))
+
+- Make docs update
+  ([`1259329`](https://github.com/populationgenomics/cpg-flow/commit/12593294bad530f60cdea55ad1230ce3f09ab975))
+
+- Make docs update
+  ([`210da09`](https://github.com/populationgenomics/cpg-flow/commit/210da09e7101e75d4e4e97c627a954103deeea21))
+
+- Make docs update
+  ([`1f4cbe8`](https://github.com/populationgenomics/cpg-flow/commit/1f4cbe870889d1c4e099bd46afcfd959d1ed7d65))
+
+- Make docs update
+  ([`1100f7f`](https://github.com/populationgenomics/cpg-flow/commit/1100f7f6a2b26775c36a5caf26bc28f960ad56ed))
+
+- Make docs update
+  ([`b3a77eb`](https://github.com/populationgenomics/cpg-flow/commit/b3a77ebb7e525b484267e67f2fc3b2a5b9f19d74))
+
+- Make docs update
+  ([`af3b29b`](https://github.com/populationgenomics/cpg-flow/commit/af3b29b8a11af0cc545b22792a30c37286f606b3))
+
 ### Continuous Integration
+
+- **web-docs.yaml**: Fix token
+  ([`5ca47de`](https://github.com/populationgenomics/cpg-flow/commit/5ca47de1563e9710c8c2903bd3d21cb144711ddd))
+
+- **web-docs.yaml**: Debug git push
+  ([`ec7d385`](https://github.com/populationgenomics/cpg-flow/commit/ec7d385785b6c7864b8ad1b91156b932af6cd1e5))
+
+- **web-docs.yaml**: Only push if there's a change
+  ([`8b7ab0e`](https://github.com/populationgenomics/cpg-flow/commit/8b7ab0e8665d0cd356f29dcd3c9e0fbf6e314bcb))
+
+- **web-docs.yaml**: Debug git push
+  ([`7d9e9ae`](https://github.com/populationgenomics/cpg-flow/commit/7d9e9aef10071b47df986d0ecf020744a9fe9589))
+
+- **web-docs.yaml**: Debug git push
+  ([`15d3024`](https://github.com/populationgenomics/cpg-flow/commit/15d3024d7e5b093457033f7be5ff854966b04503))
+
+- **web-docs.yaml**: Fix git push
+  ([`296ac5d`](https://github.com/populationgenomics/cpg-flow/commit/296ac5d8715c81fc539b0846a6f39060f87f9494))
+
+- **web-docs.yaml**: Debug git push
+  ([`6ffa3f7`](https://github.com/populationgenomics/cpg-flow/commit/6ffa3f755d44426adfb29c4897f2a68542057658))
+
+- **web-docs.yaml**: Debugging git push
+  ([`eda60d7`](https://github.com/populationgenomics/cpg-flow/commit/eda60d70eaba2f803c32e1774d5782d7a228958b))
+
+- **.github/workflows/package.yaml,web-docs.yaml**: Add secret
+  ([`9ba0907`](https://github.com/populationgenomics/cpg-flow/commit/9ba0907f91d0e9fce1cd50a0be3ffb31151b5f04))
+
+- **web-docs.yaml**: Fix rm in push
+  ([`884c042`](https://github.com/populationgenomics/cpg-flow/commit/884c0424f6b9de00cc389a09395004fb0c7d999a))
+
+- **web-docs.yaml**: Debug push
+  ([`af31d11`](https://github.com/populationgenomics/cpg-flow/commit/af31d11b000e5ee224bbb3ac3cfadc4f71394d73))
+
+- **web-docs.yaml**: Push doc changes to branch
+  ([`a612c4f`](https://github.com/populationgenomics/cpg-flow/commit/a612c4f1ba0b41a5efcb20f44e4af0a63dd6057a))
+
+- **Makefile,README.md**: Make docs command fixed
+  ([`1085947`](https://github.com/populationgenomics/cpg-flow/commit/10859478b9e2f539892fd11d392d6ef12673d008))
+
+- **Makefile**: If statement fix
+  ([`39a4586`](https://github.com/populationgenomics/cpg-flow/commit/39a4586e326a5d9ea5ee05167117cd2b6fbeb9d1))
+
+- **Makefile**: Move if to one line
+  ([`769dff8`](https://github.com/populationgenomics/cpg-flow/commit/769dff834bfe94ea5661af074f08a2cbb8d59198))
+
+- **Makefile**: Fix if
+  ([`38d6702`](https://github.com/populationgenomics/cpg-flow/commit/38d6702c3ea39a44a99932d06186fbf635a4955b))
+
+- **web-docs.yaml,Makefile**: Pass in branch to make docs
+  ([`e5c87e5`](https://github.com/populationgenomics/cpg-flow/commit/e5c87e55ebffde5bce951c6c452f08db1044a726))
+
+- **Makefile**: Add extra ls in make docs
+  ([`444ef0d`](https://github.com/populationgenomics/cpg-flow/commit/444ef0d8119d7937418a5471a4b776b63337e412))
+
+- **web-docs.yaml,Makefile**: Add ls to make docs command
+  ([`82393c0`](https://github.com/populationgenomics/cpg-flow/commit/82393c048407b311dd1c439b80bff8d3f4ba704c))
+
+- **web-docs.yaml**: Show generated files
+  ([`0b20530`](https://github.com/populationgenomics/cpg-flow/commit/0b205300c69f35704fe8b908b782774add60a50c))
+
+- **web-docs.yaml**: Fix uv install on web docs ci
+  ([`043cb87`](https://github.com/populationgenomics/cpg-flow/commit/043cb87a6c49ab16a15bf37153d0a006bfafaa14))
 
 - **package.yaml**: Only package on test success or workflow_dispatch
   ([`75ff6c7`](https://github.com/populationgenomics/cpg-flow/commit/75ff6c7a261a92457f74ec22dfeff7f9040aebf6))
