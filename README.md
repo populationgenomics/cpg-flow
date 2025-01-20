@@ -146,8 +146,13 @@ force_stages = [
     'CumulativeCalc', # the second stage
     'FilterEvens', # the third stage
     'BuildAPrimePyramid', # the last stage
+]
+
+show_workflow = True # generates a plot of the DAG
 ...
 ```
+
+For a full list of supported config options with documentation, see [defaults.toml](src/cpg_flow/defaults.toml)
 
 This `.toml` file will be may be named anything, as long as it is correctly passed to the `analysis-runner` invocation. The `analysis-runner` supplies its own default settings, and combines it with the settings from this file, before submitting a job.
 
@@ -185,7 +190,7 @@ This file would store the workflow definition as a list of stages, and then run 
 
   ![DAG](assets/newplot.png)
 
-  > The DAG plot generated from the pipeline definition is available in the logs via the job URL. To find the link to the plot, search the *Logs* section for the string: "**INFO - Link to the graph:**".
+  > To generate a plot of the DAG, `show_workflow = True` should be included in the config. The DAG plot generated from the pipeline definition is available in the logs via the job URL. To find the link to the plot, search the *Logs* section for the string: "**INFO - Link to the graph:**".
 
   There are some key considerations to take into account when designing the DAG:
 
@@ -313,7 +318,7 @@ analysis-runner \
 
 If the job is successfully created, the analysis-runner output will include a job URL. This driver job will trigger additional jobs, which can be monitored via the `/batches` page on Hail. Monitoring these jobs helps verify that the workflow ran successfully. When all expected jobs complete without errors, this confirms the successful execution of the workflow and indicates that the `cpg_flow` package is functioning as intended.
 
-> The DAG plot generated from the pipeline definition is available in the logs via the job URL. To find the link to the plot, search the *Logs* section for the string: "**INFO - Link to the graph:**".
+> To generate a plot of the DAG, `show_workflow = True` should be included in the config. The DAG plot generated from the pipeline definition is available in the logs via the job URL. To find the link to the plot, search the *Logs* section for the string: "**INFO - Link to the graph:**".
 
 See the [Docker](#docker) section for instruction on pulling valid images releases.
 
