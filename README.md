@@ -146,8 +146,10 @@ force_stages = [
     'BuildAPrimePyramid', # the last stage
 ]
 
-show_workflow = True # generates a plot of the DAG
-...
+# Show a workflow graph locally or save to web bucket.
+# Default is false, set to true to show the workflow graph.
+show_workflow = true
+# ...
 ```
 
 For a full list of supported config options with documentation, see [defaults.toml](src/cpg_flow/defaults.toml)
@@ -218,7 +220,7 @@ from jobs import cumulative_calc
 
 WORKFLOW_FOLDER = 'prime_pyramid'
 
-...
+# ...
 # This stage depends on the `GeneratePrimes` stage, and requires outputs from that stage.
 @stage(required_stages=[GeneratePrimes], analysis_keys=['cumulative'], analysis_type='custom')
 class CumulativeCalc(SequencingGroupStage):
@@ -243,7 +245,7 @@ class CumulativeCalc(SequencingGroupStage):
          data=self.expected_outputs(sequencing_group),
          jobs=jobs,
      )
-...
+# ...
 ```
 
 There is a key consideration to take into account when writing the stages:
