@@ -13,8 +13,8 @@
 [![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
 
 
-![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-328-README-prioritises-pipelines-instead-of-framework%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
-![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-328-README-prioritises-pipelines-instead-of-framework%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
+![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fmkdocs-setup%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
+![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fmkdocs-setup%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
 
 
 [![Technical Debt](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
@@ -458,9 +458,9 @@ Ensure you have the necessary permissions and are authenticated with Google Clou
 #### Unit Tests
 
 
-![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-328-README-prioritises-pipelines-instead-of-framework%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
+![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fmkdocs-setup%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
 
-![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-328-README-prioritises-pipelines-instead-of-framework%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
+![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fmkdocs-setup%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
 
 
 #### E2E Test
@@ -555,7 +555,6 @@ You can find all the workflows in the **[.github/workflows directory](https://gi
 
 | Name | Description & Status | Triggered on |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------: |
-| **[Deploy API Documentation](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml)** | Deploys API documentation to GitHub Pages.<br/><br/>[![Deploy API Documentation](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml) | `push` on `main, alpha` and `workflow_dispatch` |
 | **[Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)** | Builds and pushes Docker images for the project.<br/><br/>[![Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) | `pull_request` on `main, alpha` and `push` on `main, alpha` and `workflow_dispatch` |
 | **[Lint](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml)** | Runs linting checks using pre-commit hooks.<br/><br/>[![Lint](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml) | `push` |
 | **[Package](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)** | Packages the project and publishes it to PyPI and GitHub Releases.<br/><br/>[![Package](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml) | `push` on `main, alpha` |
@@ -563,6 +562,7 @@ You can find all the workflows in the **[.github/workflows directory](https://gi
 | **[Security Checks](https://github.com/populationgenomics/cpg-flow/actions/workflows/security.yaml)** | Performs security checks using pip-audit.<br/><br/>[![Security Checks](https://github.com/populationgenomics/cpg-flow/actions/workflows/security.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/security.yaml) | `workflow_dispatch` and `push` |
 | **[Test](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)** | Runs unit tests and generates coverage reports.<br/><br/>[![Test](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml) | `push` |
 | **[Update Badges](https://github.com/populationgenomics/cpg-flow/actions/workflows/update-badges.yaml)** | Updates badges.yaml with test results and coverage.<br/><br/>[![Update Badges](https://github.com/populationgenomics/cpg-flow/actions/workflows/update-badges.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/update-badges.yaml) | `workflow_run` (completed) |
+| **[mkdocs](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml)** | Deploys API documentation to GitHub Pages.<br/><br/>[![mkdocs](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml) | `push` on `alpha` |
 
 
 ## <a name="license">©️ License</a>
