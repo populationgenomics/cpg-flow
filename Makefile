@@ -4,6 +4,8 @@ venv:
 
 init: venv
 	uv run pre-commit install
+
+init-dev: init install-local
 	uv run pre-commit install --hook-type commit-msg
 
 # Actions
@@ -41,7 +43,7 @@ install-build: build
 	uv pip install dist/*.whl
 
 install-local:
-	uv install -e .
+	uv pip install -e .
 
 upload: clean build
 	uv run twine check dist/*
