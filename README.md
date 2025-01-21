@@ -12,8 +12,8 @@
 [![semantic-release: conventional commits](https://img.shields.io/badge/semantic--release-conventional%20commits-Æ1A7DBD?logo=semantic-release&color=1E7FBF)](https://github.com/semantic-release/semantic-release)
 [![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
 
-![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-362-abbreviate-multicohort-name%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
-![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-362-abbreviate-multicohort-name%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
+![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fshow-workflow-fixes%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
+![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fshow-workflow-fixes%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
 
 [![Technical Debt](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
 [![Duplicated Lines (%)](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=duplicated_lines_density&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
@@ -160,9 +160,9 @@ Ensure you have the necessary permissions and are authenticated with Google Clou
 
 #### Unit Tests
 
-![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-362-abbreviate-multicohort-name%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
+![Tests](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fshow-workflow-fixes%2Fdocs%2Fbadges.yaml&query=%24.test-badge.status&label=Tests&color=%24.test-badge.color)
 
-![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2FSET-362-abbreviate-multicohort-name%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
+![Coverage](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpopulationgenomics%2Fcpg-flow%2Frefs%2Fheads%2Fshow-workflow-fixes%2Fdocs%2Fbadges.yaml&query=%24.coverage-badge.status&label=Coverage&color=%24.coverage-badge.color)
 
 
 #### E2E Test
