@@ -27,10 +27,8 @@ readme:
 # and not the default branch
 BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 docs:
-	@echo "Branch is '$(BRANCH)'"
-	uv run pdoc cpg_flow --output-dir "docs/generated/$(BRANCH)"
-	ls -la docs/
-	ls -la docs/generated/
+	uv pip install mkdocs-material "mkdocstrings[python]" griffe-typingdoc
+	uv run mkdocs serve -f docs/mkdocs.yml
 
 ci-build: clean
 	python -m pip install build "setuptools>=42" setuptools-scm wheel

@@ -29,4 +29,4 @@ jobs:
       - run: uv pip install mkdocs-material
       - run: uv pip install "mkdocstrings[python]"
       - run: uv pip install griffe-typingdoc
-      - run: mkdocs gh-deploy --force
+      - run: mkdocs gh-deploy -f docs/mkdocs.yml --force
