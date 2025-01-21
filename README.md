@@ -24,7 +24,7 @@
 ## 📋 Table of Contents
 
 1. 🐙 [What is this API ?](#what-is-this-api)
-2. . ✨ [Production and development links](#production-and-development-links)
+2. ✨ [Production and development links](#production-and-development-links)
 3. 🔨 [Installation](#installation)
 4. 🚀 [Build](#build)
 5. 🤖 [Usage](#usage)
@@ -67,18 +67,16 @@ The packages are hosted on:
 
 To install this project, you will need to have Python and `uv` installed on your machine:
 
-![uv](https://img.shields.io/badge/-uv-black?style=for-the-badge&logoColor=white&logo=uv&color=3776AB)
+![uv](https://img.shields.io/badge/-uv-black?style=for-the-badge&logoColor=white&logo=uv&color=3776AB&link=https://docs.astral.sh/uv/)
 ![Python](https://img.shields.io/badge/-Python-black?style=for-the-badge&logoColor=white&logo=python&color=3776AB)
 
-We recommend using a virtual environment to manage your dependencies.
-
-Then, run the following commands:
+Run the following commands, to create a virtual environment with `uv` and install the dependencies:
 
 ```bash
 # Install the package using uv
 uv sync
 
-# Or equivalently
+# Or equivalently use make (also installs pre-commit)
 make init
 ```
 
@@ -87,16 +85,16 @@ make init
 To setup for development we recommend using the makefile setup
 
 ```bash
-make init-dev
+make init-dev # installs pre-commit as a hook
 ```
 
-As this installs the pre-commit hooks for you. To install the local cpg-flow run
+To install `cpg-flow` locally, run:
 
 ```bash
 make install-local
 ```
 
-You can also try out the pre-installed cpg-flow in our Docker, more information in the **[Docker section](#docker)**.
+To try out the pre-installed `cpg-flow` in a Docker image, find more information in the **[Docker](#docker)** section.
 
 ## <a name="build">🚀 Build</a>
 
@@ -192,15 +190,10 @@ This file would store the workflow definition as a list of stages, and then run 
 
   > To generate a plot of the DAG, `show_workflow = True` should be included in the config. The DAG plot generated from the pipeline definition is available in the logs via the job URL. To find the link to the plot, search the *Logs* section for the string: "**INFO - Link to the graph:**".
 
-  There are some key considerations to take into account when designing the DAG:
+  There are some key considerations and limitations to take into account when designing the DAG:
 
-  **No Forward Discovery:** The framework exclusively relies on backward traversal. If a stage is not explicitly or indirectly linked to one of the final stages through the `required_stages` parameter of the `@stage` decorator, it will not be included in the workflow. In other words, stages that are not reachable from a final stage are effectively ignored. This backward discovery approach ensures that only the stages directly required for the specified final stages are included, optimizing the workflow by excluding irrelevant or unused stages.
-
-  **Workflow Definition:** The workflow definition serves as a lookup table for the final stages. If a final stage is not listed in this definition, it will not be part of the workflow, as there is no mechanism for forward discovery to identify it.
-
-  ```python
-  workflow = [GeneratePrimes, CumulativeCalc, FilterEvens, BuildAPrimePyramid]
-  ```
+  - [No Forward Discovery](#no-forward-discovery)
+  - [Workflow Definition](#workflow-definition)
 
 ### `stages.py` or equivalent file(s) for the `Stage` definitions
 
@@ -255,7 +248,7 @@ class CumulativeCalc(SequencingGroupStage):
 
 There is a key consideration to take into account when writing the stages:
 
-  **No Forward Discovery:** The framework exclusively relies on backward traversal. If a stage is not explicitly or indirectly linked to one of the final stages through the `required_stages` parameter of the `@stage` decorator, it will not be included in the workflow. In other words, stages that are not reachable from a final stage are effectively ignored. This backward discovery approach ensures that only the stages directly required for the specified final stages are included, optimizing the workflow by excluding irrelevant or unused stages.
+- [No Forward Discovery](#no-forward-discovery)
 
 ### `jobs.py` or equivalent file for `Job` definitions
 
@@ -318,37 +311,47 @@ analysis-runner \
 
 If the job is successfully created, the analysis-runner output will include a job URL. This driver job will trigger additional jobs, which can be monitored via the `/batches` page on Hail. Monitoring these jobs helps verify that the workflow ran successfully. When all expected jobs complete without errors, this confirms the successful execution of the workflow and indicates that the `cpg_flow` package is functioning as intended.
 
-> To generate a plot of the DAG, `show_workflow = True` should be included in the config. The DAG plot generated from the pipeline definition is available in the logs via the job URL. To find the link to the plot, search the *Logs* section for the string: "**INFO - Link to the graph:**".
-
 See the [Docker](#docker) section for instruction on pulling valid images releases.
 
 ## <a name="key-considerations-and-limitations">😵‍💫 Key Considerations and Limitations</a>
 
-**Config Settings for `expected_outputs`:**
+### No Forward Discovery
+
+ The framework exclusively relies on backward traversal. If a stage is not explicitly or indirectly linked to one of the final stages through the `required_stages` parameter of the `@stage` decorator, it will not be included in the workflow. In other words, stages that are not reachable from a final stage are effectively ignored. This backward discovery approach ensures that only the stages directly required for the specified final stages are included, optimizing the workflow by excluding irrelevant or unused stages.
+
+### Workflow Definition
+
+The workflow definition serves as a lookup table for the final stages. If a final stage is not listed in this definition, it will not be part of the workflow, as there is no mechanism for forward discovery to identify it.
+
+```python
+workflow = [GeneratePrimes, CumulativeCalc, FilterEvens, BuildAPrimePyramid]
+```
+
+### Config Settings for `expected_outputs`
 
 The `expected_outputs` method is called for every stage in the workflow, even if the `config.toml` configures the stage to be skipped. This ensures that the workflow can validate or reference the expected outputs of all stages.
 
 Since this method may depend on workflow-specific configuration settings, these settings must be present in the workflow configuration, regardless of whether the stage will run. To avoid issues, it is common practice to include dummy values for such settings in the default configuration. This is not the intended behaviour and is marked as an area of improvement in a future release.
 
-**Verifying results of `expected_outputs`:**
+### Verifying results of `expected_outputs`
 
 The API uses the results of the `expected_outputs` method to determine whether a stage needs to run. A stage is scheduled for execution only if one or more Path objects returned by `expected_outputs` do not exist in Google Cloud Platform (GCP). If a returned Path object exists, the stage is considered to have already run successfully, and is therefore skipped.
 
 For outputs such as Matrix Tables (.mt), Hail Tables (.ht), or Variant Datasets (.vds), which are complex structures of thousands of files, the check is performed on the `object/_SUCCESS` file to verify that the output was written completely. However, it has been observed that the `object/_SUCCESS` file may be written multiple times during processing, contrary to the expectation that it should only be written once after all associated files have been fully processed.
 
-**`String` outputs from `expected_outputs`:**
+### `String` outputs from `expected_outputs`
 
 String outputs from the `expected_outputs` method are not checked by the API. This is because string outputs cannot reliably be assumed to represent valid file paths and may instead correspond to other forms of outputs.
 
-**Behavior of `queue_jobs` in relation to `expected_outputs`:**
+### Behavior of `queue_jobs` in relation to `expected_outputs`
 
 When the `expected_outputs` check determines that one or more required files do not exist, and the stage is not configured to be skipped, the `queue_jobs` method is invoked to define the specific work that needs to be scheduled in the workflow.
 
 The `queue_jobs` method runs within the driver image, before any jobs in the workflow are executed. Because of this, it cannot access or read files generated by earlier stages, as those outputs have not yet been created. The actual outputs from earlier jobs only become available as the jobs are executed during runtime.
 
-**Explicit dependency between all jobs from `queue_jobs`:**
+### Explicit dependency between all jobs from `queue_jobs`
 
-When the `queue_jobs` method schedules a collection of jobs to Hail Batch, one or more jobs are returned from the method, and the framework sets an explicit dependency between *these* jobs, and all jobs from the `Stages` set in the `required_stages` parameter. Therefore, all jobs that run in a Stage, must be returned within `queue_jobs`, to ensure no jobs start out of sequence. As an example:
+When the `queue_jobs` method schedules a collection of jobs to Hail Batch, one or more jobs are returned from the method, and the framework sets an explicit dependency between *these* jobs, and all jobs from the `Stages` set in the `required_stages` parameter. Therefore, all jobs that run in a Stage must be returned within `queue_jobs` to ensure no jobs start out of sequence. As an example:
 
 ```python
 # test_workflows_shared/cpg_flow_test/jobs/filter_evens.py
