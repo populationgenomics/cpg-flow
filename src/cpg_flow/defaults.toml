@@ -4,6 +4,10 @@
 # the code can be run without permissions.
 #dry_run = true
 
+# Show a workflow graph locally or save to web bucket.
+# Default is false, set to true to show the workflow graph.
+#show_workflow = true
+
 # Cohorts to use as inputs.
 #input_cohorts = []
 
