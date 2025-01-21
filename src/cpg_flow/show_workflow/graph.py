@@ -5,13 +5,12 @@ https://towardsdatascience.com/visualize-hierarchical-data-using-plotly-and-data
 """
 
 import os
-import re
-import webbrowser
 from collections.abc import Callable
 from copy import deepcopy
 from itertools import groupby
 
 import networkx as nx
+import numpy as np
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
@@ -29,15 +28,18 @@ class GraphPlot:
         self.title_fontsize = 24
         self.node_text_position = 'top center'
         self.node_text_fontsize = 14
-        self.node_size = 50
+        self.node_size = 5
         self.node_border_weight = 5
+        self.arrow_size = self.node_border_weight * 2
         self.edge_weight = 1
 
         # Layout
         self.partite_key = 'layer'
+        self.partite_across_key = 'layer_order'
         self.align = 'horizontal'
         self.layout_scale = 10
         self.show_legend = False
+        self.curve = 0.5
 
         # Colors
         self.colorscale = 'Blugrn'
@@ -60,7 +62,7 @@ class GraphPlot:
         self._recalculate_depth(new_key=self.partite_key)
 
         # Calculate the depth_order and position
-        self._calculate_depth_order(layer_key=self.partite_key, new_key='layer_order')
+        self._calculate_depth_order(layer_key=self.partite_key, new_key=self.partite_across_key)
 
     def __add__(self, other) -> go.Figure:
         assert type(self) is type(other)
@@ -94,13 +96,8 @@ class GraphPlot:
             showlegend=self.show_legend,
             hovermode='closest',
             margin=dict(b=20, l=5, r=5, t=40),
-            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-            yaxis=dict(
-                showgrid=False,
-                zeroline=False,
-                showticklabels=False,
-                autorange='reversed',
-            ),
+            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, scaleanchor='y'),
+            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, autorange='reversed'),
             coloraxis=dict(reversescale=False),
         )
 
@@ -113,63 +110,14 @@ class GraphPlot:
         for node in self.G.nodes:
             self.G.nodes[node]['weight'] = 1
 
-        # Now get the node and edge positions
-        node_x, node_y = self._get_node_positions()
+        # Make edge traces
+        dark_edge_traces = self._create_edge_traces(self._non_skipped_edge, self.dark_emphasis_color)
+        light_edge_traces = self._create_edge_traces(lambda x: not self._non_skipped_edge(x), self.grey_color)
 
-        # Get node depths and meta
-        node_name, node_hovertext, node_color = self._get_node_data()
+        # Make node trace
+        node_trace = self._create_node_trace()
 
-        # Begin plotting
-        edge_x, edge_y = self._get_edge_positions(self._non_skipped_edge)
-        edge_trace_dark = go.Scatter(
-            x=edge_x,
-            y=edge_y,
-            line=dict(width=self.edge_weight, color=self.dark_emphasis_color),
-            hoverinfo='none',
-            mode='lines',
-            opacity=self.arrow_opacity,
-        )
-        edge_x, edge_y = self._get_edge_positions(lambda x: not self._non_skipped_edge(x))
-        edge_trace_grey = go.Scatter(
-            x=edge_x,
-            y=edge_y,
-            line=dict(width=self.edge_weight, color=self.grey_color),
-            hoverinfo='none',
-            mode='lines',
-            opacity=self.arrow_opacity,
-        )
-
-        layer_min, layer_max = self._get_layer_range()
-        node_trace = go.Scatter(
-            x=node_x,
-            y=node_y,
-            mode='markers+text',
-            textposition=self.node_text_position,
-            textfont_size=self.node_text_fontsize,
-            hoverinfo='text',
-            marker=dict(
-                showscale=True,
-                colorscale=self.colorscale,
-                reversescale=False,
-                color=[],
-                size=self.node_size,
-                line=dict(color=self._get_border_colors(), width=self.node_border_weight),
-                colorbar=dict(
-                    thickness=15,
-                    title='Workflow Depth',
-                    xanchor='left',
-                    titleside='right',
-                    tickmode='array',
-                    tickvals=list(range(-layer_min, -layer_max - 1, -1)),
-                    ticktext=list(range(layer_min, layer_max + 1, 1)),
-                ),
-            ),
-        )
-        node_trace.text = node_name
-        node_trace.hovertext = node_hovertext
-        node_trace.marker.color = node_color
-
-        return [edge_trace_dark, edge_trace_grey, node_trace]
+        return [*dark_edge_traces, *light_edge_traces, node_trace]
 
     def create_figure(self):
         traces = self.create_traces()
@@ -190,17 +138,260 @@ class GraphPlot:
         # Add position info to the edges
         edge_x = []
         edge_y = []
+        mid_x = []
+        mid_y = []
+        edge_names = []
+        mid_angles = []  # This will store the perpendicular angles at each midpoint
+
         for edge in list(filter(filter_fun, self.G.edges())):
+            n1, n2 = edge
             x0, y0 = self.G.nodes[edge[0]]['pos']
             x1, y1 = self.G.nodes[edge[1]]['pos']
-            edge_x.append(x0)
-            edge_x.append(x1)
-            edge_x.append(None)
-            edge_y.append(y0)
-            edge_y.append(y1)
-            edge_y.append(None)
+            curve_left = self.G.nodes[n2]['curve_left']
 
-        return edge_x, edge_y
+            # Compute straight edge
+            straight_x, straight_y = self._straight_edge(x0, y0, x1, y1)
+            points_x = np.array(straight_x)
+            points_y = np.array(straight_y)
+
+            # Get all the nodes in the graph that aren't n1 and n2 and get their position
+            node_positions = np.array(
+                [self.G.nodes[n]['pos'] for n in self.G.nodes if n not in [n1, n2]],
+            )
+
+            # I only want to curve the edge if the straight line passes over a node
+            closest_node_distance = self._closest_node_distance(x0, y0, x1, y1, node_positions)
+            self.G.edges[n1, n2]['closest_node_distance'] = closest_node_distance
+
+            if closest_node_distance < self.node_size:
+                # If the straight line passes over a node, compute the curved edge
+                curve_x, curve_y = self._curved_edge(x0, y0, x1, y1, offset=self.curve, curve_left=curve_left)
+
+                # Convert to NumPy arrays for easier calculations
+                points_x = np.array(curve_x)
+                points_y = np.array(curve_y)
+
+            # Add the edge to the list
+            edge_x.extend(points_x.tolist() + [None])
+            edge_y.extend(points_y.tolist() + [None])
+
+            # Add hover text at the midpoint
+            mid_idx = len(points_x) // 2
+            mid_x.append(points_x[mid_idx])  # Curved midpoint X
+            mid_y.append(points_y[mid_idx])  # Curved midpoint Y
+
+            # Calculate the direction vector at midpoint (tangent to curve)
+            dx = points_x[mid_idx + 1] - points_x[mid_idx - 1]
+            dy = points_y[mid_idx + 1] - points_y[mid_idx - 1]
+            direction_vector = np.array([dx, dy])
+            length = np.linalg.norm(direction_vector)
+
+            # Avoid division by zero
+            if length == 0:
+                perp_vector = np.array([1, 0])  # Default perpendicular vector if no direction
+            else:
+                direction_vector /= length
+                # Perpendicular vector: Rotate 90 degrees (counter-clockwise)
+                perp_vector = np.array([-direction_vector[1], direction_vector[0]])
+
+            # Calculate the angle of the perpendicular vector (in degrees)
+            angle = np.arctan2(perp_vector[1], perp_vector[0]) * (180 / np.pi)
+
+            # Normalize the angle to be within 0 to 360 degrees
+            if angle < 0:
+                angle += 360  # Adjust to make angles positive
+
+            mid_angles.append(angle)
+
+            edge_names.append(f'{n1} ⮕ {n2}')
+
+        return edge_x, edge_y, edge_names, mid_x, mid_y, mid_angles
+
+    def _closest_node_distance(self, x0, y0, x1, y1, node_positions):
+        """
+        Computes the shortest distance from the line defined by points (x0, y0) to (x1, y1)
+        to the closest node in the node_positions.
+        """
+        # If there are no node positions, return inf
+        if len(node_positions) == 0:
+            return np.inf
+
+        # Calculate the direction vector of the line
+        dx = x1 - x0
+        dy = y1 - y0
+
+        # Calculate the length of the line segment
+        length = np.sqrt(dx**2 + dy**2)
+
+        # Normalize the direction vector
+        direction_vector = np.array([dx, dy]) / length
+
+        # Vector from the start of the line to each node
+        vec_to_nodes = node_positions - np.array([x0, y0])
+
+        # Project each node onto the direction vector
+        projection_length = np.dot(vec_to_nodes, direction_vector)
+
+        # Clamp the projection length to the range [0, length] to stay within the line segment
+        projection_length = np.clip(projection_length, 0, length)
+
+        # Calculate the closest point on the line segment to each node
+        closest_point = np.outer(projection_length, direction_vector) + np.array([x0, y0])
+
+        # Calculate the distance from each node to the closest point on the line segment
+        distance_to_line = np.linalg.norm(node_positions - closest_point, axis=1)
+
+        # Return the minimum distance to the line for each node
+        min_distance = np.min(distance_to_line)
+
+        return min_distance
+
+    def _create_edge_traces(self, filter_fun: Callable, color: str) -> list[go.Trace]:
+        # Begin plotting
+        edge_x, edge_y, edge_names, mid_x, mid_y, mid_angles = self._get_edge_positions(filter_fun)
+
+        edge_trace = go.Scatter(
+            x=edge_x,
+            y=edge_y,
+            mode='lines',
+            line=dict(width=self.edge_weight, color=color),
+            hoverinfo='none',
+        )
+        edge_trace.marker.color = color
+
+        # Add hover text
+        # Scatter trace for edge hover text (at midpoints), using perpendicular vectors to orient markers
+        edge_hover_trace = go.Scatter(
+            x=mid_x,
+            y=mid_y,
+            mode='markers+text',
+            marker=dict(
+                size=self.arrow_size,
+                symbol='arrow-up',  # This makes the marker an arrow
+                color=color,
+                angle=mid_angles,  # Rotate the arrow based on the perpendicular angle
+                angleref='up',
+            ),
+            hovertext=edge_names,  # Hover text
+            hoverinfo='text',
+            textposition='top center',  # Position text near the marker if visible
+        )
+
+        return [edge_trace, edge_hover_trace]
+
+    def _straight_edge(self, x0, y0, x1, y1, num_points=100):
+        """
+        Computes a straight path for an edge.
+
+        Parameters:
+        - x0, y0: Start coordinates of the edge.
+        - x1, y1: End coordinates of the edge.
+        - num_points: Number of points to define the straight path.
+
+        Returns:
+        - Straight coordinates as lists of x and y values.
+        """
+        # Compute 100 points along the line
+        t_values = np.linspace(0, 1, num_points)
+        straight_x = (1 - t_values) * x0 + t_values * x1
+        straight_y = (1 - t_values) * y0 + t_values * y1
+
+        return [x0, *straight_x, x1], [y0, *straight_y, y1]
+
+    # Function to add a curve around nodes
+    def _curved_edge(self, x0, y0, x1, y1, offset=0.5, num_points=100, curve_left=True):
+        """
+        Computes a curved path for an edge by introducing a midpoint offset proportional to the edge length.
+        The direction of the curve can be controlled with the `curve_up` boolean.
+
+        Parameters:
+        - x0, y0: Start coordinates of the edge.
+        - x1, y1: End coordinates of the edge.
+        - offset_multiplier: Multiplier to scale the offset based on edge length.
+        - num_points: Number of points to define the curve.
+        - curve_up: Boolean to determine if the curve is upward or downw ard.
+
+        Returns:
+        - Curved coordinates as lists of x and y values.
+        """
+        # Compute edge length
+        dx, dy = x1 - x0, y1 - y0
+        length = np.sqrt(dx**2 + dy**2)
+        if length == 0:  # Avoid division by zero
+            return [x0, x1], [y0, y1]
+
+        # Midpoint of the edge
+        mid_x = (x0 + x1) / 2
+        mid_y = (y0 + y1) / 2
+
+        # Direction of the edge (unit vector)
+        perp_dx = -dy / length
+        perp_dy = dx / length
+
+        # Offset proportional to the edge length
+        offset = length * offset
+
+        # Adjust offset direction based on curve_up boolean
+        if not curve_left:
+            perp_dx = -perp_dx
+            perp_dy = -perp_dy
+
+        # Compute the control point for the quadratic Bezier curve
+        control_x = mid_x + perp_dx * offset
+        control_y = mid_y + perp_dy * offset
+
+        # Generate Bezier curve points
+        t_values = np.linspace(0, 1, num_points)
+        curve_x = (1 - t_values) ** 2 * x0 + 2 * (1 - t_values) * t_values * control_x + t_values**2 * x1
+        curve_y = (1 - t_values) ** 2 * y0 + 2 * (1 - t_values) * t_values * control_y + t_values**2 * y1
+
+        # Return the full curved path
+        return [x0, *curve_x, x1], [y0, *curve_y, y1]
+
+    def _create_node_trace(self):
+        # Now get the node and edge positions
+        node_x, node_y = self._get_node_positions()
+        max_dim = max(*node_x, *node_y)
+
+        # Get node depths and meta
+        node_name, node_hovertext, node_color = self._get_node_data()
+
+        layer_min, layer_max = self._get_layer_range()
+        marker = dict(
+            showscale=True,
+            colorscale=self.colorscale,
+            reversescale=False,
+            color=[],
+            opacity=1,
+            size=[self.node_size] * len(node_x),
+            sizeref=1.0 * max_dim / 100.0,
+            line=dict(color=self._get_border_colors(), width=self.node_border_weight),
+            colorbar=dict(
+                thickness=15,
+                title='Workflow Depth',
+                xanchor='left',
+                titleside='right',
+                tickmode='array',
+                tickvals=list(range(-layer_min, -layer_max - 1, -1)),
+                ticktext=list(range(layer_min, layer_max + 1, 1)),
+            ),
+        )
+
+        # Create the node trace
+        node_trace = go.Scatter(
+            x=node_x,
+            y=node_y,
+            mode='markers+text',
+            textposition=self.node_text_position,
+            textfont_size=self.node_text_fontsize,
+            hoverinfo='text',
+            marker=marker,
+            text=node_name,
+            hovertext=node_hovertext,
+        )
+        node_trace.marker.color = node_color
+
+        return node_trace
 
     def _get_node_data(self):
         node_color = list(
@@ -218,18 +409,13 @@ class GraphPlot:
         node_hovertext = list(
             map(
                 lambda n: (
-                    special_labels(n[0])
-                    + 'Stage: '
-                    + str(n[0])
-                    + '<br>'
-                    + 'Stage Order: '
-                    + str(n[1]['order'])
-                    + '<br>'
-                    + 'Layer: '
-                    + str(n[1]['layer'])
-                    + '<br>'
-                    + 'Layer Order: '
-                    + str(n[1]['layer_order'])
+                    special_labels(n[0]) + 'Stage: ' + str(n[0]) + '<br>' + 'Stage Order: ' + str(n[1]['order'])
+                    # + '<br>'
+                    # + 'Layer: '
+                    # + str(n[1]['layer'])
+                    # + '<br>'
+                    # + 'Layer Order: '
+                    # + str(n[1]['layer_order'])
                 ),
                 self.G.nodes.items(),
             ),
@@ -242,7 +428,7 @@ class GraphPlot:
         elif self.G.nodes[n]['only_stages']:
             return '#5053f8', 'Only run this stage'
         elif self.G.nodes[n]['first_stages']:
-            return '#33c584', 'First stage'
+            return '#28A745', 'First stage'
         elif self.G.nodes[n]['last_stages']:
             return '#e93e2e', 'Last stage'
         elif self.G.nodes[n]['skipped']:
@@ -308,10 +494,12 @@ class GraphPlot:
             nodes = self._node_layer_sort(group_nodes)
 
             # Iterate through all running jobs, then skipped
-            # Set layer_order to it's order index in that layer
+            # Set layer_order to its order index in that layer
             for depth_order, node in enumerate(nodes):
                 idx = depth_order
+                left = depth_order < (len(nodes) / 2)
                 self.G.nodes[node['name']][new_key] = idx
+                self.G.nodes[node['name']]['curve_left'] = left
                 self.G.nodes[node['name']]['pos'] = group_pos[idx]
 
     def get_annotations(self, xref='x', yref='y'):
@@ -324,12 +512,13 @@ class GraphPlot:
             }
             return pts.get(key)
 
-        return [
+        # Old arrows
+        _ = [
             go.layout.Annotation(
                 ax=(pts(edge, 'p1.x') * 7 + pts(edge, 'p2.x') * 1) / 8,
                 ay=(pts(edge, 'p1.y') * 7 + pts(edge, 'p2.y') * 1) / 8,
-                x=(pts(edge, 'p1.x') * 5 + pts(edge, 'p2.x') * 3) / 8,
-                y=(pts(edge, 'p1.y') * 5 + pts(edge, 'p2.y') * 3) / 8,
+                x=(pts(edge, 'p1.x') * 4 + pts(edge, 'p2.x') * 4) / 8,
+                y=(pts(edge, 'p1.y') * 4 + pts(edge, 'p2.y') * 4) / 8,
                 axref=xref,
                 ayref=yref,
                 xref=xref,
@@ -342,6 +531,30 @@ class GraphPlot:
                 opacity=self.arrow_opacity,
             )
             for edge in self.G.edges
+        ]
+
+        # Legend
+        legend = (
+            '<span style="color: #5053f8;">■<span style="color: black;"> Only run this stage</span><br>'
+            '<span style="color: #28A745;">■<span style="color: black;"> First stage</span><br>'
+            '<span style="color: #e93e2e;">■<span style="color: black;"> Last stage</span><br>'
+            '<span style="color: #A9A9A9;">■<span style="color: black;"> Skipped</span><br>'
+        )
+
+        return [
+            {
+                'text': legend,  # The text inside the box
+                'xref': 'paper',  # x-axis reference type (paper space)
+                'yref': 'paper',  # y-axis reference type (paper space)
+                'x': 0.5,  # x-coordinate (center)
+                'y': 0.5,  # y-coordinate (center)
+                'showarrow': False,  # Hide the arrow
+                'font': {'size': 16},  # Font size and style
+                'align': 'center',  # Align text to center
+                'bgcolor': 'rgba(255, 255, 255, 0.5)',  # Background color with transparency
+                'bordercolor': 'rgba(0,0,0,0)',  # Border color with no border
+                'borderwidth': 2,  # Border width
+            },
         ]
 
     def _node_layer_sort(self, nodes):
