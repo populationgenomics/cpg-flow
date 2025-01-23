@@ -24,6 +24,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
+          token: ${{ secrets.BOT_ACCESS_TOKEN }}
 
       - name: Setup | Force correct release branch on workflow sha
         run: |
