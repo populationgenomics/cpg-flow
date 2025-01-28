@@ -17,3 +17,16 @@ The CPG software team continuously maintains and improves the application to mee
 ## Pull request reviews
 
 Reviewing PRs requires time and attention, so we prioritize them as part of our regular sprint planning. The team works in fortnightly sprints, which means if you submit a PR early in the cycle, it might take some time before it’s reviewed. We understand this can be frustrating and strive to provide updates on the status of your PR as promptly as possible.
+
+## Commitlint and Commitizen
+
+Releases on **main** branch are generated and published automatically,
+pre-releases on the **alpha** branch are also generated and published by:
+
+![Semantic Release](https://img.shields.io/badge/-Semantic%20Release-black?style=for-the-badge&logoColor=white&logo=semantic-release&color=000000)
+
+It uses the **[conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)** strategy.
+
+This is enforced using the **[commitlint](https://github.com/opensource-nepal/commitlint)** pre-commit hook that checks commit messages conform to the conventional commit standard.
+
+We recommend installing and using the tool **[commitizen](https://commitizen-tools.github.io/commitizen/) in order to create commit messages. Once installed, you can use either `cz commit` or `git cz` to create a commitizen generated commit message.
