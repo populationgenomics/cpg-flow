@@ -26,7 +26,7 @@
 ## 📋 Table of Contents
 
 1. 🐙 [What is this API ?](#what-is-this-api)
-2. ✨ [Production and development links](#production-and-development-links)
+2. ✨ [Documentation](#production-and-development-links)
 3. 🔨 [Installation](installation.md#installation)
 4. 🚀 [Build](installation.md#build)
 5. 🤖 [Usage](usage.md#usage)
@@ -47,7 +47,7 @@ CPG Flow supports various stages of genomic data processing, from raw data inges
 
 The API constructs a DAG (Directed Acyclic Graph) structure from a set of chained stages. This DAG structure then forms the **pipeline**.
 
-## <a name="production-and-development-links">✨ Production and development links</a>
+## <a name="docoumentation">✨ Documentation</a>
 
 ### 🌐 Production
 
