@@ -1,6 +1,47 @@
 # CHANGELOG
 
 
+## v0.1.0 (2025-01-28)
+
+### Continuous Integration
+
+- **.github/workflows/updated-badges.yaml**: Remove update badges workflow
+  ([`b508ba4`](https://github.com/populationgenomics/cpg-flow/commit/b508ba4a5e01874c7257cd5c91bcb7a6d47d35a2))
+
+- **update-badges.yaml**: Push with cpg ci bot
+  ([`c148f8e`](https://github.com/populationgenomics/cpg-flow/commit/c148f8e68700c26022d8fe3089a7fc4f47b0c0d5))
+
+- **web-docs.yaml**: Add uv run
+  ([`cf50620`](https://github.com/populationgenomics/cpg-flow/commit/cf506203dd7080bfb16d36d4aba48939785b270e))
+
+- **.github/workflows/package.yaml**: Reverted package workflow to working state
+  ([`da95c2a`](https://github.com/populationgenomics/cpg-flow/commit/da95c2a90cfd6f9947d8d30225f43b3d41c240ab))
+
+- **.github/workflows/package.yaml**: Add p.a.t for package checkout
+  ([`e6a2a77`](https://github.com/populationgenomics/cpg-flow/commit/e6a2a7708412c96690e9bf5a43afa9cf28a439fc))
+
+- **.github/workflows**: Cleanup packaging workflow
+  ([`9fca024`](https://github.com/populationgenomics/cpg-flow/commit/9fca024a88bd8dc1aaa2029594a5bdbf1e24bc68))
+
+- **.github/workflows/web-docs.yaml,docs/update_readme.py,Makefile,.pre-commit-config.yaml**: Fix
+  docs workflow, remove update-readme pre-commit hook
+  ([`888afd1`](https://github.com/populationgenomics/cpg-flow/commit/888afd1e72519c59ee295850f6fc2e22467684c3))
+
+- **package.yaml**: Rm update alpha action
+  ([`c94d52f`](https://github.com/populationgenomics/cpg-flow/commit/c94d52f87109bb4b58b7a9f2eae548e16cdcc68b))
+
+### Documentation
+
+- **README.md,docs/docs/index.md**: Remove more broken docs links
+  ([`2d6f900`](https://github.com/populationgenomics/cpg-flow/commit/2d6f900e1154af58df93132dd88cbb0813a993de))
+
+- **docs/docs/index.md**: Remove broken docs links
+  ([`01c0651`](https://github.com/populationgenomics/cpg-flow/commit/01c06518ed8de867c2e7ca01b543c2dff18aa537))
+
+- **README.md**: Remove badges
+  ([`2d2d200`](https://github.com/populationgenomics/cpg-flow/commit/2d2d2006e35392976edc81c201bd334af34d4862))
+
+
 ## v0.1.0-alpha.18 (2025-01-28)
 
 ### Bug Fixes
