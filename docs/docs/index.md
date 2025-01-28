@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD033 MD024 -->
 # 🐙 CPG Flow
 
-<img src="/assets/DNA_CURIOUS_FLOYD_CROPPED.png" alt="CPG Flow logo" align="center"/>
+<img src="assets/DNA_CURIOUS_FLOYD_CROPPED.png" alt="CPG Flow logo" align="center"/>
 
 ![Python](https://img.shields.io/badge/-Python-black?style=for-the-badge&logoColor=white&logo=python&color=2F73BF)
 
