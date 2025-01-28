@@ -51,10 +51,6 @@ The API constructs a DAG (Directed Acyclic Graph) structure from a set of chaine
 
 ### 🌐 Production
 
-The production version of this API is documented at **[populationgenomics.github.io/cpg-flow/main/cpg_flow.html](https://populationgenomics.github.io/cpg-flow/main/cpg_flow.html)**.
-
-### 🛠️ Development
-
-The development version of this API is available at **[populationgenomics.github.io/cpg-flow/alpha/cpg_flow.html](https://populationgenomics.github.io/cpg-flow/alpha/cpg_flow.html)**.
+The production version of this API is documented at **[populationgenomics.github.io/cpg-flow/](https://populationgenomics.github.io/cpg-flow/)**.
 
 The documentation is updated automatically when a commit is pushed on the `alpha` (prerelease) or `main` (release) branch.
