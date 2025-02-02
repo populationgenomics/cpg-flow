@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.1.1 (2025-02-02)
+
+### Bug Fixes
+
+- **docker.yaml**: Add condition to only push versioned image on bump
+  ([`06f7326`](https://github.com/populationgenomics/cpg-flow/commit/06f73261323b40eeec5c830a45f094bb665d4975))
+
+
 ## v0.1.0 (2025-01-28)
 
 ### Continuous Integration
