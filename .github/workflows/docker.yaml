@@ -74,8 +74,8 @@ jobs:
           docker push $DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
           echo "DOCKER_IMAGE=$DOCKER_TMP/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
-      - name: push production
-        if: ${{ github.ref_name == 'main' || github.ref_name == 'alpha' }}
+      - name: push production on version bump
+        if: ${{ github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'alpha') && startsWith(github.event.head_commit.message, 'bump:') }}
         run: |
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_MAIN/$IMAGE_NAME:$VERSION
           docker push $DOCKER_MAIN/$IMAGE_NAME:$VERSION
