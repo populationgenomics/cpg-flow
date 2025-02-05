@@ -1,6 +1,16 @@
 # CHANGELOG
 
 
+## v0.1.2 (2025-02-05)
+
+### Bug Fixes
+
+- **stage.py**: As_str to take in path as well as str
+  ([`d50a994`](https://github.com/populationgenomics/cpg-flow/commit/d50a994896124f6c645bdbf861f29c9372012f98))
+
+current method not useful, make it make sense
+
+
 ## v0.1.1 (2025-02-02)
 
 ### Bug Fixes
