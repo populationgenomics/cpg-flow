@@ -17,7 +17,7 @@ main.py, which provides a way to choose a workflow using a CLI argument.
 """
 
 import functools
-import pathlib
+import os
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
 from typing import Generic, Optional, TypeVar, cast
@@ -29,7 +29,7 @@ from hailtop.batch.job import Job
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Target
 from cpg_flow.utils import ExpectedResultT, exists, get_logger
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
-from cpg_utils import Path
+from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch
 
@@ -109,24 +109,30 @@ class StageOutput:
 
     def as_str(self, key=None) -> str:
         """
-        Cast the result to a simple string. Throw an exception when can't cast.
-        `key` is used to extract the value when the result is a dictionary.
+        Return the requested value as a simple string.
+        The value here can be a String or PathLike, which will be returned as a String
+        This is a type change, not a cast
+        Args:
+            key (str | None): used to extract the value when the result is a dictionary.
+        Returns:
+            string representation of the value
         """
         res = self._get(key)
-        if not isinstance(res, str):
-            raise ValueError(f'{res} is not a str.')
-        return cast(str, res)
+        if not isinstance(res, (os.PathLike | str)):
+            raise ValueError(f'{res} is not a str or valid Pathlike, will not convert.')
+        return str(res)
+
 
     def as_path(self, key=None) -> Path:
         """
-        Cast the result to a path object. Throw an exception when can't cast.
+        Return the result as a Path object.
+        This throws an exception when it can't cast.
         `key` is used to extract the value when the result is a dictionary.
         """
         res = self._get(key)
-        if not isinstance(res, CloudPath | pathlib.Path):
-            raise ValueError(f'{res} is not a path object.')
-
-        return cast(Path, res)
+        if not isinstance(res, (os.PathLike | str)):
+            raise ValueError(f'{res} is not a path object or a valid String, cannot return as Path.')
+        return to_path(res)
 
     def as_dict(self) -> dict[str, Path]:
         """
