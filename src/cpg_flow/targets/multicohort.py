@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, Optional
 import pandas as pd
 
 from cpg_flow.targets import Cohort, Dataset, Target
-from cpg_flow.utils import get_logger
+from cpg_flow.utils import get_logger, hash_from_list_of_strings
 from cpg_utils import Path
 from cpg_utils.config import get_config
 
@@ -37,16 +37,19 @@ class MultiCohort(Target):
     def __init__(self) -> None:
         super().__init__()
 
-        # NOTE: For a cohort, we simply pull the dataset name from the config.
+        # Previously MultiCohort.name was an underscore-delimited string of all the input cohorts
+        # this was expanding to the point where filenames including this String were too long for *nix
+        # instead we can create a hash of the input cohorts, and use that as the name
+        # the exact cohorts can be obtained from the config associated with the ar-guid
         input_cohorts = get_config()['workflow'].get('input_cohorts', [])
         if input_cohorts:
-            self.name = '_'.join(sorted(input_cohorts))
+            self.name = hash_from_list_of_strings(sorted(input_cohorts), suffix='cohorts')
         else:
             self.name = get_config()['workflow']['dataset']
 
         assert self.name, 'Ensure cohorts or dataset is defined in the config file.'
 
-        self._cohorts_by_name: dict[str, Cohort] = {}
+        self._cohorts_by_id: dict[str, Cohort] = {}
         self._datasets_by_name: dict[str, Dataset] = {}
         self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
 
@@ -78,7 +81,7 @@ class MultiCohort(Target):
         Gets list of all cohorts.
         Include only "active" cohorts (unless only_active is False)
         """
-        cohorts = list(self._cohorts_by_name.values())
+        cohorts = list(self._cohorts_by_id.values())
         if only_active:
             cohorts = [c for c in cohorts if c.active]
         return cohorts
@@ -90,18 +93,18 @@ class MultiCohort(Target):
         """
         return [c.get_cohort_id() for c in self.get_cohorts(only_active)]
 
-    def get_cohort_by_name(
+    def get_cohort_by_id(
         self,
-        name: str,
+        id: str,
         only_active: bool = True,
     ) -> Optional['Cohort']:
         """
-        Get cohort by name.
+        Get cohort by id.
         Include only "active" cohorts (unless only_active is False)
         """
-        cohort = self._cohorts_by_name.get(name)
+        cohort = self._cohorts_by_id.get(id)
         if not cohort:
-            LOGGER.warning(f'Cohort {name} not found in the multi-cohort')
+            LOGGER.warning(f'Cohort {id} not found in the multi-cohort')
 
         if not only_active:  # Return cohort even if it's inactive
             return cohort
@@ -134,16 +137,16 @@ class MultiCohort(Target):
                 all_sequencing_groups[sg.id] = sg
         return list(all_sequencing_groups.values())
 
-    def create_cohort(self, name: str):
+    def create_cohort(self, id: str, name: str) -> 'Cohort':
         """
         Create a cohort and add it to the multi-cohort.
         """
-        if name in self._cohorts_by_name:
-            LOGGER.debug(f'Cohort {name} already exists in the multi-cohort')
-            return self._cohorts_by_name[name]
+        if id in self._cohorts_by_id:
+            LOGGER.debug(f'Cohort {id} already exists in the multi-cohort')
+            return self._cohorts_by_id[id]
 
-        c = Cohort(name=name)
-        self._cohorts_by_name[c.name] = c
+        c = Cohort(id=id, name=name)
+        self._cohorts_by_id[c.id] = c
         return c
 
     def add_dataset(self, d: 'Dataset') -> 'Dataset':
@@ -180,7 +183,7 @@ class MultiCohort(Target):
         return {
             # 'sequencing_groups': self.get_sequencing_group_ids(),
             'datasets': [d.name for d in self.get_datasets()],
-            'cohorts': [c.name for c in self.get_cohorts()],
+            'cohorts': [c.id for c in self.get_cohorts()],
         }
 
     def write_ped_file(

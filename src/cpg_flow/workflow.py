@@ -23,16 +23,19 @@ from enum import Enum
 from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
+import plotly.io as pio
 
 from cpg_flow.inputs import get_multicohort
+from cpg_flow.show_workflow.graph import GraphPlot
 from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
-from cpg_flow.utils import get_logger, slugify, timestamp
+from cpg_flow.utils import get_logger, slugify, timestamp, write_to_gcs_bucket
 from cpg_utils import Path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
 
 LOGGER = get_logger(__name__)
+URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/{name}/'
 
 if TYPE_CHECKING:
     from cpg_flow.stage import Stage, StageDecorator, StageOutput
@@ -175,6 +178,8 @@ class Workflow:
             )
 
         self.dry_run = dry_run or get_config(True)['workflow'].get('dry_run')
+        self.show_workflow = get_config()['workflow'].get('show_workflow', False)
+        self.access_level = get_config()['workflow'].get('access_level', 'test')
 
         # TODO: should the ['dataset'] be a get? should we rename it to analysis dataset?
         analysis_dataset = get_config(True)['workflow']['dataset']
@@ -208,7 +213,7 @@ class Workflow:
 
     @property
     def output_version(self) -> str:
-        return self._output_version or get_multicohort().alignment_inputs_hash()
+        return self._output_version or get_multicohort().get_alignment_inputs_hash()
 
     @property
     def analysis_prefix(self) -> Path:
@@ -239,13 +244,13 @@ class Workflow:
         e.g. "gs://cpg-project-main/seqr_loader/COH123", or "gs://cpg-project-main-analysis/seqr_loader/COH123"
 
         Args:
-            cohort (Cohort): we pull the analysis dataset and name from this Cohort
+            cohort (Cohort): we pull the analysis dataset and id from this Cohort
             category (str | None): sub-bucket for this project
 
         Returns:
             Path
         """
-        return cohort.analysis_dataset.prefix(category=category) / self.name / cohort.name
+        return cohort.analysis_dataset.prefix(category=category) / self.name / cohort.id
 
     def run(
         self,
@@ -342,6 +347,10 @@ class Workflow:
             if _stage.name not in last_stages_keeps + first_stages_keeps:
                 _stage.skipped = True
                 _stage.assume_outputs_exist = True
+
+        for stage in stages:
+            if stage.skipped:
+                graph.nodes[stage.name]['skipped'] = True
 
     @staticmethod
     def _process_only_stages(
@@ -460,6 +469,7 @@ class Workflow:
         for stg in _stages_d.values():
             dag_node2nodes[stg.name] = set(dep.name for dep in stg.required_stages)
         dag = nx.DiGraph(dag_node2nodes)
+
         try:
             stage_names = list(reversed(list(nx.topological_sort(dag))))
         except nx.NetworkXUnfeasible:
@@ -468,6 +478,12 @@ class Workflow:
 
         LOGGER.info(f'Stages in order of execution:\n{stage_names}')
         stages = [_stages_d[name] for name in stage_names]
+
+        # Set order attribute to stages
+        nx.set_node_attributes(dag, {s.name: num for num, s in enumerate(stages)}, name='order')
+
+        # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
+        nx.set_node_attributes(dag, False, name='skipped')
 
         # Round 5: applying workflow options first_stages and last_stages.
         if first_stages or last_stages:
@@ -513,6 +529,48 @@ class Workflow:
         else:
             self.queued_stages = [stg for stg in _stages_d.values() if not stg.skipped]
             LOGGER.info(f'Queued stages: {self.queued_stages}')
+
+        # Round 7: show the workflow
+
+        def format_meta(attr: list):
+            return {s: s in attr for s in dag.nodes}
+
+        # First add remaining metadata
+        nx.set_node_attributes(dag, format_meta(skip_stages), name='skip_stages')
+        nx.set_node_attributes(dag, format_meta(only_stages), name='only_stages')
+        nx.set_node_attributes(dag, format_meta(first_stages), name='first_stages')
+        nx.set_node_attributes(dag, format_meta(last_stages), name='last_stages')
+
+        if self.show_workflow:
+            gp = GraphPlot(dag, title='Full Workflow Graph')
+
+            # Removed skipped steps for simple graph
+            all_nodes = list(dag.nodes)
+            _ = [dag.remove_node(n) for n in all_nodes if dag.nodes[n]['skipped']]
+            gp2 = GraphPlot(dag, title='Sub-Workflow Graph')
+
+            fig = gp + gp2
+
+            # Show the figure
+            fig.show()
+
+            # If we have a web bucket path
+            try:
+                if web_prefix := self.web_prefix:
+                    html_path = web_prefix / f'{self.name}_workflow.html'
+                    if str(html_path).startswith('gs:/'):
+                        html_file = pio.to_html(fig, full_html=True)
+                        _, file_path = write_to_gcs_bucket(html_file, html_path)
+                        url = URL_BASENAME.format(access_level=self.access_level, name=self.name) + str(file_path)
+
+                        LOGGER.info(f'Link to the graph: {url}')
+                    else:
+                        pio.write_html(fig, file=str(html_path), auto_open=False)
+
+                    LOGGER.info(f'Workflow graph saved to {html_path}')
+
+            except ConnectionError as e:
+                LOGGER.error(f'Failed to save workflow graph: {e}')
 
     @staticmethod
     def _process_stage_errors(

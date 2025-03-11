@@ -65,6 +65,8 @@ def get_multicohort() -> MultiCohort:
     Return the cohort or multicohort object based on the workflow configuration.
     """
     input_datasets = config_retrieve(['workflow', 'input_datasets'], None)
+
+    # pull the list of cohort IDs from the config
     custom_cohort_ids = config_retrieve(['workflow', 'input_cohorts'], None)
 
     if input_datasets:
@@ -85,26 +87,44 @@ def create_multicohort() -> MultiCohort:
     Add cohorts in the multicohort.
     """
     config = config_retrieve(['workflow'])
+
+    # pull the list of cohort IDs from the config
     custom_cohort_ids = config_retrieve(['workflow', 'input_cohorts'], [])
+
+    # get a unique set of cohort IDs
+    custom_cohort_ids_unique = sorted(set(custom_cohort_ids))
+    custom_cohort_ids_removed = sorted(set(custom_cohort_ids) - set(custom_cohort_ids_unique))
+
+    # if any cohort id duplicates were removed we log them
+    if len(custom_cohort_ids_unique) != len(custom_cohort_ids):
+        get_logger(__file__).warning(
+            f'Removed {len(custom_cohort_ids_removed)} non-unique cohort IDs',
+        )
+        duplicated_cohort_ids = ', '.join(custom_cohort_ids_removed)
+        get_logger(__file__).warning(f'Non-unique cohort IDs: {duplicated_cohort_ids}')
+
     multicohort = MultiCohort()
 
     # for each Cohort ID
-    for cohort_id in custom_cohort_ids:
+    for cohort_id in custom_cohort_ids_unique:
         # get the dictionary representation of all SGs in this cohort
         # dataset_id is sequencing_group_dict['sample']['project']['name']
-        cohort_sg_dicts = get_cohort_sgs(cohort_id)
-        if len(cohort_sg_dicts) == 0:
+        cohort_sg_dict = get_cohort_sgs(cohort_id)
+        cohort_name = cohort_sg_dict.get('name', cohort_id)
+        cohort_sgs = cohort_sg_dict.get('sequencing_groups', [])
+
+        if len(cohort_sgs) == 0:
             raise MetamistError(f'Cohort {cohort_id} has no sequencing groups')
 
         # create a new Cohort object
-        cohort = multicohort.create_cohort(cohort_id)
+        cohort = multicohort.create_cohort(id=cohort_id, name=cohort_name)
 
         # first populate these SGs into their Datasets
         # required so that the SG objects can be referenced in the collective Datasets
         # SG.dataset.prefix is meaningful, to correctly store outputs in the project location
-        for entry in cohort_sg_dicts:
+        for entry in cohort_sgs:
             sg_dataset = entry['sample']['project']['name']
-            dataset = multicohort.create_dataset(sg_dataset)
+            dataset = multicohort.create_dataset(sg_dataset.removesuffix('-test'))
 
             sequencing_group = add_sg_to_dataset(dataset, entry)
 
@@ -172,7 +192,6 @@ def _populate_alignment_inputs(
         LOGGER.warning(
             f'No reads found for sequencing group {sequencing_group.id} of type {entry["type"]}',
         )
-
 
 
 def _populate_analysis(dataset: Dataset) -> None:
