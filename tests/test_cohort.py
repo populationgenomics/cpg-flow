@@ -184,7 +184,7 @@ def test_cohort(mocker: MockFixture, tmp_path, caplog):
     mocker.patch('cpg_flow.metamist.Metamist.get_ped_entries', mock_get_pedigree)
 
     mocker.patch('cpg_flow.metamist.Metamist.get_sg_entries', mock_get_cohort_sgs('COH1'))
-    mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', {})
+    mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
