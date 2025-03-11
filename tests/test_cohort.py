@@ -109,24 +109,7 @@ def mock_get_pedigree_empty(*args, **kwargs):
 
 
 def mock_get_pedigree(*args, **kwargs):  # pylint: disable=unused-argument
-    return [
-        {
-            'family_id': '123',
-            'individual_id': '8',
-            'paternal_id': '14',
-            'maternal_id': None,
-            'sex': 1,
-            'affected': 1,
-        },
-        {
-            'family_id': '124',
-            'individual_id': '14',
-            'paternal_id': None,
-            'maternal_id': None,
-            'sex': 2,
-            'affected': 1,
-        },
-    ]
+    return load_mock_data('tests/assets/test_cohort/pedigree.json')
 
 
 def mock_get_cohort_sgs(cohort_id: str, *args, **kwargs) -> dict:
@@ -201,7 +184,7 @@ def test_cohort(mocker: MockFixture, tmp_path, caplog):
     mocker.patch('cpg_flow.metamist.Metamist.get_ped_entries', mock_get_pedigree)
 
     mocker.patch('cpg_flow.metamist.Metamist.get_sg_entries', mock_get_cohort_sgs('COH1'))
-    mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
+    mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', {})
 
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
