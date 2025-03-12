@@ -1,6 +1,52 @@
 # CHANGELOG
 
 
+## v0.1.3 (2025-03-11)
+
+### Bug Fixes
+
+- **Workflow**: Catch the correct ConnectionError and rm useless log line
+  ([`eba1c37`](https://github.com/populationgenomics/cpg-flow/commit/eba1c37714456f87e87a0169dde19de0f46a4aa2))
+
+This change was motivated by the local dry_run of cpg-flow always failing by attempting to contact
+  metamist. By catching the appropriate error this is no longer the case. We also log a final line
+  with dry_run complete.
+
+SET-448
+
+### Build System
+
+- Removes cpg-flow from deps
+  ([`7063dcb`](https://github.com/populationgenomics/cpg-flow/commit/7063dcb844eac9d75d38cd992d57e77db837f8d0))
+
+- **Dockerfile,pyproject.toml**: Bump uv version in Dockerfile
+  ([`feecc9c`](https://github.com/populationgenomics/cpg-flow/commit/feecc9c25d5af7405575da0a1fdb5a9b346f475b))
+
+- **uv.lock**: Pin cryptography [security]
+  ([`c30380c`](https://github.com/populationgenomics/cpg-flow/commit/c30380cbfb15cc3795e69feef6d12517fc31ebdd))
+
+### Continuous Integration
+
+- **.github/workflows/package.yaml,pyproject.toml,uv.lock**: Add step to publish tagged versions on
+  docs
+  ([`f32bd9f`](https://github.com/populationgenomics/cpg-flow/commit/f32bd9f84255c88524d364b51de133ec03b77fdc))
+
+### Documentation
+
+- **mkdocs.yml,docs/index.md**: Adding versioning to docs
+  ([`8a56baa`](https://github.com/populationgenomics/cpg-flow/commit/8a56baa4de8e5c0a632f56048c9e4e6eb7f99080))
+
+### Testing
+
+- **test_cohort**: Fix bug in mock get_analyses_by_sgid
+  ([`c071979`](https://github.com/populationgenomics/cpg-flow/commit/c07197948a0c8a44ae29d68b23dcce1c40622fb7))
+
+- Move test data into assets/
+  ([`b2f5b61`](https://github.com/populationgenomics/cpg-flow/commit/b2f5b61348851bfcc4f985ae4c5b868a8ee50aba))
+
+SET-369
+
+
 ## v0.1.2 (2025-02-05)
 
 ### Bug Fixes

@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
 import plotly.io as pio
+from requests.exceptions import ConnectionError
 
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.show_workflow.graph import GraphPlot
@@ -269,6 +270,8 @@ class Workflow:
 
         if not self.dry_run:
             get_batch().run(wait=wait)
+        else:
+            LOGGER.info('Dry run: no jobs submitted')
 
     @staticmethod
     def _process_first_last_stages(
@@ -523,9 +526,6 @@ class Workflow:
                     raise WorkflowError(
                         f'Stage {stg} failed to queue jobs with errors: ' + '\n'.join(errors),
                     )
-
-                LOGGER.info('')
-
         else:
             self.queued_stages = [stg for stg in _stages_d.values() if not stg.skipped]
             LOGGER.info(f'Queued stages: {self.queued_stages}')
