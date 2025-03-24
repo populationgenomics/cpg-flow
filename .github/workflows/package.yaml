@@ -62,4 +62,4 @@ jobs:
 
       - name: Publish | Update docs version
         run: |
-          uv run mike deploy --push --update-aliases ${{ steps.release.outputs.tag }} latest
+          uv run mike deploy -F docs/mkdocs.yml --push --update-aliases ${{ steps.release.outputs.tag }} latest
