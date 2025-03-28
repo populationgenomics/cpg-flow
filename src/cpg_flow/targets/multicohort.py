@@ -137,7 +137,7 @@ class MultiCohort(Target):
                 all_sequencing_groups[sg.id] = sg
         return list(all_sequencing_groups.values())
 
-    def create_cohort(self, id: str, name: str, dataset: str | None) -> 'Cohort':
+    def create_cohort(self, id: str, name: str, dataset: str | None = None) -> 'Cohort':
         """
         Create a cohort and add it to the multi-cohort.
         """
