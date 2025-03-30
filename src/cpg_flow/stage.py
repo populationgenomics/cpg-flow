@@ -554,11 +554,11 @@ class Stage(Generic[TargetT], ABC):
                 analysis_outputs.append(outputs.data)
 
             project_name = None
-            if isinstance(target, SequencingGroup):
+            if isinstance(target, SequencingGroup | Cohort):
                 project_name = target.dataset.name
             elif isinstance(target, Dataset):
                 project_name = target.name
-            elif isinstance(target, Cohort | MultiCohort):
+            elif isinstance(target, MultiCohort):
                 project_name = target.analysis_dataset.name
 
             assert isinstance(project_name, str)
