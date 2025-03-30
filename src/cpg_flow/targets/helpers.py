@@ -13,5 +13,5 @@ def seq_type_subdir() -> str:
     """
     Subdirectory parametrised by sequencing type. For genomes, we don't prefix at all.
     """
-    seq_type = get_config()["workflow"].get("sequencing_type")
-    return "" if not seq_type or seq_type == "genome" else seq_type
+    seq_type = get_config()['workflow'].get('sequencing_type')
+    return '' if not seq_type or seq_type == 'genome' else seq_type

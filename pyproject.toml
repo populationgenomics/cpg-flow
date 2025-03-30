@@ -153,8 +153,6 @@ ignore = [
     "ANN001",
     "ANN002",
     "ANN003",
-    "ANN101",  # Missing type annotation for self in method
-    "ANN102",  # Missing type annotation for `cls` in classmethod
     "ANN201",  # Missing return type annotation for public function
     "ANN202",
     "ANN204",  # Missing type annotation for special method `__init__`
@@ -275,7 +273,6 @@ ignore = [
     "UP015",
     "UP020",
     "UP026",
-    "UP027",
     "UP030",
     "UP031",
     "UP032",

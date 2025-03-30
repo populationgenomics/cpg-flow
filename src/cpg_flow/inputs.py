@@ -278,6 +278,5 @@ def _populate_pedigree(dataset: Dataset) -> None:
         )
     if sgids_wo_ped:
         LOGGER.warning(
-            f'No pedigree data found for '
-            f'{len(sgids_wo_ped)}/{len(dataset.get_sequencing_groups())} sequencing groups',
+            f'No pedigree data found for {len(sgids_wo_ped)}/{len(dataset.get_sequencing_groups())} sequencing groups',
         )

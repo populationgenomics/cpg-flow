@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
 import plotly.io as pio
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError as RequestsConnectionError
 
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.show_workflow.graph import GraphPlot
@@ -297,7 +297,7 @@ class Workflow:
                 if _s_name.lower() not in lower_names:
                     raise WorkflowError(
                         f'Value in workflow/{param} "{_s_name}" must be a stage name '
-                        f"or a subset of stages from the available list: "
+                        f'or a subset of stages from the available list: '
                         f'{", ".join(stage_names)}',
                     )
 
@@ -372,7 +372,7 @@ class Workflow:
             if s_name.lower() not in lower_names:
                 raise WorkflowError(
                     f'Value in workflow/only_stages "{s_name}" must be a stage '
-                    f"name or a subset of stages from the available list: "
+                    f'name or a subset of stages from the available list: '
                     f'{", ".join(stage_names)}',
                 )
 
@@ -569,7 +569,7 @@ class Workflow:
 
                     LOGGER.info(f'Workflow graph saved to {html_path}')
 
-            except ConnectionError as e:
+            except RequestsConnectionError as e:
                 LOGGER.error(f'Failed to save workflow graph: {e}')
 
     @staticmethod
