@@ -46,12 +46,12 @@ class Cohort(Target):
         self.name = name or get_config()['workflow']['dataset']
 
         # This is the analysis_dataset specified in the workflow config
-        self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
+        analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
 
         # This value should be populated by the cohort_dataset parameter
         # which represents the dataset that the cohort is associated with
         # If no cohort dataset is provided it will default to the analysis dataset
-        self.dataset = Dataset(name=dataset) if dataset else self.analysis_dataset
+        self.dataset = Dataset(name=dataset) if dataset else analysis_dataset
 
         self._sequencing_group_by_id: dict[str, SequencingGroup] = {}
 
