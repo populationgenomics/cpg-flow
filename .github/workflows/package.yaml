@@ -5,6 +5,14 @@ on:
       - main
       - alpha
 
+  workflow_dispatch:
+    inputs:
+      force_pypi_release:
+        description: 'Force PyPi publish'
+        required: false
+        default: false
+        type: boolean
+
 permissions:
   id-token: write
   contents: write
@@ -38,10 +46,7 @@ jobs:
 
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.2
-        if: steps.release.outputs.released == 'true'
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+        if: steps.release.outputs.released == 'true' || github.event.inputs.force_pypi_release == 'true'
 
       - name: Publish | Upload to GitHub Release Assets
         uses: python-semantic-release/publish-action@v9.8.9
