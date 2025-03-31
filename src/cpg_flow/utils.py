@@ -196,7 +196,7 @@ def exists_not_cached(path: Path | str, verbose: bool = True) -> bool:
     @param verbose: print on each check
     @return: True if the object exists
     """
-    path = cast(Path, to_path(path))
+    path = cast('Path', to_path(path))
 
     if path.suffix in ['.mt', '.ht']:
         path /= '_SUCCESS'
@@ -365,7 +365,7 @@ def get_intervals_from_bed(intervals_path: Path) -> list[str]:
         intervals = []
         for line in f:
             chrom, start, end = line.strip().split('\t')
-            intervals.append(f'{chrom}:{int(start)+1}-{end}')
+            intervals.append(f'{chrom}:{int(start) + 1}-{end}')
     return intervals
 
 

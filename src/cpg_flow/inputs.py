@@ -111,13 +111,18 @@ def create_multicohort() -> MultiCohort:
         # dataset_id is sequencing_group_dict['sample']['project']['name']
         cohort_sg_dict = get_cohort_sgs(cohort_id)
         cohort_name = cohort_sg_dict.get('name', cohort_id)
+        cohort_dataset = cohort_sg_dict.get('dataset', None)
         cohort_sgs = cohort_sg_dict.get('sequencing_groups', [])
 
         if len(cohort_sgs) == 0:
             raise MetamistError(f'Cohort {cohort_id} has no sequencing groups')
 
         # create a new Cohort object
-        cohort = multicohort.create_cohort(id=cohort_id, name=cohort_name)
+        cohort = multicohort.create_cohort(
+            id=cohort_id,
+            name=cohort_name,
+            dataset=cohort_dataset,
+        )
 
         # first populate these SGs into their Datasets
         # required so that the SG objects can be referenced in the collective Datasets
@@ -273,6 +278,5 @@ def _populate_pedigree(dataset: Dataset) -> None:
         )
     if sgids_wo_ped:
         LOGGER.warning(
-            f'No pedigree data found for '
-            f'{len(sgids_wo_ped)}/{len(dataset.get_sequencing_groups())} sequencing groups',
+            f'No pedigree data found for {len(sgids_wo_ped)}/{len(dataset.get_sequencing_groups())} sequencing groups',
         )

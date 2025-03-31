@@ -64,6 +64,9 @@ GET_SEQUENCING_GROUPS_BY_COHORT_QUERY = gql(
     query SGByCohortQuery($cohort_id: String!) {
         cohorts(id: {eq: $cohort_id}) {
             name
+            project {
+                dataset
+            }
             sequencingGroups {
                 id
                 meta
@@ -427,7 +430,7 @@ class Metamist:
             )
             return None
         LOGGER.info(
-            f'Created Analysis(id={aid}, type={type_}, status={status}, ' f'output={output!s}) in {metamist_proj}',
+            f'Created Analysis(id={aid}, type={type_}, status={status}, output={output!s}) in {metamist_proj}',
         )
         return aid
 
@@ -508,6 +511,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     """
     Retrieve sequencing group entries for a single cohort.
     """
+    LOGGER.info(f'Getting sequencing groups for cohort {cohort_id}')
     entries = query(GET_SEQUENCING_GROUPS_BY_COHORT_QUERY, {'cohort_id': cohort_id})
 
     # Create dictionary keying sequencing groups by project and including cohort name
@@ -517,6 +521,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     #         ...
     #     },
     #     "name": "CohortName"
+    #     "dataset": "DatasetName"
     # }
     if len(entries['cohorts']) != 1:
         raise MetamistError('We only support one cohort at a time currently')
@@ -526,10 +531,12 @@ def get_cohort_sgs(cohort_id: str) -> dict:
         raise MetamistError(f'Error fetching cohort: {message}')
 
     cohort_name = entries['cohorts'][0]['name']
+    cohort_dataset = entries['cohorts'][0]['project']['dataset']
     sequencing_groups = entries['cohorts'][0]['sequencingGroups']
 
     return {
         'name': cohort_name,
+        'dataset': cohort_dataset,
         'sequencing_groups': sequencing_groups,
     }
 
@@ -569,8 +576,7 @@ def parse_reads(  # pylint: disable=too-many-return-statements
         location = reads_data[0]['location']
         if not (location.endswith('.cram') or location.endswith('.bam')):
             raise MetamistError(
-                f'{sequencing_group_id}: ERROR: expected the file to have an extension '
-                f'.cram or .bam, got: {location}',
+                f'{sequencing_group_id}: ERROR: expected the file to have an extension .cram or .bam, got: {location}',
             )
         if get_config()['workflow']['access_level'] == 'test':
             location = location.replace('-main-upload/', '-test-upload/')
