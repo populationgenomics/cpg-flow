@@ -1,6 +1,68 @@
 # CHANGELOG
 
 
+## v0.2.0 (2025-03-31)
+
+### Bug Fixes
+
+- **Stage**: Fetch project_name for Cohort to use .dataset
+  ([`0f7430d`](https://github.com/populationgenomics/cpg-flow/commit/0f7430d5ae85c53699d2f1a2f0fc0a48a6e11406))
+
+- **Cohort**: Remove the .analysis_dataset property
+  ([`b648fe3`](https://github.com/populationgenomics/cpg-flow/commit/b648fe39eb4d24b3dcac1e7e311db9e6f0e33fc7))
+
+After discussion on the PR the thought is to remove it to reduce confusion.
+
+### Code Style
+
+- Fix ruff-format pre-commit hook and commit ruff fixes
+  ([`a3c3b38`](https://github.com/populationgenomics/cpg-flow/commit/a3c3b38da08dbc9d399fb6194c6e0fd59a45f650))
+
+### Documentation
+
+- **mkdocs**: Replicate changes made to the README.md
+  ([`1fb606b`](https://github.com/populationgenomics/cpg-flow/commit/1fb606b72a8de672069c44d1a12fe09539a91fcf))
+
+### Features
+
+- **Cohort**: Add dataset attribute to Cohort target
+  ([`4a5c22c`](https://github.com/populationgenomics/cpg-flow/commit/4a5c22c564418095cf9d4351dbc11cac9d27dd2c))
+
+This PR will solve the raised issue #75 where the Cohort target currently does not have access to
+  its own dataset (as an attribute) in order to save output files. The proposed solution is as
+  follows.
+
+We keep the analysis_dataset property available in order to maintain the current functionality of
+  existing pipelines.
+
+This also means in future this gives the power to the Pipeline Developers to choose the most
+  appropriate place to save the outputs:
+
+* In the analysis_dataset as defined in the config provided to the analysis_runner (the same one as
+  used in the MultiCohortStage)
+
+* The dataset as pulled from the metadata in Metamist to save each respective Cohorts results in its
+  respective dataset location.
+
+This naming convention is also consistent with say SequencingGroups which don't have an
+  analysis_dataset attribute only a dataset attribute which is determined entirely by metadata on
+  that individual sequencing group (pulled from metamist).
+
+We could discuss whether it would be a helpful feature for all Target types to have access to this
+  analysis_dataset property or not. That would come down to whether it's needed, or useful or would
+  just cause confusion.
+
+SET-490, Resolves #75
+
+### Testing
+
+- Update cohort test data and mocks
+  ([`859b631`](https://github.com/populationgenomics/cpg-flow/commit/859b631328bb3f93817e64740c472acb2fd5e5ad))
+
+Make the dataset argument option for the multicohort.create_cohort method (since it is optional in
+  the class constructor). Also, add the dataset to all of our mock test data.
+
+
 ## v0.1.3 (2025-03-11)
 
 ### Bug Fixes
@@ -35,6 +97,9 @@ SET-448
 
 - **mkdocs.yml,docs/index.md**: Adding versioning to docs
   ([`8a56baa`](https://github.com/populationgenomics/cpg-flow/commit/8a56baa4de8e5c0a632f56048c9e4e6eb7f99080))
+
+- **README.md**: Fix installation instructions for users vs devs
+  ([`cd64b13`](https://github.com/populationgenomics/cpg-flow/commit/cd64b1319494fe5c56074df9df0ee7ddfda1ae64))
 
 ### Testing
 
