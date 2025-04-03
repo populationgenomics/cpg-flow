@@ -18,6 +18,7 @@ from typing import Union, cast
 
 import coloredlogs
 from google.cloud import storage
+from loguru import logger as loguru_logger
 
 import hail as hl
 from hailtop.batch import ResourceFile
@@ -53,27 +54,60 @@ def get_logger(
         # allow a log-level & format override on a name basis
         log_level = config_retrieve(['workflow', 'logger', logger_name, 'level'], log_level)
         fmt_string = config_retrieve(['workflow', 'logger', logger_name, 'format'], fmt_string)
+        use_colored_logs = config_retrieve(['workflow', 'logger', logger_name, 'use_colored_logs'], True)
 
         # create a named logger
         new_logger = logging.getLogger(logger_name)
         new_logger.setLevel(log_level)
 
         # unless otherwise specified, use coloredlogs
-        if config_retrieve(['workflow', 'logger', logger_name, 'use_colored_logs'], True):
-            coloredlogs.install(level=log_level, fmt=fmt_string, logger=new_logger)
+        if use_colored_logs:
+            fmt_string = config_retrieve(
+                ['workflow', 'logger', logger_name, 'format'],
+                (
+                    '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> - '
+                    '<cyan>{name}</cyan> - '
+                    '<blue>{file}</blue>:<magenta>{line}</magenta> - '
+                    '<level>{level}</level> - <level>{message}</level>'
+                ),
+            )
+            # Remove any previous loguru handlers
+            loguru_logger.remove()
 
-        # create a stream handler to write output
-        stream_handler = logging.StreamHandler()
-        stream_handler.setLevel(log_level)
+            # Add loguru handler with given format and level
+            loguru_logger.add(
+                sys.stdout,
+                level=log_level,
+                format=fmt_string,
+                enqueue=True,
+            )
 
-        # create format string for messages
-        formatter = logging.Formatter(fmt_string)
-        stream_handler.setFormatter(formatter)
+            class LoguruHandler(logging.Handler):
+                def emit(self, record):
+                    try:
+                        level = loguru_logger.level(record.levelname).name
+                    except ValueError:
+                        level = record.levelno
+                    loguru_logger.opt(depth=6, exception=record.exc_info).log(level, record.getMessage())
 
-        # set the logger to use this handler
-        new_logger.addHandler(stream_handler)
+            logging.basicConfig(handlers=[LoguruHandler()], level=log_level)
 
-        LOGGERS[logger_name] = new_logger
+        else:
+            # Use standard logging setup
+            logger = logging.getLogger(logger_name)
+            logger.setLevel(log_level)
+
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(log_level)
+            formatter = logging.Formatter(fmt_string)
+            stream_handler.setFormatter(formatter)
+
+            logger.addHandler(stream_handler)
+            LOGGERS[logger_name] = logger
+            return logger
+
+        # Store a proxy logger for compatibility
+        LOGGERS[logger_name] = logging.getLogger(logger_name)
 
     return LOGGERS[logger_name]
 
