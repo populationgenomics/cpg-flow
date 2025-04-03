@@ -28,7 +28,7 @@ from cpg_utils.config import config_retrieve, get_config
 
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'logger', 'default_format'],
-    '%(asctime)s - %(name)s - %(pathname)s: %(lineno)d - %(levelname)s - %(message)s',
+    '{time:YYYY-MM-DD HH:mm:ss} - {name} - {file}:{line} - {level} - {message}',
 )
 LOGGERS: dict[str, logging.Logger] = {}
 
@@ -62,15 +62,6 @@ def get_logger(
 
         # unless otherwise specified, use coloredlogs
         if use_colored_logs:
-            fmt_string = config_retrieve(
-                ['workflow', 'logger', logger_name, 'format'],
-                (
-                    '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> - '
-                    '<cyan>{name}</cyan> - '
-                    '<blue>{file}</blue>:<magenta>{line}</magenta> - '
-                    '<level>{level}</level> - <level>{message}</level>'
-                ),
-            )
             # Remove any previous loguru handlers
             loguru_logger.remove()
 
