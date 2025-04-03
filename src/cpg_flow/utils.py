@@ -3,21 +3,20 @@ Utility functions and constants.
 """
 
 import hashlib
-import logging
 import re
 import string
 import sys
 import time
 import traceback
 import unicodedata
-from functools import lru_cache
+from functools import lru_cache, cache
 from itertools import chain, islice
 from os.path import basename, dirname, join
 from random import choices
 from typing import Union, cast
 
-import coloredlogs
 from google.cloud import storage
+from loguru import logger
 
 import hail as hl
 from hailtop.batch import ResourceFile
@@ -26,56 +25,44 @@ from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
 DEFAULT_LOG_FORMAT = config_retrieve(
-    ['workflow', 'logger', 'default_format'],
-    '%(asctime)s - %(name)s - %(pathname)s: %(lineno)d - %(levelname)s - %(message)s',
+    ['workflow', 'log_format'],
+    '{time:YYYY-MM-DD HH:mm:ss} - {file.path}:{line} - {level} - {message}',
 )
-LOGGERS: dict[str, logging.Logger] = {}
+COLOURED_LOGS = config_retrieve(['workflow', 'coloured_logs'], False)
 
 ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
 
 
+@cache
 def get_logger(
-    logger_name: str = 'cpg_workflows',
-    log_level: int = logging.INFO,
+    log_level: int = 'INFO',
     fmt_string: str = DEFAULT_LOG_FORMAT,
-) -> logging.Logger:
+    coloured: bool = COLOURED_LOGS,
+) -> loguru.Logger:
     """
-    creates a logger instance (so as not to use the root logger)
+    creates a loguru logger instance (so as not to use the root logger)
     Args:
         logger_name (str):
         log_level (int): logging level, defaults to INFO. Can be overridden by config
         fmt_string (str): format string for this logger, defaults to DEFAULT_LOG_FORMAT
+        coloured (bool): whether to colour the logger output
     Returns:
         a logger instance, if required create it first
     """
 
-    if logger_name not in LOGGERS:
-        # allow a log-level & format override on a name basis
-        log_level = config_retrieve(['workflow', 'logger', logger_name, 'level'], log_level)
-        fmt_string = config_retrieve(['workflow', 'logger', logger_name, 'format'], fmt_string)
+    # Remove any previous loguru handlers
+    loguru_logger.remove()
 
-        # create a named logger
-        new_logger = logging.getLogger(logger_name)
-        new_logger.setLevel(log_level)
+    # Add loguru handler with given format and level
+    loguru_logger.add(
+        sys.stdout,
+        level=log_level,
+        format=fmt_string,
+        colorize=coloured,
+        enqueue=True,
+    )
 
-        # unless otherwise specified, use coloredlogs
-        if config_retrieve(['workflow', 'logger', logger_name, 'use_colored_logs'], True):
-            coloredlogs.install(level=log_level, fmt=fmt_string, logger=new_logger)
-
-        # create a stream handler to write output
-        stream_handler = logging.StreamHandler()
-        stream_handler.setLevel(log_level)
-
-        # create format string for messages
-        formatter = logging.Formatter(fmt_string)
-        stream_handler.setFormatter(formatter)
-
-        # set the logger to use this handler
-        new_logger.addHandler(stream_handler)
-
-        LOGGERS[logger_name] = new_logger
-
-    return LOGGERS[logger_name]
+    return loguru_logger
 
 
 LOGGER = get_logger(__name__)
