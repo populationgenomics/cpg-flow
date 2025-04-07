@@ -28,7 +28,7 @@ from cpg_utils.config import config_retrieve, get_config
 
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'logger', 'default_format'],
-    '{time:YYYY-MM-DD HH:mm:ss} - {name} - {file}:{line} - {level} - {message}',
+    '{time:YYYY-MM-DD HH:mm:ss} - {file.path}:{line} - {level} - {message}',
 )
 LOGGERS: dict[str, logging.Logger] = {}
 
