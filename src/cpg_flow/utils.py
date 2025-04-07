@@ -14,10 +14,9 @@ from functools import cache, lru_cache
 from itertools import chain, islice
 from os.path import basename, dirname, join
 from random import choices
-from typing import Union, cast
+from typing import TYPE_CHECKING, Union, cast
 
 from google.cloud import storage
-from loguru import Logger
 from loguru import logger as loguru_logger
 
 import hail as hl
@@ -25,6 +24,9 @@ from hailtop.batch import ResourceFile
 
 from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
+
+if TYPE_CHECKING:
+    from loguru._logger import Logger
 
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'logger', 'log_format'],
@@ -41,7 +43,7 @@ def get_logger(
     log_level: int = loguru_logger.level('INFO').no,
     fmt_string: str = DEFAULT_LOG_FORMAT,
     coloured: bool = COLOURED_LOGS,
-) -> Logger:
+) -> 'Logger':
     """
     creates a loguru logger instance (so as not to use the root logger)
     Args:
