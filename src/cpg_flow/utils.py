@@ -54,7 +54,7 @@ def get_logger(
     Returns:
         a logger instance, if required create it first
     """
-    if logger_name in LOGGERS:
+    if logger_name not in LOGGERS:
         # Remove any previous loguru handlers
         loguru_logger.remove()
 
