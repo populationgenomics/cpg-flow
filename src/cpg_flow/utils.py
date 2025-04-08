@@ -56,7 +56,7 @@ def get_logger(
     """
     if logger_name not in LOGGERS:
         # Remove any previous loguru handlers
-        loguru_logger.remove()
+        # loguru_logger.remove()
 
         # Add loguru handler with given format and level
         loguru_logger.add(
