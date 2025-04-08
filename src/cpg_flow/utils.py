@@ -9,14 +9,14 @@ import sys
 import time
 import traceback
 import unicodedata
-from functools import cache, lru_cache
+from functools import lru_cache
 from itertools import chain, islice
 from os.path import basename, dirname, join
 from random import choices
 from typing import TYPE_CHECKING, Union, cast
 
 from google.cloud import storage
-from loguru import logger as loguru_logger
+from loguru import logger
 
 import hail as hl
 from hailtop.batch import ResourceFile
@@ -25,54 +25,52 @@ from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
 if TYPE_CHECKING:
-    from loguru import Logger
+    from loguru._logger import Logger
 
 DEFAULT_LOG_FORMAT = config_retrieve(
-    ['workflow', 'logger', 'log_format'],
+    ['workflow', 'log_format'],
     '{time:YYYY-MM-DD HH:mm:ss} - {file.path}:{line} - {level} - {message}',
 )
-LOGGERS: dict[str, 'Logger'] = {}
 
 COLOURED_LOGS = config_retrieve(['workflow', 'coloured_logs'], False)
 ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
 
 
-@cache
-def get_logger(
-    logger_name: str = 'cpg_workflows',
-    log_level: int = loguru_logger.level('INFO').no,
+def format_logger(
+    logger_instance: 'Logger',
+    log_level: int = logger.level('INFO').no,
     fmt_string: str = DEFAULT_LOG_FORMAT,
     coloured: bool = COLOURED_LOGS,
-) -> 'Logger':
+) -> None:
     """
-    creates a loguru logger instance (so as not to use the root logger)
+    loguru is a cleaner interface than the standard logging module, but it doesn't allow for multiple instances
+    instead of calling a get_logger function which returns a logger, we assume that any module using logging has
+    imported `from loguru import logger` to get access to the logger.
+
+    loguru.logger is also resistant to deepcopy, so there really is only a single global instance, meaning that the
+    display/formatting of the logger is global to the entire process, and should only be set once.
+
+    This helper method formats the logger instance with the given parameters, stripping out any previous handlers
+    Because the global logger instance is modified, there is no return value
+
     Args:
-        logger_name (str):
+        logger_instance (Logger): the loguru logger instance to format
         log_level (int): logging level, defaults to INFO. Can be overridden by config
         fmt_string (str): format string for this logger, defaults to DEFAULT_LOG_FORMAT
         coloured (bool): whether to colour the logger output
-    Returns:
-        a logger instance, if required create it first
     """
-    if logger_name not in LOGGERS:
-        # Remove any previous loguru handlers
-        # loguru_logger.remove()
 
-        # Add loguru handler with given format and level
-        loguru_logger.add(
-            sys.stdout,
-            level=log_level,
-            format=fmt_string,
-            colorize=coloured,
-            enqueue=True,
-        )
+    # Remove any previous loguru handlers
+    logger_instance.remove()
 
-        LOGGERS[logger_name] = loguru_logger
-
-    return loguru_logger
-
-
-LOGGER = get_logger(__name__)
+    # Add loguru handler with given format and level
+    logger_instance.add(
+        sys.stdout,
+        level=log_level,
+        format=fmt_string,
+        colorize=coloured,
+        enqueue=True,
+    )
 
 
 def chunks(iterable, chunk_size):

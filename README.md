@@ -126,7 +126,7 @@ Name: cpg-flow
 Version: 0.1.2
 Location: /Users/whoami/cpg-flow/.venv/lib/python3.10/site-packages
 Editable project location: /Users/whoami/cpg-flow
-Requires: coloredlogs, cpg-utils, grpcio, grpcio-status, hail, ipywidgets, metamist, networkx, plotly, pre-commit, pyyaml
+Requires: cpg-utils, grpcio, grpcio-status, hail, loguru, ipywidgets, metamist, networkx, plotly, pre-commit, pyyaml
 Required-by:
 ```
 
@@ -135,7 +135,7 @@ The build version (static until you rebuild) will look like the following.
 Name: cpg-flow
 Version: 0.1.2
 Location: /Users/whoami/cpg-flow/.venv/lib/python3.10/site-packages
-Requires: coloredlogs, cpg-utils, grpcio, grpcio-status, hail, ipywidgets, metamist, networkx, plotly, pre-commit, pyyaml
+Requires: cpg-utils, grpcio, grpcio-status, hail, ipywidgets, loguru, metamist, networkx, plotly, pre-commit, pyyaml
 Required-by:
 ```
 
