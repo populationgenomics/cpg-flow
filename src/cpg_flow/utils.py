@@ -37,7 +37,6 @@ ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
 
 
 def format_logger(
-    logger_instance: 'Logger',
     log_level: int = logger.level('INFO').no,
     fmt_string: str = DEFAULT_LOG_FORMAT,
     coloured: bool = COLOURED_LOGS,
@@ -53,18 +52,22 @@ def format_logger(
     This helper method formats the logger instance with the given parameters, stripping out any previous handlers
     Because the global logger instance is modified, there is no return value
 
+    >>> from loguru import logger
+    >>> from cpg_flow.utils import format_logger
+    >>> format_logger(log_level=10, fmt_string='{time} {level} {message}', coloured=True)
+    >>> logger.info('This is an info message')
+
     Args:
-        logger_instance (Logger): the loguru logger instance to format
         log_level (int): logging level, defaults to INFO. Can be overridden by config
         fmt_string (str): format string for this logger, defaults to DEFAULT_LOG_FORMAT
         coloured (bool): whether to colour the logger output
     """
 
     # Remove any previous loguru handlers
-    logger_instance.remove()
+    logger.remove()
 
     # Add loguru handler with given format and level
-    logger_instance.add(
+    logger.add(
         sys.stdout,
         level=log_level,
         format=fmt_string,
