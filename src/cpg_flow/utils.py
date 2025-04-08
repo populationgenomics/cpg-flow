@@ -13,7 +13,7 @@ from functools import lru_cache
 from itertools import chain, islice
 from os.path import basename, dirname, join
 from random import choices
-from typing import TYPE_CHECKING, Union, cast
+from typing import Union, cast
 
 from google.cloud import storage
 from loguru import logger
@@ -24,8 +24,6 @@ from hailtop.batch import ResourceFile
 from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
-if TYPE_CHECKING:
-    from loguru._logger import Logger
 
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'log_format'],
@@ -124,7 +122,7 @@ def read_hail(path):
     else:
         assert path.strip('/').endswith('.mt')
         t = hl.read_matrix_table(str(path))
-    LOGGER.info(f'Read data from {path}')
+    logger.info(f'Read data from {path}')
     return t
 
 
@@ -152,17 +150,17 @@ def checkpoint_hail(
     t.describe()
 
     # log the current number of partitions
-    LOGGER.info(f'Checkpointing object as {t.n_partitions()} partitions')
+    logger.info(f'Checkpointing object as {t.n_partitions()} partitions')
 
     if checkpoint_prefix is None:
         return t
 
     path = join(checkpoint_prefix, file_name)
     if can_reuse(path) and allow_reuse:
-        LOGGER.info(f'Re-using {path}')
+        logger.info(f'Re-using {path}')
         return read_hail(path)
 
-    LOGGER.info(f'Checkpointing {path}')
+    logger.info(f'Checkpointing {path}')
     return t.checkpoint(path, overwrite=True)
 
 
@@ -207,14 +205,14 @@ def exists_not_cached(path: Path | str, verbose: bool = True) -> bool:
         # instead stick to a core responsibility -
         # existence = False
         except FileNotFoundError as fnfe:
-            LOGGER.error(f'Failed checking {path}')
-            LOGGER.error(f'{fnfe}')
+            logger.error(f'Failed checking {path}')
+            logger.error(f'{fnfe}')
             return False
         except BaseException:
             traceback.print_exc()
-            LOGGER.error(f'Failed checking {path}')
+            logger.error(f'Failed checking {path}')
             sys.exit(1)
-        LOGGER.debug(f'Checked {path} [' + ('exists' if res else 'missing') + ']')
+        logger.debug(f'Checked {path} [' + ('exists' if res else 'missing') + ']')
         return res
 
     return check_exists_path(path)
@@ -267,7 +265,7 @@ def can_reuse(
     if not all(exists(fp, overwrite) for fp in paths):
         return False
 
-    LOGGER.debug(f'Reusing existing {path}')
+    logger.debug(f'Reusing existing {path}')
     return True
 
 

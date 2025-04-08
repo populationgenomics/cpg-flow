@@ -24,18 +24,18 @@ from typing import TYPE_CHECKING, Optional, Union
 
 import networkx as nx
 import plotly.io as pio
+from loguru import logger
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.show_workflow.graph import GraphPlot
 from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
-from cpg_flow.utils import get_logger, slugify, timestamp, write_to_gcs_bucket
+from cpg_flow.utils import slugify, timestamp, write_to_gcs_bucket, format_logger
 from cpg_utils import Path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
 
-LOGGER = get_logger(__name__)
 URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/{name}/'
 
 if TYPE_CHECKING:
@@ -148,6 +148,7 @@ _workflow: Optional['Workflow'] = None
 def get_workflow(dry_run: bool = False) -> 'Workflow':
     global _workflow
     if _workflow is None:
+        format_logger()
         _workflow = Workflow(dry_run=dry_run)
     return _workflow
 
@@ -271,7 +272,7 @@ class Workflow:
         if not self.dry_run:
             get_batch().run(wait=wait)
         else:
-            LOGGER.info('Dry run: no jobs submitted')
+            logger.info('Dry run: no jobs submitted')
 
     @staticmethod
     def _process_first_last_stages(
@@ -314,13 +315,13 @@ class Workflow:
         for fs in first_stages:
             for descendant in nx.descendants(graph, fs):
                 if not stages_d[descendant].skipped:
-                    LOGGER.info(
+                    logger.info(
                         f'Skipping stage {descendant} (precedes {fs} listed in first_stages)',
                     )
                     stages_d[descendant].skipped = True
                 for grand_descendant in nx.descendants(graph, descendant):
                     if not stages_d[grand_descendant].assume_outputs_exist:
-                        LOGGER.info(
+                        logger.info(
                             f'Not checking expected outputs of not immediately '
                             f'required stage {grand_descendant} (< {descendant} < {fs})',
                         )
@@ -339,7 +340,7 @@ class Workflow:
             for ancestor in ancestors:
                 if stages_d[ancestor].skipped:
                     continue  # already skipped
-                LOGGER.info(f'Skipping stage {ancestor} (after last {ls})')
+                logger.info(f'Skipping stage {ancestor} (after last {ls})')
                 stages_d[ancestor].skipped = True
                 stages_d[ancestor].assume_outputs_exist = True
 
@@ -415,14 +416,14 @@ class Workflow:
                 + "'first_stages', 'last_stages' and/or 'skip_stages'",
             )
 
-        LOGGER.info(
+        logger.info(
             f'End stages for the workflow "{self.name}": {[cls.__name__ for cls in requested_stages]}',
         )
-        LOGGER.info('Stages additional configuration:')
-        LOGGER.info(f'  workflow/skip_stages: {skip_stages}')
-        LOGGER.info(f'  workflow/only_stages: {only_stages}')
-        LOGGER.info(f'  workflow/first_stages: {first_stages}')
-        LOGGER.info(f'  workflow/last_stages: {last_stages}')
+        logger.info('Stages additional configuration:')
+        logger.info(f'  workflow/skip_stages: {skip_stages}')
+        logger.info(f'  workflow/only_stages: {only_stages}')
+        logger.info(f'  workflow/first_stages: {first_stages}')
+        logger.info(f'  workflow/last_stages: {last_stages}')
 
         # Round 1: initialising stage objects.
         _stages_d: dict[str, Stage] = {}
@@ -453,7 +454,7 @@ class Workflow:
                     newly_implicitly_added_d[reqstg.name] = reqstg
 
             if newly_implicitly_added_d:
-                LOGGER.info(
+                logger.info(
                     f'Additional implicit stages: {list(newly_implicitly_added_d.keys())}',
                 )
                 _stages_d |= newly_implicitly_added_d
@@ -476,10 +477,10 @@ class Workflow:
         try:
             stage_names = list(reversed(list(nx.topological_sort(dag))))
         except nx.NetworkXUnfeasible:
-            LOGGER.error('Circular dependencies found between stages')
+            logger.error('Circular dependencies found between stages')
             raise
 
-        LOGGER.info(f'Stages in order of execution:\n{stage_names}')
+        logger.info(f'Stages in order of execution:\n{stage_names}')
         stages = [_stages_d[name] for name in stage_names]
 
         # Set order attribute to stages
@@ -490,22 +491,22 @@ class Workflow:
 
         # Round 5: applying workflow options first_stages and last_stages.
         if first_stages or last_stages:
-            LOGGER.info('Applying workflow/first_stages and workflow/last_stages')
+            logger.info('Applying workflow/first_stages and workflow/last_stages')
             self._process_first_last_stages(stages, dag, first_stages, last_stages)
         elif only_stages:
-            LOGGER.info('Applying workflow/only_stages')
+            logger.info('Applying workflow/only_stages')
             self._process_only_stages(stages, dag, only_stages)
 
         if not (final_set_of_stages := [s.name for s in stages if not s.skipped]):
             raise WorkflowError('No stages to run')
 
-        LOGGER.info(
+        logger.info(
             f'Final list of stages after applying stage configuration options:\n{final_set_of_stages}',
         )
 
         required_skipped_stages = [s for s in stages if s.skipped]
         if required_skipped_stages:
-            LOGGER.info(
+            logger.info(
                 f'Skipped stages: {", ".join(s.name for s in required_skipped_stages)}',
             )
 
@@ -513,8 +514,8 @@ class Workflow:
         if not self.dry_run:
             inputs = get_multicohort()  # Would communicate with metamist.
             for i, stg in enumerate(stages):
-                LOGGER.info('*' * 60)
-                LOGGER.info(f'Stage #{i + 1}: {stg}')
+                logger.info('*' * 60)
+                logger.info(f'Stage #{i + 1}: {stg}')
                 # pipeline setup is now done in MultiCohort only
                 # the legacy version (input_datasets) is still supported
                 # that will create a MultiCohort with a single Cohort
@@ -528,7 +529,7 @@ class Workflow:
                     )
         else:
             self.queued_stages = [stg for stg in _stages_d.values() if not stg.skipped]
-            LOGGER.info(f'Queued stages: {self.queued_stages}')
+            logger.info(f'Queued stages: {self.queued_stages}')
 
         # Round 7: show the workflow
 
@@ -563,14 +564,14 @@ class Workflow:
                         _, file_path = write_to_gcs_bucket(html_file, html_path)
                         url = URL_BASENAME.format(access_level=self.access_level, name=self.name) + str(file_path)
 
-                        LOGGER.info(f'Link to the graph: {url}')
+                        logger.info(f'Link to the graph: {url}')
                     else:
                         pio.write_html(fig, file=str(html_path), auto_open=False)
 
-                    LOGGER.info(f'Workflow graph saved to {html_path}')
+                    logger.info(f'Workflow graph saved to {html_path}')
 
             except RequestsConnectionError as e:
-                LOGGER.error(f'Failed to save workflow graph: {e}')
+                logger.error(f'Failed to save workflow graph: {e}')
 
     @staticmethod
     def _process_stage_errors(

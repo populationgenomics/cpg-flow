@@ -22,18 +22,15 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
 from typing import Generic, Optional, TypeVar, cast
 
-from cloudpathlib import CloudPath
-
 from hailtop.batch.job import Job
+from loguru import logger
 
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Target
-from cpg_flow.utils import ExpectedResultT, exists, get_logger
+from cpg_flow.utils import ExpectedResultT, exists
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch
-
-LOGGER = get_logger(__name__)
 
 StageDecorator = Callable[..., 'Stage']
 
@@ -173,7 +170,7 @@ class StageInput:
         if stage_name not in self._outputs_by_target_by_stage:
             self._outputs_by_target_by_stage[stage_name] = dict()
         self._outputs_by_target_by_stage[stage_name][target_id] = output
-        LOGGER.debug(f'Added output from stage_name:{stage_name} for target_id:{target_id} which was {output}')
+        logger.debug(f'Added output from stage_name:{stage_name} for target_id:{target_id} which was {output}')
 
     def _each(
         self,
@@ -239,14 +236,14 @@ class StageInput:
         stage: StageDecorator,
     ):
         if not self._outputs_by_target_by_stage.get(stage.__name__):
-            LOGGER.error(f'Available: {self._outputs_by_target_by_stage}, trying to find {stage.__name__}')
+            logger.error(f'Available: {self._outputs_by_target_by_stage}, trying to find {stage.__name__}')
             raise StageInputNotFoundError(
                 f'Not found output from stage {stage.__name__}, required for stage '
                 f'{self.stage.name}. Is {stage.__name__} in the `required_stages`'
                 f'decorator? Available: {self._outputs_by_target_by_stage}',
             )
         if not self._outputs_by_target_by_stage[stage.__name__].get(target.target_id):
-            LOGGER.error(
+            logger.error(
                 f'Available: {self._outputs_by_target_by_stage[stage.__name__]}, trying to find {target.target_id}',
             )
             raise StageInputNotFoundError(
@@ -599,13 +596,13 @@ class Stage(Generic[TargetT], ABC):
         to do with the target: queue, skip or reuse, etc...
         """
         if target.forced and not self.skipped:
-            LOGGER.info(f'{self.name}: {target} [QUEUE] (target is forced)')
+            logger.info(f'{self.name}: {target} [QUEUE] (target is forced)')
             return Action.QUEUE
 
         if (d := get_config()['workflow'].get('skip_stages_for_sgs')) and self.name in d:
             skip_targets = d[self.name]
             if target.target_id in skip_targets:
-                LOGGER.info(
+                logger.info(
                     f'{self.name}: {target} [SKIP] (is in workflow/skip_stages_for_sgs)',
                 )
                 return Action.SKIP
@@ -615,12 +612,12 @@ class Stage(Generic[TargetT], ABC):
 
         if self.skipped:
             if reusable and not first_missing_path:
-                LOGGER.debug(
+                logger.debug(
                     f'{self.name}: {target} [REUSE] (stage skipped, and outputs exist)',
                 )
                 return Action.REUSE
             if get_config()['workflow'].get('skip_sgs_with_missing_input'):
-                LOGGER.warning(
+                logger.warning(
                     f'{self.name}: {target} [SKIP] (stage is required, '
                     f'but is marked as "skipped", '
                     f'workflow/skip_sgs_with_missing_input=true '
@@ -637,7 +634,7 @@ class Stage(Generic[TargetT], ABC):
                 'allow_missing_outputs_for_stages',
                 [],
             ):
-                LOGGER.info(
+                logger.info(
                     f'{self.name}: {target} [REUSE] (stage is skipped, some outputs are'
                     f'missing, but stage is listed in '
                     f'workflow/allow_missing_outputs_for_stages)',
@@ -651,21 +648,21 @@ class Stage(Generic[TargetT], ABC):
 
         if reusable and not first_missing_path:
             if target.forced:
-                LOGGER.info(
+                logger.info(
                     f'{self.name}: {target} [QUEUE] (can reuse, but forcing the target to rerun this stage)',
                 )
                 return Action.QUEUE
             if self.forced:
-                LOGGER.info(
+                logger.info(
                     f'{self.name}: {target} [QUEUE] (can reuse, but forcing the stage to rerun)',
                 )
                 return Action.QUEUE
-            LOGGER.info(
+            logger.info(
                 f'{self.name}: {target} [REUSE] (expected outputs exist: {expected_out})',
             )
             return Action.REUSE
 
-        LOGGER.info(f'{self.name}: {target} [QUEUE]')
+        logger.info(f'{self.name}: {target} [QUEUE]')
 
         return Action.QUEUE
 
@@ -681,26 +678,26 @@ class Stage(Generic[TargetT], ABC):
                 Path | None: first missing path, if any
         """
         if self.assume_outputs_exist:
-            LOGGER.debug(f'Assuming outputs exist. Expected output is {expected_out}')
+            logger.debug(f'Assuming outputs exist. Expected output is {expected_out}')
             return True, None
 
         if not expected_out:
             # Marking is reusable. If the stage does not naturally produce any outputs,
             # it would still need to create some flag file.
-            LOGGER.debug('No expected outputs, assuming outputs exist')
+            logger.debug('No expected outputs, assuming outputs exist')
             return True, None
 
         if get_config()['workflow'].get('check_expected_outputs'):
             paths = path_walk(expected_out)
-            LOGGER.info(
+            logger.info(
                 f'Checking if {paths} from expected output {expected_out} exist',
             )
             if not paths:
-                LOGGER.info(f'{expected_out} is not reusable. No paths found.')
+                logger.info(f'{expected_out} is not reusable. No paths found.')
                 return False, None
 
             if first_missing_path := next((p for p in paths if not exists(p)), None):
-                LOGGER.info(
+                logger.info(
                     f'{expected_out} is not reusable, {first_missing_path} is missing',
                 )
                 return False, first_missing_path
@@ -822,7 +819,7 @@ class SequencingGroupStage(Stage[SequencingGroup], ABC):
         output_by_target: dict[str, StageOutput | None] = dict()
         if not (active_sgs := multicohort.get_sequencing_groups()):
             all_sgs = len(multicohort.get_sequencing_groups(only_active=False))
-            LOGGER.warning(
+            logger.warning(
                 f'{len(active_sgs)}/{all_sgs} usable (active=True) SGs found in the multicohort. '
                 'Check that input_cohorts` or `input_datasets` are provided and not skipped',
             )
