@@ -21,7 +21,6 @@ This module is essential for organizing and managing data resources in CPG-relat
 from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
-
 from loguru import logger
 
 from cpg_flow.filetypes import AlignmentInput

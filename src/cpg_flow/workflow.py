@@ -31,7 +31,7 @@ from cpg_flow.inputs import get_multicohort
 from cpg_flow.show_workflow.graph import GraphPlot
 from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
-from cpg_flow.utils import slugify, timestamp, write_to_gcs_bucket, format_logger
+from cpg_flow.utils import format_logger, slugify, timestamp, write_to_gcs_bucket
 from cpg_utils import Path
 from cpg_utils.config import get_config
 from cpg_utils.hail_batch import get_batch, reset_batch

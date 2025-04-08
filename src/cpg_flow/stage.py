@@ -22,8 +22,9 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
 from typing import Generic, Optional, TypeVar, cast
 
-from hailtop.batch.job import Job
 from loguru import logger
+
+from hailtop.batch.job import Job
 
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Target
 from cpg_flow.utils import ExpectedResultT, exists

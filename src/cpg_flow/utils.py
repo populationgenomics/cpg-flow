@@ -24,7 +24,6 @@ from hailtop.batch import ResourceFile
 from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
-
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'log_format'],
     '{time:YYYY-MM-DD HH:mm:ss} - {file.path}:{line} - {level} - {message}',
