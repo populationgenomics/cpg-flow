@@ -3,7 +3,6 @@ Utility functions and constants.
 """
 
 import hashlib
-import logging
 import re
 import string
 import sys
@@ -26,13 +25,15 @@ from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
 if TYPE_CHECKING:
+    import logging
+
     from loguru import Logger
 
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'logger', 'log_format'],
     '{time:YYYY-MM-DD HH:mm:ss} - {file.path}:{line} - {level} - {message}',
 )
-LOGGERS: dict[str, logging.Logger] = {}
+LOGGERS: dict[str, 'logging.Logger | Logger'] = {}
 
 COLOURED_LOGS = config_retrieve(['workflow', 'coloured_logs'], False)
 ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
@@ -40,6 +41,7 @@ ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
 
 @cache
 def get_logger(
+    logger_name: str = 'cpg_workflows',
     log_level: int = loguru_logger.level('INFO').no,
     fmt_string: str = DEFAULT_LOG_FORMAT,
     coloured: bool = COLOURED_LOGS,
@@ -54,23 +56,25 @@ def get_logger(
     Returns:
         a logger instance, if required create it first
     """
+    if logger_name in LOGGERS:
+        # Remove any previous loguru handlers
+        loguru_logger.remove()
 
-    # Remove any previous loguru handlers
-    loguru_logger.remove()
+        # Add loguru handler with given format and level
+        loguru_logger.add(
+            sys.stdout,
+            level=log_level,
+            format=fmt_string,
+            colorize=coloured,
+            enqueue=True,
+        )
 
-    # Add loguru handler with given format and level
-    loguru_logger.add(
-        sys.stdout,
-        level=log_level,
-        format=fmt_string,
-        colorize=coloured,
-        enqueue=True,
-    )
+        LOGGERS[logger_name] = loguru_logger
 
     return loguru_logger
 
 
-LOGGER = get_logger()
+LOGGER = get_logger(__name__)
 
 
 def chunks(iterable, chunk_size):
