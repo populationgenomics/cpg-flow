@@ -17,10 +17,10 @@ Functions:
 from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
-
 from loguru import logger
+
 from cpg_flow.targets import Cohort, Dataset, Target
-from cpg_flow.utils import get_logger, hash_from_list_of_strings, format_logger
+from cpg_flow.utils import hash_from_list_of_strings
 from cpg_utils import Path
 from cpg_utils.config import get_config
 
