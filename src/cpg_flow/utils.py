@@ -26,7 +26,7 @@ from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
 if TYPE_CHECKING:
-    from loguru._logger import Logger
+    from loguru import Logger
 
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'logger', 'log_format'],
@@ -70,7 +70,7 @@ def get_logger(
     return loguru_logger
 
 
-LOGGER = get_logger(__name__)
+LOGGER = get_logger()
 
 
 def chunks(iterable, chunk_size):
