@@ -25,15 +25,13 @@ from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
 if TYPE_CHECKING:
-    import logging
-
     from loguru import Logger
 
 DEFAULT_LOG_FORMAT = config_retrieve(
     ['workflow', 'logger', 'log_format'],
     '{time:YYYY-MM-DD HH:mm:ss} - {file.path}:{line} - {level} - {message}',
 )
-LOGGERS: dict[str, 'logging.Logger | Logger'] = {}
+LOGGERS: dict[str, 'Logger'] = {}
 
 COLOURED_LOGS = config_retrieve(['workflow', 'coloured_logs'], False)
 ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
