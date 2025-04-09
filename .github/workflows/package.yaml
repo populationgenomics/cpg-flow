@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - alpha
+      - SET-490-Fix-PyPi-Publish
 
   workflow_dispatch:
     inputs:
@@ -46,7 +47,7 @@ jobs:
 
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@v1.12.2
-        if: steps.release.outputs.released == 'true' || github.event.inputs.force_pypi_release == 'true'
+        # if: steps.release.outputs.released == 'true' || github.event.inputs.force_pypi_release == 'true'
 
       - name: Publish | Upload to GitHub Release Assets
         uses: python-semantic-release/publish-action@v9.8.9
