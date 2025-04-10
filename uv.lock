@@ -659,7 +659,6 @@ requires-dist = [
     { name = "hail", specifier = "==0.2.134" },
     { name = "ipywidgets", specifier = ">=8.1.5" },
     { name = "loguru", specifier = ">0.7.0" },
-    { name = "loguru", specifier = ">=0.7.3" },
     { name = "metamist", specifier = ">=6.9.0" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "plotly", specifier = ">=5.24.1" },
