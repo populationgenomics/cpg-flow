@@ -418,4 +418,4 @@ dev-dependencies = [
 
 [tool.setuptools_scm]
 version_scheme = "only-version"
-local_scheme = "node-and-date"
+local_scheme = "no-local-version"
