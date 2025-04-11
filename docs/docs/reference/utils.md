@@ -2,7 +2,7 @@
 
 Utility functions and constants.
 
-::: cpg_flow.utils.get_logger
+::: cpg_flow.utils.format_logger
 
 ::: cpg_flow.utils.chunks
 
