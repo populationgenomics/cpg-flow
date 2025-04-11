@@ -16,9 +16,9 @@ dependencies = [
     "grpcio>=1.53.0",
     # Avoid dependency resolution backtracking, Python 3.10 compatibility
     "grpcio-status>=1.48,<1.50",
+    "loguru>0.7.0",
     "metamist>=6.9.0",
     "networkx>=3.4.2",
-    "coloredlogs>=15.0.1",
     "pyyaml>=6.0.2",
     "plotly>=5.24.1",
     "ipywidgets>=8.1.5",
