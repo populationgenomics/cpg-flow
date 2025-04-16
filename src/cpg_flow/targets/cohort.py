@@ -25,10 +25,11 @@ from loguru import logger
 
 from cpg_flow.targets import Dataset, Target
 from cpg_utils import Path, to_path
-from cpg_utils.config import get_config
+from cpg_utils.config import config_retrieve
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
+    from cpg_flow.targets.multicohort import MultiCohort
 
 
 class Cohort(Target):
@@ -38,18 +39,25 @@ class Cohort(Target):
     cohort.
     """
 
-    def __init__(self, id: str | None = None, name: str | None = None, dataset: str | None = None) -> None:
+    def __init__(
+        self,
+        multicohort: 'MultiCohort',
+        id: str | None = None,
+        name: str | None = None,
+        dataset: str | None = None,
+    ) -> None:
         super().__init__()
-        self.id = id or get_config()['workflow']['dataset']
-        self.name = name or get_config()['workflow']['dataset']
 
-        # This is the analysis_dataset specified in the workflow config
-        analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
+        # This is the dataset name specified in the workflow config
+        config_dataset = config_retrieve(['workflow', 'dataset'])
+
+        self.id = id or config_dataset
+        self.name = name or config_dataset
 
         # This value should be populated by the cohort_dataset parameter
         # which represents the dataset that the cohort is associated with
         # If no cohort dataset is provided it will default to the analysis dataset
-        self.dataset = Dataset(name=dataset) if dataset else analysis_dataset
+        self.dataset = Dataset(name=dataset or config_dataset, multicohort=multicohort)
 
         self._sequencing_group_by_id: dict[str, SequencingGroup] = {}
 
@@ -86,9 +94,9 @@ class Cohort(Target):
         df = pd.DataFrame(datas)
 
         if out_path is None:
-            out_path = self.analysis_dataset.tmp_prefix() / 'ped' / f'{self.get_alignment_inputs_hash()}.ped'
+            out_path = self.dataset.tmp_prefix() / 'ped' / f'{self.get_alignment_inputs_hash()}.ped'
 
-        if not get_config()['workflow'].get('dry_run', False):
+        if not config_retrieve(['workflow', 'dry_run'], False):
             with out_path.open('w') as fp:
                 df.to_csv(fp, sep='\t', index=False, header=False)
         return out_path
@@ -128,6 +136,8 @@ class Cohort(Target):
     def get_job_attrs(self) -> dict:
         """
         Attributes for Hail Batch job.
+        Adding the list of all SGs is not scalable, and will break GCP label limits
+        It's not completely clear what should live here
         """
         return {
             # 'sequencing_groups': self.get_sequencing_group_ids(),
@@ -144,7 +154,7 @@ class Cohort(Target):
         Export to a parsable TSV file
         """
         assert self.get_sequencing_groups()
-        tsv_path = self.analysis_dataset.tmp_prefix() / 'samples.tsv'
+        tsv_path = self.dataset.tmp_prefix() / 'samples.tsv'
         df = pd.DataFrame(
             {
                 's': s.id,

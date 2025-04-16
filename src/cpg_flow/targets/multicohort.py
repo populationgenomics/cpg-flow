@@ -22,7 +22,7 @@ from loguru import logger
 from cpg_flow.targets import Cohort, Dataset, Target
 from cpg_flow.utils import hash_from_list_of_strings
 from cpg_utils import Path
-from cpg_utils.config import get_config
+from cpg_utils.config import config_retrieve
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
@@ -40,17 +40,17 @@ class MultiCohort(Target):
         # this was expanding to the point where filenames including this String were too long for *nix
         # instead we can create a hash of the input cohorts, and use that as the name
         # the exact cohorts can be obtained from the config associated with the ar-guid
-        input_cohorts = get_config()['workflow'].get('input_cohorts', [])
+        input_cohorts = config_retrieve(['workflow', 'input_cohorts'], [])
         if input_cohorts:
             self.name = hash_from_list_of_strings(sorted(input_cohorts), suffix='cohorts')
         else:
-            self.name = get_config()['workflow']['dataset']
+            self.name = config_retrieve(['workflow', 'dataset'])
 
         assert self.name, 'Ensure cohorts or dataset is defined in the config file.'
 
         self._cohorts_by_id: dict[str, Cohort] = {}
         self._datasets_by_name: dict[str, Dataset] = {}
-        self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
+        self.analysis_dataset = Dataset(name=config_retrieve(['workflow', 'dataset']), multicohort=self)
 
     def __repr__(self):
         return f'MultiCohort({len(self.get_cohorts())} cohorts)'
@@ -70,7 +70,7 @@ class MultiCohort(Target):
         if name == self.analysis_dataset.name:
             ds = self.analysis_dataset
         else:
-            ds = Dataset(name=name)
+            ds = Dataset(name=name, multicohort=self)
 
         self._datasets_by_name[ds.name] = ds
         return ds
@@ -144,7 +144,7 @@ class MultiCohort(Target):
             logger.debug(f'Cohort {id} already exists in the multi-cohort')
             return self._cohorts_by_id[id]
 
-        c = Cohort(id=id, name=name, dataset=dataset)
+        c = Cohort(id=id, name=name, dataset=dataset, multicohort=self)
         self._cohorts_by_id[c.id] = c
         return c
 
@@ -160,7 +160,7 @@ class MultiCohort(Target):
             )
         else:
             # We need create a new dataset to avoid manipulating the cohort dataset at this point
-            self._datasets_by_name[d.name] = Dataset(d.name)
+            self._datasets_by_name[d.name] = Dataset(d.name, self)
         return self._datasets_by_name[d.name]
 
     def get_dataset_by_name(
@@ -180,7 +180,6 @@ class MultiCohort(Target):
         Attributes for Hail Batch job.
         """
         return {
-            # 'sequencing_groups': self.get_sequencing_group_ids(),
             'datasets': [d.name for d in self.get_datasets()],
             'cohorts': [c.id for c in self.get_cohorts()],
         }
@@ -209,7 +208,7 @@ class MultiCohort(Target):
         if out_path is None:
             out_path = self.analysis_dataset.tmp_prefix() / 'ped' / f'{self.get_alignment_inputs_hash()}.ped'
 
-        if not get_config()['workflow'].get('dry_run', False):
+        if not config_retrieve(['workflow', 'dry_run'], False):
             with out_path.open('w') as fp:
                 df.to_csv(fp, sep='\t', index=False, header=False)
         return out_path

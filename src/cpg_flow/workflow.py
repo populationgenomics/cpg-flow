@@ -252,7 +252,7 @@ class Workflow:
         Returns:
             Path
         """
-        return cohort.analysis_dataset.prefix(category=category) / self.name / cohort.id
+        return cohort.dataset.prefix(category=category) / self.name / cohort.id
 
     def run(
         self,

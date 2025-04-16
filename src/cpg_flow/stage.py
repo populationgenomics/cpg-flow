@@ -430,18 +430,6 @@ class Stage(Generic[TargetT], ABC):
         Can be a str, a Path object, or a dictionary of str/Path objects.
         """
 
-    # TODO: remove this method
-    def deprecated_queue_for_cohort(
-        self,
-        cohort: Cohort,
-    ) -> dict[str, StageOutput | None]:
-        """
-        Queues jobs for each corresponding target, defined by Stage subclass.
-        Returns a dictionary of `StageOutput` objects indexed by target unique_id.
-        unused, ready for deletion
-        """
-        return {}
-
     @abstractmethod
     def queue_for_multicohort(
         self,
@@ -724,7 +712,7 @@ class Stage(Generic[TargetT], ABC):
 
 
 def stage(
-    cls: type['Stage'] | None = None,
+    cls: type['Stage'] = None,
     *,
     analysis_type: str | None = None,
     analysis_keys: list[str | Path] | None = None,
