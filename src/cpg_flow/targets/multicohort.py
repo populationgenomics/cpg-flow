@@ -50,7 +50,7 @@ class MultiCohort(Target):
 
         self._cohorts_by_id: dict[str, Cohort] = {}
         self._datasets_by_name: dict[str, Dataset] = {}
-        self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
+        self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'], multicohort=self)
 
     def __repr__(self):
         return f'MultiCohort({len(self.get_cohorts())} cohorts)'
@@ -70,7 +70,7 @@ class MultiCohort(Target):
         if name == self.analysis_dataset.name:
             ds = self.analysis_dataset
         else:
-            ds = Dataset(name=name)
+            ds = Dataset(name=name, multicohort=self)
 
         self._datasets_by_name[ds.name] = ds
         return ds
@@ -144,7 +144,7 @@ class MultiCohort(Target):
             logger.debug(f'Cohort {id} already exists in the multi-cohort')
             return self._cohorts_by_id[id]
 
-        c = Cohort(id=id, name=name, dataset=dataset)
+        c = Cohort(id=id, name=name, dataset=dataset, multicohort=self)
         self._cohorts_by_id[c.id] = c
         return c
 
@@ -160,7 +160,7 @@ class MultiCohort(Target):
             )
         else:
             # We need create a new dataset to avoid manipulating the cohort dataset at this point
-            self._datasets_by_name[d.name] = Dataset(d.name)
+            self._datasets_by_name[d.name] = Dataset(d.name, multicohort=self)
         return self._datasets_by_name[d.name]
 
     def get_dataset_by_name(

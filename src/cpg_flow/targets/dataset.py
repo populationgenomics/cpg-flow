@@ -30,6 +30,7 @@ from cpg_utils.config import dataset_path, get_config, web_url
 
 if TYPE_CHECKING:
     from cpg_flow.targets import PedigreeInfo, Sex
+    from cpg_flow.targets.multicohort import MultiCohort
 
 
 class Dataset(Target):
@@ -45,18 +46,20 @@ class Dataset(Target):
     def __init__(
         self,
         name: str,
+        multicohort: 'MultiCohort',
     ):
         super().__init__()
         self._sequencing_group_by_id: dict[str, SequencingGroup] = {}
         self.name = name
         self.active = True
+        self.multicohort = multicohort
 
     @staticmethod
-    def create(name: str) -> 'Dataset':
+    def create(name: str, multicohort: 'MultiCohort') -> 'Dataset':
         """
         Create a dataset.
         """
-        return Dataset(name=name)
+        return Dataset(name=name, multicohort=multicohort)
 
     @property
     def target_id(self) -> str:
