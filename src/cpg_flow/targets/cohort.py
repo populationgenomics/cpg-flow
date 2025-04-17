@@ -47,14 +47,16 @@ class Cohort(Target):
         dataset: str | None = None,
     ) -> None:
         super().__init__()
-        analysis_dataset = get_config()['workflow']['dataset']
-        self.id = id or analysis_dataset
-        self.name = name or analysis_dataset
+        self.id = id or get_config()['workflow']['dataset']
+        self.name = name or get_config()['workflow']['dataset']
+
+        # This is the analysis_dataset specified in the workflow config
+        analysis_dataset = Dataset(name=get_config()['workflow']['dataset'], multicohort=multicohort)
 
         # This value should be populated by the cohort_dataset parameter
         # which represents the dataset that the cohort is associated with
         # If no cohort dataset is provided it will default to the analysis dataset
-        self.dataset = Dataset(name=dataset or analysis_dataset, multicohort=multicohort)
+        self.dataset = Dataset(name=dataset, multicohort=multicohort) if dataset else analysis_dataset
 
         self._sequencing_group_by_id: dict[str, SequencingGroup] = {}
         self.multicohort = multicohort
