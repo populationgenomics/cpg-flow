@@ -81,6 +81,10 @@ def get_multicohort() -> MultiCohort:
     if custom_cohort_ids and not isinstance(custom_cohort_ids, list):
         raise ValueError('Argument input_cohorts must be a list')
 
+    # After the check for no cusotom_cohort_ids in the config convert
+    # to a tuple for the cache decorator
+    custom_cohort_ids = tuple() if not custom_cohort_ids else tuple(custom_cohort_ids)
+
     return create_multicohort(custom_cohort_ids)
 
 
@@ -89,7 +93,7 @@ def get_multicohort() -> MultiCohort:
 # multicohort object in multiple places without having to recreate it.
 # This reduces the overall number of calls to the Metamist API
 @cache
-def create_multicohort(custom_cohort_ids: list[str]) -> MultiCohort:
+def create_multicohort(custom_cohort_ids: tuple[str]) -> MultiCohort:
     """
     Add cohorts in the multicohort.
     """
