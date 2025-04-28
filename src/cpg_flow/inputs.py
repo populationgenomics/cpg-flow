@@ -2,6 +2,8 @@
 Metamist wrapper to get input sequencing groups.
 """
 
+from functools import cache
+
 from loguru import logger
 
 from cpg_flow.filetypes import CramPath, GvcfPath
@@ -79,18 +81,18 @@ def get_multicohort() -> MultiCohort:
     if custom_cohort_ids and not isinstance(custom_cohort_ids, list):
         raise ValueError('Argument input_cohorts must be a list')
 
-    return create_multicohort()
+    return create_multicohort(custom_cohort_ids)
 
 
-def create_multicohort() -> MultiCohort:
+# This will cache the result of create_multicohort given an identical
+# custom_cohort_ids list. This is useful when we want to reuse the
+# multicohort object in multiple places without having to recreate it.
+# This reduces the overall number of calls to the Metamist API
+@cache
+def create_multicohort(custom_cohort_ids: list[str]) -> MultiCohort:
     """
     Add cohorts in the multicohort.
     """
-    config = config_retrieve(['workflow'])
-
-    # pull the list of cohort IDs from the config
-    custom_cohort_ids = config_retrieve(['workflow', 'input_cohorts'], [])
-
     # get a unique set of cohort IDs
     custom_cohort_ids_unique = sorted(set(custom_cohort_ids))
     custom_cohort_ids_removed = sorted(set(custom_cohort_ids) - set(custom_cohort_ids_unique))
@@ -143,7 +145,7 @@ def create_multicohort() -> MultiCohort:
     # only go to metamist once per dataset to get analysis entries
     for dataset in multicohort.get_datasets():
         _populate_analysis(dataset)
-        if config.get('read_pedigree', True):
+        if config_retrieve(['workflow', 'read_pedigree'], True):
             _populate_pedigree(dataset)
 
     return multicohort
