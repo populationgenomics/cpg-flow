@@ -62,6 +62,10 @@ def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
     return sequencing_group
 
 
+# NOTE: This function could be considered for merging with
+# create_multicohort in future since we only ever create effectively a
+# single multicohort object in the workflow.
+# For now, we keep them separate to keep code clean and readable.
 def get_multicohort() -> MultiCohort:
     """
     Return the cohort or multicohort object based on the workflow configuration.
