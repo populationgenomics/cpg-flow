@@ -2,6 +2,8 @@
 Metamist wrapper to get input sequencing groups.
 """
 
+from functools import cache
+
 from loguru import logger
 
 from cpg_flow.filetypes import CramPath, GvcfPath
@@ -60,6 +62,10 @@ def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
     return sequencing_group
 
 
+# NOTE: This function could be considered for merging with
+# create_multicohort in future since we only ever create effectively a
+# single multicohort object in the workflow.
+# For now, we keep them separate to keep code clean and readable.
 def get_multicohort() -> MultiCohort:
     """
     Return the cohort or multicohort object based on the workflow configuration.
@@ -79,18 +85,22 @@ def get_multicohort() -> MultiCohort:
     if custom_cohort_ids and not isinstance(custom_cohort_ids, list):
         raise ValueError('Argument input_cohorts must be a list')
 
-    return create_multicohort()
+    # After the check for no cusotom_cohort_ids in the config convert
+    # to a tuple for the cache decorator
+    custom_cohort_ids = tuple() if not custom_cohort_ids else tuple(custom_cohort_ids)
+
+    return create_multicohort(custom_cohort_ids)
 
 
-def create_multicohort() -> MultiCohort:
+# This will cache the result of create_multicohort given an identical
+# custom_cohort_ids list. This is useful when we want to reuse the
+# multicohort object in multiple places without having to recreate it.
+# This reduces the overall number of calls to the Metamist API
+@cache
+def create_multicohort(custom_cohort_ids: tuple[str]) -> MultiCohort:
     """
     Add cohorts in the multicohort.
     """
-    config = config_retrieve(['workflow'])
-
-    # pull the list of cohort IDs from the config
-    custom_cohort_ids = config_retrieve(['workflow', 'input_cohorts'], [])
-
     # get a unique set of cohort IDs
     custom_cohort_ids_unique = sorted(set(custom_cohort_ids))
     custom_cohort_ids_removed = sorted(set(custom_cohort_ids) - set(custom_cohort_ids_unique))
@@ -143,7 +153,7 @@ def create_multicohort() -> MultiCohort:
     # only go to metamist once per dataset to get analysis entries
     for dataset in multicohort.get_datasets():
         _populate_analysis(dataset)
-        if config.get('read_pedigree', True):
+        if config_retrieve(['workflow', 'read_pedigree'], True):
             _populate_pedigree(dataset)
 
     return multicohort

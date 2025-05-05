@@ -198,7 +198,7 @@ def run_workflow(
     cohort_mocker: Callable[..., Cohort | MultiCohort] = mock_cohort,
     stages: list[StageType] | None = None,
 ):
-    mocker.patch('cpg_flow.inputs.create_multicohort', cohort_mocker)
+    mocker.patch('cpg_flow.inputs.create_multicohort', lambda x: cohort_mocker())
     mocker.patch('cpg_flow.inputs.get_multicohort', cohort_mocker)
 
     stages = stages or [C, C2]
