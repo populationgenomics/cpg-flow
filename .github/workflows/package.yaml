@@ -20,6 +20,7 @@ permissions:
 jobs:
   package:
     name: Package
+    if: startsWith(github.event.head_commit.message, 'bump:') != true
     environment: production
     runs-on: ubuntu-latest
     defaults:
