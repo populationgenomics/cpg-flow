@@ -74,8 +74,8 @@ done
 # Add the Quality Gate values to the template
 TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{quality_gate_pr}}|$QUALITY_GATE_PR|g" | sed "s|{{quality_gate_main}}|$QUALITY_GATE_MAIN|g")
 
-# Add the SONAR_HOST_URL and PROJECT_KEY to the template
-TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|g" | sed "s|{{PROJECT_KEY}}|$PROJECT_KEY|g")
+# Add the SONAR_HOST_URL, PROJECT_KEY and MAIN_PROJECT_KEY to the template
+TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|g" | sed "s|{{PROJECT_KEY}}|$PROJECT_KEY|g" | sed "s|{{MAIN_PROJECT_KEY}}|$MAIN_PROJECT_KEY|g")
 
 # Output the final comment to stdout
 echo "$TEMPLATE"
