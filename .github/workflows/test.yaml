@@ -101,16 +101,10 @@ jobs:
             -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
             -Dsonar.qualitygate.wait=true
 
-      - name: Add SonarQube summary link
-        run: |
-          echo "Host Url: ${{ vars.SONAR_HOST_URL }}"
-          echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})"
-          echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
-
       - name: Comment on PR with SonarQube results
         if: github.event_name == 'pull_request'
         env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
           GH_BOT_TOKEN: ${{ secrets.BOT_ACCESS_TOKEN }}
           PROJECT_KEY: ${{ steps.project_key.outputs.key }}
@@ -132,7 +126,10 @@ jobs:
                         -e "s|{{VULNS}}|$VULNS|" \
                         -e "s|{{SMELLS}}|$SMELLS|" \
                         -e "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|" \
-                        -e "s|{{PROJECT_KEY}}|$PROJECT_KEY|" template.md)
+                        -e "s|{{PROJECT_KEY}}|$PROJECT_KEY|" .github/sonarqube-template.md)
+
+          # Add to GITHUB_STEP_SUMMARY
+          echo "$COMMENT" >> $GITHUB_STEP_SUMMARY
 
           # Post the comment
           curl -s -H "Authorization: token $GH_BOT_TOKEN" \
