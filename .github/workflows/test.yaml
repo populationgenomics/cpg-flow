@@ -91,6 +91,10 @@ jobs:
         with:
           pattern: '*-report'
 
+      - name: Move downloaded reports to root
+        run: |
+          mv *-report/* .
+
       - name: Set project key
         id: project_key
         run: |
