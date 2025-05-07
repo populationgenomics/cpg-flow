@@ -115,14 +115,6 @@ jobs:
 
           echo "key=$FINAL_KEY" >> "$GITHUB_OUTPUT"
 
-      - name: Show coverage and execution report
-        run: |
-          ls -l
-          echo "Coverage report:"
-          cat coverage.xml
-          echo "Execution report:"
-          cat test-execution.xml
-
       - name: SonarQube scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
@@ -132,6 +124,10 @@ jobs:
           args: >
             -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
             -Dsonar.qualitygate.wait=true
+
+      - name: Add SonarQube summary link
+        run: |
+          echo "### 🔍 [View SonarQube Results](https://your-sonarqube-domain.com/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
 
       # Optional: Fail the job if the Quality Gate fails
       # - uses: sonarsource/sonarqube-quality-gate-action@master
