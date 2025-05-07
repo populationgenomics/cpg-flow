@@ -30,10 +30,10 @@ METRICS="coverage bugs vulnerabilities code_smells security_hotspots"
 METRICS_JOINED=$(echo "$METRICS" | tr ' ' ',')
 
 # Fetching the project metrics for PR
-RESPONSE_PR=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS")
+RESPONSE_PR=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS_JOINED")
 
 # Fetching the project metrics for the main project
-RESPONSE_MAIN=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$MAIN_PROJECT_KEY&metricKeys=$METRICS")
+RESPONSE_MAIN=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$MAIN_PROJECT_KEY&metricKeys=$METRICS_JOINED")
 
 # Fetch the Quality Gate statuses for PR and Main projects
 QUALITY_GATE_PR=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY" | jq -r '.projectStatus.status')
@@ -58,8 +58,8 @@ for metric in $METRICS; do
   METRIC_VALUES_MAIN[$metric]=$VALUE_MAIN
 done
 
-# Load the template from the file (make sure you have a .github/assets/sonarqube-template.md file)
-TEMPLATE=$(cat .github/assets/sonarqube-template.md)
+# Load the template from the file (make sure you have a .github/sonarqube/sonarqube-template.md file)
+TEMPLATE=$(cat .github/sonarqube/sonarqube-template.md)
 
 # Replace the placeholders for PR metrics
 for key in "${!METRIC_VALUES_PR[@]}"; do

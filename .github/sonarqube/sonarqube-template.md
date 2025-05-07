@@ -3,7 +3,6 @@
 | Metric                 | PR Value | Main Value |
 |------------------------|----------|------------|
 | ✅ Coverage            | {{coverage_pr}}% | {{coverage_main}}% |
-| 📏 Lines to Cover      | {{lines_to_cover_pr}} | {{lines_to_cover_main}} |
 | 💨 Code Smells         | {{code_smells_pr}} | {{code_smells_main}} |
 | 🐞 Bugs                | {{bugs_pr}} | {{bugs_main}} |
 | 🔐 Vulnerabilities     | {{vulnerabilities_pr}} | {{vulnerabilities_main}} |

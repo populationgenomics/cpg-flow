@@ -115,10 +115,10 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           # Make sure the script is executable
-          chmod +x .github/scripts/sonarqube-fetch.sh
+          chmod +x .github/sonarqube/sonarqube-fetch.sh
 
           # Run the shell script and capture the output
-          COMMENT=$(./.github/scripts/sonarqube-fetch.sh "$SONAR_HOST_URL" "$SONAR_TOKEN" "$PROJECT_KEY" "$MAIN_PROJECT_KEY")
+          COMMENT=$(./.github/sonarqube/sonarqube-fetch.sh "$SONAR_HOST_URL" "$SONAR_TOKEN" "$PROJECT_KEY" "$MAIN_PROJECT_KEY")
 
           # Add the comment to GitHub Step Summary
           echo "$COMMENT" >> $GITHUB_STEP_SUMMARY
