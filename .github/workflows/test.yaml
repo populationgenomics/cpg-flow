@@ -107,23 +107,39 @@ jobs:
           echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})"
           echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
 
-      - name: Comment with SonarQube results
+      - name: Comment on PR with SonarQube results
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const projectKey = "${{ steps.project_key.outputs.key }}";
-            const sonarUrl = `${{ vars.SONAR_HOST_URL }}/dashboard?id=${projectKey}`;
-            const commentBody = `🔍 **SonarQube Scan Completed**\n\n[View Results](${sonarUrl})`;
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
+          GH_BOT_TOKEN: ${{ secrets.BOT_ACCESS_TOKEN }}
+          PROJECT_KEY: ${{ steps.project_key.outputs.key }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Fetch metrics
+          RESPONSE=$(curl -s -u "$SONAR_TOKEN:" \
+            "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=coverage,bugs,vulnerabilities,code_smells")
 
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: commentBody
-            });
+          COVERAGE=$(echo "$RESPONSE" | jq -r '.component.measures[] | select(.metric=="coverage") | .value') || COVERAGE="N/A"
+          BUGS=$(echo "$RESPONSE" | jq -r '.component.measures[] | select(.metric=="bugs") | .value') || BUGS="N/A"
+          VULNS=$(echo "$RESPONSE" | jq -r '.component.measures[] | select(.metric=="vulnerabilities") | .value') || VULNS="N/A"
+          SMELLS=$(echo "$RESPONSE" | jq -r '.component.measures[] | select(.metric=="code_smells") | .value') || SMELLS="N/A"
 
+          # Replace placeholders in the template
+          COMMENT=$(sed -e "s|{{COVERAGE}}|$COVERAGE|" \
+                        -e "s|{{BUGS}}|$BUGS|" \
+                        -e "s|{{VULNS}}|$VULNS|" \
+                        -e "s|{{SMELLS}}|$SMELLS|" \
+                        -e "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|" \
+                        -e "s|{{PROJECT_KEY}}|$PROJECT_KEY|" template.md)
+
+          # Post the comment
+          curl -s -H "Authorization: token $GH_BOT_TOKEN" \
+              -H "Content-Type: application/json" \
+              -X POST \
+              -d "$(jq -nc --arg body "$COMMENT" '{body: $body}')" \
+              "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments"
 
       # Optional: Fail the job if the Quality Gate fails
       # - uses: sonarsource/sonarqube-quality-gate-action@master
