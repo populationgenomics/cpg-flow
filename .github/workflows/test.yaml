@@ -136,7 +136,9 @@ jobs:
               "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments"
 
       # Optional: Fail the job if the Quality Gate fails
-      # - uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
+      - name: SonarQube Quality Gate
+        id: quality-gate
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
