@@ -95,7 +95,7 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
         with:
           args: >
             -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
@@ -103,9 +103,9 @@ jobs:
 
       - name: Add SonarQube summary link
         run: |
-          echo "Host Url: $SONAR_HOST_URL"
-          echo "## 🔍 [View SonarQube Results]($SONAR_HOST_URL/dashboard?id=${{ steps.project_key.outputs.key }})"
-          echo "## 🔍 [View SonarQube Results]($SONAR_HOST_URL/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
+          echo "Host Url: ${{ vars.SONAR_HOST_URL }}"
+          echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})"
+          echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
 
       - name: Comment with SonarQube results
         if: github.event_name == 'pull_request'
@@ -114,7 +114,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const projectKey = "${{ steps.project_key.outputs.key }}";
-            const sonarUrl = `$SONAR_HOST_URL/dashboard?id=${projectKey}`;
+            const sonarUrl = `${{ vars.SONAR_HOST_URL }}/dashboard?id=${projectKey}`;
             const commentBody = `🔍 **SonarQube Scan Completed**\n\n[View Results](${sonarUrl})`;
 
             await github.rest.issues.createComment({

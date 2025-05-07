@@ -37,5 +37,5 @@ jobs:
           PR_PROJECT_KEY="${{ steps.basekey.outputs.base_key }}-pr-${{ steps.branch.outputs.name }}"
           echo "Deleting SonarQube project: $PR_PROJECT_KEY"
           curl -s -f -u "${{ secrets.SONAR_GLOBAL_TOKEN }}:" \
-            -X POST "${{ secrets.SONAR_HOST_URL }}/api/projects/delete?project=${PR_PROJECT_KEY}" || \
+            -X POST "${{ vars.SONAR_HOST_URL }}/api/projects/delete?project=${PR_PROJECT_KEY}" || \
             echo "Project $PR_PROJECT_KEY not found or already deleted."
