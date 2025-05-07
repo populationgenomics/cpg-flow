@@ -4,43 +4,75 @@
 SONAR_HOST_URL=$1
 SONAR_TOKEN=$2
 PROJECT_KEY=$3
+MAIN_PROJECT_KEY=$4
+
+# Function to return the appropriate emoji based on Quality Gate status
+get_quality_gate_emoji() {
+  local status=$1
+  local emoji
+
+  if [[ "$status" == "OK" ]]; then
+    emoji="✅"
+  elif [[ "$status" == "ERROR" ]]; then
+    emoji="❌"
+  elif [[ "$status" == "WARN" ]]; then
+    emoji="⚠️"
+  else
+    emoji="🔲"
+  fi
+
+  # Prepend the emoji to the status
+  echo "$emoji $status"
+}
 
 # Fetch metrics for both overall and new code
-METRICS_ALL="coverage bugs vulnerabilities code_smells security_hotspots"
-METRICS_NEW="new_coverage new_bugs new_vulnerabilities new_code_smells new_security_hotspots new_lines_to_cover"
+METRICS="coverage bugs vulnerabilities code_smells security_hotspots"
+METRICS_JOINED=$(echo "$METRICS" | tr ' ' ',')
 
-METRICS=$(echo "$METRICS_ALL,$METRICS_NEW" | tr ' ' ',')
+# Fetching the project metrics for PR
+RESPONSE_PR=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS")
 
-# Fetching the project metrics
-RESPONSE=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS")
+# Fetching the project metrics for the main project
+RESPONSE_MAIN=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$MAIN_PROJECT_KEY&metricKeys=$METRICS")
 
-# Fetch the Quality Gate statuses
-QUALITY_GATE_ALL=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY" | jq -r '.projectStatus.status')
-QUALITY_GATE_NEW=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY&newCode=true" | jq -r '.projectStatus.status')
+# Fetch the Quality Gate statuses for PR and Main projects
+QUALITY_GATE_PR=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY" | jq -r '.projectStatus.status')
+QUALITY_GATE_MAIN=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$MAIN_PROJECT_KEY" | jq -r '.projectStatus.status')
 
-# Initialize an empty associative array
-declare -A METRIC_VALUES
+QUALITY_GATE_PR=$(get_quality_gate_emoji "$QUALITY_GATE_PR")
+QUALITY_GATE_MAIN=$(get_quality_gate_emoji "$QUALITY_GATE_MAIN")
 
-# Extract the overall metrics
-for metric in $METRICS_ALL; do
-  VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"")
-  METRIC_VALUES[$metric]=$VALUE
+# Initialize an empty associative array for both main and PR project metrics
+declare -A METRIC_VALUES_PR
+declare -A METRIC_VALUES_MAIN
+
+# Extract the overall metrics for PR
+for metric in $METRICS; do
+  VALUE_PR=$(echo "$RESPONSE_PR" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"" || echo "N/A")
+  METRIC_VALUES_PR[$metric]=$VALUE_PR
 done
 
-# Extract the new code metrics
-for metric in $METRICS_NEW; do
-  VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .period.value" || echo "N/A")
-  METRIC_VALUES[$metric]=$VALUE
+# Extract the overall metrics for Main project
+for metric in $METRICS; do
+  VALUE_MAIN=$(echo "$RESPONSE_MAIN" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"" || echo "N/A")
+  METRIC_VALUES_MAIN[$metric]=$VALUE_MAIN
 done
 
-# Create the final comment by replacing placeholders in the template
-TEMPLATE=$(cat .github/assets/sonarqube-template.md)
-for key in "${!METRIC_VALUES[@]}"; do
-  TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{${key}}}|${METRIC_VALUES[$key]}|g")
+# Replace the placeholders for PR metrics
+for key in "${!METRIC_VALUES_PR[@]}"; do
+  TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{${key}_pr}}|${METRIC_VALUES_PR[$key]}|g")
 done
 
-# Add the Quality Gate values and SONAR_HOST_URL to the template
-TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{quality_gate_all}}|$QUALITY_GATE_ALL|g" | sed "s|{{quality_gate_new}}|$QUALITY_GATE_NEW|g" | sed "s|{{sonar_host_url}}|$SONAR_HOST_URL|g")
+# Replace the placeholders for Main project metrics
+for key in "${!METRIC_VALUES_MAIN[@]}"; do
+  TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{${key}_main}}|${METRIC_VALUES_MAIN[$key]}|g")
+done
+
+# Add the Quality Gate values to the template
+TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{quality_gate_pr}}|$QUALITY_GATE_PR|g" | sed "s|{{quality_gate_main}}|$QUALITY_GATE_MAIN|g")
+
+# Add the SONAR_HOST_URL and PROJECT_KEY to the template
+TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|g" | sed "s|{{PROJECT_KEY}}|$PROJECT_KEY|g")
 
 # Output the final comment to stdout
 echo "$TEMPLATE"

@@ -89,6 +89,7 @@ jobs:
             FINAL_KEY="${BASE_KEY}-pr-${BRANCH_KEY}"
           fi
 
+          echo "main_key=$BASE_KEY" >> "$GITHUB_OUTPUT"
           echo "key=$FINAL_KEY" >> "$GITHUB_OUTPUT"
 
       - name: SonarQube scan
@@ -109,6 +110,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
           GH_BOT_TOKEN: ${{ secrets.BOT_ACCESS_TOKEN }}
           PROJECT_KEY: ${{ steps.project_key.outputs.key }}
+          MAIN_PROJECT_KEY: ${{ steps.project_key.outputs.main_key }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
         run: |
@@ -116,7 +118,7 @@ jobs:
           chmod +x .github/scripts/sonarqube-fetch.sh
 
           # Run the shell script and capture the output
-          COMMENT=$(./.github/scripts/sonarqube-fetch.sh "$SONAR_HOST_URL" "$SONAR_TOKEN" "$PROJECT_KEY")
+          COMMENT=$(./.github/scripts/sonarqube-fetch.sh "$SONAR_HOST_URL" "$SONAR_TOKEN" "$PROJECT_KEY" "$MAIN_PROJECT_KEY")
 
           # Add the comment to GitHub Step Summary
           echo "$COMMENT" >> $GITHUB_STEP_SUMMARY

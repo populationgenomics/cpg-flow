@@ -1,13 +1,13 @@
 ## 📊 SonarQube Summary
 
-| Metric                 | All Code | New Code |
-|------------------------|----------|----------|
-| ✅ Coverage            | {{coverage}}% | {{new_coverage}}% |
-| 📏 Lines to Cover      | N/A      | {{new_lines_to_cover}} |
-| 💨 Code Smells         | {{code_smells}} | {{new_code_smells}} |
-| 🐞 Bugs                | {{bugs}} | {{new_bugs}} |
-| 🔐 Vulnerabilities     | {{vulnerabilities}} | {{new_vulnerabilities}} |
-| 🚨 Security Hotspots   | {{security_hotspots}} | {{new_security_hotspots}} |
-| **🌟 Quality Gate**     | **{{quality_gate_all}}** | **{{quality_gate_new}}** |
+| Metric                 | PR Value | Main Value |
+|------------------------|----------|------------|
+| ✅ Coverage            | {{coverage_pr}}% | {{coverage_main}}% |
+| 📏 Lines to Cover      | {{lines_to_cover_pr}} | {{lines_to_cover_main}} |
+| 💨 Code Smells         | {{code_smells_pr}} | {{code_smells_main}} |
+| 🐞 Bugs                | {{bugs_pr}} | {{bugs_main}} |
+| 🔐 Vulnerabilities     | {{vulnerabilities_pr}} | {{vulnerabilities_main}} |
+| 🚨 Security Hotspots   | {{security_hotspots_pr}} | {{security_hotspots_main}} |
+| **🌟 Quality Gate**     | **{{quality_gate_pr}}** | **{{quality_gate_main}}** |
 
 🔗 [View Full Report]({{SONAR_HOST_URL}}/dashboard?id={{PROJECT_KEY}})
