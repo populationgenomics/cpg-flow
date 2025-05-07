@@ -1,6 +1,6 @@
 [## 📊 SonarQube Summary]({{SONAR_HOST_URL}}/dashboard?id={{PROJECT_KEY}})
 
-| Metric                 | PR Value | Main Value |
+| Metric                 | This PR | Main Branch |
 |------------------------|----------|------------|
 | ✅ Coverage            | {{coverage_pr}}% | {{coverage_main}}% |
 | 💨 Code Smells         | {{code_smells_pr}} | {{code_smells_main}} |
