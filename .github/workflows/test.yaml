@@ -104,7 +104,9 @@ jobs:
           if [[ "${{ github.ref_name }}" == "main" ]]; then
             FINAL_KEY="$BASE_KEY"
           else
-            FINAL_KEY="${BASE_KEY}-pr-${{ github.ref_name }}"
+            BRANCH_NAME="${{ github.head_ref }}"
+            BRANCH_KEY=$(echo "$BRANCH_NAME" | tr '/' '-' | tr -cd '[:alnum:]-')
+            FINAL_KEY="${BASE_KEY}-pr-${BRANCH_KEY}"
           fi
 
           echo "key=$FINAL_KEY" >> "$GITHUB_OUTPUT"
