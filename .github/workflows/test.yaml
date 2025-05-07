@@ -102,7 +102,7 @@ jobs:
             -Dsonar.qualitygate.wait=true
             -Dsonar.projectVersion=${{ github.sha }}
 
-      - name: Comment on PR with SonarQube results (New Code Only)
+      - name: Comment on PR with SonarQube results
         if: github.event_name == 'pull_request'
         env:
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
@@ -112,42 +112,40 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
         run: |
-          # Define new code metrics
-          METRICS="new_coverage,new_lines_to_cover,new_code_smells,new_bugs,new_vulnerabilities,new_security_hotspots"
+          METRICS="coverage,bugs,vulnerabilities,code_smells,security_hotspots,new_coverage,new_bugs,new_vulnerabilities,new_code_smells,new_security_hotspots,new_lines_to_cover"
+          RESPONSE=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS")
 
-          # Fetch metrics
-          RESPONSE=$(curl -s -u "$SONAR_TOKEN:" \
-            "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS")
+          # Initialize placeholders
+          declare -A METRIC_VALUES
 
-          echo "Raw SonarQube API response:"
-          echo "$RESPONSE" | jq .
-
-          # Extract values or default to "N/A"
-          for metric in $(echo "$METRICS" | tr ',' ' '); do
-            value=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .period.value // \"N/A\"")
-            eval "${metric}=\"$value\""
+          for metric in coverage bugs vulnerabilities code_smells security_hotspots; do
+            VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"")
+            METRIC_VALUES[$metric]=$VALUE
           done
 
-          # Replace placeholders in the template
-          COMMENT=$(sed -e "s|{{new_coverage}}|$new_coverage|" \
-                        -e "s|{{new_lines_to_cover}}|$new_lines_to_cover|" \
-                        -e "s|{{new_code_smells}}|$new_code_smells|" \
-                        -e "s|{{new_bugs}}|$new_bugs|" \
-                        -e "s|{{new_vulnerabilities}}|$new_vulnerabilities|" \
-                        -e "s|{{new_security_hotspots}}|$new_security_hotspots|" \
-                        -e "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|" \
-                        -e "s|{{PROJECT_KEY}}|$PROJECT_KEY|" \
-                        .github/sonarqube-template.md)
+          for metric in new_coverage new_bugs new_vulnerabilities new_code_smells new_security_hotspots new_lines_to_cover; do
+            VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .period.value // \"N/A\"")
+            METRIC_VALUES[$metric]=$VALUE
+          done
 
-          # Add to GitHub summary
-          echo "$COMMENT" >> "$GITHUB_STEP_SUMMARY"
+          # Render template
+          COMMENT=$(cat .github/sonarqube-template.md)
+          for key in "${!METRIC_VALUES[@]}"; do
+            COMMENT=$(echo "$COMMENT" | sed "s|{{${key}}}|${METRIC_VALUES[$key]}|g")
+          done
 
-          # Post the comment to the PR
+          COMMENT=$(echo "$COMMENT" | sed "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|g" | sed "s|{{PROJECT_KEY}}|$PROJECT_KEY|g")
+
+          # Add to GITHUB_STEP_SUMMARY
+          echo "$COMMENT" >> $GITHUB_STEP_SUMMARY
+
+          # Post comment to PR
           curl -s -H "Authorization: token $GH_BOT_TOKEN" \
               -H "Content-Type: application/json" \
               -X POST \
               -d "$(jq -nc --arg body "$COMMENT" '{body: $body}')" \
               "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments"
+
 
       # Optional: Fail the job if the Quality Gate fails
       # - uses: sonarsource/sonarqube-quality-gate-action@master
