@@ -29,8 +29,8 @@ jobs:
         id: runtests
         timeout-minutes: 20
         run: |
-          uv run coverage run -m pytest tests --junitxml=test-execution.xml
-          rc=$?
+          rc=0
+          uv run coverage run -m pytest tests --junitxml=test-execution.xml || rc=$?
           uv run coverage xml
           echo "rc=$rc" >> $GITHUB_OUTPUT
 
@@ -73,9 +73,11 @@ jobs:
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
+        env:
+          rc: ${{ steps.runtests.outputs.rc }}
         with:
           script: |
-            core.setFailed('Unittests failed with rc = ${{ steps.runtests.outputs.rc }}')
+            core.setFailed(`Unittests failed with rc = ${process.env.rc}`)
 
   sonarqube:
     name: SonarQube scan
