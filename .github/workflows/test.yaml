@@ -129,7 +129,7 @@ jobs:
           SED_EXPR="${SED_EXPR} -e \"s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|\" -e \"s|{{PROJECT_KEY}}|$PROJECT_KEY|\""
 
           # Evaluate and save output to variable
-          COMMENT=$(eval sed $SED_EXPR .github/sonarqube-summary-template.md)
+          COMMENT=$(eval sed $SED_EXPR .github/sonarqube-template.md)
 
           # Save as output so it can be used later in workflow
           COMMENT=$(printf '%s\n' "$COMMENT" | jq -Rs .)
