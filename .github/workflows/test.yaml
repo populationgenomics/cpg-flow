@@ -112,6 +112,7 @@ jobs:
         env:
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
+          GH_BOT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PROJECT_KEY="${{ steps.project_key.outputs.key }}"
           METRICS="new_coverage,new_lines_to_cover,new_code_smells,new_bugs,new_vulnerabilities,new_security_hotspots"
