@@ -3,11 +3,15 @@
   "onboarding": true,
   "requireConfig": "ignored",
   "platform": "github",
-  "repositories": ["populationgenomics/cpg-flow"],
+  "repositories": [
+    "populationgenomics/cpg-flow"
+  ],
   "prConcurrentLimit": 10,
   "prHourlyLimit": 5,
   "semanticCommits": "enabled",
-  "enabledManagers": ["pep621"],
+  "enabledManagers": [
+    "pep621"
+  ],
   "constraints": {
     "python": "==3.10"
   },
@@ -24,7 +28,9 @@
         "minor",
         "patch"
       ],
-      "matchPackagePatterns": ["*"],
+      "matchPackagePatterns": [
+        "*"
+      ],
       "minimumReleaseAge": "48 hours"
     },
     {
@@ -33,7 +39,9 @@
       "matchUpdateTypes": [
         "major"
       ],
-      "matchPackagePatterns": ["*"],
+      "matchPackagePatterns": [
+        "*"
+      ],
       "minimumReleaseAge": "48 hours"
     }
   ]

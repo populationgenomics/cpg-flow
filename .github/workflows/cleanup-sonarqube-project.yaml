@@ -1,0 +1,42 @@
+name: Cleanup SonarQube PR Project
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - delete-me
+
+jobs:
+  cleanup-sonarqube:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract base sonar.projectKey
+        id: basekey
+        run: |
+          BASE_KEY=$(grep '^sonar.projectKey=' sonar-project.properties | cut -d'=' -f2)
+          if [[ -z "$BASE_KEY" ]]; then
+            echo "sonar.projectKey not found in sonar-project.properties"
+            exit 1
+          fi
+          echo "base_key=$BASE_KEY" >> "$GITHUB_OUTPUT"
+
+      - name: Sanitize merged branch name
+        id: branch
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          BRANCH_KEY=$(echo "$BRANCH_NAME" | tr '/' '-' | tr -cd '[:alnum:]-')
+          echo "name=$BRANCH_KEY" >> "$GITHUB_OUTPUT"
+
+      - name: Delete SonarQube PR project
+        run: |
+          PR_PROJECT_KEY="${{ steps.basekey.outputs.base_key }}-pr-${{ steps.branch.outputs.name }}"
+          echo "Deleting SonarQube project: $PR_PROJECT_KEY"
+          curl -s -f -u "${{ secrets.SONAR_GLOBAL_TOKEN }}:" \
+            -X POST "${{ vars.SONAR_HOST_URL }}/api/projects/delete?project=${PR_PROJECT_KEY}" || \
+            echo "Project $PR_PROJECT_KEY not found or already deleted."
