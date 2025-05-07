@@ -102,10 +102,8 @@ jobs:
             -Dsonar.qualitygate.wait=true
 
       - name: Add SonarQube summary link
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          echo "## 🔍 [View SonarQube Results](${SONAR_HOST_URL}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 [View SonarQube Results](${{ secrets.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
 
       # Optional: Fail the job if the Quality Gate fails
       # - uses: sonarsource/sonarqube-quality-gate-action@master
