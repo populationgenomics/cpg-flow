@@ -103,9 +103,9 @@ jobs:
 
       - name: Add SonarQube summary link
         run: |
-          echo "Host Url: ${{ secrets.SONAR_HOST_URL }}"
-          echo "## 🔍 [View SonarQube Results](${{ secrets.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})"
-          echo "## 🔍 [View SonarQube Results](${{ secrets.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
+          echo "Host Url: ${{ env.SONAR_HOST_URL }}"
+          echo "## 🔍 [View SonarQube Results](${{ env.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})"
+          echo "## 🔍 [View SonarQube Results](${{ env.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
 
       # Optional: Fail the job if the Quality Gate fails
       # - uses: sonarsource/sonarqube-quality-gate-action@master
