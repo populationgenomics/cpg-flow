@@ -1,8 +1,10 @@
 name: Test
 on:
-  # Building on pull-requests, manual dispatch, and pushes to main; but restricting
-  # publishing only to main pushes and manual dispatch with `if`s in specific steps.
   push:
+    branches: [main]  # Run on push to main branch
+  pull_request:       # Trigger on PRs (from fork or same repo)
+  workflow_dispatch:  # Allow manual triggering
+
 
 jobs:
   test:
@@ -79,28 +81,46 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     environment: production
-    if: github.ref_name == 'main'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Required for accurate blame and history analysis
 
-      # Download the coverage report artifact
       - name: 'Download coverage and execution report'
         uses: actions/download-artifact@v4
         with:
           pattern: '*-report'
 
-      # Perform the SonarQube scan
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: Set project key
+        id: project_key
+        run: |
+          BASE_KEY=$(grep '^sonar.projectKey=' sonar-project.properties | cut -d'=' -f2)
 
-      # Optional: Fail the job if Quality Gate is red
-      # If you wish to fail your job when the Quality Gate is red, uncomment the
-      # following lines. This would typically be used to fail a deployment.
+          if [[ -z "$BASE_KEY" ]]; then
+            echo "sonar.projectKey not found in sonar-project.properties"
+            exit 1
+          fi
+
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            FINAL_KEY="$BASE_KEY"
+          else
+            FINAL_KEY="${BASE_KEY}-pr-${{ github.ref_name }}"
+          fi
+
+          echo "key=$FINAL_KEY" >> "$GITHUB_OUTPUT"
+
+      - name: SonarQube scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
+            -Dsonar.qualitygate.wait=true
+
+      # Optional: Fail the job if the Quality Gate fails
       # - uses: sonarsource/sonarqube-quality-gate-action@master
       #   timeout-minutes: 5
       #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
