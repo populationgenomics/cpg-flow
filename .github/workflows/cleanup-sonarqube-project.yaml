@@ -3,9 +3,7 @@ name: Cleanup SonarQube PR Project
 on:
   pull_request:
     types: [closed]
-    branches:
-      - main
-      - delete-me
+    branches: [main]
 
 jobs:
   cleanup-sonarqube:
