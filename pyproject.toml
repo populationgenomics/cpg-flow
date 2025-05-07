@@ -313,6 +313,7 @@ omit = ["test/*", "setup.py"]
 version_variables = [
     "src/__init__.py:__version__",
     ".github/workflows/docker.yaml:VERSION",
+    ".github/workflows/test.yaml:VERSION",
 ]
 assets = []
 build_command_env = []

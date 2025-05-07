@@ -5,6 +5,8 @@ on:
   pull_request:       # Trigger on PRs (from fork or same repo)
   workflow_dispatch:  # Allow manual triggering
 
+env:
+  VERSION: 0.2.2
 
 jobs:
   test:
@@ -75,6 +77,7 @@ jobs:
         id: project_key
         run: |
           BASE_KEY=$(grep '^sonar.projectKey=' sonar-project.properties | cut -d'=' -f2)
+          VERSION=${{ env.VERSION }}
 
           if [[ -z "$BASE_KEY" ]]; then
             echo "sonar.projectKey not found in sonar-project.properties"
@@ -87,10 +90,12 @@ jobs:
             BRANCH_NAME="${{ github.head_ref }}"
             BRANCH_KEY=$(echo "$BRANCH_NAME" | tr '/' '-' | tr -cd '[:alnum:]-')
             FINAL_KEY="${BASE_KEY}-pr-${BRANCH_KEY}"
+            VERSION="${{ github.sha }}"
           fi
 
           echo "main_key=$BASE_KEY" >> "$GITHUB_OUTPUT"
           echo "key=$FINAL_KEY" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: SonarQube scan
         uses: sonarsource/sonarqube-scan-action@master
@@ -101,7 +106,7 @@ jobs:
           args: >
             -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
             -Dsonar.qualitygate.wait=true
-            -Dsonar.projectVersion=${{ github.sha }}
+            -Dsonar.projectVersion=${{ steps.project_key.outputs.version }}
 
       - name: Comment on PR with SonarQube results
         if: github.event_name == 'pull_request'
