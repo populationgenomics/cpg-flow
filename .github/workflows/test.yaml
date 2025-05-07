@@ -124,7 +124,7 @@ jobs:
 
           # Extract values or default to "N/A"
           for metric in $(echo "$METRICS" | tr ',' ' '); do
-            value=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"")
+            value=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .period.value // \"N/A\"")
             eval "${metric}=\"$value\""
           done
 
