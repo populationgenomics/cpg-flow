@@ -101,44 +101,44 @@ jobs:
             -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
             -Dsonar.qualitygate.wait=true
 
-      - name: Add SonarQube summary link
-        run: |
-          echo "Host Url: ${{ vars.SONAR_HOST_URL }}"
-          echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})"
-          echo "## 🔍 [View SonarQube Results](${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ steps.project_key.outputs.key }})" >> $GITHUB_STEP_SUMMARY
-
-      - name: Generate SonarQube summary comment
-        id: sonarqube_summary
+      - name: Comment on PR with SonarQube results (New Code Only)
+        if: github.event_name == 'pull_request'
         env:
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
-          GH_BOT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_BOT_TOKEN: ${{ secrets.BOT_ACCESS_TOKEN }}
+          PROJECT_KEY: ${{ steps.project_key.outputs.key }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
         run: |
-          PROJECT_KEY="${{ steps.project_key.outputs.key }}"
+          # Define new code metrics
           METRICS="new_coverage,new_lines_to_cover,new_code_smells,new_bugs,new_vulnerabilities,new_security_hotspots"
 
-          RESPONSE=$(curl -s -u "${SONAR_TOKEN}:" \
-            "${SONAR_HOST_URL}/api/measures/component?component=${PROJECT_KEY}&metricKeys=${METRICS}")
+          # Fetch metrics
+          RESPONSE=$(curl -s -u "$SONAR_TOKEN:" \
+            "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS")
 
-          # Build sed replacement expression
-          SED_EXPR=""
-          for metric in $(echo $METRICS | tr ',' ' '); do
-            VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"0\"")
-            SED_EXPR="${SED_EXPR} -e \"s|{{${metric}}}|$VALUE|\""
+          # Extract values or default to "N/A"
+          for metric in $(echo "$METRICS" | tr ',' ' '); do
+            value=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"")
+            eval "${metric}=\"$value\""
           done
 
-          SED_EXPR="${SED_EXPR} -e \"s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|\" -e \"s|{{PROJECT_KEY}}|$PROJECT_KEY|\""
+          # Replace placeholders in the template
+          COMMENT=$(sed -e "s|{{new_coverage}}|$new_coverage|" \
+                        -e "s|{{new_lines_to_cover}}|$new_lines_to_cover|" \
+                        -e "s|{{new_code_smells}}|$new_code_smells|" \
+                        -e "s|{{new_bugs}}|$new_bugs|" \
+                        -e "s|{{new_vulnerabilities}}|$new_vulnerabilities|" \
+                        -e "s|{{new_security_hotspots}}|$new_security_hotspots|" \
+                        -e "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|" \
+                        -e "s|{{PROJECT_KEY}}|$PROJECT_KEY|" \
+                        .github/sonarqube-template.md)
 
-          # Evaluate and save output to variable
-          COMMENT=$(eval sed $SED_EXPR .github/sonarqube-template.md)
+          # Add to GitHub summary
+          echo "$COMMENT" >> "$GITHUB_STEP_SUMMARY"
 
-          # Save as output so it can be used later in workflow
-          COMMENT=$(printf '%s\n' "$COMMENT" | jq -Rs .)
-
-          # Add to GITHUB_STEP_SUMMARY
-          echo "$COMMENT" >> $GITHUB_STEP_SUMMARY
-
-          # Post the comment
+          # Post the comment to the PR
           curl -s -H "Authorization: token $GH_BOT_TOKEN" \
               -H "Content-Type: application/json" \
               -X POST \
