@@ -112,40 +112,21 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
         run: |
-          METRICS="coverage,bugs,vulnerabilities,code_smells,security_hotspots,new_coverage,new_bugs,new_vulnerabilities,new_code_smells,new_security_hotspots,new_lines_to_cover"
-          RESPONSE=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRICS")
+          # Make sure the script is executable
+          chmod +x .github/scripts/sonarqube-fetch.sh
 
-          # Initialize placeholders
-          declare -A METRIC_VALUES
+          # Run the shell script and capture the output
+          COMMENT=$(./.github/scripts/sonarqube-fetch.sh "$SONAR_HOST_URL" "$SONAR_TOKEN" "$PROJECT_KEY")
 
-          for metric in coverage bugs vulnerabilities code_smells security_hotspots; do
-            VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"")
-            METRIC_VALUES[$metric]=$VALUE
-          done
-
-          for metric in new_coverage new_bugs new_vulnerabilities new_code_smells new_security_hotspots new_lines_to_cover; do
-            VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .period.value // \"N/A\"")
-            METRIC_VALUES[$metric]=$VALUE
-          done
-
-          # Render template
-          COMMENT=$(cat .github/sonarqube-template.md)
-          for key in "${!METRIC_VALUES[@]}"; do
-            COMMENT=$(echo "$COMMENT" | sed "s|{{${key}}}|${METRIC_VALUES[$key]}|g")
-          done
-
-          COMMENT=$(echo "$COMMENT" | sed "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|g" | sed "s|{{PROJECT_KEY}}|$PROJECT_KEY|g")
-
-          # Add to GITHUB_STEP_SUMMARY
+          # Add the comment to GitHub Step Summary
           echo "$COMMENT" >> $GITHUB_STEP_SUMMARY
 
-          # Post comment to PR
+          # Post the comment to the PR
           curl -s -H "Authorization: token $GH_BOT_TOKEN" \
               -H "Content-Type: application/json" \
               -X POST \
               -d "$(jq -nc --arg body "$COMMENT" '{body: $body}')" \
               "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments"
-
 
       # Optional: Fail the job if the Quality Gate fails
       # - uses: sonarsource/sonarqube-quality-gate-action@master
