@@ -16,17 +16,18 @@ on:
         description: 'Tag to use (defaults to "test")'
         default: 'test'
 
-permissions:
-  id-token: write
-  contents: read
-
 env:
   VERSION: 0.2.2
+
+permissions: {}
 
 jobs:
   docker:
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      id-token: write
+      contents: read
     defaults:
       run:
         shell: bash -l {0}
