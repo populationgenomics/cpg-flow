@@ -100,7 +100,7 @@ jobs:
           args: >
             -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
             -Dsonar.qualitygate.wait=true
-            -Dsonar.projectVersion=$(git rev-parse --short HEAD)
+            -Dsonar.projectVersion=${{ github.sha }}
 
       - name: Comment on PR with SonarQube results (New Code Only)
         if: github.event_name == 'pull_request'
