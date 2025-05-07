@@ -4,6 +4,8 @@ on:
   # publishing only to main pushes and manual dispatch with `if`s in specific steps.
   push:
 
+permissions: {}
+
 jobs:
   test:
     name: Test
