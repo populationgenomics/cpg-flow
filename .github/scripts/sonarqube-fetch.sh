@@ -58,6 +58,9 @@ for metric in $METRICS; do
   METRIC_VALUES_MAIN[$metric]=$VALUE_MAIN
 done
 
+# Load the template from the file (make sure you have a .github/assets/sonarqube-template.md file)
+TEMPLATE=$(cat .github/assets/sonarqube-template.md)
+
 # Replace the placeholders for PR metrics
 for key in "${!METRIC_VALUES_PR[@]}"; do
   TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{${key}_pr}}|${METRIC_VALUES_PR[$key]}|g")
