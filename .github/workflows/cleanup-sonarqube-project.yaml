@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Extract base sonar.projectKey
         id: basekey
@@ -27,16 +29,18 @@ jobs:
 
       - name: Sanitize merged branch name
         id: branch
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          BRANCH_NAME="${HEAD_REF}"
           BRANCH_KEY=$(echo "$BRANCH_NAME" | tr '/' '-' | tr -cd '[:alnum:]-')
           echo "name=$BRANCH_KEY" >> "$GITHUB_OUTPUT"
 
       - name: Delete SonarQube PR project
+        env:
+          PR_PROJECT_KEY: ${{ steps.basekey.outputs.base_key }}-pr-${{ steps.branch.outputs.name }}
+          SONAR_TOKEN: ${{ secrets.SONAR_ADMIN_TOKEN }}
         run: |
-          PR_PROJECT_KEY="${{ steps.basekey.outputs.base_key }}-pr-${{ steps.branch.outputs.name }}"
-          SONAR_TOKEN="${{ secrets.SONAR_ADMIN_TOKEN }}"
-
           echo "Checking if project exists: $PR_PROJECT_KEY"
 
           # Query the project and parse the response
