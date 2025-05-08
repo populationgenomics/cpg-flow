@@ -81,22 +81,26 @@ jobs:
 
       - name: Set project key
         id: project_key
+        env:
+          VERSION: ${{ env.VERSION }}
+          REF_NAME: ${{ github.ref_name }}
+          HEAD_REF: ${{ github.head_ref }}
+          GIT_SHA: ${{ github.sha }}
         run: |
           BASE_KEY=$(grep '^sonar.projectKey=' sonar-project.properties | cut -d'=' -f2)
-          VERSION=${{ env.VERSION }}
 
-          if [[ -z "$BASE_KEY" ]]; then
+          if [[ -z "${BASE_KEY}" ]]; then
             echo "sonar.projectKey not found in sonar-project.properties"
             exit 1
           fi
 
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
-            FINAL_KEY="$BASE_KEY"
+          if [[ "$REF_NAME" == "main" ]]; then
+            FINAL_KEY="${BASE_KEY}"
           else
-            BRANCH_NAME="${{ github.head_ref }}"
+            BRANCH_NAME="${HEAD_REF}"
             BRANCH_KEY=$(echo "$BRANCH_NAME" | tr '/' '-' | tr -cd '[:alnum:]-')
             FINAL_KEY="${BASE_KEY}-pr-${BRANCH_KEY}"
-            VERSION="${{ github.sha }}"
+            VERSION="${GIT_SHA}"
           fi
 
           echo "main_key=$BASE_KEY" >> "$GITHUB_OUTPUT"
@@ -108,11 +112,13 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+          PROJECT_KEY: ${{ steps.project_key.outputs.key }}
+          PROJECT_VERSION: ${{ steps.project_key.outputs.version }}
         with:
           args: >
-            -Dsonar.projectKey=${{ steps.project_key.outputs.key }}
+            -Dsonar.projectKey="$PROJECT_KEY"
             -Dsonar.qualitygate.wait=true
-            -Dsonar.projectVersion=${{ steps.project_key.outputs.version }}
+            -Dsonar.projectVersion="$PROJECT_VERSION"
 
       - name: Comment on PR with SonarQube results
         if: github.event_name == 'pull_request'
