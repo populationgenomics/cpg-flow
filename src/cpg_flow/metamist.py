@@ -10,6 +10,7 @@ from enum import Enum
 from typing import Any, Optional
 
 from gql.transport.exceptions import TransportServerError
+from loguru import logger
 from tenacity import (
     retry,
     retry_if_exception_type,
@@ -18,15 +19,13 @@ from tenacity import (
 )
 
 from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPair, FastqPairs
-from cpg_flow.utils import exists, get_logger
+from cpg_flow.utils import exists
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 from metamist import models
 from metamist.apis import AnalysisApi
 from metamist.exceptions import ApiException, ServiceException
 from metamist.graphql import gql, query
-
-LOGGER = get_logger(__name__)
 
 GET_SEQUENCING_GROUPS_QUERY = gql(
     """
@@ -64,6 +63,9 @@ GET_SEQUENCING_GROUPS_BY_COHORT_QUERY = gql(
     query SGByCohortQuery($cohort_id: String!) {
         cohorts(id: {eq: $cohort_id}) {
             name
+            project {
+                dataset
+            }
             sequencingGroups {
                 id
                 meta
@@ -220,7 +222,7 @@ class Analysis:
         if any(k not in data for k in req_keys):
             for key in req_keys:
                 if key not in data:
-                    LOGGER.error(f'"Analysis" data does not have {key}: {data}')
+                    logger.error(f'"Analysis" data does not have {key}: {data}')
             raise ValueError(f'Cannot parse metamist Sequence {data}')
 
         output = data.get('output')
@@ -265,7 +267,7 @@ class Metamist:
             return api_func(**kwargv)
         except ServiceException:
             # raise here so the retry occurs
-            LOGGER.warning(
+            logger.warning(
                 f'Retrying {api_func} ...',
             )
             raise
@@ -273,7 +275,7 @@ class Metamist:
     def make_aapi_call(self, api_func: Callable, **kwargv: Any):
         """
         Make a generic API call to self.aapi.
-        This is a wrapper around retry of API call to handle exceptions and LOGGER.
+        This is a wrapper around retry of API call to handle exceptions and logger.
         """
         try:
             return self.make_retry_aapi_call(api_func, **kwargv)
@@ -281,7 +283,7 @@ class Metamist:
             # Metamist API failed even after retries
             # log the error and continue
             traceback.print_exc()
-            LOGGER.error(
+            logger.error(
                 f'Error: {e} Call {api_func} failed with payload:\n{kwargv!s}',
             )
         # TODO: discuss should we catch all here as well?
@@ -302,7 +304,7 @@ class Metamist:
         and filtering options.
         """
         metamist_proj = self.get_metamist_proj(dataset_name)
-        LOGGER.info(f'Getting sequencing groups for dataset {metamist_proj}')
+        logger.info(f'Getting sequencing groups for dataset {metamist_proj}')
 
         skip_sgs = get_config()['workflow'].get('skip_sgs', [])
         only_sgs = get_config()['workflow'].get('only_sgs', [])
@@ -371,13 +373,13 @@ class Metamist:
             assert a.status == analysis_status, analysis
             assert a.type == analysis_type, analysis
             if len(a.sequencing_group_ids) < 1:
-                LOGGER.warning(f'Analysis has no sequencing group ids. {analysis}')
+                logger.warning(f'Analysis has no sequencing group ids. {analysis}')
                 continue
 
             assert len(a.sequencing_group_ids) == 1, analysis
             analysis_per_sid[list(a.sequencing_group_ids)[0]] = a
 
-        LOGGER.info(
+        logger.info(
             f'Querying {analysis_type} analysis entries for {metamist_proj}: found {len(analysis_per_sid)}',
         )
         return analysis_per_sid
@@ -422,12 +424,12 @@ class Metamist:
             analysis=am,
         )
         if aid is None:
-            LOGGER.error(
+            logger.error(
                 f'Failed to create Analysis(type={type_}, status={status}, output={output!s}) in {metamist_proj}',
             )
             return None
-        LOGGER.info(
-            f'Created Analysis(id={aid}, type={type_}, status={status}, ' f'output={output!s}) in {metamist_proj}',
+        logger.info(
+            f'Created Analysis(id={aid}, type={type_}, status={status}, output={output!s}) in {metamist_proj}',
         )
         return aid
 
@@ -508,6 +510,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     """
     Retrieve sequencing group entries for a single cohort.
     """
+    logger.info(f'Getting sequencing groups for cohort {cohort_id}')
     entries = query(GET_SEQUENCING_GROUPS_BY_COHORT_QUERY, {'cohort_id': cohort_id})
 
     # Create dictionary keying sequencing groups by project and including cohort name
@@ -517,6 +520,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     #         ...
     #     },
     #     "name": "CohortName"
+    #     "dataset": "DatasetName"
     # }
     if len(entries['cohorts']) != 1:
         raise MetamistError('We only support one cohort at a time currently')
@@ -526,10 +530,12 @@ def get_cohort_sgs(cohort_id: str) -> dict:
         raise MetamistError(f'Error fetching cohort: {message}')
 
     cohort_name = entries['cohorts'][0]['name']
+    cohort_dataset = entries['cohorts'][0]['project']['dataset']
     sequencing_groups = entries['cohorts'][0]['sequencingGroups']
 
     return {
         'name': cohort_name,
+        'dataset': cohort_dataset,
         'sequencing_groups': sequencing_groups,
     }
 
@@ -569,8 +575,7 @@ def parse_reads(  # pylint: disable=too-many-return-statements
         location = reads_data[0]['location']
         if not (location.endswith('.cram') or location.endswith('.bam')):
             raise MetamistError(
-                f'{sequencing_group_id}: ERROR: expected the file to have an extension '
-                f'.cram or .bam, got: {location}',
+                f'{sequencing_group_id}: ERROR: expected the file to have an extension .cram or .bam, got: {location}',
             )
         if get_config()['workflow']['access_level'] == 'test':
             location = location.replace('-main-upload/', '-test-upload/')

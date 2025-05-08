@@ -21,13 +21,11 @@ Example:
 from typing import TYPE_CHECKING
 
 import pandas as pd
+from loguru import logger
 
 from cpg_flow.targets import Dataset, Target
-from cpg_flow.utils import get_logger
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
-
-LOGGER = get_logger(__name__)
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
@@ -40,11 +38,19 @@ class Cohort(Target):
     cohort.
     """
 
-    def __init__(self, id: str | None = None, name: str | None = None) -> None:
+    def __init__(self, id: str | None = None, name: str | None = None, dataset: str | None = None) -> None:
         super().__init__()
         self.id = id or get_config()['workflow']['dataset']
         self.name = name or get_config()['workflow']['dataset']
-        self.analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
+
+        # This is the analysis_dataset specified in the workflow config
+        analysis_dataset = Dataset(name=get_config()['workflow']['dataset'])
+
+        # This value should be populated by the cohort_dataset parameter
+        # which represents the dataset that the cohort is associated with
+        # If no cohort dataset is provided it will default to the analysis dataset
+        self.dataset = Dataset(name=dataset) if dataset else analysis_dataset
+
         self._sequencing_group_by_id: dict[str, SequencingGroup] = {}
 
     def __repr__(self):
@@ -100,7 +106,7 @@ class Cohort(Target):
         """
         if s.id in self._sequencing_group_by_id:
             if allow_duplicates:
-                LOGGER.debug(
+                logger.debug(
                     f'SequencingGroup {s.id} already exists in the Cohort {self.name}',
                 )
                 return self._sequencing_group_by_id[s.id]

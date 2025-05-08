@@ -13,4 +13,4 @@ Modules:
 This package is designed to be used with pdoc for generating documentation.
 """
 
-__all__ = ['targets', 'stage', 'workflow']
+__all__ = ['stage', 'targets', 'workflow']

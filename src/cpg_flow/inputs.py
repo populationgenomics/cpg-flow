@@ -2,6 +2,10 @@
 Metamist wrapper to get input sequencing groups.
 """
 
+from functools import cache
+
+from loguru import logger
+
 from cpg_flow.filetypes import CramPath, GvcfPath
 from cpg_flow.metamist import (
     AnalysisType,
@@ -12,10 +16,8 @@ from cpg_flow.metamist import (
     parse_reads,
 )
 from cpg_flow.targets import Dataset, MultiCohort, PedigreeInfo, SequencingGroup, Sex
-from cpg_flow.utils import exists, get_logger
+from cpg_flow.utils import exists
 from cpg_utils.config import config_retrieve, update_dict
-
-LOGGER = get_logger(__name__)
 
 
 def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
@@ -60,6 +62,10 @@ def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
     return sequencing_group
 
 
+# NOTE: This function could be considered for merging with
+# create_multicohort in future since we only ever create effectively a
+# single multicohort object in the workflow.
+# For now, we keep them separate to keep code clean and readable.
 def get_multicohort() -> MultiCohort:
     """
     Return the cohort or multicohort object based on the workflow configuration.
@@ -79,29 +85,33 @@ def get_multicohort() -> MultiCohort:
     if custom_cohort_ids and not isinstance(custom_cohort_ids, list):
         raise ValueError('Argument input_cohorts must be a list')
 
-    return create_multicohort()
+    # After the check for no cusotom_cohort_ids in the config convert
+    # to a tuple for the cache decorator
+    custom_cohort_ids = tuple() if not custom_cohort_ids else tuple(custom_cohort_ids)
+
+    return create_multicohort(custom_cohort_ids)
 
 
-def create_multicohort() -> MultiCohort:
+# This will cache the result of create_multicohort given an identical
+# custom_cohort_ids list. This is useful when we want to reuse the
+# multicohort object in multiple places without having to recreate it.
+# This reduces the overall number of calls to the Metamist API
+@cache
+def create_multicohort(custom_cohort_ids: tuple[str]) -> MultiCohort:
     """
     Add cohorts in the multicohort.
     """
-    config = config_retrieve(['workflow'])
-
-    # pull the list of cohort IDs from the config
-    custom_cohort_ids = config_retrieve(['workflow', 'input_cohorts'], [])
-
     # get a unique set of cohort IDs
     custom_cohort_ids_unique = sorted(set(custom_cohort_ids))
     custom_cohort_ids_removed = sorted(set(custom_cohort_ids) - set(custom_cohort_ids_unique))
 
     # if any cohort id duplicates were removed we log them
     if len(custom_cohort_ids_unique) != len(custom_cohort_ids):
-        get_logger(__file__).warning(
+        logger.warning(
             f'Removed {len(custom_cohort_ids_removed)} non-unique cohort IDs',
         )
         duplicated_cohort_ids = ', '.join(custom_cohort_ids_removed)
-        get_logger(__file__).warning(f'Non-unique cohort IDs: {duplicated_cohort_ids}')
+        logger.warning(f'Non-unique cohort IDs: {duplicated_cohort_ids}')
 
     multicohort = MultiCohort()
 
@@ -111,13 +121,18 @@ def create_multicohort() -> MultiCohort:
         # dataset_id is sequencing_group_dict['sample']['project']['name']
         cohort_sg_dict = get_cohort_sgs(cohort_id)
         cohort_name = cohort_sg_dict.get('name', cohort_id)
+        cohort_dataset = cohort_sg_dict.get('dataset', None)
         cohort_sgs = cohort_sg_dict.get('sequencing_groups', [])
 
         if len(cohort_sgs) == 0:
             raise MetamistError(f'Cohort {cohort_id} has no sequencing groups')
 
         # create a new Cohort object
-        cohort = multicohort.create_cohort(id=cohort_id, name=cohort_name)
+        cohort = multicohort.create_cohort(
+            id=cohort_id,
+            name=cohort_name,
+            dataset=cohort_dataset,
+        )
 
         # first populate these SGs into their Datasets
         # required so that the SG objects can be referenced in the collective Datasets
@@ -138,7 +153,7 @@ def create_multicohort() -> MultiCohort:
     # only go to metamist once per dataset to get analysis entries
     for dataset in multicohort.get_datasets():
         _populate_analysis(dataset)
-        if config.get('read_pedigree', True):
+        if config_retrieve(['workflow', 'read_pedigree'], True):
             _populate_pedigree(dataset)
 
     return multicohort
@@ -189,7 +204,7 @@ def _populate_alignment_inputs(
         )
         sequencing_group.alignment_input = alignment_input
     else:
-        LOGGER.warning(
+        logger.warning(
             f'No reads found for sequencing group {sequencing_group.id} of type {entry["type"]}',
         )
 
@@ -216,7 +231,7 @@ def _populate_analysis(dataset: Dataset) -> None:
             )
             sequencing_group.gvcf = GvcfPath(path=analysis.output)
         elif exists(sequencing_group.make_gvcf_path()):
-            LOGGER.warning(
+            logger.warning(
                 f'We found a gvcf file in the expected location {sequencing_group.make_gvcf_path()},'
                 'but it is not logged in metamist. Skipping. You may want to update the metadata and try again. ',
             )
@@ -232,7 +247,7 @@ def _populate_analysis(dataset: Dataset) -> None:
             sequencing_group.cram = CramPath(analysis.output, crai_path)
 
         elif exists(sequencing_group.make_cram_path()):
-            LOGGER.warning(
+            logger.warning(
                 f'We found a cram file in the expected location {sequencing_group.make_cram_path()},'
                 'but it is not logged in metamist. Skipping. You may want to update the metadata and try again. ',
             )
@@ -247,7 +262,7 @@ def _populate_pedigree(dataset: Dataset) -> None:
     for sg in dataset.get_sequencing_groups():
         sg_by_participant_id[sg.participant_id] = sg
 
-    LOGGER.info(f'Reading pedigree for dataset {dataset}')
+    logger.info(f'Reading pedigree for dataset {dataset}')
     ped_entries = get_metamist().get_ped_entries(dataset=dataset.name)
     ped_entry_by_participant_id = {}
     for ped_entry in ped_entries:
@@ -272,7 +287,6 @@ def _populate_pedigree(dataset: Dataset) -> None:
             phenotype=ped_entry['affected'] or '0',
         )
     if sgids_wo_ped:
-        LOGGER.warning(
-            f'No pedigree data found for '
-            f'{len(sgids_wo_ped)}/{len(dataset.get_sequencing_groups())} sequencing groups',
+        logger.warning(
+            f'No pedigree data found for {len(sgids_wo_ped)}/{len(dataset.get_sequencing_groups())} sequencing groups',
         )

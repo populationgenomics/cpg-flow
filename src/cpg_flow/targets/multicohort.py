@@ -17,13 +17,12 @@ Functions:
 from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
+from loguru import logger
 
 from cpg_flow.targets import Cohort, Dataset, Target
-from cpg_flow.utils import get_logger, hash_from_list_of_strings
+from cpg_flow.utils import hash_from_list_of_strings
 from cpg_utils import Path
 from cpg_utils.config import get_config
-
-LOGGER = get_logger(__name__)
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
@@ -104,7 +103,7 @@ class MultiCohort(Target):
         """
         cohort = self._cohorts_by_id.get(id)
         if not cohort:
-            LOGGER.warning(f'Cohort {id} not found in the multi-cohort')
+            logger.warning(f'Cohort {id} not found in the multi-cohort')
 
         if not only_active:  # Return cohort even if it's inactive
             return cohort
@@ -137,15 +136,15 @@ class MultiCohort(Target):
                 all_sequencing_groups[sg.id] = sg
         return list(all_sequencing_groups.values())
 
-    def create_cohort(self, id: str, name: str) -> 'Cohort':
+    def create_cohort(self, id: str, name: str, dataset: str | None = None) -> 'Cohort':
         """
         Create a cohort and add it to the multi-cohort.
         """
         if id in self._cohorts_by_id:
-            LOGGER.debug(f'Cohort {id} already exists in the multi-cohort')
+            logger.debug(f'Cohort {id} already exists in the multi-cohort')
             return self._cohorts_by_id[id]
 
-        c = Cohort(id=id, name=name)
+        c = Cohort(id=id, name=name, dataset=dataset)
         self._cohorts_by_id[c.id] = c
         return c
 
@@ -156,7 +155,7 @@ class MultiCohort(Target):
             d: Dataset object
         """
         if d.name in self._datasets_by_name:
-            LOGGER.debug(
+            logger.debug(
                 f'Dataset {d.name} already exists in the MultiCohort {self.name}',
             )
         else:

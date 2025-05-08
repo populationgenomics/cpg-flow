@@ -70,7 +70,7 @@ def _custom_cohort_config(tmp_path) -> str:
     conf = f"""
     [workflow]
     dataset = 'projecta'
-    input_cohorts = ['COH1']
+    input_cohorts = ['COH5']
 
     path_scheme = 'local'
 
@@ -109,24 +109,7 @@ def mock_get_pedigree_empty(*args, **kwargs):
 
 
 def mock_get_pedigree(*args, **kwargs):  # pylint: disable=unused-argument
-    return [
-        {
-            'family_id': '123',
-            'individual_id': '8',
-            'paternal_id': '14',
-            'maternal_id': None,
-            'sex': 1,
-            'affected': 1,
-        },
-        {
-            'family_id': '124',
-            'individual_id': '14',
-            'paternal_id': None,
-            'maternal_id': None,
-            'sex': 2,
-            'affected': 1,
-        },
-    ]
+    return load_mock_data('tests/assets/test_cohort/pedigree.json')
 
 
 def mock_get_cohort_sgs(cohort_id: str, *args, **kwargs) -> dict:
@@ -423,9 +406,16 @@ def test_custom_cohort(mocker: MockFixture, tmp_path, monkeypatch):
     def mock_query(query, variables):
         # Mocking the return value of the query function
         data = mock_get_cohort_sgs('COH5')
-        return {'cohorts': [{'name': data.get('name'), 'sequencingGroups': data.get('sequencing_groups')}]}
+        return {
+            'cohorts': [
+                {
+                    'name': data.get('name'),
+                    'project': {'dataset': data.get('dataset')},
+                    'sequencingGroups': data.get('sequencing_groups'),
+                },
+            ],
+        }
 
-    # Patching the query function to mock the GraphQL query
     monkeypatch.setattr('cpg_flow.metamist.query', mock_query)
 
     from cpg_flow.inputs import get_multicohort

@@ -14,11 +14,11 @@ from tests import set_config
 LOGGER = logging.getLogger(__name__)
 
 
-def _multicohort_config(tmp_path) -> str:
+def _multicohort_config(tmp_path, cohort_ids=['COH123', 'COH456']) -> str:
     conf = f"""
     [workflow]
     dataset = 'projecta'
-    input_cohorts = ['COH123', 'COH456']
+    input_cohorts = [{', '.join([f"'{x}'" for x in cohort_ids])}]
 
     path_scheme = 'local'
 
@@ -52,8 +52,8 @@ def mock_get_cohorts(cohort_id: str, *args, **kwargs) -> dict:
 
 def mock_get_test_project_cohorts(cohort_id: str, *args, **kwargs) -> dict:
     return {
-        'COH123': load_mock_data('tests/assets/test_multicohort/COH1.json'),
-        'COH456': load_mock_data('tests/assets/test_multicohort/COH2.json'),
+        'COH1': load_mock_data('tests/assets/test_multicohort/COH1.json'),
+        'COH2': load_mock_data('tests/assets/test_multicohort/COH2.json'),
     }[cohort_id]
 
 
@@ -64,8 +64,8 @@ def mock_get_overlapping_cohorts(cohort_id: str, *args, **kwargs) -> dict:
     sgs = data['sequencing_groups']
 
     return {
-        'COH123': {'name': name, 'sequencing_groups': sgs},
-        'COH456': {'name': name + ' duplicate', 'sequencing_groups': sgs},
+        'COHAAA': {'name': name, 'sequencing_groups': sgs},
+        'COHBBB': {'name': name + ' duplicate', 'sequencing_groups': sgs},
     }[cohort_id]
 
 
@@ -74,24 +74,7 @@ def mock_get_analysis_by_sgs(*args, **kwargs) -> dict:
 
 
 def mock_get_pedigree(*args, **kwargs):  # pylint: disable=unused-argument
-    return [
-        {
-            'family_id': 123,
-            'individual_id': '8',
-            'paternal_id': 14,
-            'maternal_id': None,
-            'sex': 1,
-            'affected': 1,
-        },
-        {
-            'family_id': 124,
-            'individual_id': '14',
-            'paternal_id': None,
-            'maternal_id': None,
-            'sex': 2,
-            'affected': 1,
-        },
-    ]
+    return load_mock_data('tests/assets/test_multicohort/pedigree.json')
 
 
 def test_multicohort(mocker: MockFixture, tmp_path):
@@ -153,7 +136,7 @@ def test_overlapping_multicohort(mocker: MockFixture, tmp_path):
     """
     Testing multicohorts where different cohorts have sgs from the same dataset.
     """
-    set_config(_multicohort_config(tmp_path), tmp_path / 'config.toml')
+    set_config(_multicohort_config(tmp_path, ['COHAAA', 'COHBBB']), tmp_path / 'config.toml')
 
     mocker.patch('cpg_flow.utils.exists_not_cached', lambda *args: False)
 
@@ -199,7 +182,7 @@ def test_multicohort_dataset_config(mocker: MockFixture, tmp_path):
     """
     This test is to ensure that the dataset name is stripped of the '-test' suffix.
     """
-    set_config(_multicohort_config(tmp_path), tmp_path / 'config.toml')
+    set_config(_multicohort_config(tmp_path, ['COH1', 'COH2']), tmp_path / 'config.toml')
 
     mocker.patch('cpg_flow.utils.exists_not_cached', lambda *args: False)
 

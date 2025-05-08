@@ -36,7 +36,7 @@ def add_sg(ds, id, external_id: str) -> SequencingGroup:
 
 def mock_cohort() -> MultiCohort:
     m = MultiCohort()
-    c = m.create_cohort(id='COH123', name='fewgenomes')
+    c = m.create_cohort(id='COH123', name='fewgenomes', dataset='fewgenomes')
     d = m.create_dataset('my_dataset')
 
     sg1 = add_sg(d, 'CPGAA', external_id='SAMPLE1')
@@ -46,7 +46,7 @@ def mock_cohort() -> MultiCohort:
 
 def mock_multidataset_cohort() -> MultiCohort:
     m = MultiCohort()
-    c = m.create_cohort(id='COH123', name='fewgenomes')
+    c = m.create_cohort(id='COH123', name='fewgenomes', dataset='fewgenomes')
 
     ds = m.create_dataset('my_dataset')
 
@@ -70,7 +70,7 @@ def mock_multicohort() -> MultiCohort:
     mc = MultiCohort()
 
     # Create a cohort with two datasets
-    cohort_a = mc.create_cohort(id='COH111', name='CohortA')
+    cohort_a = mc.create_cohort(id='COH111', name='CohortA', dataset='projecta')
     # Create a dataset in the cohort (legacy)
     ds = mc.create_dataset('projecta')
 
@@ -84,7 +84,7 @@ def mock_multicohort() -> MultiCohort:
     cohort_a.add_sequencing_group_object(add_sg(ds2, 'CPGDDDD', external_id='SAMPLE4'))
 
     # second cohort, third dataset
-    cohort_b = mc.create_cohort(id='COH222', name='CohortB')
+    cohort_b = mc.create_cohort(id='COH222', name='CohortB', dataset='projectb')
     ds3 = mc.create_dataset('projectb')
     cohort_b.add_sequencing_group_object(add_sg(ds3, 'CPGEEEEEE', external_id='SAMPLE5'))
     cohort_b.add_sequencing_group_object(add_sg(ds3, 'CPGFFFFFF', external_id='SAMPLE6'))
@@ -198,7 +198,7 @@ def run_workflow(
     cohort_mocker: Callable[..., Cohort | MultiCohort] = mock_cohort,
     stages: list[StageType] | None = None,
 ):
-    mocker.patch('cpg_flow.inputs.create_multicohort', cohort_mocker)
+    mocker.patch('cpg_flow.inputs.create_multicohort', lambda x: cohort_mocker())
     mocker.patch('cpg_flow.inputs.get_multicohort', cohort_mocker)
 
     stages = stages or [C, C2]

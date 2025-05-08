@@ -1,4 +1,5 @@
 site_name: CPG Flow
+site_url: 'https://populationgenomics.github.io/cpg-flow/'
 theme:
   name: material
   favicon: assets/favicon.png
@@ -28,24 +29,24 @@ theme:
     - search.suggest
     - toc.follow
   palette:
-  - media: "(prefers-color-scheme)"
-    toggle:
-      icon: material/lightbulb-auto
-      name: Switch to light mode
-  - media: '(prefers-color-scheme: light)'
-    scheme: default
-    primary: pink
-    accent: amber
-    toggle:
-      icon: material/lightbulb
-      name: Switch to dark mode
-  - media: '(prefers-color-scheme: dark)'
-    scheme: slate
-    primary: pink
-    accent: amber
-    toggle:
-      icon: material/lightbulb-outline
-      name: Switch to system preference
+    - media: '(prefers-color-scheme)'
+      toggle:
+        icon: material/lightbulb-auto
+        name: Switch to light mode
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: pink
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: pink
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to system preference
 plugins:
   search:
   mkdocstrings:
@@ -53,17 +54,17 @@ plugins:
       python:
         options:
           extensions:
-          - griffe_typingdoc
+            - griffe_typingdoc
           show_root_heading: true
           show_if_no_docstring: true
           preload_modules:
-          - cpg_flow
+            - cpg_flow
           inherited_members: true
           members_order: source
           separate_signature: true
           unwrap_annotated: true
           filters:
-          - '!^_'
+            - '!^_'
           merge_init_into_class: true
           docstring_section_style: spacy
           signature_crossrefs: true
@@ -81,7 +82,7 @@ markdown_extensions:
   toc:
     permalink: true
     anchorlink: true
-    anchorlink_class: "toclink"
+    anchorlink_class: 'toclink'
 
   # Python Markdown Extensions
   pymdownx.magiclink:
@@ -96,26 +97,26 @@ markdown_extensions:
   pymdownx.mark:
   pymdownx.superfences:
     custom_fences:
-    - name: mermaid
-      class: mermaid
-      format: !!python/name:pymdownx.superfences.fence_code_format
+      - name: mermaid
+        class: mermaid
+        format: !!python/name:pymdownx.superfences.fence_code_format
   pymdownx.tilde:
   markdown.extensions.attr_list:
 
   # pymdownx blocks
   pymdownx.blocks.admonition:
     types:
-    - note
-    - attention
-    - caution
-    - danger
-    - error
-    - tip
-    - hint
-    - warning
-    # Custom types
-    - info
-    - check
+      - note
+      - attention
+      - caution
+      - danger
+      - error
+      - tip
+      - hint
+      - warning
+      # Custom types
+      - info
+      - check
   pymdownx.blocks.details:
   pymdownx.blocks.tab:
     alternate_style: True
@@ -129,19 +130,25 @@ nav:
   - Considerations and Limitations: considerations-limitations.md
   - Docker: docker.md
   - Tests:
-    - tests.md
-    - code-analysis-consistency.md
-    - workflows.md
+      - tests.md
+      - code-analysis-consistency.md
+      - workflows.md
   - Changelog: changelog.md
   - Reference:
-    - reference/index.md
-    - reference/stage.md
-    - reference/targets.md
-    - reference/pedigree_info.md
-    - reference/filetypes.md
-    - reference/inputs.md
-    - reference/metamist.md
-    - reference/resources.md
-    - reference/status.md
-    - reference/utils.md
-    - reference/workflows.md
+      - reference/index.md
+      - reference/stage.md
+      - reference/targets.md
+      - reference/pedigree_info.md
+      - reference/filetypes.md
+      - reference/inputs.md
+      - reference/metamist.md
+      - reference/resources.md
+      - reference/status.md
+      - reference/utils.md
+      - reference/workflows.md
+
+# Customization
+extra:
+  version:
+    provider: mike
+    alias: true

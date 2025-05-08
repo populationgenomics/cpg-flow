@@ -18,9 +18,9 @@ def gcp_machine_name(name: str, ncpu: int) -> str:
     """
     Machine type name in the GCP world
     """
-    assert name in ["standard", "highmem", "highcpu"], name
+    assert name in ['standard', 'highmem', 'highcpu'], name
     assert _is_power_of_two(ncpu), ncpu
-    return f"n1-{name}-{ncpu}"
+    return f'n1-{name}-{ncpu}'
 
 
 @dataclass(init=False)
@@ -73,7 +73,7 @@ class MachineType:
         nthreads: int | None = None,
         mem_gb: float | None = None,
         storage_gb: float | None = None,
-    ) -> "JobResource":
+    ) -> 'JobResource':
         """
         Set resources to a Job object. If any optional parameters are set,
         they will be used as a bound to request a fraction of an instance.
@@ -93,7 +93,7 @@ class MachineType:
         nthreads: int | None = None,
         mem_gb: float | None = None,
         storage_gb: float | None = None,
-    ) -> "JobResource":
+    ) -> 'JobResource':
         """
         Request resources from the machine, satisfying all provided requirements.
         If not requirements are provided, the minimal amount of cores
@@ -115,11 +115,7 @@ class MachineType:
         return JobResource(
             machine_type=self,
             ncpu=min_ncpu,
-            attach_disk_storage_gb=(
-                storage_gb
-                if storage_gb and storage_gb > self.calc_instance_disk_gb()
-                else None
-            ),
+            attach_disk_storage_gb=(storage_gb if storage_gb and storage_gb > self.calc_instance_disk_gb() else None),
         )
 
     def fraction_to_ncpu(self, fraction: float) -> int:
@@ -127,14 +123,14 @@ class MachineType:
         Converts fraction to the number of CPU (e.g. fraction=1.0 to take the entire
         machine, fraction=0.5 to take half of it, etc.).
         """
-        ncpu = int(math.ceil(self.max_ncpu * fraction))
+        ncpu = math.ceil(self.max_ncpu * fraction)
         return self.adjust_ncpu(ncpu)
 
     def mem_gb_to_ncpu(self, mem_gb: float) -> int:
         """
         Converts memory requirement to the number of CPU requirement.
         """
-        ncpu = int(math.ceil(mem_gb / self.mem_gb_per_core))
+        ncpu = math.ceil(mem_gb / self.mem_gb_per_core)
         return self.adjust_ncpu(ncpu)
 
     def storage_gb_to_ncpu(self, storage_gb: float) -> int:
@@ -165,7 +161,7 @@ class MachineType:
         """
         if ncpu > self.max_ncpu:
             raise ValueError(
-                f"Requesting more cores than available on {self.name} machine: {ncpu}>{self.max_ncpu}",
+                f'Requesting more cores than available on {self.name} machine: {ncpu}>{self.max_ncpu}',
             )
 
         ncpu = max(ncpu, MachineType.min_cpu)
@@ -179,7 +175,7 @@ class MachineType:
 # Bigger default number of cores (32 vs 16) would allow for more threads for alignment,
 # however would mean a smaller available storage (5G per core is reserved)
 STANDARD = MachineType(
-    "standard",
+    'standard',
     ncpu=16,
     mem_gb_per_core=3.75,  # Total 60G
     price_per_hour=1.0787,  # 32-core machine would cost 2.1574
@@ -190,7 +186,7 @@ STANDARD = MachineType(
 # Total 104G - smaller than standard-32, but less expensive, so useful for
 # memory consuming tools that don't benefit from multiple threads
 HIGHMEM = MachineType(
-    "highmem",
+    'highmem',
     ncpu=16,
     mem_gb_per_core=6.5,
     price_per_hour=1.3431,
@@ -223,8 +219,8 @@ class JobResource:
         if ncpu is not None:
             if ncpu > self.machine_type.max_ncpu:
                 raise ValueError(
-                    f"Max number of CPU on machine {self.machine_type.name} "
-                    f"is {self.machine_type.max_ncpu}, requested {ncpu}",
+                    f'Max number of CPU on machine {self.machine_type.name} '
+                    f'is {self.machine_type.max_ncpu}, requested {ncpu}',
                 )
             self.fraction_of_full = ncpu / self.machine_type.max_ncpu
 
@@ -232,9 +228,9 @@ class JobResource:
         if attach_disk_storage_gb is not None:
             if self.fraction_of_full < 1:
                 raise ValueError(
-                    f"Storage can be overridden only when the entire machine is used, "
-                    f"not a fraction ({self.fraction_of_full}). "
-                    f"override_storage_gb={attach_disk_storage_gb}",
+                    f'Storage can be overridden only when the entire machine is used, '
+                    f'not a fraction ({self.fraction_of_full}). '
+                    f'override_storage_gb={attach_disk_storage_gb}',
                 )
             self.attach_disk_storage_gb = attach_disk_storage_gb
 
@@ -255,7 +251,7 @@ class JobResource:
         # Approximate as binary MiB (but not GiB as these options don't support
         # fractional values) so that logs are easier to read
         mem_mib = math.floor(mem_bytes / 1_048_576)
-        return f"-Xms{mem_mib}M -Xmx{mem_mib}M"
+        return f'-Xms{mem_mib}M -Xmx{mem_mib}M'
 
     def java_gc_thread_options(self, surplus: int = 2) -> str:
         """
@@ -263,7 +259,7 @@ class JobResource:
         @param surplus: Number of threads to leave available for other purposes.
         """
         gc_threads = self.get_nthreads() - surplus
-        return f"-XX:+UseParallelGC -XX:ParallelGCThreads={gc_threads}"
+        return f'-XX:+UseParallelGC -XX:ParallelGCThreads={gc_threads}'
 
     def get_ncpu(self) -> int:
         """
@@ -284,24 +280,22 @@ class JobResource:
         if self.attach_disk_storage_gb:
             storage_gb = self.attach_disk_storage_gb
         else:
-            storage_gb = (
-                self.machine_type.calc_instance_disk_gb() * self.fraction_of_full
-            )
+            storage_gb = self.machine_type.calc_instance_disk_gb() * self.fraction_of_full
 
         # Hail Batch actually requests 5% lower number than the
         # requested one (e.g. "req_storage: 46.25G, actual_storage: 44.0 GiB"),
         # so we will ask for a bigger number.
         return storage_gb * 1.05
 
-    def set_to_job(self, j: Job) -> "JobResource":
+    def set_to_job(self, j: Job) -> 'JobResource':
         """
         Set the resources to a Job object. Return self to allow chaining, e.g.:
         >>> nthreads = STANDARD.request_resources(nthreads=4).set_to_job(j).get_nthreads()
         """
 
-        j.storage(f"{self.get_storage_gb()}G")
+        j.storage(f'{self.get_storage_gb()}G')
         j.cpu(self.get_ncpu())
-        j.memory(f"{self.get_mem_gb()}G")
+        j.memory(f'{self.get_mem_gb()}G')
 
         # Returning self to allow command chaining.
         return self
@@ -311,11 +305,11 @@ def storage_for_cram_qc_job() -> int | None:
     """
     Get storage request for a CRAM QC processing job, gb
     """
-    sequencing_type = get_config()["workflow"]["sequencing_type"]
+    sequencing_type = get_config()['workflow']['sequencing_type']
     storage_gb = None  # avoid extra disk by default
-    if sequencing_type == "genome":
+    if sequencing_type == 'genome':
         storage_gb = 100
-    if sequencing_type == "exome":
+    if sequencing_type == 'exome':
         storage_gb = 20
     return storage_gb
 
@@ -325,7 +319,7 @@ def joint_calling_scatter_count(sequencing_group_count: int) -> int:
     Number of partitions for joint-calling jobs (GenotypeGVCFs, VQSR, VEP),
     as a function of the sequencing group number.
     """
-    if scatter_count := get_config()["workflow"].get("scatter_count"):
+    if scatter_count := get_config()['workflow'].get('scatter_count'):
         return scatter_count
 
     # Estimating this is challenging because GenotypeGVCFs does not scale
@@ -355,7 +349,7 @@ def storage_for_joint_vcf(
     """
     if not sequencing_group_count:
         return None
-    if get_config()["workflow"]["sequencing_type"] == "exome":
+    if get_config()['workflow']['sequencing_type'] == 'exome':
         gb_per_sequencing_group = 0.1
     else:
         gb_per_sequencing_group = 1.0

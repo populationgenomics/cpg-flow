@@ -6,7 +6,7 @@ The `Dataset` class allows for:
 - Storage path management: Provides methods to access primary, temporary, analysis, and web storage paths.
 - Integration with configurations: Uses configuration settings for workflow management and path handling.
 - Pedigree file generation: Capable of generating PED files based on sequencing group data for genetic analysis.
-- Logging: Utilizes LOGGER to track and debug sequencing group additions.
+- Logging: Utilizes logger to track and debug sequencing group additions.
 
 Key Components:
 - Dataset: Main class that represents a genomic dataset and extends from the `Target` class.
@@ -21,14 +21,12 @@ This module is essential for organizing and managing data resources in CPG-relat
 from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
+from loguru import logger
 
 from cpg_flow.filetypes import AlignmentInput
 from cpg_flow.targets import SequencingGroup, Target, seq_type_subdir
-from cpg_flow.utils import get_logger
 from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path, get_config, web_url
-
-LOGGER = get_logger(__name__)
 
 if TYPE_CHECKING:
     from cpg_flow.targets import PedigreeInfo, Sex
@@ -150,7 +148,7 @@ class Dataset(Target):
         Create a new sequencing group and add it to the dataset.
         """
         if id in self._sequencing_group_by_id:
-            LOGGER.debug(
+            logger.debug(
                 f'SequencingGroup {id} already exists in the dataset {self.name}',
             )
             return self._sequencing_group_by_id[id]
@@ -182,7 +180,7 @@ class Dataset(Target):
             s: SequencingGroup object
         """
         if s.id in self._sequencing_group_by_id:
-            LOGGER.debug(
+            logger.debug(
                 f'SequencingGroup {s.id} already exists in the dataset {self.name}',
             )
         else:

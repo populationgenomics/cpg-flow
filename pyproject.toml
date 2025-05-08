@@ -12,13 +12,13 @@ dynamic = ["version"]
 dependencies = [
     "cpg-utils>=5.0.11",
     # Pin Hail at CPG"s installed version
-    "hail==0.2.133",
+    "hail==0.2.134",
     "grpcio>=1.53.0",
     # Avoid dependency resolution backtracking, Python 3.10 compatibility
     "grpcio-status>=1.48,<1.50",
+    "loguru>0.7.0",
     "metamist>=6.9.0",
     "networkx>=3.4.2",
-    "coloredlogs>=15.0.1",
     "pyyaml>=6.0.2",
     "plotly>=5.24.1",
     "ipywidgets>=8.1.5",
@@ -153,8 +153,6 @@ ignore = [
     "ANN001",
     "ANN002",
     "ANN003",
-    "ANN101",  # Missing type annotation for self in method
-    "ANN102",  # Missing type annotation for `cls` in classmethod
     "ANN201",  # Missing return type annotation for public function
     "ANN202",
     "ANN204",  # Missing type annotation for special method `__init__`
@@ -275,7 +273,6 @@ ignore = [
     "UP015",
     "UP020",
     "UP026",
-    "UP027",
     "UP030",
     "UP031",
     "UP032",
@@ -415,10 +412,9 @@ dev-dependencies = [
     "mkdocs-material>=9.5.50",
     "mkdocstrings[python]>=0.27.0",
     "griffe-typingdoc>=0.2.7",
+    "mike>=2.1.3",
 ]
-
-[tool.uv.sources]
 
 [tool.setuptools_scm]
 version_scheme = "only-version"
-local_scheme = "node-and-date"
+local_scheme = "no-local-version"

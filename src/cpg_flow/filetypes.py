@@ -41,9 +41,10 @@ class CramOrBamPath(AlignmentInput, ABC):
         self.full_index_suffix: str | None = None
         if index_path:
             self.index_path = to_path(index_path)
-            assert self.index_path.suffix == f".{self.index_ext}"
+            assert self.index_path.suffix == f'.{self.index_ext}'
             self.full_index_suffix = str(self.index_path).replace(
-                str(self.path.with_suffix("")), "",
+                str(self.path.with_suffix('')),
+                '',
             )
         self.reference_assembly = None
         if reference_assembly:
@@ -70,8 +71,8 @@ class CramOrBamPath(AlignmentInput, ABC):
         res = str(self.path)
         if self.index_path:
             assert self.full_index_suffix
-            res += f"+{self.full_index_suffix}"
-        return f"{self.ext.upper()}({res})"
+            res += f'+{self.full_index_suffix}'
+        return f'{self.ext.upper()}({res})'
 
     def exists(self) -> bool:
         """
@@ -97,8 +98,8 @@ class BamPath(CramOrBamPath):
     Represents a path to a BAM file, optionally with corresponding index.
     """
 
-    EXT = "bam"
-    INDEX_EXT = "bai"
+    EXT = 'bam'
+    INDEX_EXT = 'bai'
 
     def __init__(
         self,
@@ -121,8 +122,8 @@ class CramPath(CramOrBamPath):
     Represents a path to a CRAM file, optionally with corresponding index.
     """
 
-    EXT = "cram"
-    INDEX_EXT = "crai"
+    EXT = 'cram'
+    INDEX_EXT = 'crai'
 
     def __init__(
         self,
@@ -131,7 +132,7 @@ class CramPath(CramOrBamPath):
         reference_assembly: str | Path | None = None,
     ):
         super().__init__(path, index_path, reference_assembly)
-        self.somalier_path = to_path(f"{self.path}.somalier")
+        self.somalier_path = to_path(f'{self.path}.somalier')
 
     @property
     def ext(self) -> str:
@@ -151,13 +152,13 @@ class GvcfPath:
 
     def __init__(self, path: Path | str):
         self.path = to_path(path)
-        self.somalier_path = to_path(f"{self.path}.somalier")
+        self.somalier_path = to_path(f'{self.path}.somalier')
 
     def __str__(self) -> str:
         return str(self.path)
 
     def __repr__(self) -> str:
-        return f"GVCF({self.path})"
+        return f'GVCF({self.path})'
 
     def exists(self) -> bool:
         """
@@ -170,7 +171,7 @@ class GvcfPath:
         """
         Path to the corresponding index
         """
-        return to_path(f"{self.path}.tbi")
+        return to_path(f'{self.path}.tbi')
 
     def resource_group(self, b: Batch) -> ResourceGroup:
         """
@@ -178,8 +179,8 @@ class GvcfPath:
         """
         return b.read_input_group(
             **{
-                "g.vcf.gz": str(self.path),
-                "g.vcf.gz.tbi": str(self.tbi_path),
+                'g.vcf.gz': str(self.path),
+                'g.vcf.gz.tbi': str(self.tbi_path),
             },
         )
 
@@ -200,19 +201,12 @@ class FastqPair(AlignmentInput):
         assert i == 0 or i == 1, i
         return [self.r1, self.r2][i]
 
-    def as_resources(self, b) -> "FastqPair":
+    def as_resources(self, b) -> 'FastqPair':
         """
         Makes a pair of ResourceFile objects for r1 and r2.
         """
         return FastqPair(
-            *[
-                (
-                    self[i]
-                    if isinstance(self[i], ResourceFile)
-                    else b.read_input(str(self[i]))
-                )
-                for i in [0, 1]
-            ],
+            *[(self[i] if isinstance(self[i], ResourceFile) else b.read_input(str(self[i]))) for i in [0, 1]],
         )
 
     def exists(self) -> bool:
@@ -228,7 +222,7 @@ class FastqPair(AlignmentInput):
         >>> str(FastqPair('gs://sequencing_group_R1.fq.gz', 'gs://sequencing_group_R2.fq.gz'))
         'gs://sequencing_group_R{1,2}.fq.gz'
         """
-        return "".join(
+        return ''.join(
             f'{{{",".join(sorted(set(chars)))}}}' if len(set(chars)) > 1 else chars[0]
             for chars in zip(str(self.r1), str(self.r2), strict=False)
         )
@@ -257,7 +251,7 @@ class FastqPairs(list[FastqPair], AlignmentInput):
         >>> repr(FastqPairs([p1, p2]))
         'gs://sequencing_group_L{1,2}_R{1,2}.fq.gz'
         """
-        return "".join(
+        return ''.join(
             f'{{{",".join(sorted(set(chars)))}}}' if len(set(chars)) > 1 else chars[0]
             for chars in zip(*[repr(pair) for pair in self], strict=False)
         )

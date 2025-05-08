@@ -3,7 +3,6 @@ Utility functions and constants.
 """
 
 import hashlib
-import logging
 import re
 import string
 import sys
@@ -16,8 +15,8 @@ from os.path import basename, dirname, join
 from random import choices
 from typing import Union, cast
 
-import coloredlogs
 from google.cloud import storage
+from loguru import logger
 
 import hail as hl
 from hailtop.batch import ResourceFile
@@ -26,59 +25,52 @@ from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
 
 DEFAULT_LOG_FORMAT = config_retrieve(
-    ['workflow', 'logger', 'default_format'],
-    '%(asctime)s - %(name)s - %(pathname)s: %(lineno)d - %(levelname)s - %(message)s',
+    ['workflow', 'log_format'],
+    '{time:YYYY-MM-DD HH:mm:ss} - {file.path}:{line} - {level} - {message}',
 )
-LOGGERS: dict[str, logging.Logger] = {}
 
+COLOURED_LOGS = config_retrieve(['workflow', 'coloured_logs'], False)
 ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
 
 
-def get_logger(
-    logger_name: str = 'cpg_workflows',
-    log_level: int = logging.INFO,
+def format_logger(
+    log_level: int = logger.level('INFO').no,
     fmt_string: str = DEFAULT_LOG_FORMAT,
-) -> logging.Logger:
+    coloured: bool = COLOURED_LOGS,
+) -> None:
     """
-    creates a logger instance (so as not to use the root logger)
+    loguru is a cleaner interface than the standard logging module, but it doesn't allow for multiple instances
+    instead of calling a get_logger function which returns a logger, we assume that any module using logging has
+    imported `from loguru import logger` to get access to the logger.
+
+    loguru.logger is also resistant to deepcopy, so there really is only a single global instance, meaning that the
+    display/formatting of the logger is global to the entire process, and should only be set once.
+
+    This helper method formats the logger instance with the given parameters, stripping out any previous handlers
+    Because the global logger instance is modified, there is no return value
+
+    >>> from loguru import logger
+    >>> from cpg_flow.utils import format_logger
+    >>> format_logger(log_level=10, fmt_string='{time} {level} {message}', coloured=True)
+    >>> logger.info('This is an info message')
+
     Args:
-        logger_name (str):
         log_level (int): logging level, defaults to INFO. Can be overridden by config
         fmt_string (str): format string for this logger, defaults to DEFAULT_LOG_FORMAT
-    Returns:
-        a logger instance, if required create it first
+        coloured (bool): whether to colour the logger output
     """
 
-    if logger_name not in LOGGERS:
-        # allow a log-level & format override on a name basis
-        log_level = config_retrieve(['workflow', 'logger', logger_name, 'level'], log_level)
-        fmt_string = config_retrieve(['workflow', 'logger', logger_name, 'format'], fmt_string)
+    # Remove any previous loguru handlers
+    logger.remove()
 
-        # create a named logger
-        new_logger = logging.getLogger(logger_name)
-        new_logger.setLevel(log_level)
-
-        # unless otherwise specified, use coloredlogs
-        if config_retrieve(['workflow', 'logger', logger_name, 'use_colored_logs'], True):
-            coloredlogs.install(level=log_level, fmt=fmt_string, logger=new_logger)
-
-        # create a stream handler to write output
-        stream_handler = logging.StreamHandler()
-        stream_handler.setLevel(log_level)
-
-        # create format string for messages
-        formatter = logging.Formatter(fmt_string)
-        stream_handler.setFormatter(formatter)
-
-        # set the logger to use this handler
-        new_logger.addHandler(stream_handler)
-
-        LOGGERS[logger_name] = new_logger
-
-    return LOGGERS[logger_name]
-
-
-LOGGER = get_logger(__name__)
+    # Add loguru handler with given format and level
+    logger.add(
+        sys.stdout,
+        level=log_level,
+        format=fmt_string,
+        colorize=coloured,
+        enqueue=True,
+    )
 
 
 def chunks(iterable, chunk_size):
@@ -129,7 +121,7 @@ def read_hail(path):
     else:
         assert path.strip('/').endswith('.mt')
         t = hl.read_matrix_table(str(path))
-    LOGGER.info(f'Read data from {path}')
+    logger.info(f'Read data from {path}')
     return t
 
 
@@ -157,17 +149,17 @@ def checkpoint_hail(
     t.describe()
 
     # log the current number of partitions
-    LOGGER.info(f'Checkpointing object as {t.n_partitions()} partitions')
+    logger.info(f'Checkpointing object as {t.n_partitions()} partitions')
 
     if checkpoint_prefix is None:
         return t
 
     path = join(checkpoint_prefix, file_name)
     if can_reuse(path) and allow_reuse:
-        LOGGER.info(f'Re-using {path}')
+        logger.info(f'Re-using {path}')
         return read_hail(path)
 
-    LOGGER.info(f'Checkpointing {path}')
+    logger.info(f'Checkpointing {path}')
     return t.checkpoint(path, overwrite=True)
 
 
@@ -196,7 +188,7 @@ def exists_not_cached(path: Path | str, verbose: bool = True) -> bool:
     @param verbose: print on each check
     @return: True if the object exists
     """
-    path = cast(Path, to_path(path))
+    path = cast('Path', to_path(path))
 
     if path.suffix in ['.mt', '.ht']:
         path /= '_SUCCESS'
@@ -212,14 +204,14 @@ def exists_not_cached(path: Path | str, verbose: bool = True) -> bool:
         # instead stick to a core responsibility -
         # existence = False
         except FileNotFoundError as fnfe:
-            LOGGER.error(f'Failed checking {path}')
-            LOGGER.error(f'{fnfe}')
+            logger.error(f'Failed checking {path}')
+            logger.error(f'{fnfe}')
             return False
         except BaseException:
             traceback.print_exc()
-            LOGGER.error(f'Failed checking {path}')
+            logger.error(f'Failed checking {path}')
             sys.exit(1)
-        LOGGER.debug(f'Checked {path} [' + ('exists' if res else 'missing') + ']')
+        logger.debug(f'Checked {path} [' + ('exists' if res else 'missing') + ']')
         return res
 
     return check_exists_path(path)
@@ -272,7 +264,7 @@ def can_reuse(
     if not all(exists(fp, overwrite) for fp in paths):
         return False
 
-    LOGGER.debug(f'Reusing existing {path}')
+    logger.debug(f'Reusing existing {path}')
     return True
 
 
@@ -365,7 +357,7 @@ def get_intervals_from_bed(intervals_path: Path) -> list[str]:
         intervals = []
         for line in f:
             chrom, start, end = line.strip().split('\t')
-            intervals.append(f'{chrom}:{int(start)+1}-{end}')
+            intervals.append(f'{chrom}:{int(start) + 1}-{end}')
     return intervals
 
 

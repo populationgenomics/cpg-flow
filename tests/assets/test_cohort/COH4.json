@@ -1,5 +1,8 @@
 {
     "name": "Cohort #4",
+    "project": {
+        "dataset": "Cohort #4 Dataset"
+    },
     "sequencing_groups": [
         {
             "id": "CPGccc",
