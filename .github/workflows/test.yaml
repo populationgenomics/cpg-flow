@@ -8,6 +8,8 @@ on:
 env:
   VERSION: 0.2.2
 
+permissions: {}
+
 jobs:
   test:
     name: Test
@@ -16,12 +18,13 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
         with:
           submodules: 'true'
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca #v6.0.1
 
       - name: Install project dev dependencies
         run: uv sync --only-dev
@@ -30,29 +33,31 @@ jobs:
         id: runtests
         timeout-minutes: 20
         run: |
-          uv run coverage run -m pytest tests --junitxml=test-execution.xml
-          rc=$?
+          rc=0
+          uv run coverage run -m pytest tests --junitxml=test-execution.xml || rc=$?
           uv run coverage xml
           echo "rc=$rc" >> $GITHUB_OUTPUT
 
       - name: 'Save coverage report as an Artifact'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.3.0
         with:
           name: coverage-report
           path: ./coverage.xml
 
       - name: 'Save execution report as an Artifact'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.3.0
         with:
           name: execution-report
           path: ./test-execution.xml
 
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
-        uses: actions/github-script@v6
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
+        env:
+          rc: ${{ steps.runtests.outputs.rc }}
         with:
           script: |
-            core.setFailed('Unittests failed with rc = ${{ steps.runtests.outputs.rc }}')
+            core.setFailed(`Unittests failed with rc = ${process.env.rc}`)
 
   sonarqube:
     name: SonarQube scan
@@ -60,12 +65,13 @@ jobs:
     needs: test
     environment: production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
         with:
-          fetch-depth: 0 # Required for accurate blame and history analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+          persist-credentials: false
 
       - name: 'Download coverage and execution report'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 #4.3.0
         with:
           pattern: '*-report'
 
