@@ -125,7 +125,7 @@ jobs:
         env:
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
-          GH_BOT_TOKEN: ${{ secrets.BOT_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_ACCESS_TOKEN }}
           PROJECT_KEY: ${{ steps.project_key.outputs.key }}
           MAIN_PROJECT_KEY: ${{ steps.project_key.outputs.main_key }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
