@@ -1,21 +1,24 @@
 import pytest
 
-from cpg_flow.resources import JobResource, MachineType, _is_power_of_two, gcp_machine_name
+from cpg_flow.resources import Job, JobResource, MachineType, _is_power_of_two, gcp_machine_name
 
 
 # Mock Job class for testing
-class MockJob:
+class MockJob(Job):
     def __init__(self):
         self.resources = {}
 
-    def storage(self, value):
-        self.resources['storage'] = value
+    def storage(self, storage):
+        self.resources['storage'] = storage
+        return self
 
-    def cpu(self, value):
-        self.resources['cpu'] = value
+    def cpu(self, cores):
+        self.resources['cpu'] = cores
+        return self
 
-    def memory(self, value):
-        self.resources['memory'] = value
+    def memory(self, memory):
+        self.resources['memory'] = memory
+        return self
 
 
 def test_is_power_of_two():
