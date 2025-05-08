@@ -309,6 +309,11 @@ cpg = [
 [tool.coverage.run]
 omit = ["test/*", "setup.py"]
 
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "basic"
+
 [tool.semantic_release]
 version_variables = [
     "src/__init__.py:__version__",
