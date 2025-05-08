@@ -144,7 +144,7 @@ jobs:
           echo "$COMMENT" > body.md
 
           # Post the comment to the PR
-          gh pr comment --edit-last --create-if-none --body-file body.md $PR_NUMBER
+          gh pr comment $PR_NUMBER --create-if-none --body-file body.md
 
       # Optional: Fail the job if the Quality Gate fails
       - name: SonarQube Quality Gate
