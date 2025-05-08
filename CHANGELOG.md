@@ -1,6 +1,30 @@
 # CHANGELOG
 
 
+## v0.2.2 (2025-05-05)
+
+### Bug Fixes
+
+- **create_multicohort**: Cache result on identical input_cohorts list
+  ([`e5bcd63`](https://github.com/populationgenomics/cpg-flow/commit/e5bcd635061c94f589439c4604c4751eed8d4e6f))
+
+This is a proposed solution to Issue #79 where each call to get_multicohort is re-creating the
+  cohort object again from scratch. This results in many more calls to the Metamist API than
+  required. The cache on create_multicohort will resue the result rather than recreate it.
+
+Resolves Issue #79, SET-568
+
+### Documentation
+
+- Add comment to get_multicohort()
+  ([`35460ed`](https://github.com/populationgenomics/cpg-flow/commit/35460ed5424d27a29e4998b01433172d82526705))
+
+### Testing
+
+- Fix tests that mock create_multicohort & fix cohort ids in configs
+  ([`9d5bebc`](https://github.com/populationgenomics/cpg-flow/commit/9d5bebc79898d495df0909b47918eba578902c60))
+
+
 ## v0.2.1 (2025-04-10)
 
 ### Bug Fixes

@@ -70,7 +70,7 @@ def _custom_cohort_config(tmp_path) -> str:
     conf = f"""
     [workflow]
     dataset = 'projecta'
-    input_cohorts = ['COH1']
+    input_cohorts = ['COH5']
 
     path_scheme = 'local'
 

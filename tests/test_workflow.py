@@ -36,7 +36,7 @@ backend = 'local'
 """
 
 
-def mock_create_create_cohort() -> MultiCohort:
+def mock_create_create_cohort(*_) -> MultiCohort:
     m = MultiCohort()
     c = m.create_cohort(id='COH123', name='fewgenomes')
     ds = m.create_dataset('my_dataset')
