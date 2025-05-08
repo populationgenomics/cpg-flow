@@ -46,11 +46,6 @@ repos:
           ]
         additional_dependencies: [types-PyYAML==6.0.4, types-toml]
 
-  # - repo: https://github.com/RobertCraigie/pyright-python
-  #   rev: v1.1.400
-  #   hooks:
-  #     - id: pyright
-
   - repo: https://github.com/opensource-nepal/commitlint
     rev: v1.3.0
     hooks:

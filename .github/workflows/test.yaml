@@ -140,12 +140,11 @@ jobs:
           # Add the comment to GitHub Step Summary
           echo "$COMMENT" >> $GITHUB_STEP_SUMMARY
 
+          # Create body file
+          echo "$COMMENT" > body.md
+
           # Post the comment to the PR
-          curl -s -H "Authorization: token $GH_BOT_TOKEN" \
-              -H "Content-Type: application/json" \
-              -X POST \
-              -d "$(jq -nc --arg body "$COMMENT" '{body: $body}')" \
-              "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments"
+          gh pr comment --edit-last --create-if-none --body-file body.md $PR_NUMBER
 
       # Optional: Fail the job if the Quality Gate fails
       - name: SonarQube Quality Gate

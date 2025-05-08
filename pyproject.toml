@@ -306,11 +306,6 @@ cpg = [
     "metamist",
 ]
 
-[tool.pyright]
-venvPath = "."
-venv = ".venv"
-typeCheckingMode = "basic"
-
 [tool.coverage.run]
 omit = ["test/*", "setup.py"]
 
