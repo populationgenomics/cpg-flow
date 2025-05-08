@@ -13,15 +13,16 @@ on:
         default: false
         type: boolean
 
-permissions:
-  id-token: write
-  contents: write
+permissions: {}
 
 jobs:
   package:
     name: Package
     if: startsWith(github.event.head_commit.message, 'bump:') != true
     environment: production
+    permissions:
+      id-token: write
+      contents: write
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,16 +30,22 @@ jobs:
 
     steps:
       - name: Setup | Force correct release branch on workflow sha
+        env:
+          REPO: ${{ github.repository }}
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git clone https://github.com/${{ github.repository }} .
-          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+          set -euo pipefail
+          git clone https://github.com/${REPO} .
+          git checkout -B "${REF_NAME}" "${SHA}"
           git config user.name "cpg-software-ci-bot"
           git config user.email "software-team+githubcibot@populationgenomics.org.au"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}"
 
       - name: Action | Semantic Version Release
         id: release
-        uses: python-semantic-release/python-semantic-release@v9.21.0
+        uses: python-semantic-release/python-semantic-release@0dc72ac9058a62054a45f6344c83a423d7f906a8 #v9.21.1
         with:
           root_options: '-v'
           git_committer_email: 'software-team+githubcibot@populationgenomics.org.au'
@@ -52,18 +59,20 @@ jobs:
           make ci-build
 
       - name: Publish | Upload package to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.12.4
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc #v1.12.4
         if: steps.release.outputs.released == 'true' || github.event.inputs.force_pypi_release == 'true'
 
       - name: Publish | Upload to GitHub Release Assets
-        uses: python-semantic-release/publish-action@v9.21.0
+        uses: python-semantic-release/publish-action@1aa9f41fac5d531e6764e1991b536783337f3a56 #v9.21.1
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.BOT_ACCESS_TOKEN }}
           tag: ${{ steps.release.outputs.tag }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5.4.1
+        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca #v6.0.1
+        with:
+          enable-cache: false
 
       - name: Install project dependencies
         run: |
