@@ -124,6 +124,8 @@ class StageOutput:
                     f'{self.stage}: {self.data} is not a dictionary, can\'t get "{key}"',
                 )
             res = to_path(cast('dict', self.data)[key])
+        elif isinstance(self.data, Path):
+            res = self.data
         elif isinstance(self.data, str):
             res = to_path(self.data)
         else:
@@ -494,9 +496,9 @@ class Stage(ABC, Generic[TargetT]):
 
     def make_outputs(
         self,
-        *,
         target: Target,
         data: ExpectedResultT = None,  # TODO: ExpectedResultT is probably too broad, our code only really support dict
+        *,
         jobs: Sequence[Job | None] | Job | None = None,
         meta: dict | None = None,
         reusable: bool = False,

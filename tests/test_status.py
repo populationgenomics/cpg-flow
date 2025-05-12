@@ -112,7 +112,7 @@ def test_status_reporter(mocker: MockFixture, tmp_path):
             j.command(f'echo {sequencing_group.id}_done >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)))
             print(f'Writing to {self.expected_outputs(sequencing_group)}')
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     @stage(analysis_type='qc', analysis_keys=['bed'])
     class MyQcStage2(SequencingGroupStage):
@@ -131,7 +131,7 @@ def test_status_reporter(mocker: MockFixture, tmp_path):
             j.command(f'echo {sequencing_group.id}_done >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)['bed']))
             print(f'Writing to {self.expected_outputs(sequencing_group)["bed"]}')
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     reset_batch()
     run_workflow(stages=[MyQcStage1, MyQcStage2])
@@ -172,7 +172,7 @@ def test_status_reporter_with_custom_updater(mocker: MockFixture, tmp_path):
             j = get_batch().new_job('Echo', self.get_job_attrs(sequencing_group) | {'tool': 'echo'})
             j.command(f'echo 42 >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)))
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     run_workflow(stages=[MyQcStage])
 
@@ -210,7 +210,7 @@ def test_status_reporter_fails(mocker: MockFixture, tmp_path):
             j.command(f'echo {sequencing_group.id}_done >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)['bed']))
             print(f'Writing to {self.expected_outputs(sequencing_group)["bed"]}')
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     from cpg_flow.workflow import WorkflowError
 
