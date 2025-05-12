@@ -451,13 +451,7 @@ class GraphPlot:
         node_hovertext = list(
             map(
                 lambda n: (
-                    special_labels(n[0]) + 'Stage: ' + str(n[0]) + '<br>' + 'Stage Order: ' + str(n[1]['order'])
-                    # + '<br>'
-                    # + 'Layer: '
-                    # + str(n[1]['layer'])
-                    # + '<br>'
-                    # + 'Layer Order: '
-                    # + str(n[1]['layer_order'])
+                    special_labels(n[0]) + 'Stage: ' + str(n[0]) + '<br>' + 'Stage Order: ' + str(n[1].get('order', ''))
                 ),
                 self.G.nodes.items(),
             ),

@@ -98,8 +98,8 @@ class BamPath(CramOrBamPath):
     Represents a path to a BAM file, optionally with corresponding index.
     """
 
-    EXT = 'bam'
-    INDEX_EXT = 'bai'
+    FILE_EXT = 'bam'
+    FILE_INDEX_EXT = 'bai'
 
     def __init__(
         self,
@@ -110,11 +110,11 @@ class BamPath(CramOrBamPath):
 
     @property
     def ext(self) -> str:
-        return BamPath.EXT
+        return BamPath.FILE_EXT
 
     @property
     def index_ext(self) -> str:
-        return BamPath.INDEX_EXT
+        return BamPath.FILE_INDEX_EXT
 
 
 class CramPath(CramOrBamPath):
