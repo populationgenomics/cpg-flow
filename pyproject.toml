@@ -412,6 +412,7 @@ dev-dependencies = [
     "pytest>=8.3.3",
     "python-semantic-release>=9.4.1",
     "pyyaml>=6.0.2",
+    "ruff>=0.5.2",
     "toml>=0.10.2",
     "twine>=5.1.1",
     "mkdocs-material>=9.5.50",

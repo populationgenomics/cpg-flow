@@ -14,6 +14,9 @@ import numpy as np
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
+# Helpful Types
+Edge = tuple[float, float, float, float]
+
 
 class GraphPlot:
     def __init__(self, G: nx.DiGraph, **kwargs):
@@ -78,18 +81,17 @@ class GraphPlot:
         # Set the overall layout using this objects layout
         # Make sure the updates are to both subplot axes
         layout = self._get_layout()
+        layout.update(
+            annotations=self.get_annotations(xref='x1', yref='y1') + other.get_annotations(xref='x2', yref='y2'),
+        )
         fig.update_layout(layout)
         fig.update_layout(title='')
         fig.update_yaxes(layout.yaxis)
         fig.update_xaxes(layout.xaxis)
 
-        fig.layout.update(
-            annotations=self.get_annotations(xref='x1', yref='y1') + other.get_annotations(xref='x2', yref='y2'),
-        )
-
         return fig
 
-    def _get_layout(self):
+    def _get_layout(self) -> go.Layout:
         return go.Layout(
             title=self.title,
             titlefont_size=self.title_fontsize,
@@ -105,7 +107,7 @@ class GraphPlot:
         fig = self.create_figure()
         fig.show()
 
-    def create_traces(self) -> go.Figure:
+    def create_traces(self) -> list[go.Scatter]:
         # Add weight and depth attributes to the nodes
         for node in self.G.nodes:
             self.G.nodes[node]['weight'] = 1
@@ -156,7 +158,7 @@ class GraphPlot:
 
             # Get all the nodes in the graph that aren't n1 and n2 and get their position
             node_positions = np.array(
-                [self.G.nodes[n]['pos'] for n in self.G.nodes if n not in [n1, n2]],
+                [self.G.nodes[n]['pos'] for n in self.G.nodes if n not in edge],
             )
 
             # I only want to curve the edge if the straight line passes over a node
@@ -165,7 +167,7 @@ class GraphPlot:
 
             if closest_node_distance < self.node_size:
                 # If the straight line passes over a node, compute the curved edge
-                curve_x, curve_y = self._curved_edge(x0, y0, x1, y1, offset=self.curve, curve_left=curve_left)
+                curve_x, curve_y = self._curved_edge(edge=(x0, y0, x1, y1), offset=self.curve, curve_left=curve_left)
 
                 # Convert to NumPy arrays for easier calculations
                 points_x = np.array(curve_x)
@@ -246,7 +248,7 @@ class GraphPlot:
 
         return min_distance
 
-    def _create_edge_traces(self, filter_fun: Callable, color: str) -> list[go.Trace]:
+    def _create_edge_traces(self, filter_fun: Callable, color: str) -> list[go.Scatter]:
         # Begin plotting
         edge_x, edge_y, edge_names, mid_x, mid_y, mid_angles = self._get_edge_positions(filter_fun)
 
@@ -256,8 +258,10 @@ class GraphPlot:
             mode='lines',
             line=dict(width=self.edge_weight, color=color),
             hoverinfo='none',
+            marker=dict(
+                color=color,
+            ),
         )
-        edge_trace.marker.color = color
 
         # Add hover text
         # Scatter trace for edge hover text (at midpoints), using perpendicular vectors to orient markers
@@ -299,7 +303,7 @@ class GraphPlot:
         return [x0, *straight_x, x1], [y0, *straight_y, y1]
 
     # Function to add a curve around nodes
-    def _curved_edge(self, x0, y0, x1, y1, offset=0.5, num_points=100, curve_left=True):
+    def _curved_edge(self, edge: Edge, offset=0.5, num_points=100, curve_left=True):
         """
         Computes a curved path for an edge by introducing a midpoint offset proportional to the edge length.
         The direction of the curve can be controlled with the `curve_up` boolean.
@@ -314,6 +318,8 @@ class GraphPlot:
         Returns:
         - Curved coordinates as lists of x and y values.
         """
+        x0, y0, x1, y1 = edge
+
         # Compute edge length
         dx, dy = x1 - x0, y1 - y0
         length = np.sqrt(dx**2 + dy**2)
@@ -348,7 +354,7 @@ class GraphPlot:
         # Return the full curved path
         return [x0, *curve_x, x1], [y0, *curve_y, y1]
 
-    def _create_node_trace(self):
+    def _create_node_trace(self) -> go.Scatter:
         # Now get the node and edge positions
         node_x, node_y = self._get_node_positions()
         max_dim = max(*node_x, *node_y)
@@ -378,6 +384,7 @@ class GraphPlot:
         )
 
         # Create the node trace
+        marker['color'] = node_color
         node_trace = go.Scatter(
             x=node_x,
             y=node_y,
@@ -389,7 +396,6 @@ class GraphPlot:
             text=node_name,
             hovertext=node_hovertext,
         )
-        node_trace.marker.color = node_color
 
         return node_trace
 
@@ -422,7 +428,7 @@ class GraphPlot:
         )
         return node_name, node_hovertext, node_color
 
-    def _get_node_color(self, n: str, default: str | int = None):
+    def _get_node_color(self, n: str, default: str | int | None = None):
         if self.G.nodes[n]['skip_stages']:
             return '#5A5A5A', 'Skip stage'
         elif self.G.nodes[n]['only_stages']:
@@ -503,14 +509,18 @@ class GraphPlot:
                 self.G.nodes[node['name']]['pos'] = group_pos[idx]
 
     def get_annotations(self, xref='x', yref='y'):
-        def pts(edge, key):
+        def pts(edge, key) -> float:
             pts = {
                 'p1.x': self.G.nodes[edge[0]]['pos'][0],
                 'p1.y': self.G.nodes[edge[0]]['pos'][1],
                 'p2.x': self.G.nodes[edge[1]]['pos'][0],
                 'p2.y': self.G.nodes[edge[1]]['pos'][1],
             }
-            return pts.get(key)
+
+            if key not in pts:
+                raise ValueError(f'Key {key} not found in pts dictionary. Available keys: {list(pts.keys())}')
+
+            return pts[key]
 
         # Old arrows
         _ = [
@@ -558,9 +568,14 @@ class GraphPlot:
         ]
 
     def _node_layer_sort(self, nodes):
-        layer_num_parity = nodes[0][self.partite_key] % 2
+        layer_num_parity = bool(nodes[0][self.partite_key] % 2)
+
         degree = self.G.out_degree([n['name'] for n in nodes])
-        deg_order = sorted(nodes, key=lambda n: degree[n['name']], reverse=layer_num_parity)
+        if isinstance(degree, int):
+            raise ValueError('Degree is an int, not a dict. This should not happen.')
+        else:
+            degree = dict(degree)
+        deg_order = sorted(nodes, key=lambda n: degree.get(n['name'], 0), reverse=layer_num_parity)
 
         # Set largest degree towards the middle
         return deg_order[len(deg_order) % 2 :: 2] + deg_order[::-2]
