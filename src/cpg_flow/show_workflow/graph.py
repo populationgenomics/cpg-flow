@@ -169,8 +169,8 @@ class GraphPlot:
 
     def _get_edge_positions(self, filter_fun: Callable):
         # Add position info to the edges
-        edges: dict[str, list[float]] = {'x': [], 'y': []}
-        midpoints: dict[str, list[float]] = {'x': [], 'y': []}
+        edges: dict[str, list[float | None]] = {'x': [], 'y': []}
+        midpoints: dict[str, list[float | None]] = {'x': [], 'y': []}
         edge_names = []
         mid_angles = []  # This will store the perpendicular angles at each midpoint
 
@@ -201,8 +201,8 @@ class GraphPlot:
                 )
 
             # Add the edge to the list
-            edges['x'].extend(points_x + [None])
-            edges['y'].extend(points_y + [None])
+            edges['x'].extend(list(points_x) + [None])
+            edges['y'].extend(list(points_y) + [None])
 
             # Add hover text at the midpoint
             mid_idx = len(points_x) // 2
