@@ -237,7 +237,7 @@ class Workflow:
         """
         Prepare a unique path for the workflow with this name and this input data.
         """
-        return get_multicohort().dataset.prefix(category=category) / self.name / self.output_version
+        return get_multicohort().analysis_dataset.prefix(category=category) / self.name / self.output_version
 
     def cohort_prefix(self, cohort: Cohort, category: str | None = None) -> Path:
         """
@@ -252,7 +252,7 @@ class Workflow:
         Returns:
             Path
         """
-        return cohort.analysis_dataset.prefix(category=category) / self.name / cohort.id
+        return cohort.dataset.prefix(category=category) / self.name / cohort.id
 
     def run(
         self,
