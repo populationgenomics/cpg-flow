@@ -1,6 +1,209 @@
 # CHANGELOG
 
 
+## v0.2.3 (2025-05-13)
+
+### Bug Fixes
+
+- **cohort_dataset**: Correction to syntax
+  ([`181068d`](https://github.com/populationgenomics/cpg-flow/commit/181068d36fdc33f02e4b5a570755b967b3fee794))
+
+### Build System
+
+- **uv.lock**: Bumping cryptography and jinja2
+  ([`d8dc7ed`](https://github.com/populationgenomics/cpg-flow/commit/d8dc7eddda51221027f19c887bbcced40b3ce395))
+
+There are vulnerabilities identified in cryptography==43.0.3 and jinja2==3.1.5 which are fixed by
+  bumping them in our uv.lock file
+
+### Code Style
+
+- **BamPath**: Rename class attributes for cleaner code
+  ([`cb05603`](https://github.com/populationgenomics/cpg-flow/commit/cb05603ea1c123f6faaddd8d61edc092c842443d))
+
+- **pretty-format-json**: Add json formatter to pre-commit hook
+  ([`40e2e96`](https://github.com/populationgenomics/cpg-flow/commit/40e2e961101e251a79b2133fa43ce27d7f4ee2d4))
+
+### Continuous Integration
+
+- Add delete-me branch to test functionality of cleanup
+  ([`c4fd31d`](https://github.com/populationgenomics/cpg-flow/commit/c4fd31d22a988f30c26d06a837675f0bd60eff82))
+
+- Addressing code scanning results of zizmor
+  ([`caffb2c`](https://github.com/populationgenomics/cpg-flow/commit/caffb2c20209fdf2faf7179e71904541543f508c))
+
+- Change link to h2
+  ([`5141c4b`](https://github.com/populationgenomics/cpg-flow/commit/5141c4b3b1270d9e8ffcf16f63c4ca8b16a3c566))
+
+- **cleanup-sonarqube**: Add production env to get secret access
+  ([`b13a484`](https://github.com/populationgenomics/cpg-flow/commit/b13a484e9d3bf8a30c018870bc348d7955159ba1))
+
+- **cleanup-sonarqube**: Address security alerts in workflows
+  ([`45684c4`](https://github.com/populationgenomics/cpg-flow/commit/45684c49ef28dec04d663ac247bc107fc052c4a5))
+
+- **cleanup-sonarqube**: Check the project exists before the delete
+  ([`243d8b8`](https://github.com/populationgenomics/cpg-flow/commit/243d8b80fa12b622e0d40fc79718754630efa834))
+
+- **cleanup-sonarqube**: Fix curl command
+  ([`ffc0c04`](https://github.com/populationgenomics/cpg-flow/commit/ffc0c04a060adef42611a05208d7f479c5b361c6))
+
+You need an admin token in order to delete, the global token failed. Also the format was wrong for
+  sending the token, it needed to be in the Authorization: Bearer header.
+
+- **cleanup-sonarqube**: Show delete error
+  ([`c972477`](https://github.com/populationgenomics/cpg-flow/commit/c9724776db852b4be5035dc164be4a32dd3df9d7))
+
+- **cleanup-sonarqube**: Tested and working cleanup action
+  ([`de93183`](https://github.com/populationgenomics/cpg-flow/commit/de93183c0bb5a309952cccc1a16f3e7dd719525c))
+
+Tested by merging into delete-me branch. All working now. See the successful action here:
+  https://github.com/populationgenomics/cpg-flow/actions/runs/14895431016/job/41836900804.
+
+- **sonarqube**: Add main project link as well
+  ([`c6003cd`](https://github.com/populationgenomics/cpg-flow/commit/c6003cd0ba6caa6b078ef48140eab8e3b177ad69))
+
+- **sonarqube**: Change link labels
+  ([`90b47a3`](https://github.com/populationgenomics/cpg-flow/commit/90b47a3d5ec53aec2b8e20747f34f9255b7182e2))
+
+- **sonarqube**: Enable quality gate
+  ([`a4901a2`](https://github.com/populationgenomics/cpg-flow/commit/a4901a21c674862cfcfa13ca315860b6393bac56))
+
+- **sonarqube**: Fix the metricKeys in the sonarqube-fetch.sh script
+  ([`b955ff5`](https://github.com/populationgenomics/cpg-flow/commit/b955ff57e4b3473a25ef33680b39d012df8d5b3b))
+
+- **sonarqube**: Format headers and fix link style
+  ([`fca4096`](https://github.com/populationgenomics/cpg-flow/commit/fca4096ec29df029f0fc197455a4c8f6eca641f9))
+
+- **sonarqube**: Rename headings to PR and main branch
+  ([`37eb8e2`](https://github.com/populationgenomics/cpg-flow/commit/37eb8e280b256b070990331704985c6960b5f7c0))
+
+- **sonarqube**: Rm link from chain emoji
+  ([`ffac0f7`](https://github.com/populationgenomics/cpg-flow/commit/ffac0f75ab6934d2235362be0f896885c97b9bdf))
+
+- **sonarqube**: Use version on push to sonarqube when running on main
+  ([`11961bc`](https://github.com/populationgenomics/cpg-flow/commit/11961bc440c1bc51a065aa7fa1393c0e4a676438))
+
+- **test**: Add emoji to the quality gate status
+  ([`bbc8814`](https://github.com/populationgenomics/cpg-flow/commit/bbc88141de5c34a287ded19431224d99c90285c8))
+
+- **test**: Add GH_BOT_TOKEN to env
+  ([`77211c3`](https://github.com/populationgenomics/cpg-flow/commit/77211c3f453a06a6f3a46881c36a0fba206b7a66))
+
+- **test**: Address security code scanning on workflows
+  ([`324da98`](https://github.com/populationgenomics/cpg-flow/commit/324da988faafc9b263e54449959f560eab5511d4))
+
+- **test**: Another sonarqube link fix
+  ([`1a4fd9f`](https://github.com/populationgenomics/cpg-flow/commit/1a4fd9f36480b2f46e2a029fc4d23715f54f33a6))
+
+- **test**: Change from ref_name to head_ref for branch key
+  ([`b6b0783`](https://github.com/populationgenomics/cpg-flow/commit/b6b078369328b4b969bafc0b449a77db7e125ea1))
+
+- **test**: Confirm the existence of the coverage and execution reports
+  ([`5f3ee5d`](https://github.com/populationgenomics/cpg-flow/commit/5f3ee5d28022c81b743e5d932472d095bc4674ea))
+
+- **test**: Convert SONAR_HOST_URL to variable not secret
+  ([`be6e6a7`](https://github.com/populationgenomics/cpg-flow/commit/be6e6a7acc03583f8d5f5a5e2252d6f1e3f1a515))
+
+- **test**: Correct to use github actions variable github.sha
+  ([`0e98c17`](https://github.com/populationgenomics/cpg-flow/commit/0e98c173450b607dc6f57c0f9051009ad971c6f8))
+
+- **test**: Debugging final url - add echos
+  ([`a24e0ab`](https://github.com/populationgenomics/cpg-flow/commit/a24e0abb574270a687c7196e563cb3c717fadfab))
+
+- **test**: Fix environment variable access
+  ([`9012348`](https://github.com/populationgenomics/cpg-flow/commit/90123489e7dc42ed490c5588c0f95806f5150fbf))
+
+- **test**: Fix extracting sonarqube api values
+  ([`32232c9`](https://github.com/populationgenomics/cpg-flow/commit/32232c97e27b9d5a652286ee5ab0c0969fd1d793))
+
+- **test**: Fix GH_BOT_TOKEN to GH_TOKEN for gh cli command
+  ([`ebde25a`](https://github.com/populationgenomics/cpg-flow/commit/ebde25a0e34872b71404f9079a6a29abf042dea7))
+
+- **test**: Fix output url
+  ([`06ddc49`](https://github.com/populationgenomics/cpg-flow/commit/06ddc49842c321e89eaa7db1201a2c32af8efd05))
+
+- **test**: Fix template name
+  ([`cf9bfe6`](https://github.com/populationgenomics/cpg-flow/commit/cf9bfe639dc6ca94e31294bdc4993d93a77456a8))
+
+- **test**: Fix template path
+  ([`190b6b7`](https://github.com/populationgenomics/cpg-flow/commit/190b6b73ccde3696345449626e242ce0c267b579))
+
+- **test**: Load template.md properly
+  ([`c4f8dff`](https://github.com/populationgenomics/cpg-flow/commit/c4f8dff56eb20aa625f38ec7238c9106acca2baf))
+
+- **test**: Move sonarqube logic to it's own script
+  ([`77b036e`](https://github.com/populationgenomics/cpg-flow/commit/77b036ecfb848331228740bf0b0bab4d2a0df045))
+
+- **test**: Mv reports to root directory
+  ([`d38730d`](https://github.com/populationgenomics/cpg-flow/commit/d38730dc86e906863a0f9b5af642bc65f1041c0e))
+
+- **test**: New PR comment format
+  ([`18ae743`](https://github.com/populationgenomics/cpg-flow/commit/18ae743379c0764eb418759b241b12414cc24fc0))
+
+- **test**: New sonarqube PR comment template
+  ([`5a35a19`](https://github.com/populationgenomics/cpg-flow/commit/5a35a197af1919a982f73ce723176b05bcbcacc6))
+
+- **test**: Pass in sonarqube version (the github sha)
+  ([`69fa6d8`](https://github.com/populationgenomics/cpg-flow/commit/69fa6d8105d77cb73447888bfd4d2fa0dc1cbe70))
+
+- **test**: Remove --edit-last so you get a new post every workflow run
+  ([`1a17efb`](https://github.com/populationgenomics/cpg-flow/commit/1a17efb418d54ba796d5ded502330615817eb7f4))
+
+- **test**: Revert back to accessing secret directly
+  ([`e242145`](https://github.com/populationgenomics/cpg-flow/commit/e24214553f6d0ee3b3877f1dc55cdda0b121111b))
+
+- **test**: Rm --create-if-none flag - not needed
+  ([`247671f`](https://github.com/populationgenomics/cpg-flow/commit/247671fd8cd2e43257fe39ed0d2dee71add23b99))
+
+- **test**: Rm cat of execution/coverage file and output result link
+  ([`38b2172`](https://github.com/populationgenomics/cpg-flow/commit/38b21722c259580341153e77b5c6ca4d12935aee))
+
+- **test**: Rm unused badge data from test.yaml
+  ([`bbd9957`](https://github.com/populationgenomics/cpg-flow/commit/bbd9957e489fd67e0494ccf6071a636d0bf66260))
+
+- **test**: Sonarqube scan every pr and create it's own project
+  ([`ff77fde`](https://github.com/populationgenomics/cpg-flow/commit/ff77fde6c66d72b93dc0f442622f25da1d59f1fd))
+
+This is the (slightly hacky) work around for being limited to the community version where we can't
+  do separate scans on each PR. The solution is make a new sonarqube project for every
+  project-pr-<pr-name> and remove that project on merge to main (where a scan on main will then be
+  performed). A little gross, and the main downside is creating an unnecessary number of projects
+  cluttering the ui and also increasing the required specs on our sonarqube instance.
+
+- **test**: Try to fix the summary link, add env section
+  ([`09f6494`](https://github.com/populationgenomics/cpg-flow/commit/09f64943bb69de20fc03348defa3a90db611a6ab))
+
+- **test**: Update sonarqube summary template
+  ([`ef84798`](https://github.com/populationgenomics/cpg-flow/commit/ef84798980ba7f0ebe91960fc31c7619c5b8e41f))
+
+- **test**: Update to show all and new code stats
+  ([`bcf7d7d`](https://github.com/populationgenomics/cpg-flow/commit/bcf7d7deab6dbbe69f1ddec2871a404f853b805b))
+
+- **test**: Use vars context
+  ([`3a9b95a`](https://github.com/populationgenomics/cpg-flow/commit/3a9b95ad896441375fc8d8709cb84d9dde37faac))
+
+### Documentation
+
+- **.github/CODEOWNERS**: Added software team to code owners
+  ([`8d12f7a`](https://github.com/populationgenomics/cpg-flow/commit/8d12f7a063cb50adbe4f3aac29c0df007cf39328))
+
+### Refactoring
+
+- **test,pre-commit**: Use gh pr comment and rm extra code from PR
+  ([`b5a2c1d`](https://github.com/populationgenomics/cpg-flow/commit/b5a2c1d6de2a5b628c7d5826341f953e00d27911))
+
+### Testing
+
+- Add test_resources for the resources.py file
+  ([`2772a9e`](https://github.com/populationgenomics/cpg-flow/commit/2772a9e3632c9f4ef5c116b4d069d068bbf43d85))
+
+- Add unit tests for graph.py
+  ([`6928743`](https://github.com/populationgenomics/cpg-flow/commit/69287436d67f7982fdef50ec17e9ea0557944d1b))
+
+- Update test_resources MockJob
+  ([`e6a9b17`](https://github.com/populationgenomics/cpg-flow/commit/e6a9b17336655cd4dd284e0067fa575276f47784))
+
+
 ## v0.2.2 (2025-05-05)
 
 ### Bug Fixes
@@ -13,6 +216,11 @@ This is a proposed solution to Issue #79 where each call to get_multicohort is r
   required. The cache on create_multicohort will resue the result rather than recreate it.
 
 Resolves Issue #79, SET-568
+
+### Continuous Integration
+
+- Prevent the double run of package workflow with the "bump:" commit
+  ([`24a5154`](https://github.com/populationgenomics/cpg-flow/commit/24a515407d41d172b03b9d4d80e9d0d25987747a))
 
 ### Documentation
 
