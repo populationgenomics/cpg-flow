@@ -135,3 +135,6 @@ dmypy.json
 .vscode/
 .secrets
 .scannerwork/
+
+# Ignore text files
+*.txt

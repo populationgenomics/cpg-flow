@@ -20,11 +20,13 @@ def sample_graph():
             ('F', 'D'),
         ],
     )
-    nx.set_node_attributes(G, False, 'skipped')
-    nx.set_node_attributes(G, False, 'skip_stages')
-    nx.set_node_attributes(G, False, 'only_stages')
-    nx.set_node_attributes(G, False, 'first_stages')
-    nx.set_node_attributes(G, False, 'last_stages')
+    all_nodes_false = dict.fromkeys(G.nodes, False)
+
+    nx.set_node_attributes(G, all_nodes_false, 'skipped')
+    nx.set_node_attributes(G, all_nodes_false, 'skip_stages')
+    nx.set_node_attributes(G, all_nodes_false, 'only_stages')
+    nx.set_node_attributes(G, all_nodes_false, 'first_stages')
+    nx.set_node_attributes(G, all_nodes_false, 'last_stages')
     return G
 
 

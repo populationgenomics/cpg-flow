@@ -8,13 +8,15 @@ from collections.abc import Callable
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
 
+from cpg_flow.metamist import AnalysisStatus, get_metamist
 from cpg_flow.targets import Target
 from cpg_flow.targets.cohort import Cohort
 from cpg_flow.targets.multicohort import MultiCohort
+from cpg_utils import to_path
 from cpg_utils.config import get_config
 
 
-def complete_analysis_job(
+def complete_analysis_job(  # noqa: PLR0917
     output: str,
     analysis_type: str,
     cohort_ids: list[str],
@@ -38,14 +40,11 @@ def complete_analysis_job(
         tolerate_missing (bool): if True, allow missing output
     """
 
-    from cpg_flow.metamist import AnalysisStatus, get_metamist
-    from cpg_utils import to_path
-
     assert isinstance(output, str)
     output_cloudpath = to_path(output)
 
     if update_analysis_meta is not None:
-        meta = meta | update_analysis_meta(output)
+        meta |= update_analysis_meta(output)
 
     # if SG IDs are listed in the meta, remove them
     # these are already captured in the sg_ids list
@@ -85,9 +84,9 @@ def complete_analysis_job(
         meta=meta,
     )
     if a_id is None:
-        _msg = f'Creation of Analysis failed (type={analysis_type}, output={output}) in {project_name}'
-        print(_msg)
-        raise ConnectionError(_msg)
+        msg = f'Creation of Analysis failed (type={analysis_type}, output={output}) in {project_name}'
+        print(msg)
+        raise ConnectionError(msg)
     print(
         f'Created Analysis(id={a_id}, type={analysis_type}, output={output}) in {project_name}',
     )
@@ -105,7 +104,7 @@ class StatusReporter(ABC):
     """
 
     @abstractmethod
-    def create_analysis(
+    def create_analysis(  # noqa: PLR0917
         self,
         b: Batch,
         output: str,
@@ -131,8 +130,8 @@ class MetamistStatusReporter(StatusReporter):
     def __init__(self) -> None:
         super().__init__()
 
-    def create_analysis(
-        self,
+    @staticmethod
+    def create_analysis(  # noqa: PLR0917
         b: Batch,
         output: str,
         analysis_type: str,

@@ -1,6 +1,14 @@
 import pytest
 
-from cpg_flow.resources import Job, JobResource, MachineType, _is_power_of_two, gcp_machine_name
+from cpg_flow.resources import (
+    Job,
+    JobResource,
+    MachineType,
+    gcp_machine_name,
+    is_power_of_two,
+    storage_for_cram_qc_job,
+    storage_for_joint_vcf,
+)
 
 
 # Mock Job class for testing
@@ -22,11 +30,11 @@ class MockJob(Job):
 
 
 def test_is_power_of_two():
-    assert _is_power_of_two(1) is True
-    assert _is_power_of_two(2) is True
-    assert _is_power_of_two(4) is True
-    assert _is_power_of_two(3) is False
-    assert _is_power_of_two(5) is False
+    assert is_power_of_two(1) is True
+    assert is_power_of_two(2) is True
+    assert is_power_of_two(4) is True
+    assert is_power_of_two(3) is False
+    assert is_power_of_two(5) is False
 
 
 def test_gcp_machine_name():
@@ -42,7 +50,7 @@ def test_machine_type_request_resources():
     machine = MachineType('standard', ncpu=16, mem_gb_per_core=3.75, price_per_hour=1.0, disk_size_gb=375)
     resource = machine.request_resources(ncpu=4)
     assert resource.get_ncpu() == 4
-    assert resource.get_mem_gb() == 4 * 3.75
+    assert resource.get_mem_gb() == pytest.approx(4 * 3.75)
 
 
 def test_machine_type_adjust_ncpu():
@@ -82,8 +90,6 @@ def test_job_resource_java_gc_thread_options():
 
 def test_storage_for_cram_qc_job(mocker):
     mocker.patch('cpg_flow.resources.get_config', return_value={'workflow': {'sequencing_type': 'genome'}})
-    from cpg_flow.resources import storage_for_cram_qc_job
-
     assert storage_for_cram_qc_job() == 100
 
     mocker.patch('cpg_flow.resources.get_config', return_value={'workflow': {'sequencing_type': 'exome'}})
@@ -92,19 +98,17 @@ def test_storage_for_cram_qc_job(mocker):
 
 def test_storage_for_joint_vcf(mocker):
     mocker.patch('cpg_flow.resources.get_config', return_value={'workflow': {'sequencing_type': 'genome'}})
-    from cpg_flow.resources import storage_for_joint_vcf
-
-    assert storage_for_joint_vcf(1000) == 1000.0
-    assert storage_for_joint_vcf(1000, site_only=False) == 1500.0
+    assert storage_for_joint_vcf(1000) == pytest.approx(1000.0)
+    assert storage_for_joint_vcf(1000, site_only=False) == pytest.approx(1500.0)
 
     mocker.patch('cpg_flow.resources.get_config', return_value={'workflow': {'sequencing_type': 'exome'}})
-    assert storage_for_joint_vcf(1000) == 100.0
+    assert storage_for_joint_vcf(1000) == pytest.approx(100.0)
 
 
 def test_job_resource_get_mem_gb():
     machine = MachineType('standard', ncpu=16, mem_gb_per_core=3.75, price_per_hour=1.0, disk_size_gb=375)
     resource = JobResource(machine_type=machine, ncpu=4)
-    assert resource.get_mem_gb() == 4 * 3.75
+    assert resource.get_mem_gb() == pytest.approx(4 * 3.75)
 
 
 def test_job_resource_get_ncpu():

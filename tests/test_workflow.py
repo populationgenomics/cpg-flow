@@ -4,9 +4,19 @@ Test building Workflow object.
 
 from unittest import mock
 
+from cpg_flow.inputs import get_multicohort
+from cpg_flow.stage import (
+    CohortStage,
+    SequencingGroupStage,
+    StageInput,
+    StageOutput,
+    stage,
+)
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
-from cpg_flow.workflow import path_walk
+from cpg_flow.workflow import path_walk, run_workflow
 from cpg_utils import Path, to_path
+from cpg_utils.config import dataset_path
+from cpg_utils.hail_batch import get_batch
 
 from tests import set_config
 
@@ -63,18 +73,6 @@ def test_workflow(tmp_path):
     conf = TOML.format(directory=tmp_path)
     set_config(conf, tmp_path / 'config.toml')
 
-    from cpg_flow.inputs import get_multicohort
-    from cpg_flow.stage import (
-        CohortStage,
-        SequencingGroupStage,
-        StageInput,
-        StageOutput,
-        stage,
-    )
-    from cpg_flow.workflow import run_workflow
-    from cpg_utils.config import dataset_path
-    from cpg_utils.hail_batch import get_batch
-
     output_path = to_path(dataset_path('cohort.tsv'))
 
     multi_cohort = get_multicohort()
@@ -92,7 +90,8 @@ def test_workflow(tmp_path):
         Just a sequencing-group-level stage.
         """
 
-        def expected_outputs(self, sequencing_group: SequencingGroup) -> Path:
+        @staticmethod
+        def expected_outputs(sequencing_group: SequencingGroup) -> Path:
             return to_path(dataset_path(f'{sequencing_group.id}.tsv'))
 
         def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -108,7 +107,8 @@ def test_workflow(tmp_path):
         Just a cohort-level stage.
         """
 
-        def expected_outputs(self, cohort: Cohort) -> Path:
+        @staticmethod
+        def expected_outputs(_: Cohort) -> Path:
             return output_path
 
         def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:

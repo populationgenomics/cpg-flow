@@ -10,6 +10,7 @@ from cpg_flow.stage import (
     DatasetStage,
     MultiCohortStage,
     SequencingGroupStage,
+    StageDecorator,
     StageInput,
     StageOutput,
     stage,
@@ -98,7 +99,7 @@ class TestStage(SequencingGroupStage):
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
         j = get_batch().new_job(self.name, attributes=self.get_job_attrs(sequencing_group))
-        return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), j)
+        return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
 
 class TestDatasetStage(DatasetStage):
@@ -107,7 +108,7 @@ class TestDatasetStage(DatasetStage):
 
     def queue_jobs(self, dataset: Dataset, inputs: StageInput) -> StageOutput | None:
         j = get_batch().new_job(self.name, attributes=self.get_job_attrs(dataset))
-        return self.make_outputs(dataset, self.expected_outputs(dataset), j)
+        return self.make_outputs(dataset, self.expected_outputs(dataset), jobs=j)
 
 
 class TestCohortStage(CohortStage):
@@ -116,7 +117,7 @@ class TestCohortStage(CohortStage):
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
         j = get_batch().new_job(self.name, attributes=self.get_job_attrs(cohort))
-        return self.make_outputs(cohort, self.expected_outputs(cohort), j)
+        return self.make_outputs(cohort, self.expected_outputs(cohort), jobs=j)
 
 
 class TestMultiCohortStage(MultiCohortStage):
@@ -125,7 +126,7 @@ class TestMultiCohortStage(MultiCohortStage):
 
     def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
         j = get_batch().new_job(self.name, attributes=self.get_job_attrs(multicohort))
-        return self.make_outputs(multicohort, self.expected_outputs(multicohort), j)
+        return self.make_outputs(multicohort, self.expected_outputs(multicohort), jobs=j)
 
 
 # A -> B -> C -> D
@@ -196,10 +197,10 @@ StageType = Union[type[TestStage], type[TestDatasetStage], type[TestCohortStage]
 def run_workflow(
     mocker,
     cohort_mocker: Callable[..., Cohort | MultiCohort] = mock_cohort,
-    stages: list[StageType] | None = None,
+    stages: list[StageDecorator] | None = None,
 ):
     mocker.patch('cpg_flow.inputs.create_multicohort', lambda x: cohort_mocker())
     mocker.patch('cpg_flow.inputs.get_multicohort', cohort_mocker)
 
     stages = stages or [C, C2]
-    _run_workflow(stages)  # type: ignore
+    _run_workflow(stages)

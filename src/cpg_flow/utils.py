@@ -190,9 +190,9 @@ def exists_not_cached(path: Path | str, verbose: bool = True) -> bool:
     """
     path = cast('Path', to_path(path))
 
-    if path.suffix in ['.mt', '.ht']:
+    if path.suffix in {'.mt', '.ht'}:
         path /= '_SUCCESS'
-    if path.suffix in ['.vds']:
+    if path.suffix == '.vds':
         path /= 'variant_data/_SUCCESS'
 
     if verbose:
@@ -405,8 +405,8 @@ def write_to_gcs_bucket(contents, path: Path):
     if not str(path).startswith('gs:/'):
         raise ValueError(f'Path {path} must be a GCS path')
 
-    path = str(path).removeprefix('gs:/').removeprefix('/')
-    bucket_name, blob_name = path.split('/', 1)
+    new_path = str(path).removeprefix('gs:/').removeprefix('/')
+    bucket_name, blob_name = new_path.split('/', 1)
 
     bucket = client.bucket(bucket_name)
     if not bucket.exists():

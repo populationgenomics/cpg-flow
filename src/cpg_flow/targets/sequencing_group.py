@@ -178,9 +178,9 @@ class SequencingGroup(Target):
             'dataset': self.dataset.name,
             'sequencing_group': self.id,
         }
-        _participant_id: str | None = self._participant_id or self._external_id
-        if _participant_id:
-            attrs['participant_id'] = _participant_id
+        participant_id: str | None = self._participant_id or self._external_id
+        if participant_id:
+            attrs['participant_id'] = participant_id
         return attrs
 
     def get_job_prefix(self) -> str:

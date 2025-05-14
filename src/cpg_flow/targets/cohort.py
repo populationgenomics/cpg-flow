@@ -86,7 +86,7 @@ class Cohort(Target):
         df = pd.DataFrame(datas)
 
         if out_path is None:
-            out_path = self.analysis_dataset.tmp_prefix() / 'ped' / f'{self.get_alignment_inputs_hash()}.ped'
+            out_path = self.dataset.tmp_prefix() / 'ped' / f'{self.get_alignment_inputs_hash()}.ped'
 
         if not get_config()['workflow'].get('dry_run', False):
             with out_path.open('w') as fp:
@@ -125,15 +125,15 @@ class Cohort(Target):
         """
         return [s for s in self._sequencing_group_by_id.values() if (s.active or not only_active)]
 
-    def get_job_attrs(self) -> dict:
+    @staticmethod
+    def get_job_attrs() -> dict:
         """
         Attributes for Hail Batch job.
         """
-        return {
-            # 'sequencing_groups': self.get_sequencing_group_ids(),
-        }
+        return {}
 
-    def get_job_prefix(self) -> str:
+    @staticmethod
+    def get_job_prefix() -> str:
         """
         Prefix job names.
         """
@@ -144,7 +144,7 @@ class Cohort(Target):
         Export to a parsable TSV file
         """
         assert self.get_sequencing_groups()
-        tsv_path = self.analysis_dataset.tmp_prefix() / 'samples.tsv'
+        tsv_path = to_path(self.dataset.tmp_prefix() / 'samples.tsv')
         df = pd.DataFrame(
             {
                 's': s.id,
@@ -155,6 +155,8 @@ class Cohort(Target):
             }
             for s in self.get_sequencing_groups()
         ).set_index('s', drop=False)
-        with to_path(tsv_path).open('w') as f:
+
+        with tsv_path.open('w') as f:
             df.to_csv(f, index=False, sep='\t', na_rep='NA')
-        return tsv_path
+
+        return str(tsv_path)

@@ -264,10 +264,10 @@ class Workflow:
         When `run_all_implicit_stages` is set, all required stages that were not defined
         explicitly would still be executed.
         """
-        _stages = stages or self._stages
-        if not _stages:
+        stages_value = stages or self._stages
+        if not stages_value:
             raise WorkflowError('No stages added')
-        self.set_stages(_stages)
+        self.set_stages(stages_value)
 
         if not self.dry_run:
             get_batch().run(wait=wait)
@@ -426,68 +426,27 @@ class Workflow:
         logger.info(f'  workflow/last_stages: {last_stages}')
 
         # Round 1: initialising stage objects.
-        _stages_d: dict[str, Stage] = {}
+        stages_dict: dict[str, Stage] = {}
         for cls in requested_stages:
-            if cls.__name__ in _stages_d:
+            if cls.__name__ in stages_dict:
                 continue
-            _stages_d[cls.__name__] = cls()
+            stages_dict[cls.__name__] = cls()
 
         # Round 2: depth search to find implicit stages.
-        depth = 0
-        while True:  # might require few iterations to resolve dependencies recursively
-            depth += 1
-            newly_implicitly_added_d = dict()
-            for stg in _stages_d.values():
-                if stg.name in skip_stages:
-                    stg.skipped = True
-                    continue  # not searching deeper
-
-                if only_stages and stg.name not in only_stages:
-                    stg.skipped = True
-
-                # Iterate dependencies:
-                for reqcls in stg.required_stages_classes:
-                    if reqcls.__name__ in _stages_d:  # already added
-                        continue
-                    # Initialising and adding as explicit.
-                    reqstg = reqcls()
-                    newly_implicitly_added_d[reqstg.name] = reqstg
-
-            if newly_implicitly_added_d:
-                logger.info(
-                    f'Additional implicit stages: {list(newly_implicitly_added_d.keys())}',
-                )
-                _stages_d |= newly_implicitly_added_d
-            else:
-                # No new implicit stages added, so can stop the depth-search here
-                break
+        stages_dict = self._resolve_implicit_stages(
+            stages_dict=stages_dict,
+            skip_stages=skip_stages,
+            only_stages=only_stages,
+        )
 
         # Round 3: set "stage.required_stages" fields to each stage.
-        for stg in _stages_d.values():
+        for stg in stages_dict.values():
             stg.required_stages = [
-                _stages_d[cls.__name__] for cls in stg.required_stages_classes if cls.__name__ in _stages_d
+                stages_dict[cls.__name__] for cls in stg.required_stages_classes if cls.__name__ in stages_dict
             ]
 
         # Round 4: determining order of execution.
-        dag_node2nodes = dict()  # building a DAG
-        for stg in _stages_d.values():
-            dag_node2nodes[stg.name] = set(dep.name for dep in stg.required_stages)
-        dag = nx.DiGraph(dag_node2nodes)
-
-        try:
-            stage_names = list(reversed(list(nx.topological_sort(dag))))
-        except nx.NetworkXUnfeasible:
-            logger.error('Circular dependencies found between stages')
-            raise
-
-        logger.info(f'Stages in order of execution:\n{stage_names}')
-        stages = [_stages_d[name] for name in stage_names]
-
-        # Set order attribute to stages
-        nx.set_node_attributes(dag, {s.name: num for num, s in enumerate(stages)}, name='order')
-
-        # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
-        nx.set_node_attributes(dag, False, name='skipped')
+        stages, dag = self._determine_order_of_execution(stages_dict)
 
         # Round 5: applying workflow options first_stages and last_stages.
         if first_stages or last_stages:
@@ -528,11 +487,75 @@ class Workflow:
                         f'Stage {stg} failed to queue jobs with errors: ' + '\n'.join(errors),
                     )
         else:
-            self.queued_stages = [stg for stg in _stages_d.values() if not stg.skipped]
+            self.queued_stages = [stg for stg in stages_dict.values() if not stg.skipped]
             logger.info(f'Queued stages: {self.queued_stages}')
 
         # Round 7: show the workflow
+        self._show_workflow(dag, skip_stages, only_stages, first_stages, last_stages)
 
+    @staticmethod
+    def _resolve_implicit_stages(stages_dict: dict, skip_stages: list[str], only_stages: list[str]):
+        implicit_stages = {'first': 'loop'}
+
+        while len(implicit_stages) > 0:
+            implicit_stages = dict()
+            for stg in stages_dict.values():
+                if stg.name in skip_stages:
+                    stg.skipped = True
+                    continue  # not searching deeper
+
+                if only_stages and stg.name not in only_stages:
+                    stg.skipped = True
+
+                # Get all deps not already in stages_dict
+                not_in_stages_dict = {
+                    cls().name: cls() for cls in stg.required_stages_classes if cls.__name__ not in stages_dict
+                }
+                implicit_stages |= not_in_stages_dict
+
+            # If there's nothing more to add, finish search
+            if not implicit_stages:
+                break
+
+            logger.info(
+                f'Additional implicit stages: {list(implicit_stages.keys())}',
+            )
+            stages_dict |= implicit_stages
+
+        return stages_dict
+
+    @staticmethod
+    def _determine_order_of_execution(stages_dict: dict):
+        dag_node2nodes = dict()  # building a DAG
+        for stg in stages_dict.values():
+            dag_node2nodes[stg.name] = set(dep.name for dep in stg.required_stages)
+        dag = nx.DiGraph(dag_node2nodes)
+
+        try:
+            stage_names = list(reversed(list(nx.topological_sort(dag))))
+        except nx.NetworkXUnfeasible:
+            logger.error('Circular dependencies found between stages')
+            raise
+
+        logger.info(f'Stages in order of execution:\n{stage_names}')
+        stages_in_order = [stages_dict[name] for name in stage_names]
+
+        # Set order attribute to stages
+        nx.set_node_attributes(dag, values={s.name: num for num, s in enumerate(stages_in_order)}, name='order')
+
+        # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
+        nx.set_node_attributes(dag, values=dict.fromkeys(dag.nodes, False), name='skipped')
+
+        return stages_in_order, dag
+
+    def _show_workflow(
+        self,
+        dag: nx.DiGraph,
+        skip_stages: list[str],
+        only_stages: list[str],
+        first_stages: list[str],
+        last_stages: list[str],
+    ):
         def format_meta(attr: list):
             return {s: s in attr for s in dag.nodes}
 

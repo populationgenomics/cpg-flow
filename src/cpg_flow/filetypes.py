@@ -122,8 +122,8 @@ class CramPath(CramOrBamPath):
     Represents a path to a CRAM file, optionally with corresponding index.
     """
 
-    EXT = 'cram'
-    INDEX_EXT = 'crai'
+    FILE_EXT = 'cram'
+    FILE_INDEX_EXT = 'crai'
 
     def __init__(
         self,
@@ -136,11 +136,11 @@ class CramPath(CramOrBamPath):
 
     @property
     def ext(self) -> str:
-        return CramPath.EXT
+        return CramPath.FILE_EXT
 
     @property
     def index_ext(self) -> str:
-        return CramPath.INDEX_EXT
+        return CramPath.FILE_INDEX_EXT
 
 
 class GvcfPath:

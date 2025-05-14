@@ -430,7 +430,7 @@ class TestMetamist:
                 },
                 check_existence=False,
             )
-        assert str(exc_info.value) == "SG01: ERROR: \"reads_type\" is expected to be one of ('fastq', 'bam', 'cram')"
+        assert str(exc_info.value) == "SG01: ERROR: \"reads_type\" is expected to be one of ['bam', 'cram', 'fastq']"
 
         # test incorrectly formatted error
         with pytest.raises(ValueError) as exc_info:

@@ -7,12 +7,37 @@ https://towardsdatascience.com/visualize-hierarchical-data-using-plotly-and-data
 import os
 from collections.abc import Callable
 from copy import deepcopy
+from dataclasses import dataclass
 from itertools import groupby
 
 import networkx as nx
 import numpy as np
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+
+# Helpful Types
+EdgeList = tuple[float, float, float, float]
+
+
+@dataclass
+class GraphEdge:
+    u: float
+    v: float
+    data: dict | None = None
+
+
+@dataclass
+class Edge:
+    x0: float
+    y0: float
+    x1: float
+    y1: float
+
+
+@dataclass
+class Point:
+    x: float
+    y: float
 
 
 class GraphPlot:
@@ -78,18 +103,17 @@ class GraphPlot:
         # Set the overall layout using this objects layout
         # Make sure the updates are to both subplot axes
         layout = self._get_layout()
+        layout.update(
+            annotations=self.get_annotations(xref='x1', yref='y1') + other.get_annotations(xref='x2', yref='y2'),
+        )
         fig.update_layout(layout)
         fig.update_layout(title='')
         fig.update_yaxes(layout.yaxis)
         fig.update_xaxes(layout.xaxis)
 
-        fig.layout.update(
-            annotations=self.get_annotations(xref='x1', yref='y1') + other.get_annotations(xref='x2', yref='y2'),
-        )
-
         return fig
 
-    def _get_layout(self):
+    def _get_layout(self) -> go.Layout:
         return go.Layout(
             title=self.title,
             titlefont_size=self.title_fontsize,
@@ -105,7 +129,7 @@ class GraphPlot:
         fig = self.create_figure()
         fig.show()
 
-    def create_traces(self) -> go.Figure:
+    def create_traces(self) -> list[go.Scatter]:
         # Add weight and depth attributes to the nodes
         for node in self.G.nodes:
             self.G.nodes[node]['weight'] = 1
@@ -136,80 +160,85 @@ class GraphPlot:
 
     def _get_edge_positions(self, filter_fun: Callable):
         # Add position info to the edges
-        edge_x = []
-        edge_y = []
-        mid_x = []
-        mid_y = []
+        edges: dict[str, list[float | None]] = {'x': [], 'y': []}
+        midpoints: dict[str, list[float | None]] = {'x': [], 'y': []}
         edge_names = []
         mid_angles = []  # This will store the perpendicular angles at each midpoint
 
         for edge in list(filter(filter_fun, self.G.edges())):
-            n1, n2 = edge
-            x0, y0 = self.G.nodes[edge[0]]['pos']
-            x1, y1 = self.G.nodes[edge[1]]['pos']
-            curve_left = self.G.nodes[n2]['curve_left']
+            edge = GraphEdge(*edge)
+            u = Point(*self.G.nodes[edge.u]['pos'])
+            v = Point(*self.G.nodes[edge.v]['pos'])
 
             # Compute straight edge
-            straight_x, straight_y = self._straight_edge(x0, y0, x1, y1)
-            points_x = np.array(straight_x)
-            points_y = np.array(straight_y)
+            points_x, points_y = self._straight_edge(u, v)
 
             # Get all the nodes in the graph that aren't n1 and n2 and get their position
             node_positions = np.array(
-                [self.G.nodes[n]['pos'] for n in self.G.nodes if n not in [n1, n2]],
+                [self.G.nodes[n]['pos'] for n in self.G.nodes if n not in set([edge.u, edge.v])],
             )
 
             # I only want to curve the edge if the straight line passes over a node
-            closest_node_distance = self._closest_node_distance(x0, y0, x1, y1, node_positions)
-            self.G.edges[n1, n2]['closest_node_distance'] = closest_node_distance
+            closest_node_distance = self._closest_node_distance(u, v, node_positions)
+            self.G.edges[edge.u, edge.v]['closest_node_distance'] = closest_node_distance
 
             if closest_node_distance < self.node_size:
                 # If the straight line passes over a node, compute the curved edge
-                curve_x, curve_y = self._curved_edge(x0, y0, x1, y1, offset=self.curve, curve_left=curve_left)
-
-                # Convert to NumPy arrays for easier calculations
-                points_x = np.array(curve_x)
-                points_y = np.array(curve_y)
+                points_x, points_y = self._curved_edge(
+                    u,
+                    v,
+                    offset=self.curve,
+                    curve_left=self.G.nodes[edge.v]['curve_left'],
+                )
 
             # Add the edge to the list
-            edge_x.extend(points_x.tolist() + [None])
-            edge_y.extend(points_y.tolist() + [None])
+            edges['x'].extend(list(points_x) + [None])
+            edges['y'].extend(list(points_y) + [None])
 
             # Add hover text at the midpoint
             mid_idx = len(points_x) // 2
-            mid_x.append(points_x[mid_idx])  # Curved midpoint X
-            mid_y.append(points_y[mid_idx])  # Curved midpoint Y
+            midpoints['x'].append(points_x[mid_idx])  # Curved midpoint X
+            midpoints['y'].append(points_y[mid_idx])  # Curved midpoint Y
 
-            # Calculate the direction vector at midpoint (tangent to curve)
-            dx = points_x[mid_idx + 1] - points_x[mid_idx - 1]
-            dy = points_y[mid_idx + 1] - points_y[mid_idx - 1]
-            direction_vector = np.array([dx, dy])
-            length = np.linalg.norm(direction_vector)
+            # Get the midpoint perpendicular vector angle
+            mid_angles.append(self._get_midpoint_angle(points_x, points_y, mid_idx))
 
-            # Avoid division by zero
-            if length == 0:
-                perp_vector = np.array([1, 0])  # Default perpendicular vector if no direction
-            else:
-                direction_vector /= length
-                # Perpendicular vector: Rotate 90 degrees (counter-clockwise)
-                perp_vector = np.array([-direction_vector[1], direction_vector[0]])
+            edge_names.append(f'{edge.u} ⮕ {edge.v}')
 
-            # Calculate the angle of the perpendicular vector (in degrees)
-            angle = np.arctan2(perp_vector[1], perp_vector[0]) * (180 / np.pi)
+        return edges['x'], edges['y'], edge_names, midpoints['x'], midpoints['y'], mid_angles
 
-            # Normalize the angle to be within 0 to 360 degrees
-            if angle < 0:
-                angle += 360  # Adjust to make angles positive
+    @staticmethod
+    def _get_midpoint_angle(points_x, points_y, mid_idx):
+        # Calculate the direction vector at midpoint (tangent to curve)
+        direction_vector = np.array(
+            [
+                points_x[mid_idx + 1] - points_x[mid_idx - 1],
+                points_y[mid_idx + 1] - points_y[mid_idx - 1],
+            ]
+        )
+        length = np.linalg.norm(direction_vector)
 
-            mid_angles.append(angle)
+        # Avoid division by zero
+        if length == 0:
+            perp_vector = Point(1, 0)  # Default perpendicular vector if no direction
+        else:
+            direction_vector /= length
+            # Perpendicular vector: Rotate 90 degrees (counter-clockwise)
+            perp_vector = Point(-direction_vector[1], direction_vector[0])
 
-            edge_names.append(f'{n1} ⮕ {n2}')
+        # Calculate the angle of the perpendicular vector (in degrees)
+        angle = np.arctan2(perp_vector.y, perp_vector.x) * (180 / np.pi)
 
-        return edge_x, edge_y, edge_names, mid_x, mid_y, mid_angles
+        # Normalize the angle to be within 0 to 360 degrees
+        if angle < 0:
+            angle += 360  # Adjust to make angles positive
 
-    def _closest_node_distance(self, x0, y0, x1, y1, node_positions):
+        return angle
+
+    @staticmethod
+    def _closest_node_distance(p1: Point, p2: Point, node_positions):
         """
-        Computes the shortest distance from the line defined by points (x0, y0) to (x1, y1)
+        Computes the shortest distance from the line defined by points (p1.x, p1.y) to (p2.x, p2.y)
         to the closest node in the node_positions.
         """
         # If there are no node positions, return inf
@@ -217,8 +246,8 @@ class GraphPlot:
             return np.inf
 
         # Calculate the direction vector of the line
-        dx = x1 - x0
-        dy = y1 - y0
+        dx = p2.x - p1.x
+        dy = p2.y - p1.y
 
         # Calculate the length of the line segment
         length = np.sqrt(dx**2 + dy**2)
@@ -227,7 +256,7 @@ class GraphPlot:
         direction_vector = np.array([dx, dy]) / length
 
         # Vector from the start of the line to each node
-        vec_to_nodes = node_positions - np.array([x0, y0])
+        vec_to_nodes = node_positions - np.array([p1.x, p1.y])
 
         # Project each node onto the direction vector
         projection_length = np.dot(vec_to_nodes, direction_vector)
@@ -236,7 +265,7 @@ class GraphPlot:
         projection_length = np.clip(projection_length, 0, length)
 
         # Calculate the closest point on the line segment to each node
-        closest_point = np.outer(projection_length, direction_vector) + np.array([x0, y0])
+        closest_point = np.outer(projection_length, direction_vector) + np.array([p1.x, p1.y])
 
         # Calculate the distance from each node to the closest point on the line segment
         distance_to_line = np.linalg.norm(node_positions - closest_point, axis=1)
@@ -246,7 +275,7 @@ class GraphPlot:
 
         return min_distance
 
-    def _create_edge_traces(self, filter_fun: Callable, color: str) -> list[go.Trace]:
+    def _create_edge_traces(self, filter_fun: Callable, color: str) -> list[go.Scatter]:
         # Begin plotting
         edge_x, edge_y, edge_names, mid_x, mid_y, mid_angles = self._get_edge_positions(filter_fun)
 
@@ -256,8 +285,10 @@ class GraphPlot:
             mode='lines',
             line=dict(width=self.edge_weight, color=color),
             hoverinfo='none',
+            marker=dict(
+                color=color,
+            ),
         )
-        edge_trace.marker.color = color
 
         # Add hover text
         # Scatter trace for edge hover text (at midpoints), using perpendicular vectors to orient markers
@@ -279,7 +310,8 @@ class GraphPlot:
 
         return [edge_trace, edge_hover_trace]
 
-    def _straight_edge(self, x0, y0, x1, y1, num_points=100):
+    @staticmethod
+    def _straight_edge(p1: Point, p2: Point, num_points=100):
         """
         Computes a straight path for an edge.
 
@@ -293,20 +325,20 @@ class GraphPlot:
         """
         # Compute 100 points along the line
         t_values = np.linspace(0, 1, num_points)
-        straight_x = (1 - t_values) * x0 + t_values * x1
-        straight_y = (1 - t_values) * y0 + t_values * y1
+        straight_x = (1 - t_values) * p1.x + t_values * p2.x
+        straight_y = (1 - t_values) * p1.y + t_values * p2.y
 
-        return [x0, *straight_x, x1], [y0, *straight_y, y1]
+        return np.array([p1.x, *straight_x, p2.x]), np.array([p1.y, *straight_y, p2.y])
 
-    # Function to add a curve around nodes
-    def _curved_edge(self, x0, y0, x1, y1, offset=0.5, num_points=100, curve_left=True):
+    @staticmethod
+    def _curved_edge(p1: Point, p2: Point, offset=0.5, num_points=100, curve_left=True):
         """
         Computes a curved path for an edge by introducing a midpoint offset proportional to the edge length.
         The direction of the curve can be controlled with the `curve_up` boolean.
 
         Parameters:
-        - x0, y0: Start coordinates of the edge.
-        - x1, y1: End coordinates of the edge.
+        - p1.x, p1.y: Start coordinates of the edge.
+        - p2.x, p2.y: End coordinates of the edge.
         - offset_multiplier: Multiplier to scale the offset based on edge length.
         - num_points: Number of points to define the curve.
         - curve_up: Boolean to determine if the curve is upward or downw ard.
@@ -314,15 +346,16 @@ class GraphPlot:
         Returns:
         - Curved coordinates as lists of x and y values.
         """
+
         # Compute edge length
-        dx, dy = x1 - x0, y1 - y0
+        dx, dy = p2.x - p1.x, p2.y - p1.y
         length = np.sqrt(dx**2 + dy**2)
         if length == 0:  # Avoid division by zero
-            return [x0, x1], [y0, y1]
+            return [p1.x, p2.x], [p1.y, p2.y]
 
         # Midpoint of the edge
-        mid_x = (x0 + x1) / 2
-        mid_y = (y0 + y1) / 2
+        mid_x = (p1.x + p2.x) / 2
+        mid_y = (p1.y + p2.y) / 2
 
         # Direction of the edge (unit vector)
         perp_dx = -dy / length
@@ -342,13 +375,13 @@ class GraphPlot:
 
         # Generate Bezier curve points
         t_values = np.linspace(0, 1, num_points)
-        curve_x = (1 - t_values) ** 2 * x0 + 2 * (1 - t_values) * t_values * control_x + t_values**2 * x1
-        curve_y = (1 - t_values) ** 2 * y0 + 2 * (1 - t_values) * t_values * control_y + t_values**2 * y1
+        curve_x = (1 - t_values) ** 2 * p1.x + 2 * (1 - t_values) * t_values * control_x + t_values**2 * p2.x
+        curve_y = (1 - t_values) ** 2 * p1.y + 2 * (1 - t_values) * t_values * control_y + t_values**2 * p2.y
 
         # Return the full curved path
-        return [x0, *curve_x, x1], [y0, *curve_y, y1]
+        return np.array([p1.x, *curve_x, p2.x]), np.array([p1.y, *curve_y, p2.y])
 
-    def _create_node_trace(self):
+    def _create_node_trace(self) -> go.Scatter:
         # Now get the node and edge positions
         node_x, node_y = self._get_node_positions()
         max_dim = max(*node_x, *node_y)
@@ -378,6 +411,7 @@ class GraphPlot:
         )
 
         # Create the node trace
+        marker['color'] = node_color
         node_trace = go.Scatter(
             x=node_x,
             y=node_y,
@@ -389,7 +423,6 @@ class GraphPlot:
             text=node_name,
             hovertext=node_hovertext,
         )
-        node_trace.marker.color = node_color
 
         return node_trace
 
@@ -416,7 +449,7 @@ class GraphPlot:
         )
         return node_name, node_hovertext, node_color
 
-    def _get_node_color(self, n: str, default: str | int = None):
+    def _get_node_color(self, n: str, default: str | int | None = None):
         if self.G.nodes[n]['skip_stages']:
             return '#5A5A5A', 'Skip stage'
         elif self.G.nodes[n]['only_stages']:
@@ -497,14 +530,18 @@ class GraphPlot:
                 self.G.nodes[node['name']]['pos'] = group_pos[idx]
 
     def get_annotations(self, xref='x', yref='y'):
-        def pts(edge, key):
+        def pts(edge, key) -> float:
             pts = {
                 'p1.x': self.G.nodes[edge[0]]['pos'][0],
                 'p1.y': self.G.nodes[edge[0]]['pos'][1],
                 'p2.x': self.G.nodes[edge[1]]['pos'][0],
                 'p2.y': self.G.nodes[edge[1]]['pos'][1],
             }
-            return pts.get(key)
+
+            if key not in pts:
+                raise ValueError(f'Key {key} not found in pts dictionary. Available keys: {list(pts.keys())}')
+
+            return pts[key]
 
         # Old arrows
         _ = [
@@ -552,9 +589,14 @@ class GraphPlot:
         ]
 
     def _node_layer_sort(self, nodes):
-        layer_num_parity = nodes[0][self.partite_key] % 2
+        layer_num_parity = bool(nodes[0][self.partite_key] % 2)
+
         degree = self.G.out_degree([n['name'] for n in nodes])
-        deg_order = sorted(nodes, key=lambda n: degree[n['name']], reverse=layer_num_parity)
+        if isinstance(degree, int):
+            raise ValueError('Degree is an int, not a dict. This should not happen.')
+        else:
+            degree = dict(degree)
+        deg_order = sorted(nodes, key=lambda n: degree.get(n['name'], 0), reverse=layer_num_parity)
 
         # Set largest degree towards the middle
         return deg_order[len(deg_order) % 2 :: 2] + deg_order[::-2]
