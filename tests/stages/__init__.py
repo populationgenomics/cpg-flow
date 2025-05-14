@@ -10,6 +10,7 @@ from cpg_flow.stage import (
     DatasetStage,
     MultiCohortStage,
     SequencingGroupStage,
+    StageDecorator,
     StageInput,
     StageOutput,
     stage,
@@ -196,10 +197,10 @@ StageType = Union[type[TestStage], type[TestDatasetStage], type[TestCohortStage]
 def run_workflow(
     mocker,
     cohort_mocker: Callable[..., Cohort | MultiCohort] = mock_cohort,
-    stages: list[StageType] | None = None,
+    stages: list[StageDecorator] | None = None,
 ):
     mocker.patch('cpg_flow.inputs.create_multicohort', lambda x: cohort_mocker())
     mocker.patch('cpg_flow.inputs.get_multicohort', cohort_mocker)
 
     stages = stages or [C, C2]
-    _run_workflow(stages)  # type: ignore
+    _run_workflow(stages)

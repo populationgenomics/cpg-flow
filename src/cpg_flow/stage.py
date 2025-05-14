@@ -20,7 +20,7 @@ import functools
 import os
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Generic, Optional, TypeVar, cast
+from typing import Generic, Optional, TypeVar, cast, overload
 
 from loguru import logger
 
@@ -754,6 +754,29 @@ class Stage(ABC, Generic[TargetT]):
         return job_attrs
 
 
+# ---- Overloads ----
+# These overloads are used to provide type hints for the `stage` decorator.
+
+
+@overload
+def stage(cls: type[Stage]) -> StageDecorator: ...
+
+
+@overload
+def stage(
+    *,
+    analysis_type: str | None = None,
+    analysis_keys: list[str | Path] | None = None,
+    update_analysis_meta: Callable[[str], dict] | None = None,
+    tolerate_missing_output: bool = False,
+    required_stages: list[StageDecorator] | StageDecorator | None = None,
+    skipped: bool = False,
+    assume_outputs_exist: bool = False,
+    forced: bool = False,
+) -> Callable[[type[Stage]], StageDecorator]: ...
+
+
+# ---- Actual Implementation ----
 def stage(
     cls: type['Stage'] | None = None,
     *,
@@ -765,7 +788,7 @@ def stage(
     skipped: bool = False,
     assume_outputs_exist: bool = False,
     forced: bool = False,
-) -> StageDecorator | Callable[..., StageDecorator]:
+) -> StageDecorator | Callable[[type[Stage]], StageDecorator]:
     """
     Implements a standard class decorator pattern with optional arguments.
     The goal is to allow declaring workflow stages without requiring to implement
@@ -817,6 +840,7 @@ def stage(
 
     if cls is None:
         return decorator_stage
+
     return decorator_stage(cls)
 
 
