@@ -25,9 +25,6 @@ class GraphEdge:
     v: float
     data: dict | None = None
 
-    def __iter__(self) -> tuple[float, float]:
-        return (self.u, self.v)
-
 
 @dataclass
 class Edge:
@@ -36,17 +33,11 @@ class Edge:
     x1: float
     y1: float
 
-    def __iter__(self) -> EdgeList:
-        return (self.x0, self.y0, self.x1, self.y1)
-
 
 @dataclass
 class Point:
     x: float
     y: float
-
-    def __iter__(self) -> tuple[float, float]:
-        return (self.x, self.y)
 
 
 class GraphPlot:
