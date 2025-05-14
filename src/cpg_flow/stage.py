@@ -116,8 +116,6 @@ class StageOutput:
         if self.data is None:
             raise ValueError(f'{self.stage}: output data is not available')
 
-        res: Path = to_path('placeholder')
-
         if key is not None:
             if not isinstance(self.data, dict):
                 raise ValueError(

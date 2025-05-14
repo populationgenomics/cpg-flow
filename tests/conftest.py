@@ -2,9 +2,9 @@ import os
 from unittest import mock
 
 import pytest
-from _pytest.logging import LogCaptureFixture
 from google.auth import environment_vars
 from loguru import logger
+from pytest import LogCaptureFixture
 
 import cpg_flow.inputs
 import cpg_flow.metamist

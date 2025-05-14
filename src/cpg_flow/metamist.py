@@ -540,7 +540,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     }
 
 
-def parse_reads(  # pylint: disable=too-many-return-statements
+def parse_reads(
     sequencing_group_id: str,
     assay_meta: dict,
     check_existence: bool,
@@ -556,64 +556,36 @@ def parse_reads(  # pylint: disable=too-many-return-statements
 
     if not reads_data:
         raise MetamistError(f'{sequencing_group_id}: no "meta/reads" field in meta')
+
     if not reads_type:
         raise MetamistError(
             f'{sequencing_group_id}: no "meta/reads_type" field in meta',
         )
-    supported_types = ('fastq', 'bam', 'cram')
+
+    if reads_type in {'bam', 'cram'} and len(reads_data) > 1:
+        raise MetamistError(
+            f'{sequencing_group_id}: supporting only single bam/cram input',
+        )
+
+    supported_types = {'fastq', 'bam', 'cram'}
     if reads_type not in supported_types:
         raise MetamistError(
             f'{sequencing_group_id}: ERROR: "reads_type" is expected to be one of {supported_types}',
         )
 
-    if reads_type in ('bam', 'cram'):
-        if len(reads_data) > 1:
-            raise MetamistError(
-                f'{sequencing_group_id}: supporting only single bam/cram input',
-            )
+    if reads_type in {'bam', 'cram'}:
+        return find_cram_or_bam(
+            reads_data,
+            sequencing_group_id,
+            check_existence,
+            reference_assembly,
+            access_level=get_config()['workflow']['access_level'],
+        )
+    else:
+        return find_fastqs(reads_data, sequencing_group_id, check_existence)
 
-        location = reads_data[0]['location']
-        if not (location.endswith('.cram') or location.endswith('.bam')):
-            raise MetamistError(
-                f'{sequencing_group_id}: ERROR: expected the file to have an extension .cram or .bam, got: {location}',
-            )
-        if get_config()['workflow']['access_level'] == 'test':
-            location = location.replace('-main-upload/', '-test-upload/')
-        if check_existence and not exists(location):
-            raise MetamistError(
-                f'{sequencing_group_id}: ERROR: index file does not exist: {location}',
-            )
 
-        # Index:
-        index_location = None
-        if reads_data[0].get('secondaryFiles'):
-            index_location = reads_data[0]['secondaryFiles'][0]['location']
-            if (location.endswith('.cram') and not index_location.endswith('.crai')) or (
-                location.endswith('.bam') and not index_location.endswith('.bai')
-            ):
-                raise MetamistError(
-                    f'{sequencing_group_id}: ERROR: expected the index file to have an extension '
-                    f'.crai or .bai, got: {index_location}',
-                )
-            if get_config()['workflow']['access_level'] == 'test':
-                index_location = index_location.replace(
-                    '-main-upload/',
-                    '-test-upload/',
-                )
-            if check_existence and not exists(index_location):
-                raise MetamistError(
-                    f'{sequencing_group_id}: ERROR: index file does not exist: {index_location}',
-                )
-
-        if location.endswith('.cram'):
-            return CramPath(
-                location,
-                index_path=index_location,
-                reference_assembly=reference_assembly,
-            )
-        assert location.endswith('.bam')
-        return BamPath(location, index_path=index_location)
-
+def find_fastqs(reads_data: list[dict], sequencing_group_id: str, check_existence: bool) -> FastqPairs:
     fastq_pairs = FastqPairs()
 
     for lane_pair in reads_data:
@@ -641,3 +613,61 @@ def parse_reads(  # pylint: disable=too-many-return-statements
         )
 
     return fastq_pairs
+
+
+def find_cram_or_bam(
+    reads_data: list[dict],
+    sequencing_group_id: str,
+    check_existence: bool,
+    reference_assembly: Path | None = None,
+    access_level: str | None = None,
+) -> AlignmentInput:
+    CRAM_EXT = '.cram'
+    BAM_EXT = '.bam'
+    CRAM_INDEX_EXT = '.crai'
+    BAM_INDEX_EXT = '.bai'
+
+    assert len(reads_data) == 1, f'{sequencing_group_id}: expected only one entry for bam/cram, got {len(reads_data)}'
+    file = reads_data[0]
+    location = file['location']
+
+    if not (location.endswith(CRAM_EXT) or location.endswith(BAM_EXT)):
+        raise MetamistError(
+            f'{sequencing_group_id}: ERROR: expected the file to have an extension .cram or .bam, got: {location}',
+        )
+    if access_level == 'test':
+        location = location.replace('-main-upload/', '-test-upload/')
+    if check_existence and not exists(location):
+        raise MetamistError(
+            f'{sequencing_group_id}: ERROR: index file does not exist: {location}',
+        )
+
+    # Index:
+    index_location = None
+    if file.get('secondaryFiles'):
+        index_location = file['secondaryFiles'][0]['location']
+        if (location.endswith(CRAM_EXT) and not index_location.endswith(CRAM_INDEX_EXT)) or (
+            location.endswith(BAM_EXT) and not index_location.endswith(BAM_INDEX_EXT)
+        ):
+            raise MetamistError(
+                f'{sequencing_group_id}: ERROR: expected the index file to have an extension '
+                f'.crai or .bai, got: {index_location}',
+            )
+        if access_level == 'test':
+            index_location = index_location.replace(
+                '-main-upload/',
+                '-test-upload/',
+            )
+        if check_existence and not exists(index_location):
+            raise MetamistError(
+                f'{sequencing_group_id}: ERROR: index file does not exist: {index_location}',
+            )
+
+    if location.endswith(CRAM_EXT):
+        return CramPath(
+            location,
+            index_path=index_location,
+            reference_assembly=reference_assembly,
+        )
+    assert location.endswith(BAM_EXT)
+    return BamPath(location, index_path=index_location)

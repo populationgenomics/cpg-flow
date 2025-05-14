@@ -495,9 +495,9 @@ class Workflow:
 
     @staticmethod
     def _resolve_implicit_stages(stages_dict: dict, skip_stages: list[str], only_stages: list[str]):
-        depth = 0
-        while True:  # might require few iterations to resolve dependencies recursively
-            depth += 1
+        implicit_stages = {'first': 'loop'}
+
+        while len(implicit_stages) > 0:
             implicit_stages = dict()
             for stg in stages_dict.values():
                 if stg.name in skip_stages:
@@ -507,22 +507,20 @@ class Workflow:
                 if only_stages and stg.name not in only_stages:
                     stg.skipped = True
 
-                # Iterate dependencies:
-                for reqcls in stg.required_stages_classes:
-                    if reqcls.__name__ in stages_dict:  # already added
-                        continue
-                    # Initialising and adding as explicit.
-                    reqstg = reqcls()
-                    implicit_stages[reqstg.name] = reqstg
+                # Get all deps not already in stages_dict
+                not_in_stages_dict = {
+                    cls().name: cls() for cls in stg.required_stages_classes if cls.__name__ not in stages_dict
+                }
+                implicit_stages |= not_in_stages_dict
 
-            if implicit_stages:
-                logger.info(
-                    f'Additional implicit stages: {list(implicit_stages.keys())}',
-                )
-                stages_dict |= implicit_stages
-            else:
-                # No new implicit stages added, so can stop the depth-search here
+            # If there's nothing more to add, finish search
+            if not implicit_stages:
                 break
+
+            logger.info(
+                f'Additional implicit stages: {list(implicit_stages.keys())}',
+            )
+            stages_dict |= implicit_stages
 
         return stages_dict
 
