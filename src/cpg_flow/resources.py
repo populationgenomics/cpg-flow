@@ -10,7 +10,7 @@ from hailtop.batch.job import Job
 from cpg_utils.config import get_config
 
 
-def _is_power_of_two(n: int) -> bool:
+def is_power_of_two(n: int) -> bool:
     return math.ceil(math.log(n, 2)) == math.floor(math.log(n, 2))
 
 
@@ -19,7 +19,7 @@ def gcp_machine_name(name: str, ncpu: int) -> str:
     Machine type name in the GCP world
     """
     assert name in ['standard', 'highmem', 'highcpu'], name
-    assert _is_power_of_two(ncpu), ncpu
+    assert is_power_of_two(ncpu), ncpu
     return f'n1-{name}-{ncpu}'
 
 
