@@ -570,7 +570,7 @@ def parse_reads(
     supported_types = {'fastq', 'bam', 'cram'}
     if reads_type not in supported_types:
         raise MetamistError(
-            f'{sequencing_group_id}: ERROR: "reads_type" is expected to be one of {supported_types}',
+            f'{sequencing_group_id}: ERROR: "reads_type" is expected to be one of {sorted(supported_types)}',
         )
 
     if reads_type in {'bam', 'cram'}:
