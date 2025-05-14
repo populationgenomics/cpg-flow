@@ -255,7 +255,7 @@ class Metamist:
         retry=retry_if_exception_type(ServiceException),
         reraise=True,
     )
-    def make_retry_aapi_call(self, api_func: Callable, **kwargv: Any):
+    def make_retry_aapi_call(self, api_func: Callable, **kwargv: Any):  # noqa: PLR6301
         """
         Make a generic API call to self.aapi with retries.
         Retry only if ServiceException is thrown
@@ -384,7 +384,7 @@ class Metamist:
         )
         return analysis_per_sid
 
-    def create_analysis(
+    def create_analysis(  # noqa: PLR0917
         self,
         output: Path | str,
         type_: str | AnalysisType,
@@ -615,6 +615,12 @@ def find_fastqs(reads_data: list[dict], sequencing_group_id: str, check_existenc
     return fastq_pairs
 
 
+def update_location(location: str, access_level: str | None) -> str:
+    if access_level == 'test':
+        return location.replace('-main-upload/', '-test-upload/')
+    return location
+
+
 def find_cram_or_bam(
     reads_data: list[dict],
     sequencing_group_id: str,
@@ -629,14 +635,13 @@ def find_cram_or_bam(
 
     assert len(reads_data) == 1, f'{sequencing_group_id}: expected only one entry for bam/cram, got {len(reads_data)}'
     file = reads_data[0]
-    location = file['location']
+    location = update_location(file['location'], access_level)
 
     if not (location.endswith(CRAM_EXT) or location.endswith(BAM_EXT)):
         raise MetamistError(
             f'{sequencing_group_id}: ERROR: expected the file to have an extension .cram or .bam, got: {location}',
         )
-    if access_level == 'test':
-        location = location.replace('-main-upload/', '-test-upload/')
+
     if check_existence and not exists(location):
         raise MetamistError(
             f'{sequencing_group_id}: ERROR: index file does not exist: {location}',
@@ -645,7 +650,8 @@ def find_cram_or_bam(
     # Index:
     index_location = None
     if file.get('secondaryFiles'):
-        index_location = file['secondaryFiles'][0]['location']
+        index_location = update_location(file['secondaryFiles'][0]['location'], access_level)
+
         if (location.endswith(CRAM_EXT) and not index_location.endswith(CRAM_INDEX_EXT)) or (
             location.endswith(BAM_EXT) and not index_location.endswith(BAM_INDEX_EXT)
         ):
@@ -653,11 +659,7 @@ def find_cram_or_bam(
                 f'{sequencing_group_id}: ERROR: expected the index file to have an extension '
                 f'.crai or .bai, got: {index_location}',
             )
-        if access_level == 'test':
-            index_location = index_location.replace(
-                '-main-upload/',
-                '-test-upload/',
-            )
+
         if check_existence and not exists(index_location):
             raise MetamistError(
                 f'{sequencing_group_id}: ERROR: index file does not exist: {index_location}',
@@ -669,5 +671,6 @@ def find_cram_or_bam(
             index_path=index_location,
             reference_assembly=reference_assembly,
         )
+
     assert location.endswith(BAM_EXT)
     return BamPath(location, index_path=index_location)

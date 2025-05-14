@@ -47,6 +47,7 @@ repos:
           ]
         additional_dependencies: [types-PyYAML==6.0.4, types-toml]
 
+  # TODO: Consider the addition of pyright or replacement of mypy with pyright
   # - repo: https://github.com/RobertCraigie/pyright-python
   #   rev: v1.1.400
   #   hooks:
