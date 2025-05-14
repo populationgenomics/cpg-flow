@@ -264,10 +264,10 @@ class Workflow:
         When `run_all_implicit_stages` is set, all required stages that were not defined
         explicitly would still be executed.
         """
-        _stages = stages or self._stages
-        if not _stages:
+        stages_value = stages or self._stages
+        if not stages_value:
             raise WorkflowError('No stages added')
-        self.set_stages(_stages)
+        self.set_stages(stages_value)
 
         if not self.dry_run:
             get_batch().run(wait=wait)
