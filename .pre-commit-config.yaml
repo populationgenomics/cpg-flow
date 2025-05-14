@@ -41,7 +41,6 @@ repos:
           [
             --pretty,
             --show-error-codes,
-            --no-strict-optional,
             --ignore-missing-imports,
             --install-types,
             --non-interactive,
