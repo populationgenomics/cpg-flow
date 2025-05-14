@@ -543,10 +543,10 @@ class Workflow:
         stages_in_order = [stages_dict[name] for name in stage_names]
 
         # Set order attribute to stages
-        nx.set_node_attributes(dag, {s.name: num for num, s in enumerate(stages_in_order)}, name='order')
+        nx.set_node_attributes(dag, values={s.name: num for num, s in enumerate(stages_in_order)}, name='order')
 
         # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
-        nx.set_node_attributes(dag, False, name='skipped')
+        nx.set_node_attributes(dag, values=dict.fromkeys(dag.nodes, False), name='skipped')
 
         return stages_in_order, dag
 
