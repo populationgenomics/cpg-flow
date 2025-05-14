@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.2.4 (2025-05-14)
+
+### Bug Fixes
+
+- **syntax**: Correction to previous correction
+  ([`11673b8`](https://github.com/populationgenomics/cpg-flow/commit/11673b8de1e7140576fcadfa758d7e6a890c5341))
+
+
 ## v0.2.3 (2025-05-13)
 
 ### Bug Fixes
