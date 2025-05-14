@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cpg-flow"
 description = "CPG Flow API for Hail Batch"
-requires-python = ">=3.10,<3.11"
+requires-python = ">=3.13,<3.14"
 readme = "README.md"
 license = { "file" = "LICENSE" }
 dynamic = ["version"]
@@ -15,7 +15,7 @@ dependencies = [
     "hail==0.2.134",
     "grpcio>=1.53.0",
     # Avoid dependency resolution backtracking, Python 3.10 compatibility
-    "grpcio-status>=1.48,<1.50",
+    "grpcio-status>=1.71,<1.72",
     "loguru>0.7.0",
     "metamist>=6.9.0",
     "networkx>=3.4.2",
