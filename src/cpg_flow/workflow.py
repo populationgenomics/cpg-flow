@@ -463,13 +463,11 @@ class Workflow:
         logger.info(f'  workflow/first_stages: {first_stages}')
         logger.info(f'  workflow/last_stages: {last_stages}')
 
-        # Round 1: initialising stage objects.
         stages_dict: dict[str, Stage] = self._instantiate_stages(requested_stages, skip_stages, only_stages)
 
-        # Round 4: determining order of execution.
         stages, dag = self._determine_order_of_execution(stages_dict)
 
-        # Round 5: applying workflow options first_stages and last_stages.
+        # Apply workflow options first_stages and last_stages.
         if first_stages or last_stages:
             logger.info('Applying workflow/first_stages and workflow/last_stages')
             self._process_first_last_stages(stages, dag, first_stages, last_stages)
