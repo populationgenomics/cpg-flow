@@ -391,7 +391,7 @@ class Workflow:
         logger.info(f'  workflow/first_stages: {first_stages}')
         logger.info(f'  workflow/last_stages: {last_stages}')
 
-        # Round 1: initialising stage objects.
+        # Iinitialise stage objects.
         _stages_d: dict[str, Stage] = {}
 
         def _make_once(cls) -> tuple['Stage', bool]:
@@ -413,11 +413,6 @@ class Workflow:
 
         for cls in requested_stages:
             _recursively_make_stage(cls)
-
-        if only_stages:
-            for stage_name, stage in _stages_d.items():
-                if stage_name not in only_stages:
-                    stage.skipped = True
 
         implicit_stages = set(_stages_d.keys()) - {stage.__name__ for stage in requested_stages}
         logger.info(
@@ -445,7 +440,14 @@ class Workflow:
         # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
         # nx.set_node_attributes(dag, False, name='skipped')
 
-        # Round 5: applying workflow options first_stages and last_stages.
+        # Apply workflow option only_stages.
+        if only_stages:
+            for stage_name, stage in _stages_d.items():
+                if stage_name not in only_stages:
+                    stage.skipped = True
+                    dag.nodes[stage_name]['skipped'] = True
+
+        # Apply workflow options first_stages and last_stages.
         if first_stages or last_stages:
             logger.info('Applying workflow/first_stages and workflow/last_stages')
             self._process_first_last_stages(stages, dag, first_stages, last_stages)
