@@ -391,7 +391,7 @@ class Workflow:
         logger.info(f'  workflow/first_stages: {first_stages}')
         logger.info(f'  workflow/last_stages: {last_stages}')
 
-        # Iinitialise stage objects.
+        # Initialise stage objects.
         _stages_d: dict[str, Stage] = {}
 
         def _make_once(cls) -> tuple['Stage', bool]:
