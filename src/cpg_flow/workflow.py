@@ -163,6 +163,24 @@ def run_workflow(
     return wfl
 
 
+def _compute_shadow(graph: nx.DiGraph, shadow_casters: set[str]) -> set[str]:
+    """Compute the 'shadow' of a set of nodes on a directed graph.
+
+    Shadowed nodes are those that are only not reachable from any root of the
+    graph without passing through a shadow caster node."""
+    shadowed: set[str] = set(graph.nodes)
+    unvisited: set[str] = {node for node, in_degree in graph.in_degree() if not in_degree}
+
+    while unvisited:
+        node = unvisited.pop()
+        shadowed.remove(node)
+        if node not in shadow_casters:
+            for descendant in graph.successors(node):
+                if descendant in shadowed:
+                    unvisited.add(descendant)
+    return shadowed
+
+
 class Workflow:
     """
     Encapsulates a Hail Batch object, stages, and a cohort of datasets of sequencing groups.
@@ -286,75 +304,24 @@ class Workflow:
         before first_stages, and all stages after last_stages (i.e. descendants and
         ancestors on the stages DAG.)
         """
-        stages_d = {s.name: s for s in stages}
-        stage_names = list(stg.name for stg in stages)
-        lower_names = {s.lower() for s in stage_names}
-
-        for param, _stage_list in [
-            ('first_stages', first_stages),
-            ('last_stages', last_stages),
-        ]:
-            for _s_name in _stage_list:
-                if _s_name.lower() not in lower_names:
-                    raise WorkflowError(
-                        f'Value in workflow/{param} "{_s_name}" must be a stage name '
-                        f'or a subset of stages from the available list: '
-                        f'{", ".join(stage_names)}',
-                    )
-
-        if not (last_stages or first_stages):
+        if not (first_stages or last_stages):
             return
 
-        # E.g. if our last_stages is CramQc, MtToEs would still run because it's in
-        # a different branch. So we want to collect all stages after first_stages
-        # and before last_stages in their respective branches, and mark as skipped
-        # everything in other branches.
-        first_stages_keeps: list[str] = first_stages[:]
-        last_stages_keeps: list[str] = last_stages[:]
+        pre_first = _compute_shadow(graph, set(first_stages))
+        post_last = _compute_shadow(graph.reverse(), set(last_stages))
 
-        for fs in first_stages:
-            for descendant in nx.descendants(graph, fs):
-                if not stages_d[descendant].skipped:
-                    logger.info(
-                        f'Skipping stage {descendant} (precedes {fs} listed in first_stages)',
-                    )
-                    stages_d[descendant].skipped = True
-                for grand_descendant in nx.descendants(graph, descendant):
-                    if not stages_d[grand_descendant].assume_outputs_exist:
-                        logger.info(
-                            f'Not checking expected outputs of not immediately '
-                            f'required stage {grand_descendant} (< {descendant} < {fs})',
-                        )
-                        stages_d[grand_descendant].assume_outputs_exist = True
+        kept = set()
+        for node in first_stages:
+            kept.update({node} | nx.ancestors(graph, node))
+        for node in last_stages:
+            kept.update({node} | nx.descendants(graph, node))
 
-            for ancestor in nx.ancestors(graph, fs):
-                first_stages_keeps.append(ancestor)
-
-        for ls in last_stages:
-            # ancestors of this last_stage
-            ancestors = nx.ancestors(graph, ls)
-            if any(anc in last_stages for anc in ancestors):
-                # a downstream stage is also in last_stages, so this is not yet
-                # a "real" last stage that we want to run
-                continue
-            for ancestor in ancestors:
-                if stages_d[ancestor].skipped:
-                    continue  # already skipped
-                logger.info(f'Skipping stage {ancestor} (after last {ls})')
-                stages_d[ancestor].skipped = True
-                stages_d[ancestor].assume_outputs_exist = True
-
-            for ancestor in nx.descendants(graph, ls):
-                last_stages_keeps.append(ancestor)
-
-        for _stage in stages:
-            if _stage.name not in last_stages_keeps + first_stages_keeps:
-                _stage.skipped = True
-                _stage.assume_outputs_exist = True
-
-        for stage in stages:
-            if stage.skipped:
-                graph.nodes[stage.name]['skipped'] = True
+        stage_d: dict[str, Stage] = {s.name: s for s in stages}
+        for node in pre_first | post_last | (set(stage_d.keys() - kept)):
+            stage = stage_d[node]
+            stage.skipped = True
+            stage.assume_outputs_exist = True
+            graph.nodes[node]['skipped'] = True
 
     @staticmethod
     def _process_only_stages(
@@ -381,8 +348,7 @@ class Workflow:
         # imediate predecessor stages, but skip everything else.
         required_stages: set[str] = set()
         for os in only_stages:
-            rs = nx.descendants_at_distance(graph, os, 1)
-            required_stages |= set(rs)
+            required_stages.update(nx.descendants_at_distance(graph, os, 1))
 
         for stage in stages:
             # Skip stage not in only_stages, and assume outputs exist...
@@ -427,52 +393,42 @@ class Workflow:
 
         # Round 1: initialising stage objects.
         _stages_d: dict[str, Stage] = {}
+
+        def _make_once(cls) -> tuple['Stage', bool]:
+            try:
+                return _stages_d[cls.__name__], False
+            except KeyError:
+                instance = _stages_d[cls.__name__] = cls()
+                return instance, True
+
+        def _recursively_make_stage(cls):
+            instance, is_new = _make_once(cls)
+            if is_new:
+                instance.skipped = cls.__name__ in skip_stages
+                if not instance.skipped:
+                    instance.required_stages.extend(
+                        filter(None, map(_recursively_make_stage, instance.required_stages_classes)),
+                    )
+            return instance
+
         for cls in requested_stages:
-            if cls.__name__ in _stages_d:
-                continue
-            _stages_d[cls.__name__] = cls()
+            _recursively_make_stage(cls)
 
-        # Round 2: depth search to find implicit stages.
-        depth = 0
-        while True:  # might require few iterations to resolve dependencies recursively
-            depth += 1
-            newly_implicitly_added_d = dict()
-            for stg in _stages_d.values():
-                if stg.name in skip_stages:
-                    stg.skipped = True
-                    continue  # not searching deeper
+        if only_stages:
+            for stage_name, stage in _stages_d.items():
+                if stage_name not in only_stages:
+                    stage.skipped = True
 
-                if only_stages and stg.name not in only_stages:
-                    stg.skipped = True
+        implicit_stages = set(_stages_d.keys()) - {stage.__name__ for stage in requested_stages}
+        logger.info(
+            f'Additional implicit stages: {sorted(implicit_stages)}',
+        )
 
-                # Iterate dependencies:
-                for reqcls in stg.required_stages_classes:
-                    if reqcls.__name__ in _stages_d:  # already added
-                        continue
-                    # Initialising and adding as explicit.
-                    reqstg = reqcls()
-                    newly_implicitly_added_d[reqstg.name] = reqstg
-
-            if newly_implicitly_added_d:
-                logger.info(
-                    f'Additional implicit stages: {list(newly_implicitly_added_d.keys())}',
-                )
-                _stages_d |= newly_implicitly_added_d
-            else:
-                # No new implicit stages added, so can stop the depth-search here
-                break
-
-        # Round 3: set "stage.required_stages" fields to each stage.
-        for stg in _stages_d.values():
-            stg.required_stages = [
-                _stages_d[cls.__name__] for cls in stg.required_stages_classes if cls.__name__ in _stages_d
-            ]
-
-        # Round 4: determining order of execution.
-        dag_node2nodes = dict()  # building a DAG
+        # Build stage dependency graph.
+        dag_node2nodes = dict()
         for stg in _stages_d.values():
             dag_node2nodes[stg.name] = set(dep.name for dep in stg.required_stages)
-        dag = nx.DiGraph(dag_node2nodes)
+        dag = nx.DiGraph(dag_node2nodes, skipped=False)
 
         try:
             stage_names = list(reversed(list(nx.topological_sort(dag))))
@@ -487,7 +443,7 @@ class Workflow:
         nx.set_node_attributes(dag, {s.name: num for num, s in enumerate(stages)}, name='order')
 
         # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
-        nx.set_node_attributes(dag, False, name='skipped')
+        # nx.set_node_attributes(dag, False, name='skipped')
 
         # Round 5: applying workflow options first_stages and last_stages.
         if first_stages or last_stages:
