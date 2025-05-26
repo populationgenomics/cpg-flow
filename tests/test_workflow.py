@@ -2,7 +2,9 @@
 Test building Workflow object.
 """
 
+import itertools
 import pathlib
+import re
 from collections.abc import Collection, Mapping, Sequence
 from typing import Any, Final
 from unittest import mock
@@ -19,7 +21,8 @@ from cpg_flow.stage import (
     stage,
 )
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
-from cpg_flow.workflow import _render_graph, path_walk, run_workflow
+from cpg_flow.workflow import _compute_shadow, _render_graph, path_walk, run_workflow
+from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path
 from cpg_utils.hail_batch import get_batch
 
@@ -151,6 +154,7 @@ def test_path_walk():
     }
     act = path_walk(exp)
     assert act == {pathlib.Path('this.txt'), pathlib.Path('that.txt'), pathlib.Path('the_other.txt')}
+    assert act == {to_path('this.txt'), to_path('that.txt'), to_path('the_other.txt')}
 
 
 @pytest.fixture()
@@ -269,3 +273,27 @@ class TestRenderGraph:
         graph = _create_graph_with_attrs(edges, skipped_nodes)
         result = ';'.join(_render_graph(graph, **extra_args))
         assert result == expected
+
+
+def _parse_graph(graph: str) -> nx.DiGraph:
+    g = nx.DiGraph()
+    for path in re.split(r'\s*;\s*', graph):
+        path = re.split(r'\s*->\s*', path)
+        for edge in itertools.pairwise(path):
+            g.add_edge(*edge)
+    return g
+
+
+@pytest.mark.parametrize(
+    ['graph', 'casters', 'expected'],
+    [
+        pytest.param('R->A->Caster->B->D', set(), set()),
+        pytest.param('R->A->Caster->B->D', {'X'}, set()),
+        pytest.param('R->A->Caster->B->D', {'Caster'}, {'B', 'D'}),
+        pytest.param('R->A->Caster->B->D;B->E', {'Caster'}, {'B', 'D', 'E'}),
+        pytest.param('R->A->Caster->B->D;A->D', {'Caster'}, {'B'}),
+        pytest.param('R1->A->B->D;R1->Caster1->B;R2->X->Y->Caster2->Z;R3->P', {'Caster1', 'Caster2'}, {'Z'}),
+    ],
+)
+def test_compute_shadow(graph: str, casters: set[str], expected: set[str]):
+    assert _compute_shadow(_parse_graph(graph), casters) == expected
