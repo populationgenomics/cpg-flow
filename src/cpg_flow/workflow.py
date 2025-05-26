@@ -237,7 +237,7 @@ def _render_graph(
 def _compute_shadow(graph: nx.DiGraph, shadow_casters: set[str]) -> set[str]:
     """Compute the 'shadow' of a set of nodes on a directed graph.
 
-    Shadowed nodes are those that are only not reachable from any root of the
+    Shadowed nodes are those that are not reachable from any root of the
     graph without passing through a shadow caster node."""
     shadowed: set[str] = set(graph.nodes)
     unvisited: set[str] = {node for node, in_degree in graph.in_degree() if not in_degree}
