@@ -2,10 +2,15 @@
 Test building Workflow object.
 """
 
-from unittest import mock
+import itertools
+import re
+from unittest import TestCase, mock
+
+import networkx as nx
+import pytest
 
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
-from cpg_flow.workflow import path_walk
+from cpg_flow.workflow import _compute_shadow, path_walk
 from cpg_utils import Path, to_path
 
 from tests import set_config
@@ -146,3 +151,27 @@ def test_path_walk():
     }
     act = path_walk(exp)
     assert act == {to_path('this.txt'), to_path('that.txt'), to_path('the_other.txt')}
+
+
+def _parse_graph(graph: str) -> nx.DiGraph:
+    g = nx.DiGraph()
+    for path in re.split(r'\s*;\s*', graph):
+        path = re.split(r'\s*->\s*', path)
+        for edge in itertools.pairwise(path):
+            g.add_edge(*edge)
+    return g
+
+
+@pytest.mark.parametrize(
+    ['graph', 'casters', 'expected'],
+    [
+        pytest.param('R->A->Caster->B->D', set(), set()),
+        pytest.param('R->A->Caster->B->D', {'X'}, set()),
+        pytest.param('R->A->Caster->B->D', {'Caster'}, {'B', 'D'}),
+        pytest.param('R->A->Caster->B->D;B->E', {'Caster'}, {'B', 'D', 'E'}),
+        pytest.param('R->A->Caster->B->D;A->D', {'Caster'}, {'B'}),
+        pytest.param('R1->A->B->D;R1->Caster1->B;R2->X->Y->Caster2->Z;R3->P', {'Caster1', 'Caster2'}, {'Z'}),
+    ],
+)
+def test_compute_shadow(graph: str, casters: set[str], expected: set[str]):
+    assert _compute_shadow(_parse_graph(graph), casters) == expected
