@@ -194,7 +194,6 @@ def _render_graph(
     def _render_node(node):
         node_text = node
         skipped = graph.nodes[node]['skipped']
-        logger.info(f'TJS {node=} {skipped=}')
         if not skipped:
             node_text = _BOLD + _WHITE + node_text + _RESET
         if node in only_stages:
