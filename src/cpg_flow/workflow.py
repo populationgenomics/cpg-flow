@@ -215,7 +215,7 @@ def _render_graph(
     while g:
         path = [next(n for n, i in g.in_degree() if not i)]
         while succ := list(g.successors(path[-1])):
-            path.append(succ[0])
+            path.append(min(succ))
         nodes = collections.deque([_render_node(node) for node in path])
         if pre_path := set(graph.successors(path[0])):
             nodes.appendleft(_DARK + _node_set(pre_path) + _RESET)
