@@ -16,11 +16,12 @@ defined in this package, and chained into Workflows by their inter-Stages depend
 main.py, which provides a way to choose a workflow using a CLI argument.
 """
 
+import collections
 import functools
 from collections import defaultdict
-from collections.abc import Callable
+from collections.abc import Callable, Collection, Sequence
 from enum import Enum
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Final, Optional, Union
 
 import networkx as nx
 import plotly.io as pio
@@ -161,6 +162,75 @@ def run_workflow(
     wfl = get_workflow(dry_run=dry_run)
     wfl.run(stages=stages, wait=wait)
     return wfl
+
+
+_TARGET: Final[str] = '\U0001F3AF'
+_ONLY: Final[str] = '\U0001F449'
+_START: Final[str] = '\u23E9'
+_END: Final[str] = '\u23EA'
+_ARROW: Final[str] = ' \u2192 '
+
+_BOLD: Final[str] = '\033[1m'
+_WHITE: Final[str] = '\033[97m'
+_BLUE: Final[str] = '\033[94m'
+_DARK: Final[str] = '\033[90m'
+_RESET: Final[str] = '\033[0m'
+
+
+def _render_graph(
+    graph: nx.DiGraph,
+    *,
+    target_stages: Sequence[str] = (),
+    only_stages: Sequence[str] = (),
+    first_stages: Sequence[str] = (),
+    last_stages: Sequence[str] = (),
+) -> list[str]:
+    target_stages = set(target_stages)
+    only_stages = set(only_stages)
+    first_stages = set(first_stages)
+    last_stages = set(last_stages)
+
+    def _node_set(nodes: Collection[str]) -> str:
+        nodes = sorted(nodes)
+        if len(nodes) == 1:
+            return nodes[0]
+        return '{' + ','.join(nodes) + '}'
+
+    def _render_node(node):
+        node_text = node
+        skipped = graph.nodes[node]['skipped']
+        logger.info(f'TJS {node=} {skipped=}')
+        if not skipped:
+            node_text = _BOLD + _WHITE + node_text + _RESET
+        if node in only_stages:
+            node_text = _ONLY + node_text
+        if node in first_stages:
+            node_text = _START + node_text
+        if node in last_stages:
+            node_text = node_text + _END
+        if not skipped:
+            order = graph.nodes[node]['order']
+            node_text += f'{_BLUE}[{order}]{_RESET}'
+        if node in target_stages:
+            node_text += _TARGET
+        return node_text
+
+    g = graph.reverse()
+
+    out = []
+    while g:
+        path = [next(n for n, i in g.in_degree() if not i)]
+        while succ := list(g.successors(path[-1])):
+            path.append(succ[0])
+        nodes = collections.deque([_render_node(node) for node in path])
+        if pre_path := set(graph.successors(path[0])):
+            nodes.appendleft(_DARK + _node_set(pre_path) + _RESET)
+        if post_path := set(graph.predecessors(path[-1])):
+            nodes.append(_DARK + _node_set(post_path) + _RESET)
+        out.append(_ARROW.join(nodes))
+        for node in path:
+            g.remove_node(node)
+    return out
 
 
 class Workflow:
@@ -388,6 +458,7 @@ class Workflow:
             # Skip stage not in only_stages, and assume outputs exist...
             if stage.name not in only_stages:
                 stage.skipped = True
+                graph.nodes[stage.name]['skipped'] = True
                 stage.assume_outputs_exist = True
 
         # ...unless stage is directly required by any stage in only_stages
@@ -459,16 +530,15 @@ class Workflow:
         if not (final_set_of_stages := [s.name for s in stages if not s.skipped]):
             raise WorkflowError('No stages to run')
 
-        logger.info(
-            f'Final list of stages after applying stage configuration options:\n{final_set_of_stages}',
-        )
-
-        required_skipped_stages = [s for s in stages if s.skipped]
-        if required_skipped_stages:
-            logger.info(
-                f'Skipped stages: {", ".join(s.name for s in required_skipped_stages)}',
-            )
-
+        logger.info('Final workflow graph:')
+        for line in _render_graph(
+            dag,
+            target_stages=[cls.__name__ for cls in requested_stages],
+            only_stages=only_stages,
+            first_stages=first_stages,
+            last_stages=last_stages,
+        ):
+            logger.info(line)
         # Round 6: actually adding jobs from the stages.
         if not self.dry_run:
             inputs = get_multicohort()  # Would communicate with metamist.
@@ -544,7 +614,7 @@ class Workflow:
         nx.set_node_attributes(dag, values={s.name: num for num, s in enumerate(stages_in_order)}, name='order')
 
         # Update dag with the skipped attribute so it can be updated in self._process_first_last_stages
-        nx.set_node_attributes(dag, values=dict.fromkeys(dag.nodes, False), name='skipped')
+        nx.set_node_attributes(dag, {s.name: s.skipped for s in stages_dict.values()}, name='skipped')
 
         return stages_in_order, dag
 
