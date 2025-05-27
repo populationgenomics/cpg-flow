@@ -214,7 +214,7 @@ def _render_graph(
     out = []
     node_depth = {}
     for depth, nodes in enumerate(nx.topological_generations(graph.reverse())):
-        node_depth.update({node: depth for node in nodes})
+        node_depth.update(dict.fromkeys(nodes, depth))
 
     while g:
         root = min((node_depth[n], n) for n, i in g.in_degree() if not i)[1]
