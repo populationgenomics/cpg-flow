@@ -212,16 +212,22 @@ def _render_graph(
     g = graph.reverse()
 
     out = []
+    node_depth = {}
+    for depth, nodes in enumerate(nx.topological_generations(graph.reverse())):
+        node_depth.update({node: depth for node in nodes})
+
     while g:
-        path = [next(n for n, i in g.in_degree() if not i)]
-        while succ := list(g.successors(path[-1])):
-            path.append(min(succ))
+        root = min((node_depth[n], n) for n, i in g.in_degree() if not i)[1]
+        path = [root]
+        while len(succ := list(g.successors(path[-1]))) == 1:
+            path.append(succ[0])
         nodes = collections.deque([_render_node(node) for node in path])
         if pre_path := set(graph.successors(path[0])):
             nodes.appendleft(_DARK + _node_set(pre_path) + _RESET)
+        pad = '  ' * min((node_depth[node] for node in pre_path), default=0)
         if post_path := set(graph.predecessors(path[-1])):
             nodes.append(_DARK + _node_set(post_path) + _RESET)
-        out.append(_ARROW.join(nodes))
+        out.append(pad + _ARROW.join(nodes))
         for node in path:
             g.remove_node(node)
     return out

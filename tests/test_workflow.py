@@ -2,7 +2,13 @@
 Test building Workflow object.
 """
 
+from collections.abc import Mapping, Sequence
+from pathlib import Path
+from typing import Any, Final
 from unittest import mock
+
+import networkx as nx
+import pytest
 
 from cpg_flow.inputs import get_multicohort
 from cpg_flow.stage import (
@@ -13,7 +19,7 @@ from cpg_flow.stage import (
     stage,
 )
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
-from cpg_flow.workflow import path_walk, run_workflow
+from cpg_flow.workflow import _render_graph, path_walk, run_workflow
 from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path
 from cpg_utils.hail_batch import get_batch
@@ -66,7 +72,7 @@ def mock_create_create_cohort(*_) -> MultiCohort:
 
 
 @mock.patch('cpg_flow.inputs.create_multicohort', mock_create_create_cohort)
-def test_workflow(tmp_path):
+def test_workflow(tmp_path: Path):
     """
     Testing running a workflow from a mock cohort.
     """
@@ -146,3 +152,132 @@ def test_path_walk():
     }
     act = path_walk(exp)
     assert act == {to_path('this.txt'), to_path('that.txt'), to_path('the_other.txt')}
+
+
+@pytest.fixture()
+def mock_render_constants(monkeypatch: pytest.MonkeyPatch):
+    """Mocks the rendering constants used by _render_graph."""
+    monkeypatch.setattr('cpg_flow.workflow._TARGET', '<TARGET>')
+    monkeypatch.setattr('cpg_flow.workflow._ONLY', '<ONLY>')
+    monkeypatch.setattr('cpg_flow.workflow._START', '<START>')
+    monkeypatch.setattr('cpg_flow.workflow._END', '<END>')
+    monkeypatch.setattr('cpg_flow.workflow._ARROW', ' -> ')
+    # Don't care about presence of ANSI escapes
+    monkeypatch.setattr('cpg_flow.workflow._BOLD', '')
+    monkeypatch.setattr('cpg_flow.workflow._WHITE', '')
+    monkeypatch.setattr('cpg_flow.workflow._BLUE', '')
+    monkeypatch.setattr('cpg_flow.workflow._DARK', '')
+    monkeypatch.setattr('cpg_flow.workflow._RESET', '')
+
+
+def _create_graph_with_attrs(edges: list[tuple[str, str]], skipped_nodes: set[str]) -> nx.DiGraph:
+    graph = nx.DiGraph()
+    # workflow uses a graph with node -> dependencies, but displays the reverse order.
+    # It's easier to write the test inputs in the reverse order too.
+    graph.add_edges_from((t, s) for (s, t) in edges)
+    nx.set_node_attributes(graph, {n: n in skipped_nodes for n in graph.nodes}, 'skipped')
+    for order, n in enumerate(reversed(list(nx.topological_sort(graph)))):
+        graph.nodes[n]['order'] = order
+    return graph
+
+
+_COMPLEX_GRAPH: Final[tuple[tuple[str, str], ...]] = (
+    ('A', 'B'),
+    ('B', 'C'),
+    ('C', 'D'),
+    ('A', 'D'),
+    ('D', 'E'),
+    ('D', 'F'),
+)
+
+class TestRenderGraph:
+    @pytest.mark.parametrize(
+        ['edges', 'skipped_nodes', 'expected'],
+        [
+            pytest.param([], {}, '', id='empty_graph'),
+            pytest.param(
+                [('A', 'B')],
+                set(),
+                'A[0] -> B[1]',
+                id='one_edge',
+            ),
+            pytest.param(
+                [('A', 'B')],
+                {'A'},
+                'A -> B[1]',
+                id='one_edge_one_skipped_node',
+            ),
+            pytest.param(
+                [('A', 'B'), ('B', 'C'), ('A', 'C')],
+                set(),
+                'A[0] -> {B,C};  {A} -> B[1] -> {C};  {A,B} -> C[2]', 
+                id='triangle',
+            ),
+            pytest.param(
+                _COMPLEX_GRAPH,
+                set(),
+                'A[0] -> {B,D};'
+                'A -> B[1] -> C[2] -> D[3] -> {E,F};'
+                '      D -> E[5];'
+                '      D -> F[4]',
+                id='complex_graph',
+            ),
+        ],
+    )
+    def test_render_graph(
+        self,
+        edges: Sequence[tuple[str, str]],
+        skipped_nodes: set[str],
+        expected: str,
+        mock_render_constants,
+    ):
+        graph = _create_graph_with_attrs(edges, skipped_nodes)
+        result = ';'.join(_render_graph(graph))
+        assert result == expected
+
+    @pytest.mark.parametrize(
+        ['edges', 'skipped_nodes', 'extra_args', 'expected'],
+        [
+            pytest.param(
+                _COMPLEX_GRAPH,
+                set(),
+                dict(only_stages={'D'}),
+                'A[0] -> {B,D};'
+                'A -> B[1] -> C[2] -> <ONLY>D[3] -> {E,F};'
+                '      D -> E[5];'
+                '      D -> F[4]',
+                id='complex_graph_only_nodes',
+            ),
+            pytest.param(
+                _COMPLEX_GRAPH,
+                set(),
+                dict(target_stages={'E', 'F'}),
+                'A[0] -> {B,D};'
+                'A -> B[1] -> C[2] -> D[3] -> {E,F};'
+                '      D -> E[5]<TARGET>;'
+                '      D -> F[4]<TARGET>',
+                id='complex_graph_only_nodes',
+            ),
+            pytest.param(
+                _COMPLEX_GRAPH,
+                set(),
+                dict(first_stages={'A'}, last_stages={'E', 'F'}),
+                '<START>A[0] -> {B,D};'
+                'A -> B[1] -> C[2] -> D[3] -> {E,F};'
+                '      D -> E<END>[5];'
+                '      D -> F<END>[4]',
+                id='complex_graph_only_nodes',
+            ),
+        ],
+    )
+    def test_render_graph_extra_args(
+        self,
+        edges: Sequence[tuple[str, str]],
+        skipped_nodes: set[str],
+        extra_args: Mapping[str, Any],
+        expected: str,
+        mock_render_constants,
+    ):
+        graph = _create_graph_with_attrs(edges, skipped_nodes)
+        result = ';'.join(_render_graph(graph, **extra_args))
+        assert result == expected
