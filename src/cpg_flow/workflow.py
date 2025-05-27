@@ -180,16 +180,11 @@ _RESET: Final[str] = '\033[0m'
 def _render_graph(
     graph: nx.DiGraph,
     *,
-    target_stages: Sequence[str] = (),
-    only_stages: Sequence[str] = (),
-    first_stages: Sequence[str] = (),
-    last_stages: Sequence[str] = (),
+    target_stages: Collection[str] = (),
+    only_stages: Collection[str] = (),
+    first_stages: Collection[str] = (),
+    last_stages: Collection[str] = (),
 ) -> list[str]:
-    target_stages = set(target_stages)
-    only_stages = set(only_stages)
-    first_stages = set(first_stages)
-    last_stages = set(last_stages)
-
     def _node_set(nodes: Collection[str]) -> str:
         nodes = sorted(nodes)
         if len(nodes) == 1:
@@ -527,7 +522,7 @@ class Workflow:
             logger.info('Applying workflow/only_stages')
             self._process_only_stages(stages, dag, only_stages)
 
-        if not (final_set_of_stages := [s.name for s in stages if not s.skipped]):
+        if all(s.skipped for s in stages):
             raise WorkflowError('No stages to run')
 
         logger.info('Final workflow graph:')
