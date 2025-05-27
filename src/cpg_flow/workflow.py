@@ -164,10 +164,10 @@ def run_workflow(
     return wfl
 
 
-_TARGET: Final[str] = '\U0001F3AF'
-_ONLY: Final[str] = '\U0001F449'
-_START: Final[str] = '\u23E9'
-_END: Final[str] = '\u23EA'
+_TARGET: Final[str] = '\U0001f3af'
+_ONLY: Final[str] = '\U0001f449'
+_START: Final[str] = '\u23e9'
+_END: Final[str] = '\u23ea'
 _ARROW: Final[str] = ' \u2192 '
 
 _BOLD: Final[str] = '\033[1m'
