@@ -2,7 +2,7 @@
 Test building Workflow object.
 """
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Collection, Mapping, Sequence
 from pathlib import Path
 from typing import Any, Final
 from unittest import mock
@@ -170,7 +170,7 @@ def mock_render_constants(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr('cpg_flow.workflow._RESET', '')
 
 
-def _create_graph_with_attrs(edges: list[tuple[str, str]], skipped_nodes: set[str]) -> nx.DiGraph:
+def _create_graph_with_attrs(edges: Sequence[tuple[str, str]], skipped_nodes: Collection[str]) -> nx.DiGraph:
     graph = nx.DiGraph()
     # workflow uses a graph with node -> dependencies, but displays the reverse order.
     # It's easier to write the test inputs in the reverse order too.
@@ -189,6 +189,7 @@ _COMPLEX_GRAPH: Final[tuple[tuple[str, str], ...]] = (
     ('D', 'E'),
     ('D', 'F'),
 )
+
 
 class TestRenderGraph:
     @pytest.mark.parametrize(
@@ -210,16 +211,13 @@ class TestRenderGraph:
             pytest.param(
                 [('A', 'B'), ('B', 'C'), ('A', 'C')],
                 set(),
-                'A[0] -> {B,C};{A} -> B[1] -> {C};{A,B} -> C[2]', 
+                'A[0] -> {B,C};A -> B[1] -> C;{A,B} -> C[2]',
                 id='triangle',
             ),
             pytest.param(
                 _COMPLEX_GRAPH,
                 set(),
-                'A[0] -> {B,D};'
-                'A -> B[1] -> C[2] -> D[3] -> {E,F};'
-                '      D -> E[5];'
-                '      D -> F[4]',
+                'A[0] -> {B,D};A -> B[1] -> C[2] -> D[3] -> {E,F};      D -> E[5];      D -> F[4]',
                 id='complex_graph',
             ),
         ],
@@ -242,30 +240,21 @@ class TestRenderGraph:
                 _COMPLEX_GRAPH,
                 set(),
                 dict(only_stages={'D'}),
-                'A[0] -> {B,D};'
-                'A -> B[1] -> C[2] -> <ONLY>D[3] -> {E,F};'
-                '      D -> E[5];'
-                '      D -> F[4]',
+                'A[0] -> {B,D};A -> B[1] -> C[2] -> <ONLY>D[3] -> {E,F};      D -> E[5];      D -> F[4]',
                 id='complex_graph_only_nodes',
             ),
             pytest.param(
                 _COMPLEX_GRAPH,
                 set(),
                 dict(target_stages={'E', 'F'}),
-                'A[0] -> {B,D};'
-                'A -> B[1] -> C[2] -> D[3] -> {E,F};'
-                '      D -> E[5]<TARGET>;'
-                '      D -> F[4]<TARGET>',
+                'A[0] -> {B,D};A -> B[1] -> C[2] -> D[3] -> {E,F};      D -> E[5]<TARGET>;      D -> F[4]<TARGET>',
                 id='complex_graph_only_nodes',
             ),
             pytest.param(
                 _COMPLEX_GRAPH,
                 set(),
                 dict(first_stages={'A'}, last_stages={'E', 'F'}),
-                '<START>A[0] -> {B,D};'
-                'A -> B[1] -> C[2] -> D[3] -> {E,F};'
-                '      D -> E<END>[5];'
-                '      D -> F<END>[4]',
+                '<START>A[0] -> {B,D};A -> B[1] -> C[2] -> D[3] -> {E,F};      D -> E<END>[5];      D -> F<END>[4]',
                 id='complex_graph_only_nodes',
             ),
         ],
