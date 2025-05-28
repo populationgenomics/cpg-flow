@@ -77,9 +77,12 @@ jobs:
       - name: Install project dependencies
         run: |
           uv sync
-          source .venv/bin/activate
 
       - run: uv pip install mike
+
+      - name: Clean stale build metadata
+        run: |
+          rm -rf src/*.egg-info || true
 
       - name: Publish | Update docs version
         run: |
