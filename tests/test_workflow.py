@@ -211,7 +211,7 @@ class TestRenderGraph:
             pytest.param(
                 [('A', 'B'), ('B', 'C'), ('A', 'C')],
                 set(),
-                'A[0] -> {B,C};A -> B[1] -> C;{A,B} -> C[2]',
+                'A[0] -> {B,C};A -> B[1] -> C[2]',
                 id='triangle',
             ),
             pytest.param(
