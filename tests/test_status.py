@@ -8,7 +8,19 @@ from typing import Any
 import pytest
 from pytest_mock import MockFixture
 
+from cpg_flow.inputs import get_multicohort
+from cpg_flow.stage import (
+    SequencingGroupStage,
+    StageInput,
+    StageOutput,
+    stage,
+)
+from cpg_flow.targets import MultiCohort, SequencingGroup
+from cpg_flow.workflow import WorkflowError, run_workflow
+from cpg_utils import Path as CPGPath
 from cpg_utils import to_path
+from cpg_utils.config import dataset_path
+from cpg_utils.hail_batch import get_batch, reset_batch
 
 from tests import set_config
 
@@ -60,8 +72,6 @@ def _common(mocker, tmp_path):
 
     mocker.patch('metamist.apis.AnalysisApi.create_analysis', mock_create_analysis)
 
-    from cpg_flow.targets import MultiCohort
-
     def mock_create_cohort(*_) -> MultiCohort:
         m = MultiCohort()
         c = m.create_cohort(id='COH123', name='fewgenomes')
@@ -86,25 +96,14 @@ def _common(mocker, tmp_path):
 def test_status_reporter(mocker: MockFixture, tmp_path):
     _common(mocker, tmp_path)
 
-    from cpg_flow.inputs import get_multicohort
-    from cpg_flow.stage import (
-        SequencingGroupStage,
-        StageInput,
-        StageOutput,
-        stage,
-    )
-    from cpg_flow.targets import SequencingGroup
-    from cpg_flow.workflow import run_workflow
-    from cpg_utils.config import dataset_path
-    from cpg_utils.hail_batch import get_batch, reset_batch
-
     @stage(analysis_type='qc')
     class MyQcStage1(SequencingGroupStage):
         """
         Just a sequencing-group-level stage.
         """
 
-        def expected_outputs(self, sequencing_group: SequencingGroup) -> Path:
+        @staticmethod
+        def expected_outputs(sequencing_group: SequencingGroup) -> CPGPath:
             return to_path(dataset_path(f'{sequencing_group.id}.tsv'))
 
         def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -112,7 +111,7 @@ def test_status_reporter(mocker: MockFixture, tmp_path):
             j.command(f'echo {sequencing_group.id}_done >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)))
             print(f'Writing to {self.expected_outputs(sequencing_group)}')
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     @stage(analysis_type='qc', analysis_keys=['bed'])
     class MyQcStage2(SequencingGroupStage):
@@ -120,7 +119,8 @@ def test_status_reporter(mocker: MockFixture, tmp_path):
         Just a sequencing-group-level stage.
         """
 
-        def expected_outputs(self, sequencing_group: SequencingGroup) -> dict:
+        @staticmethod
+        def expected_outputs(sequencing_group: SequencingGroup) -> dict:
             return {
                 'bed': to_path(dataset_path(f'{sequencing_group.id}.bed')),
                 'tsv': to_path(dataset_path(f'{sequencing_group.id}.tsv')),
@@ -131,7 +131,7 @@ def test_status_reporter(mocker: MockFixture, tmp_path):
             j.command(f'echo {sequencing_group.id}_done >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)['bed']))
             print(f'Writing to {self.expected_outputs(sequencing_group)["bed"]}')
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     reset_batch()
     run_workflow(stages=[MyQcStage1, MyQcStage2])
@@ -143,8 +143,6 @@ def test_status_reporter(mocker: MockFixture, tmp_path):
 
 
 def _update_meta(output_path: str) -> dict[str, Any]:
-    from cpg_utils import to_path
-
     with to_path(output_path).open() as f:
         return {'result': f.read().strip()}
 
@@ -152,27 +150,17 @@ def _update_meta(output_path: str) -> dict[str, Any]:
 def test_status_reporter_with_custom_updater(mocker: MockFixture, tmp_path):
     _common(mocker, tmp_path)
 
-    from cpg_flow.stage import (
-        SequencingGroupStage,
-        StageInput,
-        StageOutput,
-        stage,
-    )
-    from cpg_flow.targets import SequencingGroup
-    from cpg_flow.workflow import run_workflow
-    from cpg_utils.config import dataset_path
-    from cpg_utils.hail_batch import get_batch
-
     @stage(analysis_type='qc', update_analysis_meta=_update_meta)
     class MyQcStage(SequencingGroupStage):
-        def expected_outputs(self, sequencing_group: SequencingGroup) -> Path:
+        @staticmethod
+        def expected_outputs(sequencing_group: SequencingGroup) -> CPGPath:
             return to_path(dataset_path(f'{sequencing_group.id}.tsv'))
 
         def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
             j = get_batch().new_job('Echo', self.get_job_attrs(sequencing_group) | {'tool': 'echo'})
             j.command(f'echo 42 >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)))
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     run_workflow(stages=[MyQcStage])
 
@@ -182,24 +170,14 @@ def test_status_reporter_with_custom_updater(mocker: MockFixture, tmp_path):
 def test_status_reporter_fails(mocker: MockFixture, tmp_path):
     _common(mocker, tmp_path)
 
-    from cpg_flow.stage import (
-        SequencingGroupStage,
-        StageInput,
-        StageOutput,
-        stage,
-    )
-    from cpg_flow.targets import SequencingGroup
-    from cpg_flow.workflow import run_workflow
-    from cpg_utils.config import dataset_path
-    from cpg_utils.hail_batch import get_batch
-
     @stage(analysis_type='qc')
     class MyQcStage(SequencingGroupStage):
         """
         Just a sequencing-group-level stage.
         """
 
-        def expected_outputs(self, sequencing_group: SequencingGroup) -> dict:
+        @staticmethod
+        def expected_outputs(sequencing_group: SequencingGroup) -> dict:
             return {
                 'bed': dataset_path(f'{sequencing_group.id}.bed'),
                 'tsv': dataset_path(f'{sequencing_group.id}.tsv'),
@@ -210,9 +188,7 @@ def test_status_reporter_fails(mocker: MockFixture, tmp_path):
             j.command(f'echo {sequencing_group.id}_done >> {j.output}')
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)['bed']))
             print(f'Writing to {self.expected_outputs(sequencing_group)["bed"]}')
-            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), [j])
-
-    from cpg_flow.workflow import WorkflowError
+            return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     with pytest.raises(WorkflowError):
         run_workflow(stages=[MyQcStage])

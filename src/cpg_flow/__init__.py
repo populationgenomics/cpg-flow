@@ -13,4 +13,6 @@ Modules:
 This package is designed to be used with pdoc for generating documentation.
 """
 
+from . import stage, targets, workflow
+
 __all__ = ['stage', 'targets', 'workflow']

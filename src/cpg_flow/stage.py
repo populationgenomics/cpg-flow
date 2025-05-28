@@ -20,7 +20,7 @@ import functools
 import os
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Generic, Optional, TypeVar, cast
+from typing import Generic, Optional, TypeVar, cast, overload
 
 from loguru import logger
 
@@ -49,6 +49,13 @@ class StageInputNotFoundError(Exception):
     """
 
 
+class StageTargetNotFoundError(Exception):
+    """
+    Thrown when a stage is attempting to get the Path of a target
+    that doesn't exist.
+    """
+
+
 # noinspection PyShadowingNames
 class StageOutput:
     """
@@ -58,6 +65,7 @@ class StageOutput:
 
     def __init__(
         self,
+        *,
         target: Target,
         data: ExpectedResultT = None,
         jobs: Sequence[Job | None] | Job | None = None,
@@ -68,11 +76,24 @@ class StageOutput:
         stage: Optional['Stage'] = None,
     ):
         # Converting str into Path objects.
-        self.data = data
+        self.data: dict[str, Path] | Path | None = None
+        if isinstance(data, str):
+            self.data = to_path(data)
+        elif isinstance(data, dict):
+            self.data = {k: to_path(v) for k, v in data.items()}
+        else:
+            self.data = data
+
         self.stage = stage
         self.target = target
-        _jobs = [jobs] if isinstance(jobs, Job) else (jobs or [])
-        self.jobs: list[Job] = [j for j in _jobs if j is not None]
+
+        if isinstance(jobs, Job):
+            self.jobs = [jobs]
+        elif jobs is None:
+            self.jobs = []
+        else:
+            self.jobs = [j for j in jobs if j is not None]
+
         self.meta: dict = meta or {}
         self.reusable = reusable
         self.skipped = skipped
@@ -100,9 +121,14 @@ class StageOutput:
                 raise ValueError(
                     f'{self.stage}: {self.data} is not a dictionary, can\'t get "{key}"',
                 )
-            res = cast('dict', self.data)[key]
-        else:
+            res = to_path(cast('dict', self.data)[key])
+        elif isinstance(self.data, Path):
             res = self.data
+        elif isinstance(self.data, str):
+            res = to_path(self.data)
+        else:
+            raise ValueError(f'{self.stage}: {self.data} is not a string or dictionary, can\'t get "{key}"')
+
         return res
 
     def as_str(self, key=None) -> str:
@@ -137,6 +163,7 @@ class StageOutput:
         """
         if not isinstance(self.data, dict):
             raise ValueError(f'{self.data} is not a dictionary.')
+
         return self.data
 
 
@@ -263,6 +290,10 @@ class StageInput:
         `stage` can be callable, or a subclass of Stage
         """
         res = self._get(target=target, stage=stage)
+
+        if not res:
+            raise StageTargetNotFoundError(f'Target "{target}" not found for Stage "{stage}".')
+
         return res.as_path(key)
 
     def as_str(
@@ -276,6 +307,10 @@ class StageInput:
         `stage` can be callable, or a subclass of Stage
         """
         res = self._get(target=target, stage=stage)
+
+        if not res:
+            raise StageTargetNotFoundError(f'Target "{target}" not found for Stage "{stage}".')
+
         return res.as_str(key)
 
     def as_dict(self, target: Target, stage: StageDecorator) -> dict[str, Path]:
@@ -283,6 +318,10 @@ class StageInput:
         Get a dict of paths for a specific target and stage
         """
         res = self._get(target=target, stage=stage)
+
+        if not res:
+            raise StageTargetNotFoundError(f'Target "{target}" not found for Stage "{stage}".')
+
         return res.as_dict()
 
     def get_jobs(self, target: Target) -> list[Job]:
@@ -305,7 +344,7 @@ class StageInput:
         return all_jobs
 
 
-class Stage(Generic[TargetT], ABC):
+class Stage(ABC, Generic[TargetT]):
     """
     Abstract class for a workflow stage. Parametrised by specific Target subclass,
     i.e. SequencingGroupStage(Stage[SequencingGroup]) should only be able to work on SequencingGroup(Target).
@@ -313,6 +352,7 @@ class Stage(Generic[TargetT], ABC):
 
     def __init__(
         self,
+        *,
         name: str,
         required_stages: list[StageDecorator] | StageDecorator | None = None,
         analysis_type: str | None = None,
@@ -430,18 +470,6 @@ class Stage(Generic[TargetT], ABC):
         Can be a str, a Path object, or a dictionary of str/Path objects.
         """
 
-    # TODO: remove this method
-    def deprecated_queue_for_cohort(
-        self,
-        cohort: Cohort,
-    ) -> dict[str, StageOutput | None]:
-        """
-        Queues jobs for each corresponding target, defined by Stage subclass.
-        Returns a dictionary of `StageOutput` objects indexed by target unique_id.
-        unused, ready for deletion
-        """
-        return {}
-
     @abstractmethod
     def queue_for_multicohort(
         self,
@@ -468,6 +496,7 @@ class Stage(Generic[TargetT], ABC):
         self,
         target: Target,
         data: ExpectedResultT = None,  # TODO: ExpectedResultT is probably too broad, our code only really support dict
+        *,
         jobs: Sequence[Job | None] | Job | None = None,
         meta: dict | None = None,
         reusable: bool = False,
@@ -723,6 +752,29 @@ class Stage(Generic[TargetT], ABC):
         return job_attrs
 
 
+# ---- Overloads ----
+# These overloads are used to provide type hints for the `stage` decorator.
+
+
+@overload
+def stage(cls: type[Stage]) -> StageDecorator: ...
+
+
+@overload
+def stage(
+    *,
+    analysis_type: str | None = None,
+    analysis_keys: list[str | Path] | None = None,
+    update_analysis_meta: Callable[[str], dict] | None = None,
+    tolerate_missing_output: bool = False,
+    required_stages: list[StageDecorator] | StageDecorator | None = None,
+    skipped: bool = False,
+    assume_outputs_exist: bool = False,
+    forced: bool = False,
+) -> Callable[[type[Stage]], StageDecorator]: ...
+
+
+# ---- Actual Implementation ----
 def stage(
     cls: type['Stage'] | None = None,
     *,
@@ -734,7 +786,7 @@ def stage(
     skipped: bool = False,
     assume_outputs_exist: bool = False,
     forced: bool = False,
-) -> StageDecorator | Callable[..., StageDecorator]:
+) -> StageDecorator | Callable[[type[Stage]], StageDecorator]:
     """
     Implements a standard class decorator pattern with optional arguments.
     The goal is to allow declaring workflow stages without requiring to implement
@@ -786,6 +838,7 @@ def stage(
 
     if cls is None:
         return decorator_stage
+
     return decorator_stage(cls)
 
 

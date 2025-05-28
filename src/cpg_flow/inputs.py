@@ -184,22 +184,22 @@ def _populate_alignment_inputs(
     assays: list[Assay] = []
 
     for assay in entry.get('assays', []):
-        _assay = Assay.parse(assay, sequencing_group.id, run_parse_reads=False)
-        assays.append(_assay)
+        entry_assay = Assay.parse(assay, sequencing_group.id, run_parse_reads=False)
+        assays.append(entry_assay)
 
     sequencing_group.assays = tuple(assays)
 
     if len(assays) > 1:
-        _assay_meta = _combine_assay_meta(assays)
+        entry_assay_meta = _combine_assay_meta(assays)
     else:
-        _assay_meta = assays[0].meta
-        if _reads := _assay_meta.get('reads'):
-            _assay_meta['reads'] = [_reads]
+        entry_assay_meta = assays[0].meta
+        if _reads := entry_assay_meta.get('reads'):
+            entry_assay_meta['reads'] = [_reads]
 
-    if _assay_meta.get('reads'):
+    if entry_assay_meta.get('reads'):
         alignment_input = parse_reads(
             sequencing_group_id=sequencing_group.id,
-            assay_meta=_assay_meta,
+            assay_meta=entry_assay_meta,
             check_existence=check_existence,
         )
         sequencing_group.alignment_input = alignment_input
