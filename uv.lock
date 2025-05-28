@@ -612,24 +612,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/59/f1/4da7717f0063a222db253e7121bd6a56f6fb1ba439dcc36659088793347c/coverage-7.8.0-py3-none-any.whl", hash = "sha256:dbf364b4c5e7bae9250528167dfe40219b62e2d573c854d74be213e1e52069f7", size = 203435 },
 ]
 
-[[package]]
-name = "cpg-flow"
-version = "0.2.2"
-source = { editable = "." }
-dependencies = [
-    { name = "cpg-utils" },
-    { name = "grpcio" },
-    { name = "grpcio-status" },
-    { name = "hail" },
-    { name = "ipywidgets" },
-    { name = "loguru" },
-    { name = "metamist" },
-    { name = "networkx" },
-    { name = "plotly" },
-    { name = "pre-commit" },
-    { name = "pyyaml" },
-]
-
 [package.dev-dependencies]
 dev = [
     { name = "black" },
