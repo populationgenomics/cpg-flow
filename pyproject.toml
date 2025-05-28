@@ -84,6 +84,7 @@ typeCheckingMode = "basic"
 [tool.semantic_release]
 version_variables = [
     "src/__init__.py:__version__",
+    "Dockerfile:VERSION",
     ".github/workflows/docker.yaml:VERSION",
     ".github/workflows/test.yaml:VERSION",
 ]
@@ -193,3 +194,8 @@ dev-dependencies = [
 [tool.setuptools_scm]
 version_scheme = "only-version"
 local_scheme = "no-local-version"
+version_file = "src/__init__.py"
+write_to = "cpg_flow/_version.py"
+
+[tool.setuptools.dynamic]
+version = {attr = "cpg_flow.__version__"}
