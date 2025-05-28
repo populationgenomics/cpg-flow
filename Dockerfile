@@ -13,7 +13,7 @@ ENV UV_LINK_MODE=copy
 ENV VERSION="0.2.5"
 
 # Inject version into __init__.py or _version.py
-RUN echo "__version__ = \"$VERSION\"" > cpg_flow/_version.py
+RUN mkdir -p src/ && echo "__version__ = \"$VERSION\"" > src/__init__.py
 
 # Install the project's dependencies using the lockfile and settings
 RUN --mount=type=cache,target=/root/.cache/uv \

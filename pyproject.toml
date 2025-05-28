@@ -195,7 +195,6 @@ dev-dependencies = [
 version_scheme = "only-version"
 local_scheme = "no-local-version"
 version_file = "src/__init__.py"
-write_to = "cpg_flow/_version.py"
 
 [tool.setuptools.dynamic]
 version = {attr = "cpg_flow.__version__"}
