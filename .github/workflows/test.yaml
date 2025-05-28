@@ -6,7 +6,7 @@ on:
   workflow_dispatch:  # Allow manual triggering
 
 env:
-  VERSION: 0.2.4
+  VERSION: 0.2.5
 
 permissions: {}
 

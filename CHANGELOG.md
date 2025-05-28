@@ -1,6 +1,59 @@
 # CHANGELOG
 
 
+## v0.2.5 (2025-05-28)
+
+### Bug Fixes
+
+- Resolve all locally discovered sonarlint issues
+  ([`4639ac3`](https://github.com/populationgenomics/cpg-flow/commit/4639ac3c3c15c9fb541a09631fefa1d469b3ef36))
+
+### Continuous Integration
+
+- **sonarqube**: Update existing comment instead of new one every time
+  ([`5406fed`](https://github.com/populationgenomics/cpg-flow/commit/5406fedd9f8523d3d1b8f1ff9fff3a6f1036bed7))
+
+### Refactoring
+
+- A little more cleanup and code polishing
+  ([`11d2d4b`](https://github.com/populationgenomics/cpg-flow/commit/11d2d4bae0185108224f22549d96d03a0818e59b))
+
+- Further cleanup of minor issues
+  ([`ad89b94`](https://github.com/populationgenomics/cpg-flow/commit/ad89b943c4b8d4a552c2f1f5245c4d74c34d0dee))
+
+- Remove unused __iter__ methods
+  ([`f133cf0`](https://github.com/populationgenomics/cpg-flow/commit/f133cf0ba4e9edd6e85916db9d5516c2ba1011be))
+
+- Resolve some higher level code smells indicated by sonarqube
+  ([`a5a7449`](https://github.com/populationgenomics/cpg-flow/commit/a5a7449927bc9dde49f57e7fe242c5d12a3d4b0f))
+
+- Use explicit {node: False} mapping in nx.set_node_attributes()
+  ([`954cf7b`](https://github.com/populationgenomics/cpg-flow/commit/954cf7b911afed913f7f54f40f83a02411c12c3b))
+
+- **pyproject.toml**: Reformat pyproject.toml headings
+  ([`37a2a66`](https://github.com/populationgenomics/cpg-flow/commit/37a2a66956743f901c3bc080ee44ea766a65450f))
+
+- **stage.py**: Add overloads to help the static type checkers
+  ([`700fff8`](https://github.com/populationgenomics/cpg-flow/commit/700fff805a3a3ee3132c2c15b10f334db2b9f3a5))
+
+- **test_stage_types.py**: Fix typing issues of job_by_stage
+  ([`ecc6876`](https://github.com/populationgenomics/cpg-flow/commit/ecc6876dbf7b862bee213d4248f9e973d933838f))
+
+Also, removed the --no-strict-optional flag from mypy pre-commit config to see if it will pick up
+  more type errors.
+
+- **test_status.py**: Fix all typing errors and warnings
+  ([`2d13e01`](https://github.com/populationgenomics/cpg-flow/commit/2d13e016728ad3fd0f84d17505bd56ad445d4f33))
+
+- **test_workflow.py**: Fix all vscode discovered type issues
+  ([`d247ea0`](https://github.com/populationgenomics/cpg-flow/commit/d247ea0c9900bbac28c33e9759c8591b5b3352fd))
+
+### Testing
+
+- **test_metamist.py**: Sort the accepted types in error message
+  ([`6e6223b`](https://github.com/populationgenomics/cpg-flow/commit/6e6223b7baabca64399c4c4eadd7fc8411c69be6))
+
+
 ## v0.2.4 (2025-05-14)
 
 ### Bug Fixes
@@ -12,6 +65,17 @@
 ## v0.2.3 (2025-05-13)
 
 ### Bug Fixes
+
+- Fix bugs raised by changing pos args to kwargs in code
+  ([`a46d479`](https://github.com/populationgenomics/cpg-flow/commit/a46d47972224a1d6902b27bab8c4a2a407995fd5))
+
+- **cohort.py**: Analysis_dataset referenced in Cohort
+  ([`77cb6c1`](https://github.com/populationgenomics/cpg-flow/commit/77cb6c1090bae3d7cb7faa0f781aa3dae6032762))
+
+This value is no longer available as per the changes merged by PR #78 However, it is still accessed.
+  This is fixed here
+
+Resolves #75, Extends solution in PR #78
 
 - **cohort_dataset**: Correction to syntax
   ([`181068d`](https://github.com/populationgenomics/cpg-flow/commit/181068d36fdc33f02e4b5a570755b967b3fee794))
@@ -197,8 +261,23 @@ This is the (slightly hacky) work around for being limited to the community vers
 
 ### Refactoring
 
+- **graph.py**: Fix all type and lint errors
+  ([`7cd0f64`](https://github.com/populationgenomics/cpg-flow/commit/7cd0f64f7c22d4aba17d1853a9501862df17fade))
+
+- **graph.py**: Fix errors caused by refactor to pass tests
+  ([`3d8f982`](https://github.com/populationgenomics/cpg-flow/commit/3d8f98224bfb651644b3d62b98979e2d3213e6b9))
+
+- **graph.py**: Fix the strict typing errors in file
+  ([`4c27851`](https://github.com/populationgenomics/cpg-flow/commit/4c278519d70631c65bb5d91da18df6aac8f315f2))
+
+- **stage.py**: Fix all pyright typing issues
+  ([`2c7c970`](https://github.com/populationgenomics/cpg-flow/commit/2c7c970fbc19e59daba9155b5921d1eaa3332f2e))
+
 - **test,pre-commit**: Use gh pr comment and rm extra code from PR
   ([`b5a2c1d`](https://github.com/populationgenomics/cpg-flow/commit/b5a2c1d6de2a5b628c7d5826341f953e00d27911))
+
+- **utils.py**: Fix pyright strict type errors
+  ([`d013c45`](https://github.com/populationgenomics/cpg-flow/commit/d013c45d3a9ce6636f073d22e427fb7c938b4e2a))
 
 ### Testing
 
@@ -207,6 +286,9 @@ This is the (slightly hacky) work around for being limited to the community vers
 
 - Add unit tests for graph.py
   ([`6928743`](https://github.com/populationgenomics/cpg-flow/commit/69287436d67f7982fdef50ec17e9ea0557944d1b))
+
+- Consider adding pyright to pre-commit hooks
+  ([`21a780d`](https://github.com/populationgenomics/cpg-flow/commit/21a780dffdf4447fb114526a0e867d1241301452))
 
 - Update test_resources MockJob
   ([`e6a9b17`](https://github.com/populationgenomics/cpg-flow/commit/e6a9b17336655cd4dd284e0067fa575276f47784))
