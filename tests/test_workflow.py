@@ -3,7 +3,6 @@ Test building Workflow object.
 """
 
 from collections.abc import Collection, Mapping, Sequence
-from pathlib import Path
 from typing import Any, Final
 from unittest import mock
 
