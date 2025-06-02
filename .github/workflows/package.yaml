@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - alpha
+      - fix-mkdocs-deploy
 
   workflow_dispatch:
     inputs:
