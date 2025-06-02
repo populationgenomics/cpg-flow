@@ -209,7 +209,7 @@ def _render_graph(
             node_text += _TARGET
         return node_text
 
-    g = graph.reverse()
+    g: nx.DiGraph = graph.reverse()
 
     out = []
     node_depth = {}
