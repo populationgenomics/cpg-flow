@@ -138,3 +138,6 @@ dmypy.json
 
 # Ignore text files
 *.txt
+
+# Ignore built documentation site
+docs/site/
