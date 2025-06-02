@@ -9,11 +9,12 @@ import sys
 import time
 import traceback
 import unicodedata
+from collections.abc import Iterator
 from functools import lru_cache
 from itertools import chain, islice
 from os.path import basename, dirname, join
 from random import choices
-from typing import Union, cast
+from typing import Any, Union, cast
 
 from google.cloud import storage
 from loguru import logger
@@ -73,7 +74,7 @@ def format_logger(
     )
 
 
-def chunks(iterable, chunk_size):
+def chunks(iterable, chunk_size) -> Iterator[Any]:
     """
     Yield successive n-sized chunks from an iterable
 
@@ -92,7 +93,7 @@ def chunks(iterable, chunk_size):
         yield iterable[i : (i + chunk_size)]
 
 
-def generator_chunks(generator, size):
+def generator_chunks(generator, size) -> Iterator[list[Any]]:
     """
     Iterates across a generator, returning specifically sized chunks
 
