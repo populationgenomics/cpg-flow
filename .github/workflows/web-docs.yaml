@@ -4,7 +4,6 @@ on:
     branches:
       - alpha
       - main
-      - fix-mkdocs-deploy
 
 permissions: {}
 
