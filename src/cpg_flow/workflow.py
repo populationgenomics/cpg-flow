@@ -209,7 +209,7 @@ def _render_graph(
             node_text += _TARGET
         return node_text
 
-    g = graph.reverse()
+    g: nx.DiGraph = graph.reverse()
 
     out = []
     node_depth = {}
@@ -217,7 +217,7 @@ def _render_graph(
         node_depth.update(dict.fromkeys(nodes, depth))
 
     while g:
-        root = min((node_depth[n], n) for n, i in g.in_degree() if not i)[1]
+        root = min((node_depth[n], n) for n, i in g.in_degree if not i)[1]
         path = [root]
         while len(succ := list(g.successors(path[-1]))) == 1:
             path.append(succ[0])

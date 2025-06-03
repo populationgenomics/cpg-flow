@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=42", "wheel", "setuptools-scm"]
+requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,7 @@ name = "cpg-flow"
 description = "CPG Flow API for Hail Batch"
 requires-python = ">=3.10,<3.11"
 readme = "README.md"
-license = { "file" = "LICENSE" }
+license-files = ["LICENSE"]
 dynamic = ["version"]
 dependencies = [
     "cpg-utils>=5.0.11",
@@ -23,6 +23,8 @@ dependencies = [
     "plotly>=5.24.1",
     "ipywidgets>=8.1.5",
     "pre-commit>=4.0.1",
+    # Security adjustments
+    "tornado>=6.5",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -34,10 +36,6 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 
-    # Pick your license as you wish
-    "License :: OSI Approved :: MIT License",
-
-
     "Natural Language :: English",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: POSIX",
@@ -48,6 +46,30 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
 keywords = ["hail", "flow", "api", "bioinformatics", "genomics"]
+
+[tool.uv]
+dev-dependencies = [
+    "black>=24.10.0",
+    "build>=1.2.2.post1",
+    "bump2version>=1.0.1",
+    "commitizen>=3.30.0",
+    "coverage>=7.6.4",
+    "hail>=0.2.133",
+    "pip-audit>=2.7.3",
+    "pylint>=3.3.1",
+    "pytest-mock>=3.14.0",
+    "pytest>=8.3.3",
+    "python-semantic-release>=9.4.1",
+    "pyyaml>=6.0.2",
+    "ruff>=0.5.2",
+    "toml>=0.10.2",
+    "twine>=5.1.1",
+    "mkdocs-material>=9.5.50",
+    "mkdocstrings[python]>=0.27.0",
+    "griffe-typingdoc>=0.2.7",
+    "mike>=2.1.3",
+    "pyright>=1.1.400",
+]
 
 [project.urls]
 Repository = "https://github.com/populationgenomics/cpg-flow"
@@ -82,6 +104,7 @@ typeCheckingMode = "basic"
 [tool.semantic_release]
 version_variables = [
     "src/__init__.py:__version__",
+    "Dockerfile:VERSION",
     ".github/workflows/docker.yaml:VERSION",
     ".github/workflows/test.yaml:VERSION",
 ]
@@ -164,30 +187,9 @@ upload_to_pypi = false
 upload_to_test_pypi = true
 upload_to_vcs_release = false
 
-[tool.uv]
-dev-dependencies = [
-    "black>=24.10.0",
-    "build>=1.2.2.post1",
-    "bump2version>=1.0.1",
-    "commitizen>=3.30.0",
-    "coverage>=7.6.4",
-    "hail>=0.2.133",
-    "pip-audit>=2.7.3",
-    "pylint>=3.3.1",
-    "pytest-mock>=3.14.0",
-    "pytest>=8.3.3",
-    "python-semantic-release>=9.4.1",
-    "pyyaml>=6.0.2",
-    "ruff>=0.5.2",
-    "toml>=0.10.2",
-    "twine>=5.1.1",
-    "mkdocs-material>=9.5.50",
-    "mkdocstrings[python]>=0.27.0",
-    "griffe-typingdoc>=0.2.7",
-    "mike>=2.1.3",
-    "pyright>=1.1.400",
-]
+[tool.setuptools.dynamic]
+version = {attr = "__init__.__version__"}
 
-[tool.setuptools_scm]
-version_scheme = "only-version"
-local_scheme = "no-local-version"
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["cpg_flow"]

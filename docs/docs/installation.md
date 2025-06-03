@@ -86,7 +86,7 @@ Required-by:
 ```
 
 !!! tip
-    To try out the pre-installed `cpg-flow` in a Docker image, find more information in the **[Docker](#docker)** section.
+    To try out the pre-installed `cpg-flow` in a Docker image, find more information in the **[Docker](docker.md)** documentation.
 
 ## 🚀 Build</a>
 
