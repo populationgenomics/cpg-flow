@@ -2,6 +2,7 @@
 Test building Workflow object.
 """
 
+import pathlib
 from collections.abc import Collection, Mapping, Sequence
 from typing import Any, Final
 from unittest import mock
@@ -19,7 +20,6 @@ from cpg_flow.stage import (
 )
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
 from cpg_flow.workflow import _render_graph, path_walk, run_workflow
-from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path
 from cpg_utils.hail_batch import get_batch
 
@@ -71,14 +71,14 @@ def mock_create_create_cohort(*_) -> MultiCohort:
 
 
 @mock.patch('cpg_flow.inputs.create_multicohort', mock_create_create_cohort)
-def test_workflow(tmp_path: Path):
+def test_workflow(tmp_path: pathlib.Path):
     """
     Testing running a workflow from a mock cohort.
     """
     conf = TOML.format(directory=tmp_path)
     set_config(conf, tmp_path / 'config.toml')
 
-    output_path = to_path(dataset_path('cohort.tsv'))
+    output_path = pathlib.Path(dataset_path('cohort.tsv'))
 
     multi_cohort = get_multicohort()
 
@@ -96,8 +96,8 @@ def test_workflow(tmp_path: Path):
         """
 
         @staticmethod
-        def expected_outputs(sequencing_group: SequencingGroup) -> Path:
-            return to_path(dataset_path(f'{sequencing_group.id}.tsv'))
+        def expected_outputs(sequencing_group: SequencingGroup) -> pathlib.Path:
+            return pathlib.Path(dataset_path(f'{sequencing_group.id}.tsv'))
 
         def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
             j = get_batch().new_job('SequencingGroup job', self.get_job_attrs(sequencing_group))
@@ -113,7 +113,7 @@ def test_workflow(tmp_path: Path):
         """
 
         @staticmethod
-        def expected_outputs(_: Cohort) -> Path:
+        def expected_outputs(_: Cohort) -> pathlib.Path:
             return output_path
 
         def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
@@ -145,12 +145,12 @@ def test_path_walk():
     """
 
     exp = {
-        'a': to_path('this.txt'),
-        'b': [to_path('that.txt'), {'c': to_path('the_other.txt')}],
+        'a': pathlib.Path('this.txt'),
+        'b': [pathlib.Path('that.txt'), {'c': pathlib.Path('the_other.txt')}],
         'd': 'string.txt',
     }
     act = path_walk(exp)
-    assert act == {to_path('this.txt'), to_path('that.txt'), to_path('the_other.txt')}
+    assert act == {pathlib.Path('this.txt'), pathlib.Path('that.txt'), pathlib.Path('the_other.txt')}
 
 
 @pytest.fixture()
