@@ -299,8 +299,8 @@ class Workflow:
         self.status_reporter = None
         if get_config()['workflow'].get('status_reporter') == 'metamist':
             self.status_reporter = MetamistStatusReporter()
-        self._stages: list[StageDecorator] | None = stages
-        self.queued_stages: list[Stage] = []
+        self._stages: list['StageDecorator'] | None = stages
+        self.queued_stages: list['Stage'] = []
 
     @property
     def output_version(self) -> str:
@@ -387,7 +387,7 @@ class Workflow:
         for node in last_stages:
             kept.update({node} | nx.descendants(graph, node))
 
-        stage_d: dict[str, Stage] = {s.name: s for s in stages}
+        stage_d: dict[str, 'Stage'] = {s.name: s for s in stages}
         for node in pre_first | post_last | (set(stage_d.keys() - kept)):
             stage = stage_d[node]
             stage.skipped = True
@@ -463,7 +463,7 @@ class Workflow:
         logger.info(f'  workflow/first_stages: {first_stages}')
         logger.info(f'  workflow/last_stages: {last_stages}')
 
-        stages_dict: dict[str, Stage] = self._instantiate_stages(requested_stages, skip_stages, only_stages)
+        stages_dict: dict[str, 'Stage'] = self._instantiate_stages(requested_stages, skip_stages, only_stages)
 
         stages, dag = self._determine_order_of_execution(stages_dict)
 
@@ -514,10 +514,10 @@ class Workflow:
     @staticmethod
     def _instantiate_stages(
         requested_stages: list['StageDecorator'], skip_stages: list[str], only_stages: list[str]
-    ) -> dict[str, Stage]:
-        stages_dict: dict[str, Stage] = {}
+    ) -> dict[str, 'Stage']:
+        stages_dict: dict[str, 'Stage'] = {}
 
-        def _make_once(cls) -> tuple[Stage, bool]:
+        def _make_once(cls) -> tuple['Stage', bool]:
             try:
                 return stages_dict[cls.__name__], False
             except KeyError:
@@ -545,7 +545,7 @@ class Workflow:
         return stages_dict
 
     @staticmethod
-    def _determine_order_of_execution(stages_dict: dict) -> tuple[list[Stage], nx.DiGraph]:
+    def _determine_order_of_execution(stages_dict: dict) -> tuple[list['Stage'], nx.DiGraph]:
         dag_node2nodes = dict()  # building a DAG
         for stg in stages_dict.values():
             dag_node2nodes[stg.name] = set(dep.name for dep in stg.required_stages)
