@@ -512,10 +512,12 @@ class Workflow:
         self._show_workflow(dag, skip_stages, only_stages, first_stages, last_stages)
 
     @staticmethod
-    def _instantiate_stages(requested_stages: list['StageDecorator'], skip_stages: list[str], only_stages: list[str]):
+    def _instantiate_stages(
+        requested_stages: list['StageDecorator'], skip_stages: list[str], only_stages: list[str]
+    ) -> dict[str, Stage]:
         stages_dict: dict[str, Stage] = {}
 
-        def _make_once(cls) -> tuple['Stage', bool]:
+        def _make_once(cls) -> tuple[Stage, bool]:
             try:
                 return stages_dict[cls.__name__], False
             except KeyError:
@@ -543,7 +545,7 @@ class Workflow:
         return stages_dict
 
     @staticmethod
-    def _determine_order_of_execution(stages_dict: dict):
+    def _determine_order_of_execution(stages_dict: dict) -> tuple[list[Stage], nx.DiGraph]:
         dag_node2nodes = dict()  # building a DAG
         for stg in stages_dict.values():
             dag_node2nodes[stg.name] = set(dep.name for dep in stg.required_stages)
