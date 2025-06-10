@@ -298,8 +298,8 @@ class Workflow:
         self.status_reporter = None
         if get_config()['workflow'].get('status_reporter') == 'metamist':
             self.status_reporter = MetamistStatusReporter()
-        self._stages: list['StageDecorator'] | None = stages
-        self.queued_stages: list['Stage'] = []
+        self._stages: list['StageDecorator'] | None = stages  # noqa: UP037
+        self.queued_stages: list['Stage'] = []  # noqa: UP037
 
     @property
     def output_version(self) -> str:
@@ -386,7 +386,7 @@ class Workflow:
         for node in last_stages:
             kept.update({node} | nx.descendants(graph, node))
 
-        stage_d: dict[str, 'Stage'] = {s.name: s for s in stages}
+        stage_d: dict[str, 'Stage'] = {s.name: s for s in stages}  # noqa: UP037
         for node in pre_first | post_last | (set(stage_d.keys() - kept)):
             stage = stage_d[node]
             stage.skipped = True
@@ -462,7 +462,7 @@ class Workflow:
         logger.info(f'  workflow/first_stages: {first_stages}')
         logger.info(f'  workflow/last_stages: {last_stages}')
 
-        stages_dict: dict[str, 'Stage'] = self._instantiate_stages(requested_stages, skip_stages, only_stages)
+        stages_dict: dict[str, 'Stage'] = self._instantiate_stages(requested_stages, skip_stages, only_stages)  # noqa: UP037
 
         stages, dag = self._determine_order_of_execution(stages_dict)
 
@@ -514,7 +514,7 @@ class Workflow:
     def _instantiate_stages(
         requested_stages: list['StageDecorator'], skip_stages: list[str], only_stages: list[str]
     ) -> dict[str, 'Stage']:
-        stages_dict: dict[str, 'Stage'] = {}
+        stages_dict: dict[str, 'Stage'] = {}  # noqa: UP037
 
         def _make_once(cls) -> tuple['Stage', bool]:
             try:
