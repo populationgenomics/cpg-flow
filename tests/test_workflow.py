@@ -22,7 +22,6 @@ from cpg_flow.stage import (
 )
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
 from cpg_flow.workflow import _compute_shadow, _render_graph, path_walk, run_workflow
-from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path
 from cpg_utils.hail_batch import get_batch
 
@@ -154,7 +153,6 @@ def test_path_walk():
     }
     act = path_walk(exp)
     assert act == {pathlib.Path('this.txt'), pathlib.Path('that.txt'), pathlib.Path('the_other.txt')}
-    assert act == {to_path('this.txt'), to_path('that.txt'), to_path('the_other.txt')}
 
 
 @pytest.fixture()
