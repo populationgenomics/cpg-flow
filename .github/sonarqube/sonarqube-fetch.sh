@@ -94,3 +94,10 @@ TEMPLATE=$(echo "$TEMPLATE" | sed "s|{{SONAR_HOST_URL}}|$SONAR_HOST_URL|g" | sed
 
 # Output the final comment to stdout
 echo "$TEMPLATE"
+
+# Output the raw metrics
+echo "## Raw metrics for PR:"
+echo $(echo "$RESPONSE_PR" | jq -r '.component.measures[] | "\(.metric): \(.value)"' | sort)
+
+echo "## Raw metrics for Main project:"
+echo $(echo "$RESPONSE_MAIN" | jq -r '.component.measures[] | "\(.metric): \(.value)"' | sort)
