@@ -7,7 +7,7 @@
 | 🐞 Bugs                | {{bugs_pr}} | {{bugs_main}} |
 | 🔐 Vulnerabilities     | {{vulnerabilities_pr}} | {{vulnerabilities_main}} |
 | 🚨 Security Hotspots   | {{security_hotspots_pr}} | {{security_hotspots_main}} |
-| 📝 Open Issues         | {{open_issues_pr}} | {{open_issues_main}} |
+| 📝 New Issues          | {{new_issues_pr}} | {{new_issues_main}} |
 | **🌟 Quality Gate**    | **{{quality_gate_pr}}** | **{{quality_gate_main}}** |
 
 🔗 [View Main Branch Report]({{SONAR_HOST_URL}}/dashboard?id={{MAIN_PROJECT_KEY}})

@@ -26,7 +26,8 @@ get_quality_gate_emoji() {
 }
 
 # Fetch metrics for both overall and new code
-METRICS="coverage bugs vulnerabilities code_smells security_hotspots open_issues"
+ISSUES="new_reliability_issues new_security_issues new_maintainability_issues"
+METRICS="coverage bugs vulnerabilities code_smells security_hotspots $ISSUES"
 METRICS_JOINED=$(echo "$METRICS" | tr ' ' ',')
 
 # Fetching the project metrics for PR
@@ -47,15 +48,29 @@ declare -A METRIC_VALUES_PR
 declare -A METRIC_VALUES_MAIN
 
 # Extract the overall metrics for PR
+METRIC_VALUES_PR["new_issues"]=0
 for metric in $METRICS; do
   VALUE_PR=$(echo "$RESPONSE_PR" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"" || echo "N/A")
-  METRIC_VALUES_PR[$metric]=$VALUE_PR
+
+  # Save metric value, sum the ones in $ISSUES into one key
+  if [[ " $ISSUES " =~ [[:space:]]$metric[[:space:]] ]]; then
+    METRIC_VALUES_PR["new_issues"]=$(( ${METRIC_VALUES_PR["new_issues"]} + ${VALUE_PR:-0} ))
+  else
+    METRIC_VALUES_PR[$metric]=$VALUE_PR
+  fi
 done
 
 # Extract the overall metrics for Main project
+METRIC_VALUES_MAIN["new_issues"]=0
 for metric in $METRICS; do
   VALUE_MAIN=$(echo "$RESPONSE_MAIN" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"" || echo "N/A")
-  METRIC_VALUES_MAIN[$metric]=$VALUE_MAIN
+
+  # Save metric value, sum the ones in $ISSUES into one key
+  if [[ " $ISSUES " =~ [[:space:]]$metric[[:space:]] ]]; then
+    METRIC_VALUES_PR["new_issues"]=$(( ${METRIC_VALUES_PR["new_issues"]} + ${VALUE_PR:-0} ))
+  else
+    METRIC_VALUES_MAIN[$metric]=$VALUE_MAIN
+  fi
 done
 
 # Load the template from the file (make sure you have a .github/sonarqube/sonarqube-template.md file)
