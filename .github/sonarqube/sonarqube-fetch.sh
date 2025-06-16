@@ -99,5 +99,15 @@ echo "$TEMPLATE"
 echo "## Raw metrics for PR:"
 echo $(echo "$RESPONSE_PR" | jq -r '.component.measures[] | "\(.metric): \(.value)"' | sort)
 
+echo "### Arrays for PR metrics:"
+for key in "${!METRIC_VALUES_PR[@]}"; do
+  echo "$key: ${METRIC_VALUES_PR[$key]}"
+done
+
 echo "## Raw metrics for Main project:"
 echo $(echo "$RESPONSE_MAIN" | jq -r '.component.measures[] | "\(.metric): \(.value)"' | sort)
+
+echo "### Arrays for Main project metrics:"
+for key in "${!METRIC_VALUES_MAIN[@]}"; do
+  echo "$key: ${METRIC_VALUES_MAIN[$key]}"
+done
