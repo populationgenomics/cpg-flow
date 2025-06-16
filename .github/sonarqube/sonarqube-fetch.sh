@@ -26,7 +26,7 @@ get_quality_gate_emoji() {
 }
 
 # Fetch metrics for both overall and new code
-ISSUES="new_reliability_issues new_security_issues new_maintainability_issues"
+ISSUES="new_accepted_issues new_software_quality_blocker_issues new_software_quality_high_issues new_software_quality_info_issues new_software_quality_low_issues new_software_quality_maintainability_issues new_software_quality_medium_issues new_software_quality_reliability_issues new_software_quality_security_issues"
 METRICS="coverage bugs vulnerabilities code_smells security_hotspots $ISSUES"
 METRICS_JOINED=$(echo "$METRICS" | tr ' ' ',')
 
