@@ -47,31 +47,39 @@ QUALITY_GATE_MAIN=$(get_quality_gate_emoji "$QUALITY_GATE_MAIN")
 declare -A METRIC_VALUES_PR
 declare -A METRIC_VALUES_MAIN
 
+# Function to extract metrics and sum issues
+extract_metrics() {
+  local RESPONSE="$1"
+  local -n METRIC_VALUES=$2  # Use nameref for associative array
+  METRIC_VALUES["new_issues"]=0
+
+  local index=0
+  for metric in $METRICS; do
+    VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // empty" || echo "")
+    # Treat empty or null as zero, and ensure numeric
+    if [[ -z "$VALUE" || "$VALUE" == "null" ]]; then
+      VALUE=0
+    fi
+    if ! [[ "$VALUE" =~ ^-?[0-9]+([.][0-9]+)?$ ]]; then
+      VALUE=0
+    fi
+
+    # Save metric value, sum the ones in $ISSUES into one key
+    if [[ " $ISSUES " =~ [[:space:]]$metric[[:space:]] ]]; then
+      NEW_VALUE=$(awk "BEGIN {print ${METRIC_VALUES["new_issues"]} + $VALUE}")
+      METRIC_VALUES["new_issues"]=$NEW_VALUE
+      METRIC_VALUES["new_issues_$index"]=$NEW_VALUE
+    else
+      METRIC_VALUES[$metric]=$VALUE
+    fi
+
+    ((index++))
+  done
+}
+
 # Extract the overall metrics for PR
-METRIC_VALUES_PR["new_issues"]=0
-for metric in $METRICS; do
-  VALUE_PR=$(echo "$RESPONSE_PR" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"" || echo "N/A")
-
-  # Save metric value, sum the ones in $ISSUES into one key
-  if [[ " $ISSUES " =~ [[:space:]]$metric[[:space:]] ]]; then
-    METRIC_VALUES_PR["new_issues"]=$(( ${METRIC_VALUES_PR["new_issues"]} + ${VALUE_PR:-0} ))
-  else
-    METRIC_VALUES_PR[$metric]=$VALUE_PR
-  fi
-done
-
-# Extract the overall metrics for Main project
-METRIC_VALUES_MAIN["new_issues"]=0
-for metric in $METRICS; do
-  VALUE_MAIN=$(echo "$RESPONSE_MAIN" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .value // \"N/A\"" || echo "N/A")
-
-  # Save metric value, sum the ones in $ISSUES into one key
-  if [[ " $ISSUES " =~ [[:space:]]$metric[[:space:]] ]]; then
-    METRIC_VALUES_PR["new_issues"]=$(( ${METRIC_VALUES_PR["new_issues"]} + ${VALUE_PR:-0} ))
-  else
-    METRIC_VALUES_MAIN[$metric]=$VALUE_MAIN
-  fi
-done
+extract_metrics "$RESPONSE_PR" METRIC_VALUES_PR
+extract_metrics "$RESPONSE_MAIN" METRIC_VALUES_MAIN
 
 # Load the template from the file (make sure you have a .github/sonarqube/sonarqube-template.md file)
 TEMPLATE=$(cat .github/sonarqube/sonarqube-template.md)
