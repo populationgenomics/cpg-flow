@@ -66,6 +66,15 @@ extract_metrics() {
 
     # Save metric value, sum the ones in $ISSUES into one key
     if [[ " $ISSUES " =~ [[:space:]]$metric[[:space:]] ]]; then
+      VALUE=$(echo "$RESPONSE" | jq -r ".component.measures[] | select(.metric==\"$metric\") | .period.value // empty" || echo "")
+      # Treat empty or null as zero, and ensure numeric
+      if [[ -z "$VALUE" || "$VALUE" == "null" ]]; then
+        VALUE=0
+      fi
+      if ! [[ "$VALUE" =~ ^-?[0-9]+([.][0-9]+)?$ ]]; then
+        VALUE=0
+      fi
+
       NEW_VALUE=$(echo "${METRIC_VALUES["new_issues"]} + $VALUE" | bc)
       METRIC_VALUES["new_issues"]=$NEW_VALUE
       METRIC_VALUES["new_issues_${index}_$metric"]=$NEW_VALUE
