@@ -26,7 +26,7 @@ get_quality_gate_emoji() {
 }
 
 # Fetch metrics for both overall and new code
-METRICS="coverage bugs vulnerabilities code_smells security_hotspots"
+METRICS="coverage bugs vulnerabilities code_smells security_hotspots open_issues"
 METRICS_JOINED=$(echo "$METRICS" | tr ' ' ',')
 
 # Fetching the project metrics for PR
