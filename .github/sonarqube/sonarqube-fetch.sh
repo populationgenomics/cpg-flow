@@ -66,7 +66,7 @@ extract_metrics() {
 
     # Save metric value, sum the ones in $ISSUES into one key
     if [[ " $ISSUES " =~ [[:space:]]$metric[[:space:]] ]]; then
-      NEW_VALUE=$(awk "BEGIN {print ${METRIC_VALUES["new_issues"]} + $VALUE}")
+      NEW_VALUE=$(echo "${METRIC_VALUES["new_issues"]} + $VALUE" | bc)
       METRIC_VALUES["new_issues"]=$NEW_VALUE
       METRIC_VALUES["new_issues_${index}_$metric"]=$NEW_VALUE
     else
