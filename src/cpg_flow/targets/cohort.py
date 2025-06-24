@@ -79,7 +79,7 @@ class Cohort(Target):
 
         path_elements = []
 
-        if workflow_name := config_retrieve(['workflow', 'name'], default=None)
+        if workflow_name := config_retrieve(['workflow', 'name'], default=None):
             path_elements.append(workflow_name)
 
         if unique_for_multicohort:
