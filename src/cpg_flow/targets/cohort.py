@@ -18,14 +18,16 @@ Example:
 
 """
 
+import os
 from typing import TYPE_CHECKING
 
 import pandas as pd
 from loguru import logger
 
+from cpg_flow.inputs import get_multicohort
 from cpg_flow.targets import Dataset, Target
 from cpg_utils import Path, to_path
-from cpg_utils.config import get_config
+from cpg_utils.config import config_retrieve, dataset_path, get_config
 
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
@@ -60,6 +62,39 @@ class Cohort(Target):
     def target_id(self) -> str:
         """Unique target ID"""
         return self.id
+
+    def prefix(self, unique_for_multicohort: bool = False, **kwargs) -> Path:
+        """
+        The primary storage path for the cohort.
+
+        Constructs the suffix based on whether this is a multi-cohort context.
+        Resulting path structure:
+            - With workflow & multicohort:  BUCKET/workflow_name/multicohort_hash/cohort_name/...
+            - With workflow only:           BUCKET/workflow_name/cohort_name/...
+            - With neither:                 BUCKET/cohort_name/...
+
+        The inclusion of the multicohort hash is determined when this method is called.
+        The inclusion of the workflow name is determined by the config.
+        """
+
+        path_elements = []
+
+        workflow_name = config_retrieve(['workflow', 'name'], default=None)
+        if workflow_name:
+            path_elements.append(workflow_name)
+
+        if unique_for_multicohort:
+            path_elements.append(get_multicohort().name)
+
+        path_elements.append(self.name)
+
+        return to_path(
+            dataset_path(
+                suffix=os.path.join(*path_elements),
+                dataset=self.dataset.name,
+                **kwargs,
+            )
+        )
 
     def get_cohort_id(self) -> str:
         """Get the cohort ID"""
