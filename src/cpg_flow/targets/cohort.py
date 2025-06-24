@@ -24,7 +24,6 @@ from typing import TYPE_CHECKING
 import pandas as pd
 from loguru import logger
 
-from cpg_flow.inputs import get_multicohort
 from cpg_flow.targets import Dataset, Target
 from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, dataset_path, get_config
@@ -76,6 +75,7 @@ class Cohort(Target):
         The inclusion of the multicohort hash is determined when this method is called.
         The inclusion of the workflow name is determined by the config.
         """
+        from cpg_flow.inputs import get_multicohort
 
         path_elements = []
 
