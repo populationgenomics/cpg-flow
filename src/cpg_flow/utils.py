@@ -31,7 +31,7 @@ DEFAULT_LOG_FORMAT = config_retrieve(
 )
 
 COLOURED_LOGS = config_retrieve(['workflow', 'coloured_logs'], False)
-ExpectedResultT = Union[Path, dict[str, Path], dict[str, str], str, None]
+ExpectedResultT = Union[Path, dict[str, list[Path] | Path], str, None]
 
 
 def format_logger(

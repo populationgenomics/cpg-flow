@@ -76,11 +76,17 @@ class StageOutput:
         stage: Optional['Stage'] = None,
     ):
         # Converting str into Path objects.
-        self.data: dict[str, Path] | Path | None = None
+        self.data: ExpectedResultT = None
         if isinstance(data, str):
             self.data = to_path(data)
         elif isinstance(data, dict):
-            self.data = {k: to_path(v) for k, v in data.items()}
+            new_data = dict()
+            for k, v in data.items():
+                if isinstance(v, list):
+                    new_data[k] = [to_path(i) for i in v]
+                else:
+                    new_data[k] = to_path(v)
+            self.data = new_data
         else:
             self.data = data
 
