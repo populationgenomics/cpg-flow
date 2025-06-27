@@ -103,9 +103,6 @@ jobs:
           echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$TAG" >> "$GITHUB_ENV"
           echo "DOCKER_DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
-      - name: print docker tag
-        run: echo "Pushed Docker Tag $DOCKER_IMAGE"
-
       - name: Add image link to GitHub Summary
         if: ${{ (github.ref_name != 'main' && github.ref_name != 'alpha') || (github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'alpha') && startsWith(github.event.head_commit.message, 'bump:')) || (github.event_name == 'workflow_dispatch' && github.ref_name != 'main') }}
         run: |
