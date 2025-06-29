@@ -6,7 +6,7 @@ import pytest
 from pytest_mock import MockFixture
 
 from tests import set_config
-from tests.stages import run_workflow
+from tests.stages import D, run_workflow
 
 
 def test_first_last_stages_misconfigured(mocker: MockFixture, tmp_path):
@@ -47,4 +47,4 @@ def test_first_last_stages_misconfigured(mocker: MockFixture, tmp_path):
     from cpg_flow.workflow import WorkflowError
 
     with pytest.raises(WorkflowError, match='No stages to run'):
-        run_workflow(mocker)
+        run_workflow(mocker, stages=[D])
