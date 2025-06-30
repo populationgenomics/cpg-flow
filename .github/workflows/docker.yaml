@@ -73,15 +73,21 @@ jobs:
         if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
         run: |
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
-          docker push $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
+          PUSH_OUTPUT=$(docker push $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }} 2>&1)
+          echo "$PUSH_OUTPUT"
+          DIGEST=$(echo "$PUSH_OUTPUT" | grep -oP 'sha256:[a-f0-9]{64}' | head -n1)
           echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+          echo "DOCKER_DIGEST=$DIGEST" >> $GITHUB_ENV
 
       - name: push production on version bump
         if: ${{ github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'alpha') && startsWith(github.event.head_commit.message, 'bump:') }}
         run: |
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_MAIN/$IMAGE_NAME:$VERSION
-          docker push $DOCKER_MAIN/$IMAGE_NAME:$VERSION
+          PUSH_OUTPUT=$(docker push $DOCKER_MAIN/$IMAGE_NAME:$VERSION 2>&1)
+          echo "$PUSH_OUTPUT"
+          DIGEST=$(echo "$PUSH_OUTPUT" | grep -oP 'sha256:[a-f0-9]{64}' | head -n1)
           echo "DOCKER_IMAGE=$DOCKER_MAIN/$IMAGE_NAME:$VERSION" >> $GITHUB_ENV
+          echo "DOCKER_DIGEST=$DIGEST" >> $GITHUB_ENV
 
       - name: manually triggered build
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
@@ -93,8 +99,41 @@ jobs:
         run: |
           set -euo pipefail
           docker tag "$IMAGE_NAME:$SHA" "$DOCKER_DEV/$IMAGE_NAME:$TAG"
-          docker push "$DOCKER_DEV/$IMAGE_NAME:$TAG"
+          PUSH_OUTPUT=$(docker push "$DOCKER_DEV/$IMAGE_NAME:$TAG" 2>&1)
+          echo "$PUSH_OUTPUT"
+          DIGEST=$(echo "$PUSH_OUTPUT" | grep -oP 'sha256:[a-f0-9]{64}' | head -n1)
           echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$TAG" >> "$GITHUB_ENV"
+          echo "DOCKER_DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
       - name: print docker tag
-        run: echo "Pushed Docker Tag ${{ env.DOCKER_IMAGE }}"
+        run: echo "Pushed Docker Tag $DOCKER_IMAGE"
+
+      - name: Add image link to GitHub Summary
+        if: ${{ (github.ref_name != 'main' && github.ref_name != 'alpha') || (github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'alpha') && startsWith(github.event.head_commit.message, 'bump:')) || (github.event_name == 'workflow_dispatch' && github.ref_name != 'main') }}
+        run: |
+          if [ -n "${DOCKER_IMAGE:-}" ]; then
+            echo "## 🐳 Docker Image" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Image:** \`${DOCKER_IMAGE}\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Pull command:**" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+            echo "docker pull ${DOCKER_IMAGE}" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            # Determine which registry was used
+            if [[ "${DOCKER_IMAGE}" == *"images-dev"* ]]; then
+              REGISTRY="images-dev"
+            else
+              REGISTRY="images"
+            fi
+
+            # Create GCP Artifact Registry link with digest if available
+            if [ -n "${DOCKER_DIGEST:-}" ]; then
+              GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/${REGISTRY}/cpg_flow/${DOCKER_DIGEST}"
+              echo "**🔗 [View in Google Cloud Console](${GCP_LINK})**" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "**🔗 [View in Google Cloud Console](https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/${REGISTRY}/cpg_flow)**" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
