@@ -1,6 +1,30 @@
 # CHANGELOG
 
 
+## v0.3.1 (2025-06-30)
+
+### Bug Fixes
+
+- **setuptools**: Add where syntax to find all sub-folders
+  ([`2276728`](https://github.com/populationgenomics/cpg-flow/commit/2276728dd01fc4c56eb8d8b829c439142c16150a))
+
+The old build command was not finding any of the sub folders (show_workflow and targets) in the src
+  folder. In removing the use of setuptools scm (which we didn't need since semantic release handles
+  versioning) and switching back to the simple setuptools for the build setting the package-dir to
+  "src" was insufficient. Now with the find syntax added it finds all the files and sub folders in
+  the "src" folder.
+
+SET-653
+
+### Build System
+
+- Add the package-data option to include defaults.toml
+  ([`be2f3f1`](https://github.com/populationgenomics/cpg-flow/commit/be2f3f137bc1d3a2006c651f7432e5cdb3478de7))
+
+- **src/__init__.py**: Re-add the file, now empty to keep mypy happy
+  ([`3a09045`](https://github.com/populationgenomics/cpg-flow/commit/3a09045c3eabf6dfa32cf303ee5c766f2f278955))
+
+
 ## v0.3.0 (2025-06-26)
 
 ### Build System
