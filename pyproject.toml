@@ -187,11 +187,11 @@ upload_to_pypi = false
 upload_to_test_pypi = true
 upload_to_vcs_release = false
 
-[tool.setuptools.dynamic]
-version = {attr = "__init__.__version__"}
+[tool.setuptools.dynamic.version]
+attr = "__init__.__version__"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+[tool.setuptools.package-data]
+cpg_flow = ["defaults.toml"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
