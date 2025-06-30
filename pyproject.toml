@@ -192,4 +192,6 @@ version = {attr = "__init__.__version__"}
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["cpg_flow"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
