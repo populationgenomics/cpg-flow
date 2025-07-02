@@ -20,7 +20,7 @@ import functools
 import os
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Generic, Optional, TypeVar, cast, overload
+from typing import Any, Generic, Optional, TypeVar, cast, overload
 
 from loguru import logger
 
@@ -76,11 +76,16 @@ class StageOutput:
         stage: Optional['Stage'] = None,
     ):
         # Converting str into Path objects.
-        self.data: dict[str, Path] | Path | None = None
+        self.data: ExpectedResultT = None
         if isinstance(data, str):
             self.data = to_path(data)
         elif isinstance(data, dict):
-            self.data = {k: to_path(v) for k, v in data.items()}
+            self.data = data
+
+            # NOTE: prior Issue #110 we would convert strings to Paths
+            # as suggested in an old prod pipes comment.
+            # As per discussion in Issue #110, and PR #113 we are
+            # reverting this change for now to fix the Cromwell issue.
         else:
             self.data = data
 
@@ -157,7 +162,7 @@ class StageOutput:
             raise ValueError(f'{res} is not a path object or a valid String, cannot return as Path.')
         return to_path(res)
 
-    def as_dict(self) -> dict[str, Path]:
+    def as_dict(self) -> dict[str, Any]:
         """
         Cast the result to a dictionary, or throw an error if the cast failed.
         """
@@ -313,7 +318,7 @@ class StageInput:
 
         return res.as_str(key)
 
-    def as_dict(self, target: Target, stage: StageDecorator) -> dict[str, Path]:
+    def as_dict(self, target: Target, stage: StageDecorator) -> dict[str, Any]:
         """
         Get a dict of paths for a specific target and stage
         """
@@ -574,8 +579,14 @@ class Stage(ABC, Generic[TargetT]):
                         f'keys {outputs.data.keys()}',
                     )
 
+                # Handle the case where the analysis key refers to a
+                # list of outputs e.g. Cromwell jobs
                 for analysis_key in self.analysis_keys:
-                    analysis_outputs.append(outputs.data[analysis_key])
+                    data = outputs.data.get(analysis_key)
+                    if isinstance(data, list):
+                        analysis_outputs.extend(data)
+                    elif data is not None:
+                        analysis_outputs.append(data)
 
             else:
                 analysis_outputs.append(outputs.data)
