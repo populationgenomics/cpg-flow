@@ -587,7 +587,7 @@ class Stage(ABC, Generic[TargetT]):
                         f'keys {outputs.data.keys()}',
                     )
 
-                # Handle the case where the analysis key referes to a
+                # Handle the case where the analysis key refers to a
                 # list of outputs e.g. Cromwell jobs
                 for analysis_key in self.analysis_keys:
                     data = outputs.data.get(analysis_key)
