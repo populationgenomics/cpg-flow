@@ -1,6 +1,44 @@
 # CHANGELOG
 
 
+## v0.3.2 (2025-07-02)
+
+### Build System
+
+- **pillow**: Upgrade to 11.3.0 based on pip-audit warning
+  ([`30c51e1`](https://github.com/populationgenomics/cpg-flow/commit/30c51e1adf5e4640c22701926c2a59d62f32409e))
+
+https://github.com/populationgenomics/cpg-flow/actions/runs/16014339785/job/45178026796?pr=113
+
+### Code Style
+
+- **stage**: Fix a comment typo
+  ([`2a4a046`](https://github.com/populationgenomics/cpg-flow/commit/2a4a04697375eadf33649265f9d8410d815afee3))
+
+- **StageOutput**: Remove commented out code
+  ([`604a94c`](https://github.com/populationgenomics/cpg-flow/commit/604a94c40beefb44c5d4e44a531a79cfaf38f648))
+
+### Continuous Integration
+
+- **.github/workflows/docker.yaml**: Add comment to PRs with links
+  ([`1ee58f9`](https://github.com/populationgenomics/cpg-flow/commit/1ee58f93eb112826731c369b16add44927593da4))
+
+- **.github/workflows/docker.yaml**: Display link to image registry
+  ([`6274f36`](https://github.com/populationgenomics/cpg-flow/commit/6274f36acbbac411f1860d819ab165c0e2157e07))
+
+- **.github/workflows/docker.yaml**: Improve digest extraction
+  ([`2b45833`](https://github.com/populationgenomics/cpg-flow/commit/2b4583398f9f9767009a4fc3eb760351e61d69ab))
+
+- **.github/workflows/docker.yaml**: Remove redundant print step
+  ([`1f2d820`](https://github.com/populationgenomics/cpg-flow/commit/1f2d82067f296de9e3be4ec9a63db8459e7c79db))
+
+- **.github/workflows/docker.yaml**: Simplify comment feature
+  ([`894b70c`](https://github.com/populationgenomics/cpg-flow/commit/894b70c2dbd0fc3604d7d77d9e93ecd0a1f7bd85))
+
+- **.github/workflows/docker.yaml**: Switch to images-dev registry
+  ([`4520eac`](https://github.com/populationgenomics/cpg-flow/commit/4520eac785dc30c9bd6303bbc79c5b62156343fa))
+
+
 ## v0.3.1 (2025-06-30)
 
 ### Bug Fixes
@@ -26,6 +64,14 @@ SET-653
 
 
 ## v0.3.0 (2025-06-26)
+
+### Bug Fixes
+
+- **stage**: Revert to_path conversion of strings
+  ([`d41de43`](https://github.com/populationgenomics/cpg-flow/commit/d41de43de0cc6f48ae7d7c3764c5730004b22c2e))
+
+- **utils,stage**: Adjust the ExpectedResultT to allow for dict[str,
+  ([`007fe48`](https://github.com/populationgenomics/cpg-flow/commit/007fe48e024f7c25d62548a501cfb86ff87e47bb))
 
 ### Build System
 
