@@ -82,18 +82,10 @@ class StageOutput:
         elif isinstance(data, dict):
             self.data = data
 
-            # This code converts strings to Paths as suggested in an old
-            # prod pipes comment.
+            # NOTE: prior Issue #110 we would convert strings to Paths
+            # as suggested in an old prod pipes comment.
             # As per discussion in Issue #110, and PR #113 we are
             # reverting this change for now to fix the Cromwell issue.
-
-            # new_data = dict()
-            # for k, v in data.items():
-            #     if isinstance(v, list):
-            #         new_data[k] = [to_path(i) for i in v]
-            #     else:
-            #         new_data[k] = to_path(v)
-            # self.data = new_data
         else:
             self.data = data
 
