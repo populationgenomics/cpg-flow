@@ -22,6 +22,16 @@
   },
   "packageRules": [
     {
+      "matchManagers": [
+        "pep621"
+      ],
+      "matchPackageNames": [
+        "python",
+        "hail"
+      ],
+      "enabled": false
+    },
+    {
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
       "matchUpdateTypes": [
