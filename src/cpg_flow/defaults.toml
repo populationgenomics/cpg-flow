@@ -53,6 +53,13 @@ check_inputs = true
 # that are missing results from skipped stages.
 skip_sgs_with_missing_input = false
 
+# The default behaviour of cpg_flow is to generate expected outputs for every Stage, even if that Stage is skipped.
+# This is used to fail the workflow if expected outputs do not exist, and the stage is skipped.
+# If this variable is set to true, it will not generate expected outputs for skipped stages.
+# This can lead to faster workflow setup, but may cause issues if outputs from skipped stages have not been created,
+# are expected by later stages, if those later stages are not skipped.
+unsafe_skipping = true
+
 # Within jobs, check all in-job intermediate files for possible reuse.
 # If set to False, will overwrite all intermediates. Used by `utils.can_reuse(path)`.
 check_intermediates = true
