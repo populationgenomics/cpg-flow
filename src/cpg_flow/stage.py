@@ -30,7 +30,7 @@ from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Targ
 from cpg_flow.utils import ExpectedResultT, exists
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
 from cpg_utils import Path, to_path
-from cpg_utils.config import get_config
+from cpg_utils.config import config_retrieve, get_config
 from cpg_utils.hail_batch import get_batch
 
 StageDecorator = Callable[..., 'Stage']
@@ -533,6 +533,10 @@ class Stage(ABC, Generic[TargetT]):
         if not action:
             action = self._get_action(target)
 
+        # don't evaluate any outputs, we will definitely skip this Stage
+        if action == Action.SKIP:
+            return None
+
         inputs = self._make_inputs()
         expected_out = self.expected_outputs(target)
 
@@ -647,6 +651,13 @@ class Stage(ABC, Generic[TargetT]):
                     f'{self.name}: {target} [SKIP] (is in workflow/skip_stages_for_sgs)',
                 )
                 return Action.SKIP
+
+        if self.skipped and config_retrieve(['workflow', 'unsafe_skipping'], True):
+            logger.info(
+                f'{self.name}: {target} [SKIP] (stage is marked as skipped, '
+                f'and unsafe_skipping is enabled). Will not evaluate any outputs for this stage.',
+            )
+            return Action.SKIP
 
         expected_out = self.expected_outputs(target)
         reusable, first_missing_path = self._is_reusable(expected_out)
