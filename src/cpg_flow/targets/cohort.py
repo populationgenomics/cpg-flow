@@ -163,7 +163,9 @@ class Cohort(Target):
         """
         Attributes for Hail Batch job.
         """
-        return {}
+        return {
+            'sequencing_groups': self.get_sequencing_group_ids(),
+        }
 
     def get_job_prefix(self) -> str:
         """

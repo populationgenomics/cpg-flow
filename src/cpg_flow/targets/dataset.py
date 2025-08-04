@@ -207,7 +207,7 @@ class Dataset(Target):
         """
         return {
             'dataset': self.name,
-            # 'sequencing_groups': self.get_sequencing_group_ids(),
+            'sequencing_groups': self.get_sequencing_group_ids(),
         }
 
     def get_job_prefix(self) -> str:
