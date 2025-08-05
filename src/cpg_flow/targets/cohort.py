@@ -159,15 +159,13 @@ class Cohort(Target):
         """
         return [s for s in self._sequencing_group_by_id.values() if (s.active or not only_active)]
 
-    @staticmethod
-    def get_job_attrs() -> dict:
+    def get_job_attrs(self) -> dict:
         """
         Attributes for Hail Batch job.
         """
         return {}
 
-    @staticmethod
-    def get_job_prefix() -> str:
+    def get_job_prefix(self) -> str:
         """
         Prefix job names.
         """
