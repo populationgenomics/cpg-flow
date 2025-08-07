@@ -552,6 +552,7 @@ class Stage(ABC, Generic[TargetT]):
 
         outputs.stage = self
         outputs.meta |= self.get_job_attrs(target)
+        print('Target should append the meta here if needed:', target, outputs.meta)
 
         for output_job in outputs.jobs:
             if output_job:
@@ -755,11 +756,14 @@ class Stage(ABC, Generic[TargetT]):
         """
         Create Hail Batch Job attributes dictionary
         """
+        print('get_job_attrs called for stage:', self.name, 'target:', target)
         job_attrs = dict(stage=self.name)
         if sequencing_type := get_config()['workflow'].get('sequencing_type'):
             job_attrs['sequencing_type'] = sequencing_type
         if target:
             job_attrs |= target.get_job_attrs()
+
+        print('get_job_attrs returning:', job_attrs)
         return job_attrs
 
 

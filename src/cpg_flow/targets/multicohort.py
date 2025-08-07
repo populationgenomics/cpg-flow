@@ -179,6 +179,8 @@ class MultiCohort(Target):
         """
         Attributes for Hail Batch job.
         """
+        print(f'Getting job attributes for multi-cohort {self.name}')
+        print(f'  Sequencing groups: {self.get_sequencing_group_ids()}')
         return {
             'sequencing_groups': self.get_sequencing_group_ids(),
             'datasets': [d.name for d in self.get_datasets()],
