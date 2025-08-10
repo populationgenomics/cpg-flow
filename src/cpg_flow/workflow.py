@@ -340,7 +340,10 @@ class Workflow:
         self.set_stages(stages_value)
 
         if not self.dry_run:
+            print('FRED in Workflow.run')
+            print(f'FRED {type(get_batch())=}')
             get_batch().run(wait=wait)
+            print('FRED done Workflow.run')
         else:
             logger.info('Dry run: no jobs submitted')
 
