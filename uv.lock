@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = "==3.10.*"
 
 [[package]]
@@ -658,7 +658,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "cpg-utils", specifier = ">=5.0.11" },
+    { name = "cpg-utils", specifier = ">=5.4.2" },
     { name = "grpcio", specifier = ">=1.53.0" },
     { name = "grpcio-status", specifier = ">=1.48,<1.50" },
     { name = "hail", specifier = "==0.2.134" },
@@ -698,7 +698,7 @@ dev = [
 
 [[package]]
 name = "cpg-utils"
-version = "5.3.0"
+version = "5.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -713,7 +713,7 @@ dependencies = [
     { name = "tabulate" },
     { name = "toml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/88/78/ca51b78f58bdb5758eeb7eaaea08ec45893fa5db51aa23a56ee9f2173321/cpg_utils-5.3.0.tar.gz", hash = "sha256:9fa79f6783163cc539b212ee3bb3535f238d9e07018e7be1619217b2a4636634", size = 43173, upload-time = "2025-05-08T03:22:33.191Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/55/e069ef106f576e3e7916f4801d56dc2efd867387ff4fc0b6593815a54f47/cpg_utils-5.4.2.tar.gz", hash = "sha256:eb6f0808655e836171db279b44db3bff66b4e7a9b3a8629caf630483e7cc5bc6", size = 43646, upload-time = "2025-08-13T01:56:47.044Z" }
 
 [[package]]
 name = "cryptography"
