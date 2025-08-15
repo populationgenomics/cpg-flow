@@ -3,6 +3,8 @@ Utility functions and constants.
 """
 
 import hashlib
+import inspect
+import logging
 import re
 import string
 import sys
@@ -31,13 +33,31 @@ DEFAULT_LOG_FORMAT = config_retrieve(
 )
 
 COLOURED_LOGS = config_retrieve(['workflow', 'coloured_logs'], False)
+INTERCEPT_LOGGING = config_retrieve(['workflow', 'intercept_logging'], True)
 ExpectedResultT = Union[Path, dict[str, str | Path | list[str | Path]], str, None]
+
+
+class _LoguruInterceptHandler(logging.Handler):
+    def emit(self, record: logging.LogRecord) -> None:
+        try:
+            level = logger.level(record.levelname).name
+        except ValueError:
+            level = record.levelno
+
+        frame = inspect.currentframe()
+        depth = 0
+        while frame and (depth == 0 or frame.f_code.co_filename == logging.__file__):
+            frame = frame.f_back
+            depth += 1
+
+        logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
 
 def format_logger(
     log_level: int = logger.level('INFO').no,
     fmt_string: str = DEFAULT_LOG_FORMAT,
     coloured: bool = COLOURED_LOGS,
+    intercept_logging: bool = INTERCEPT_LOGGING,
 ) -> None:
     """
     loguru is a cleaner interface than the standard logging module, but it doesn't allow for multiple instances
@@ -72,6 +92,10 @@ def format_logger(
         colorize=coloured,
         enqueue=True,
     )
+
+    if intercept_logging:
+        # Intercept standard Python logging and redirect to loguru handler
+        logging.basicConfig(handlers=[_LoguruInterceptHandler()], level=0, force=True)
 
 
 def chunks(iterable, chunk_size) -> Iterator[Any]:
