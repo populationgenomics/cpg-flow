@@ -30,7 +30,7 @@ from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Targ
 from cpg_flow.utils import ExpectedResultT, exists
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
 from cpg_utils import Path, to_path
-from cpg_utils.config import get_config
+from cpg_utils.config import config_retrieve, get_config
 from cpg_utils.hail_batch import get_batch
 
 StageDecorator = Callable[..., 'Stage']
@@ -362,11 +362,12 @@ class Stage(ABC, Generic[TargetT]):
         required_stages: list[StageDecorator] | StageDecorator | None = None,
         analysis_type: str | None = None,
         analysis_keys: list[str] | None = None,
-        update_analysis_meta: Callable[[str], dict] | None = None,
+        update_analysis_meta: Callable[[dict], dict] | None = None,
         tolerate_missing_output: bool = False,
         skipped: bool = False,
         assume_outputs_exist: bool = False,
         forced: bool = False,
+        merge_analyses: bool = False,
     ):
         self._name = name
         self.required_stages_classes: list[StageDecorator] = []
@@ -384,9 +385,9 @@ class Stage(ABC, Generic[TargetT]):
         # entries in Metamist.
         self.analysis_type = analysis_type
         # If `analysis_keys` are defined, it will be used to extract the value for
-        # `Analysis.output` if the Stage.expected_outputs() returns a dict.
+        # `Analysis.outputs` if the Stage.expected_outputs() returns a dict.
         self.analysis_keys = analysis_keys
-        # if `update_analysis_meta` is defined, it is called on the `Analysis.output`
+        # if `update_analysis_meta` is defined, it is called on the `Analysis.outputs`
         # field, and result is merged into the `Analysis.meta` dictionary.
         self.update_analysis_meta = update_analysis_meta
 
@@ -401,6 +402,10 @@ class Stage(ABC, Generic[TargetT]):
             [],
         )
         self.assume_outputs_exist = assume_outputs_exist
+
+        # If true, only one analysis output will be created for this stage,
+        self.merge_analyses = merge_analyses or self.name in config_retrieve(['workflow', 'merge_analyses_stages'], [])
+
 
     @property
     def tmp_prefix(self):
@@ -511,6 +516,8 @@ class Stage(ABC, Generic[TargetT]):
         """
         Create StageOutput for this stage.
         """
+        if isinstance(data, (str | Path)):
+            data = {'output': data}
         return StageOutput(
             target=target,
             data=data,
@@ -564,7 +571,7 @@ class Stage(ABC, Generic[TargetT]):
 
         # Adding status reporter jobs
         if self.analysis_type and self.status_reporter and action == Action.QUEUE and outputs.data:
-            analysis_outputs: list[str | Path] = []
+            analysis_outputs: dict[str, str | Path] = {}
             if isinstance(outputs.data, dict):
                 if not self.analysis_keys:
                     raise WorkflowError(
@@ -584,12 +591,12 @@ class Stage(ABC, Generic[TargetT]):
                 for analysis_key in self.analysis_keys:
                     data = outputs.data.get(analysis_key)
                     if isinstance(data, list):
-                        analysis_outputs.extend(data)
+                        analysis_outputs[analysis_key] = data
                     elif data is not None:
-                        analysis_outputs.append(data)
+                        analysis_outputs['output'] = data
 
             else:
-                analysis_outputs.append(outputs.data)
+                analysis_outputs['output'] = outputs.data
 
             project_name = None
             if isinstance(target, SequencingGroup | Cohort):
@@ -605,20 +612,24 @@ class Stage(ABC, Generic[TargetT]):
             if get_config()['workflow']['access_level'] == 'test' and 'test' not in project_name:
                 project_name = f'{project_name}-test'
 
-            for analysis_output in analysis_outputs:
-                if not outputs.jobs:
-                    continue
+            if not outputs.jobs:
+                pass  # No jobs means no analyses
 
-                assert isinstance(
-                    analysis_output,
-                    str | Path,
-                ), f'{analysis_output} should be a str or Path object'
-                if outputs.meta is None:
-                    outputs.meta = {}
+            if outputs.meta is None:
+                outputs.meta = {}
+
+            elif self.merge_analyses and len(analysis_outputs) > 1:
+                # If merge_analyses is True, we will create a single analysis entry
+                # for all outputs of this stage.
+                assert isinstance(analysis_outputs, dict), (
+                    f'Expected outputs for stage {self.name} should be a dict with string keys and str or Path values, '
+                    f'but got {analysis_outputs}'
+                )
+
 
                 self.status_reporter.create_analysis(
                     b=get_batch(),
-                    output=str(analysis_output),
+                    outputs=analysis_outputs,
                     analysis_type=self.analysis_type,
                     target=target,
                     jobs=outputs.jobs,
@@ -628,6 +639,23 @@ class Stage(ABC, Generic[TargetT]):
                     tolerate_missing_output=self.tolerate_missing_output,
                     project_name=project_name,
                 )
+
+            else:
+                for k, analysis_output in analysis_outputs.items():
+                    assert isinstance(analysis_output, (str | Path)), f'{analysis_output} should be a str or Path object'
+
+                    self.status_reporter.create_analysis(
+                        b=get_batch(),
+                        outputs={k: analysis_output},
+                        analysis_type=self.analysis_type,
+                        target=target,
+                        jobs=outputs.jobs,
+                        job_attr=self.get_job_attrs(target) | {'stage': self.name, 'tool': 'metamist'},
+                        meta=outputs.meta,
+                        update_analysis_meta=self.update_analysis_meta,
+                        tolerate_missing_output=self.tolerate_missing_output,
+                        project_name=project_name,
+                    )
 
         return outputs
 
@@ -776,7 +804,7 @@ def stage(
     *,
     analysis_type: str | None = None,
     analysis_keys: list[str | Path] | None = None,
-    update_analysis_meta: Callable[[str], dict] | None = None,
+    update_analysis_meta: Callable[[dict], dict] | None = None,
     tolerate_missing_output: bool = False,
     required_stages: list[StageDecorator] | StageDecorator | None = None,
     skipped: bool = False,
@@ -791,7 +819,7 @@ def stage(
     *,
     analysis_type: str | None = None,
     analysis_keys: list[str | Path] | None = None,
-    update_analysis_meta: Callable[[str], dict] | None = None,
+    update_analysis_meta: Callable[[dict], dict] | None = None,
     tolerate_missing_output: bool = False,
     required_stages: list[StageDecorator] | StageDecorator | None = None,
     skipped: bool = False,
@@ -812,12 +840,12 @@ def stage(
 
     @analysis_type: if defined, will be used to create/update `Analysis` entries
         using the status reporter.
-    @analysis_keys: is defined, will be used to extract the value for `Analysis.output`
+    @analysis_keys: is defined, will be used to extract the value for `Analysis.outputs`
         if the Stage.expected_outputs() returns a dict.
-    @update_analysis_meta: if defined, this function is called on the `Analysis.output`
+    @update_analysis_meta: if defined, this function is called on the `Analysis.outputs`
         field, and returns a dictionary to be merged into the `Analysis.meta`
-    @tolerate_missing_output: if True, when registering the output of this stage,
-        allow for the output file to be missing (only relevant for metamist entry)
+    @tolerate_missing_output: if True, when registering the outputs of this stage,
+        allow for the outputs file to be missing (only relevant for metamist entry)
     @required_stages: list of other stage classes that are required prerequisites
         for this stage. Outputs of those stages will be passed to
         `Stage.queue_jobs(... , inputs)` as `inputs`, and all required
