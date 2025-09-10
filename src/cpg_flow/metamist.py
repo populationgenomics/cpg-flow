@@ -629,16 +629,16 @@ def find_fastqs(
         if read_reference is not None:
             fastq_pairs.append(
                 FastqOraPair(
-                    to_path(lane_pair[0]['location']),
-                    to_path(lane_pair[1]['location']),
+                    to_path(r1_file),
+                    to_path(r2_file),
                     read_reference,
                 ),
             )
         else:
             fastq_pairs.append(
                 FastqPair(
-                    to_path(lane_pair[0]['location']),
-                    to_path(lane_pair[1]['location']),
+                    to_path(r1_file),
+                    to_path(r2_file),
                 ),
             )
 
