@@ -19,7 +19,7 @@ main.py, which provides a way to choose a workflow using a CLI argument.
 import collections
 import functools
 from collections import defaultdict
-from collections.abc import Callable, Collection, Sequence
+from collections.abc import Callable, Collection
 from enum import Enum
 from typing import TYPE_CHECKING, Final, Optional, Union
 
@@ -34,7 +34,7 @@ from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
 from cpg_flow.utils import format_logger, slugify, timestamp, write_to_gcs_bucket
 from cpg_utils import Path
-from cpg_utils.config import get_config
+from cpg_utils.config import get_config, config_retrieve
 from cpg_utils.hail_batch import get_batch, reset_batch
 
 URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/{name}/'
@@ -249,27 +249,27 @@ class Workflow:
                 'Workflow already initialised. Use get_workflow() to get the instance',
             )
 
-        self.dry_run = dry_run or get_config(True)['workflow'].get('dry_run')
-        self.show_workflow = get_config()['workflow'].get('show_workflow', False)
-        self.access_level = get_config()['workflow'].get('access_level', 'test')
+        self.dry_run = dry_run or config_retrieve(['workflow', 'dry_run'], False)
+        self.show_workflow = config_retrieve(['workflow', 'show_workflow'], False)
+        self.access_level = config_retrieve(['workflow', 'access_level'], 'test')
 
         # TODO: should the ['dataset'] be a get? should we rename it to analysis dataset?
-        analysis_dataset = get_config(True)['workflow']['dataset']
-        name = get_config()['workflow'].get('name', analysis_dataset)
-        description = get_config()['workflow'].get('description', name)
+        analysis_dataset = config_retrieve(['workflow', 'dataset'])
+        name = config_retrieve(['workflow', 'name'], analysis_dataset)
+        description = config_retrieve(['workflow', 'description'], name)
         self.name = slugify(name)
 
         self._output_version: str | None = None
-        if output_version := get_config()['workflow'].get('output_version'):
+        if output_version := config_retrieve(['workflow', 'output_version'], None):
             self._output_version = slugify(output_version)
 
-        self.run_timestamp: str = get_config()['workflow'].get('run_timestamp') or timestamp()
+        self.run_timestamp: str = config_retrieve(['workflow', 'run_timestamp'], timestamp())
 
         # Description
         if self._output_version:
             description += f': output_version={self._output_version}'
         description += f': run_timestamp={self.run_timestamp}'
-        if sequencing_type := get_config()['workflow'].get('sequencing_type'):
+        if sequencing_type := config_retrieve(['workflow', 'sequencing_type'], None):
             description += f' [{sequencing_type}]'
         if not self.dry_run:
             if ds_set := set(d.name for d in get_multicohort().get_datasets()):
@@ -278,7 +278,7 @@ class Workflow:
             get_batch().name = description
 
         self.status_reporter = None
-        if get_config()['workflow'].get('status_reporter') == 'metamist':
+        if config_retrieve(['workflow', 'status_reporter'], None) == 'metamist':
             self.status_reporter = MetamistStatusReporter()
         self._stages: list[StageDecorator] | None = stages
         self.queued_stages: list[Stage] = []

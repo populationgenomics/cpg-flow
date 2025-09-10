@@ -450,7 +450,7 @@ class Metamist:
         Return the Metamist project name, appending '-test' if the access level is 'test'.
         """
         metamist_proj = dataset or self.default_dataset
-        if get_config()['workflow']['access_level'] == 'test' and not metamist_proj.endswith('-test'):
+        if config_retrieve(['workflow', 'access_level']) == 'test' and not metamist_proj.endswith('-test'):
             metamist_proj += '-test'
 
         return metamist_proj
@@ -553,7 +553,7 @@ def parse_reads(
     """
     reads_data = assay_meta.get('reads')
     reads_type = assay_meta.get('reads_type')
-    reference_assembly = assay_meta.get('reference_assembly', {}).get('location')
+    ora_reference = assay_meta.get('ora_reference', {}).get('location')
 
     if not reads_data:
         raise MetamistError(f'{sequencing_group_id}: no "meta/reads" field in meta')
@@ -570,7 +570,7 @@ def parse_reads(
 
     if reads_type not in SUPPORTED_READ_TYPES:
         raise MetamistError(
-            f'{sequencing_group_id}: ERROR: "reads_type" is expected to be one of {SUPPORTED_READ_TYPES}',
+            f'{sequencing_group_id}: ERROR: "reads_type" is expected to be one of {sorted(SUPPORTED_READ_TYPES)}',
         )
 
     if reads_type in {'bam', 'cram'}:
@@ -578,7 +578,7 @@ def parse_reads(
             reads_data,
             sequencing_group_id,
             check_existence,
-            reference_assembly,
+            ora_reference,
             access_level=config_retrieve(['workflow', 'access_level']),
         )
 
@@ -595,8 +595,15 @@ def parse_reads(
 
 
 def find_fastqs(
-    reads_data: list[dict], sequencing_group_id: str, check_existence: bool, read_reference: str | None = None
+    reads_data: list[dict],
+    sequencing_group_id: str,
+    check_existence: bool,
+    read_reference: str | None = None,
 ) -> FastqPairs:
+    """
+    Generates FastqPairs objects. This method handles component FastqPair objects or ORA or FQ type.
+    Objects are assumed to be ORA if we are generating FastqPairs and passing a reference for decompression.
+    """
     fastq_pairs = FastqPairs()
 
     for lane_pair in reads_data:
