@@ -619,11 +619,11 @@ def find_fastqs(
 
         if check_existence and not exists(r1_file):
             raise MetamistError(
-                f'{sequencing_group_id}: ERROR: read 1 file does not exist: {lane_pair[0]["location"]}',
+                f'{sequencing_group_id}: ERROR: read 1 file does not exist: {r1_file}',
             )
         if check_existence and not exists(r2_file):
             raise MetamistError(
-                f'{sequencing_group_id}: ERROR: read 2 file does not exist: {lane_pair[1]["location"]}',
+                f'{sequencing_group_id}: ERROR: read 2 file does not exist: {r2_file}',
             )
 
         if read_reference is not None:
