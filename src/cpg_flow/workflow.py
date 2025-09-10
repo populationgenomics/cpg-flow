@@ -34,7 +34,7 @@ from cpg_flow.status import MetamistStatusReporter
 from cpg_flow.targets import Cohort, MultiCohort
 from cpg_flow.utils import format_logger, slugify, timestamp, write_to_gcs_bucket
 from cpg_utils import Path
-from cpg_utils.config import get_config, config_retrieve
+from cpg_utils.config import config_retrieve, get_config
 from cpg_utils.hail_batch import get_batch, reset_batch
 
 URL_BASENAME = 'https://{access_level}-web.populationgenomics.org.au/{name}/'
