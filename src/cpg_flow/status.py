@@ -13,7 +13,7 @@ from cpg_flow.targets import Target
 from cpg_flow.targets.cohort import Cohort
 from cpg_flow.targets.multicohort import MultiCohort
 from cpg_utils import to_path
-from cpg_utils.config import get_config
+from cpg_utils.config import get_config, AR_GUID_NAME, try_get_ar_guid
 
 
 def complete_analysis_job(  # noqa: PLR0917
@@ -73,6 +73,10 @@ def complete_analysis_job(  # noqa: PLR0917
         # add file size to meta
         if not output_cloudpath.is_dir():
             meta |= {'size': output_cloudpath.stat().st_size}
+
+    # if the ar-guid isn't already present, try to add it
+    if AR_GUID_NAME not in meta and (ar_guid := try_get_ar_guid()):
+        meta |= {AR_GUID_NAME: ar_guid}
 
     a_id = get_metamist().create_analysis(
         output=output,
