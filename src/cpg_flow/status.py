@@ -13,7 +13,7 @@ from cpg_flow.targets import Target
 from cpg_flow.targets.cohort import Cohort
 from cpg_flow.targets.multicohort import MultiCohort
 from cpg_utils import to_path
-from cpg_utils.config import get_config, AR_GUID_NAME, try_get_ar_guid
+from cpg_utils.config import AR_GUID_NAME, get_config, try_get_ar_guid
 
 
 def complete_analysis_job(  # noqa: PLR0917
