@@ -554,7 +554,6 @@ def parse_reads(
     reads_data = assay_meta.get('reads')
     reads_type = assay_meta.get('reads_type')
     reference_assembly = assay_meta.get('reference_assembly', {}).get('location')
-    ora_reference = assay_meta.get('ora_reference', {}).get('location')
 
     if not reads_data:
         raise MetamistError(f'{sequencing_group_id}: no "meta/reads" field in meta')
