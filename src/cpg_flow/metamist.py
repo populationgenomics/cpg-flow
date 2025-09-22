@@ -588,10 +588,10 @@ def parse_reads(
             reference_location := ora_reference.get('location')
         ) is None:
             raise MetamistError(f'"meta.ora_reference.location" is mandatory for {reads_type} assays: \n{assay_meta}')
-        return find_fastqs(reads_data, ora_reference, check_existence, reference_location)
+        return find_fastqs(reads_data, sequencing_group_id, check_existence, read_reference=reference_location)
 
     else:
-        return find_fastqs(reads_data, sequencing_group_id, check_existence, reads_type)
+        return find_fastqs(reads_data, sequencing_group_id, check_existence)
 
 
 def find_fastqs(
