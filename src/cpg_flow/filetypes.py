@@ -252,10 +252,10 @@ class FastqOraPair(AlignmentInput):
 
     def __repr__(self):
         """
-        Glob string to find all FASTQ files.
+        Glob string to find all FASTQ.ora files.
 
-        >>> str(FastqPair('gs://sequencing_group_R1.fq.gz', 'gs://sequencing_group_R2.fq.gz'))
-        'gs://sequencing_group_R{1,2}.fq.gz'
+        >>> str(FastqOraPair('gs://sequencing_group_R1.fq.ora', 'gs://sequencing_group_R2.fq.ora'))
+        'gs://sequencing_group_R{1,2}.fq.ora'
         """
         return ''.join(
             f'{{{",".join(sorted(set(chars)))}}}' if len(set(chars)) > 1 else chars[0]
