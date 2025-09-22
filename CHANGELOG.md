@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.4.0 (2025-09-22)
+
+### Continuous Integration
+
+- Disable upgrades of python and hail
+  ([`118291d`](https://github.com/populationgenomics/cpg-flow/commit/118291d0b42a65a0ed0ee15275850fe07fe55672))
+
+Disable suggestions to uprade python and hail from renovate
+
+### Features
+
+- **ora**: Create FastqOra filetype
+  ([`a4db915`](https://github.com/populationgenomics/cpg-flow/commit/a4db915088df28b6cebf1e47a8686140f2ea233d))
+
+
 ## v0.3.2 (2025-07-02)
 
 ### Build System
