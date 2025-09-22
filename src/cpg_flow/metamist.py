@@ -553,6 +553,7 @@ def parse_reads(
     """
     reads_data = assay_meta.get('reads')
     reads_type = assay_meta.get('reads_type')
+    reference_assembly = assay_meta.get('reference_assembly', {}).get('location')
     ora_reference = assay_meta.get('ora_reference', {}).get('location')
 
     if not reads_data:
@@ -578,7 +579,7 @@ def parse_reads(
             reads_data,
             sequencing_group_id,
             check_existence,
-            ora_reference,
+            reference_assembly,
             access_level=config_retrieve(['workflow', 'access_level']),
         )
 
