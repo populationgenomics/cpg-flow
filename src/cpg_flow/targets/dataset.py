@@ -24,7 +24,7 @@ import pandas as pd
 from loguru import logger
 
 from cpg_flow.filetypes import AlignmentInput
-from cpg_flow.targets import SequencingGroup, Target, seq_type_subdir
+from cpg_flow.targets import SequencingGroup, Target, sequencing_subdir
 from cpg_utils import Path, to_path
 from cpg_utils.config import dataset_path, get_config, web_url
 
@@ -75,7 +75,7 @@ class Dataset(Target):
         """
         return to_path(
             dataset_path(
-                seq_type_subdir(),
+                sequencing_subdir(),
                 dataset=self.name,
                 **kwargs,
             ),
@@ -87,7 +87,7 @@ class Dataset(Target):
         """
         return to_path(
             dataset_path(
-                seq_type_subdir(),
+                sequencing_subdir(),
                 dataset=self.name,
                 category='tmp',
                 **kwargs,
@@ -100,7 +100,7 @@ class Dataset(Target):
         """
         return to_path(
             dataset_path(
-                seq_type_subdir(),
+                sequencing_subdir(),
                 dataset=self.name,
                 category='analysis',
                 **kwargs,
@@ -114,7 +114,7 @@ class Dataset(Target):
         """
         return to_path(
             dataset_path(
-                seq_type_subdir(),
+                sequencing_subdir(),
                 dataset=self.name,
                 category='web',
                 **kwargs,
@@ -126,7 +126,7 @@ class Dataset(Target):
         URLs matching self.storage_web_path() files serverd by an HTTP server.
         """
         return web_url(
-            seq_type_subdir(),
+            sequencing_subdir(),
             dataset=self.name,
         )
 
