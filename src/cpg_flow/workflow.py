@@ -146,11 +146,11 @@ def skip(
 _workflow: Optional['Workflow'] = None
 
 
-def get_workflow(name: str, dry_run: bool = False) -> 'Workflow':
+def get_workflow(name: str = '', dry_run: bool = False) -> 'Workflow':
     global _workflow
     if _workflow is None:
         format_logger()
-        _workflow = Workflow(name, dry_run=dry_run)
+        _workflow = Workflow(name=name, dry_run=dry_run)
     return _workflow
 
 
@@ -160,7 +160,7 @@ def run_workflow(
     wait: bool | None = False,
     dry_run: bool = False,
 ) -> 'Workflow':
-    wfl = get_workflow(name, dry_run=dry_run)
+    wfl = get_workflow(name=name, dry_run=dry_run)
     wfl.run(stages=stages, wait=wait)
     return wfl
 
