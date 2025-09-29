@@ -146,20 +146,21 @@ def skip(
 _workflow: Optional['Workflow'] = None
 
 
-def get_workflow(dry_run: bool = False) -> 'Workflow':
+def get_workflow(name: str, dry_run: bool = False) -> 'Workflow':
     global _workflow
     if _workflow is None:
         format_logger()
-        _workflow = Workflow(dry_run=dry_run)
+        _workflow = Workflow(name, dry_run=dry_run)
     return _workflow
 
 
 def run_workflow(
+    name: str,
     stages: list['StageDecorator'] | None = None,
     wait: bool | None = False,
     dry_run: bool = False,
 ) -> 'Workflow':
-    wfl = get_workflow(dry_run=dry_run)
+    wfl = get_workflow(name, dry_run=dry_run)
     wfl.run(stages=stages, wait=wait)
     return wfl
 
@@ -241,6 +242,7 @@ class Workflow:
 
     def __init__(
         self,
+        name: str,
         stages: list['StageDecorator'] | None = None,
         dry_run: bool | None = None,
     ):
@@ -255,7 +257,6 @@ class Workflow:
 
         # TODO: should the ['dataset'] be a get? should we rename it to analysis dataset?
         analysis_dataset = config_retrieve(['workflow', 'dataset'])
-        name = config_retrieve(['workflow', 'name'], analysis_dataset)
         description = config_retrieve(['workflow', 'description'], name)
         self.name = slugify(name)
 
