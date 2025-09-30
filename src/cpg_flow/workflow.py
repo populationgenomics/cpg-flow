@@ -146,11 +146,11 @@ def skip(
 _workflow: Optional['Workflow'] = None
 
 
-def get_workflow(name: str = '', dry_run: bool = False) -> 'Workflow':
-    global _workflow
+def get_workflow(dry_run: bool = False) -> 'Workflow':
     if _workflow is None:
-        format_logger()
-        _workflow = Workflow(name=name, dry_run=dry_run)
+        raise WorkflowError(
+            'No workflow has been created yet: ensure that run_workflow is called before any calls to get_workflow'
+        )
     return _workflow
 
 
@@ -160,7 +160,11 @@ def run_workflow(
     wait: bool | None = False,
     dry_run: bool = False,
 ) -> 'Workflow':
-    wfl = get_workflow(name=name, dry_run=dry_run)
+    global _workflow
+    if _workflow is None:
+        format_logger()
+        _workflow = Workflow(name=name, dry_run=dry_run)
+    wfl = get_workflow(dry_run=dry_run)
     wfl.run(stages=stages, wait=wait)
     return wfl
 
