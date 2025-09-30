@@ -134,7 +134,7 @@ def test_status_reporter(mocker: MockFixture, tmp_path):
             return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     reset_batch()
-    run_workflow(stages=[MyQcStage1, MyQcStage2])
+    run_workflow(name='test-status-reporter', stages=[MyQcStage1, MyQcStage2])
 
     print(get_batch().job_by_tool['metamist'])
     assert 'metamist' in get_batch().job_by_tool, get_batch().job_by_tool
@@ -162,7 +162,7 @@ def test_status_reporter_with_custom_updater(mocker: MockFixture, tmp_path):
             get_batch().write_output(j.output, str(self.expected_outputs(sequencing_group)))
             return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
-    run_workflow(stages=[MyQcStage])
+    run_workflow(name='test-status-reporter-with-custom-updater', stages=[MyQcStage])
 
     assert 'metamist' in get_batch().job_by_tool, get_batch().job_by_tool
 
@@ -191,4 +191,4 @@ def test_status_reporter_fails(mocker: MockFixture, tmp_path):
             return self.make_outputs(sequencing_group, self.expected_outputs(sequencing_group), jobs=j)
 
     with pytest.raises(WorkflowError):
-        run_workflow(stages=[MyQcStage])
+        run_workflow(name='test-status-reporter-fails', stages=[MyQcStage])
