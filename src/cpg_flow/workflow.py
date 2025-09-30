@@ -146,7 +146,7 @@ def skip(
 _workflow: Optional['Workflow'] = None
 
 
-def get_workflow(dry_run: bool = False) -> 'Workflow':
+def get_workflow() -> 'Workflow':
     if _workflow is None:
         raise WorkflowError(
             'No workflow has been created yet: ensure that run_workflow is called before any calls to get_workflow'
@@ -164,9 +164,8 @@ def run_workflow(
     if _workflow is None:
         format_logger()
         _workflow = Workflow(name=name, dry_run=dry_run)
-    wfl = get_workflow(dry_run=dry_run)
-    wfl.run(stages=stages, wait=wait)
-    return wfl
+    _workflow.run(stages=stages, wait=wait)
+    return _workflow
 
 
 _TARGET: Final[str] = '\U0001f3af'
