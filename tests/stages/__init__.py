@@ -203,4 +203,4 @@ def run_workflow(
     mocker.patch('cpg_flow.inputs.get_multicohort', cohort_mocker)
 
     stages = stages or [C, C2]
-    _run_workflow(stages)
+    _run_workflow(name='test-workflow', stages=stages)

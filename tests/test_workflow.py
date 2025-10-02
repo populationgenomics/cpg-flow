@@ -128,7 +128,7 @@ def test_workflow(tmp_path: pathlib.Path):
             print(f'Writing to {self.expected_outputs(cohort)}')
             return self.make_outputs(cohort, self.expected_outputs(cohort))
 
-    run_workflow(stages=[MyCohortStage])
+    run_workflow(name='test-workflow', stages=[MyCohortStage])
 
     print(f'Checking result in {output_path}:')
     with output_path.open() as f:
