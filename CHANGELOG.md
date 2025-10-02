@@ -1,6 +1,213 @@
 # CHANGELOG
 
 
+## v0.4.0 (2025-09-22)
+
+### Continuous Integration
+
+- Disable upgrades of python and hail
+  ([`118291d`](https://github.com/populationgenomics/cpg-flow/commit/118291d0b42a65a0ed0ee15275850fe07fe55672))
+
+Disable suggestions to uprade python and hail from renovate
+
+### Features
+
+- **ora**: Create FastqOra filetype
+  ([`a4db915`](https://github.com/populationgenomics/cpg-flow/commit/a4db915088df28b6cebf1e47a8686140f2ea233d))
+
+
+## v0.3.2 (2025-07-02)
+
+### Build System
+
+- **pillow**: Upgrade to 11.3.0 based on pip-audit warning
+  ([`30c51e1`](https://github.com/populationgenomics/cpg-flow/commit/30c51e1adf5e4640c22701926c2a59d62f32409e))
+
+https://github.com/populationgenomics/cpg-flow/actions/runs/16014339785/job/45178026796?pr=113
+
+### Code Style
+
+- **stage**: Fix a comment typo
+  ([`2a4a046`](https://github.com/populationgenomics/cpg-flow/commit/2a4a04697375eadf33649265f9d8410d815afee3))
+
+- **StageOutput**: Remove commented out code
+  ([`604a94c`](https://github.com/populationgenomics/cpg-flow/commit/604a94c40beefb44c5d4e44a531a79cfaf38f648))
+
+### Continuous Integration
+
+- **.github/workflows/docker.yaml**: Add comment to PRs with links
+  ([`1ee58f9`](https://github.com/populationgenomics/cpg-flow/commit/1ee58f93eb112826731c369b16add44927593da4))
+
+- **.github/workflows/docker.yaml**: Display link to image registry
+  ([`6274f36`](https://github.com/populationgenomics/cpg-flow/commit/6274f36acbbac411f1860d819ab165c0e2157e07))
+
+- **.github/workflows/docker.yaml**: Improve digest extraction
+  ([`2b45833`](https://github.com/populationgenomics/cpg-flow/commit/2b4583398f9f9767009a4fc3eb760351e61d69ab))
+
+- **.github/workflows/docker.yaml**: Remove redundant print step
+  ([`1f2d820`](https://github.com/populationgenomics/cpg-flow/commit/1f2d82067f296de9e3be4ec9a63db8459e7c79db))
+
+- **.github/workflows/docker.yaml**: Simplify comment feature
+  ([`894b70c`](https://github.com/populationgenomics/cpg-flow/commit/894b70c2dbd0fc3604d7d77d9e93ecd0a1f7bd85))
+
+- **.github/workflows/docker.yaml**: Switch to images-dev registry
+  ([`4520eac`](https://github.com/populationgenomics/cpg-flow/commit/4520eac785dc30c9bd6303bbc79c5b62156343fa))
+
+
+## v0.3.1 (2025-06-30)
+
+### Bug Fixes
+
+- **setuptools**: Add where syntax to find all sub-folders
+  ([`2276728`](https://github.com/populationgenomics/cpg-flow/commit/2276728dd01fc4c56eb8d8b829c439142c16150a))
+
+The old build command was not finding any of the sub folders (show_workflow and targets) in the src
+  folder. In removing the use of setuptools scm (which we didn't need since semantic release handles
+  versioning) and switching back to the simple setuptools for the build setting the package-dir to
+  "src" was insufficient. Now with the find syntax added it finds all the files and sub folders in
+  the "src" folder.
+
+SET-653
+
+### Build System
+
+- Add the package-data option to include defaults.toml
+  ([`be2f3f1`](https://github.com/populationgenomics/cpg-flow/commit/be2f3f137bc1d3a2006c651f7432e5cdb3478de7))
+
+- **src/__init__.py**: Re-add the file, now empty to keep mypy happy
+  ([`3a09045`](https://github.com/populationgenomics/cpg-flow/commit/3a09045c3eabf6dfa32cf303ee5c766f2f278955))
+
+
+## v0.3.0 (2025-06-26)
+
+### Bug Fixes
+
+- **stage**: Revert to_path conversion of strings
+  ([`d41de43`](https://github.com/populationgenomics/cpg-flow/commit/d41de43de0cc6f48ae7d7c3764c5730004b22c2e))
+
+- **utils,stage**: Adjust the ExpectedResultT to allow for dict[str,
+  ([`007fe48`](https://github.com/populationgenomics/cpg-flow/commit/007fe48e024f7c25d62548a501cfb86ff87e47bb))
+
+### Build System
+
+- Security fix for tornado>=6.5
+  ([`e0c3717`](https://github.com/populationgenomics/cpg-flow/commit/e0c3717a97c394449c9e02ec3349fba8d7a7d363))
+
+- Update pycares dependency, ignore low severity protobuf security issue
+  ([`3cf8c7d`](https://github.com/populationgenomics/cpg-flow/commit/3cf8c7d25789169caa0902c396a10a606745eb0c))
+
+- Update pycares dependency, ignore low severity protobuf security issue
+  ([`9f27a91`](https://github.com/populationgenomics/cpg-flow/commit/9f27a91dc6ee2241fe677904a3e27bfba4ab1ff5))
+
+- Update requests package version
+  ([`c897573`](https://github.com/populationgenomics/cpg-flow/commit/c8975731f8b610a58a40fcb0dd12c6b6a3fde805))
+
+Addresses github.com/advisories/GHSA-9hjg-9r4m-mvj7
+
+- **Dockerfile**: Add before uv sync
+  ([`367c1b7`](https://github.com/populationgenomics/cpg-flow/commit/367c1b7965e3f05bfc64cfe9f095db78d8b8b79c))
+
+- **Dockerfile**: Fix version file location
+  ([`3fc3da0`](https://github.com/populationgenomics/cpg-flow/commit/3fc3da003c8735728a5a45e06fcc2ce03ef23014))
+
+- **Dockerfile**: Rever COPY from astral uv
+  ([`e10c265`](https://github.com/populationgenomics/cpg-flow/commit/e10c265cfdd232bf962e3a41ddbc0c9738c63726))
+
+- **Dockerfile**: Rm --no-install-project flag in docker build
+  ([`707b46a`](https://github.com/populationgenomics/cpg-flow/commit/707b46af0240d50a37fbf6870045679a6d61e994))
+
+- **Dockerfile**: Try to pass in the build version
+  ([`cefdc66`](https://github.com/populationgenomics/cpg-flow/commit/cefdc663b35d508b677b827b58e8d2b7de10b814))
+
+- **Dockerfile**: Update to new uv docker install standard
+  ([`b3a8433`](https://github.com/populationgenomics/cpg-flow/commit/b3a84337c40bd2a64c50b92deb09647d9b9ddc5a))
+
+See: https://github.com/astral-sh/uv-docker-example/blob/main/Dockerfile
+
+- **uv.lock**: Remove cpg-flow from lock file
+  ([`92630d3`](https://github.com/populationgenomics/cpg-flow/commit/92630d3534cd6108c197b19a372fc72c08ab052a))
+
+### Chores
+
+- **deps**: Bump urllib3
+  ([`79da35a`](https://github.com/populationgenomics/cpg-flow/commit/79da35a26f99bd8d19edd3b3133def7e9b70b109))
+
+Fixes: GHSA-48p4-8xcf-vxj5, GHSA-pq67-6m6q-mj2v
+
+- **deps**: Bump urllib3 to 2.5.0
+  ([`081d6a4`](https://github.com/populationgenomics/cpg-flow/commit/081d6a40ea82eb1b7c180c49397c61ec0d64140c))
+
+Fixes: GHSA-48p4-8xcf-vxj5, GHSA-pq67-6m6q-mj2v
+
+### Code Style
+
+- **commitlint**: Set max length to 72
+  ([`a818b38`](https://github.com/populationgenomics/cpg-flow/commit/a818b38ac5e9056d0bb6d15580db4d44b84c036c))
+
+- **pre-commit**: Commitlint hook runs on commit
+  ([`9c60d4a`](https://github.com/populationgenomics/cpg-flow/commit/9c60d4a10c49a88f165b8539020d5ea828cdf793))
+
+### Continuous Integration
+
+- **Dockerfile**: Fix docker build
+  ([`b8539d6`](https://github.com/populationgenomics/cpg-flow/commit/b8539d6b4a243f9d987407e28939533c6d58e2a3))
+
+- **package**: Try a build cleanup step before mike deploy
+  ([`a9b803f`](https://github.com/populationgenomics/cpg-flow/commit/a9b803f09b4ccb292e2d3c4186223463489f12b0))
+
+- **package,web-docs**: Force workflow run on test branch
+  ([`3d292fe`](https://github.com/populationgenomics/cpg-flow/commit/3d292fed47eb59fc13bc56cf40cf17e03dd268c7))
+
+- **sonarqube**: Add "new_issues" key and sum all values
+  ([`f32e309`](https://github.com/populationgenomics/cpg-flow/commit/f32e309cc03016d246fe43f7f328b4bd1bb91192))
+
+- **sonarqube**: Also pull open issues on both projects
+  ([`82f7418`](https://github.com/populationgenomics/cpg-flow/commit/82f7418329223c5a7efa073df684e1f9e6df7d18))
+
+- **sonarqube**: Echo raw metrics for debugging
+  ([`9255af1`](https://github.com/populationgenomics/cpg-flow/commit/9255af15b85caa4aff1fc39d8af465961d770367))
+
+- **sonarqube**: Fix keys for summing new issues
+  ([`62d9ea7`](https://github.com/populationgenomics/cpg-flow/commit/62d9ea7109531b496c017088359cc6a01eef4146))
+
+- **sonarqube**: Fix new_issues count
+  ([`d525778`](https://github.com/populationgenomics/cpg-flow/commit/d52577808dd70ed6be1de10a7233e5b20ddd6c6a))
+
+- **sonarqube**: More debug echos
+  ([`e1fd734`](https://github.com/populationgenomics/cpg-flow/commit/e1fd734f730a5c5a9c2dfd635a42ef730c3d5235))
+
+- **sonarqube**: More debug statements
+  ([`51c97c0`](https://github.com/populationgenomics/cpg-flow/commit/51c97c0ea91fb06a540aee91ec072ab781b355a9))
+
+- **sonarqube**: Refactor sonarqube-fetch.sh
+  ([`729f89f`](https://github.com/populationgenomics/cpg-flow/commit/729f89f3162dd9ad544eefa2a7acdbc43567c527))
+
+- **sonarqube**: Try bc to sum values
+  ([`37035a2`](https://github.com/populationgenomics/cpg-flow/commit/37035a2a94357b5cf2bd69a92971b0dfdd370be8))
+
+- **sonarqube**: Try new value key
+  ([`2bd76f8`](https://github.com/populationgenomics/cpg-flow/commit/2bd76f86148734804142b44328ff015c2a91cc78))
+
+- **web-docs**: Persist-credentials to see if that resolves perm issue
+  ([`1696682`](https://github.com/populationgenomics/cpg-flow/commit/169668259a6d4b36cf0dc6f1a87dacd766950146))
+
+- **web-docs**: Rm fix-mkdocs-deploy from push branches
+  ([`50a4f6b`](https://github.com/populationgenomics/cpg-flow/commit/50a4f6b4fe4b204de657d7af403e1f74de13542d))
+
+### Documentation
+
+- Fix docs warnings raised by mike
+  ([`9647f29`](https://github.com/populationgenomics/cpg-flow/commit/9647f29fbc2db3b7e8de7cb341e60fdd21c6268d))
+
+### Features
+
+- **Cohort**: Add support for prefix method for cohort, similar to existing method for dataset
+  ([`f104622`](https://github.com/populationgenomics/cpg-flow/commit/f1046225609b4210a1f86fdc55f7451a622ce917))
+
+this change also allows for uniqueness for between cohort outputs across multicohorts to be toggled
+  on and off
+
+
 ## v0.2.5 (2025-05-28)
 
 ### Bug Fixes

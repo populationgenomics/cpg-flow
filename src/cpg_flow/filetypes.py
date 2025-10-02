@@ -228,7 +228,42 @@ class FastqPair(AlignmentInput):
         )
 
 
-class FastqPairs(list[FastqPair], AlignmentInput):
+@dataclass
+class FastqOraPair(AlignmentInput):
+    def __init__(self, r1_path: FastqPath, r2_path: FastqPath, reference_assembly: str | Path):
+        self.reference_assembly = reference_assembly
+        self.fq_pair = FastqPair(r1_path, r2_path)
+
+    def as_resources(self, b) -> 'FastqPair':
+        """
+        Makes a trio of ResourceFile objects for r1, r2, and a reference assembly.
+        """
+        return b.read_input_group(
+            r1=self.fq_pair.r1,
+            r2=self.fq_pair.r2,
+            reference=self.reference_assembly,
+        )
+
+    def exists(self) -> bool:
+        """
+        Check if each FASTQ.ora file in the pair, and the reference, exists.
+        """
+        return all(exists(file) for file in [self.fq_pair.r1, self.fq_pair.r2, self.reference_assembly])
+
+    def __repr__(self):
+        """
+        Glob string to find all FASTQ.ora files.
+
+        >>> str(FastqOraPair('gs://sequencing_group_R1.fq.ora', 'gs://sequencing_group_R2.fq.ora'))
+        'gs://sequencing_group_R{1,2}.fq.ora'
+        """
+        return ''.join(
+            f'{{{",".join(sorted(set(chars)))}}}' if len(set(chars)) > 1 else chars[0]
+            for chars in zip(str(self.fq_pair.r1), str(self.fq_pair.r2), strict=False)
+        )
+
+
+class FastqPairs(list[FastqPair | FastqOraPair], AlignmentInput):
     """
     Multiple FASTQ file pairs belonging to the same sequencing_group
     (e.g. multiple lanes or top-ups).

@@ -18,10 +18,10 @@ from tenacity import (
     wait_exponential,
 )
 
-from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqPair, FastqPairs
+from cpg_flow.filetypes import AlignmentInput, BamPath, CramPath, FastqOraPair, FastqPair, FastqPairs
 from cpg_flow.utils import exists
 from cpg_utils import Path, to_path
-from cpg_utils.config import get_config
+from cpg_utils.config import config_retrieve, get_config
 from metamist import models
 from metamist.apis import AnalysisApi
 from metamist.exceptions import ApiException, ServiceException
@@ -126,6 +126,7 @@ GET_PEDIGREE_QUERY = gql(
     """,
 )
 
+SUPPORTED_READ_TYPES = {'bam', 'cram', 'fastq', 'fastq_ora'}
 
 _metamist: Optional['Metamist'] = None
 
@@ -449,7 +450,7 @@ class Metamist:
         Return the Metamist project name, appending '-test' if the access level is 'test'.
         """
         metamist_proj = dataset or self.default_dataset
-        if get_config()['workflow']['access_level'] == 'test' and not metamist_proj.endswith('-test'):
+        if config_retrieve(['workflow', 'access_level']) == 'test' and not metamist_proj.endswith('-test'):
             metamist_proj += '-test'
 
         return metamist_proj
@@ -567,10 +568,9 @@ def parse_reads(
             f'{sequencing_group_id}: supporting only single bam/cram input',
         )
 
-    supported_types = {'fastq', 'bam', 'cram'}
-    if reads_type not in supported_types:
+    if reads_type not in SUPPORTED_READ_TYPES:
         raise MetamistError(
-            f'{sequencing_group_id}: ERROR: "reads_type" is expected to be one of {sorted(supported_types)}',
+            f'{sequencing_group_id}: ERROR: "reads_type" is expected to be one of {sorted(SUPPORTED_READ_TYPES)}',
         )
 
     if reads_type in {'bam', 'cram'}:
@@ -579,13 +579,31 @@ def parse_reads(
             sequencing_group_id,
             check_existence,
             reference_assembly,
-            access_level=get_config()['workflow']['access_level'],
+            access_level=config_retrieve(['workflow', 'access_level']),
         )
+
+    # special handling case for FQ.ora files, these require a reference for decompression
+    elif reads_type == 'fastq_ora':
+        if (ora_reference := assay_meta.get('ora_reference')) is None or (
+            reference_location := ora_reference.get('location')
+        ) is None:
+            raise MetamistError(f'"meta.ora_reference.location" is mandatory for {reads_type} assays: \n{assay_meta}')
+        return find_fastqs(reads_data, sequencing_group_id, check_existence, read_reference=reference_location)
+
     else:
         return find_fastqs(reads_data, sequencing_group_id, check_existence)
 
 
-def find_fastqs(reads_data: list[dict], sequencing_group_id: str, check_existence: bool) -> FastqPairs:
+def find_fastqs(
+    reads_data: list[dict],
+    sequencing_group_id: str,
+    check_existence: bool,
+    read_reference: str | None = None,
+) -> FastqPairs:
+    """
+    Generates FastqPairs objects. This method handles component FastqPair objects or ORA or FQ type.
+    Objects are assumed to be ORA if we are generating FastqPairs and passing a reference for decompression.
+    """
     fastq_pairs = FastqPairs()
 
     for lane_pair in reads_data:
@@ -596,21 +614,33 @@ def find_fastqs(reads_data: list[dict], sequencing_group_id: str, check_existenc
                 f'but got {len(lane_pair)}. '
                 f'Read data: {pprint.pformat(lane_pair)}',
             )
-        if check_existence and not exists(lane_pair[0]['location']):
+        r1_file = lane_pair[0]['location']
+        r2_file = lane_pair[1]['location']
+
+        if check_existence and not exists(r1_file):
             raise MetamistError(
-                f'{sequencing_group_id}: ERROR: read 1 file does not exist: {lane_pair[0]["location"]}',
+                f'{sequencing_group_id}: ERROR: read 1 file does not exist: {r1_file}',
             )
-        if check_existence and not exists(lane_pair[1]['location']):
+        if check_existence and not exists(r2_file):
             raise MetamistError(
-                f'{sequencing_group_id}: ERROR: read 2 file does not exist: {lane_pair[1]["location"]}',
+                f'{sequencing_group_id}: ERROR: read 2 file does not exist: {r2_file}',
             )
 
-        fastq_pairs.append(
-            FastqPair(
-                to_path(lane_pair[0]['location']),
-                to_path(lane_pair[1]['location']),
-            ),
-        )
+        if read_reference is not None:
+            fastq_pairs.append(
+                FastqOraPair(
+                    to_path(r1_file),
+                    to_path(r2_file),
+                    read_reference,
+                ),
+            )
+        else:
+            fastq_pairs.append(
+                FastqPair(
+                    to_path(r1_file),
+                    to_path(r2_file),
+                ),
+            )
 
     return fastq_pairs
 

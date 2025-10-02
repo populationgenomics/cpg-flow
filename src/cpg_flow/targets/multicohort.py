@@ -11,7 +11,7 @@ Classes:
     PedigreeInfo: Represents pedigree relationships and other PED data.
 
 Functions:
-    seq_type_subdir: Returns a subdirectory parametrized by sequencing type.
+    sequencing_subdir: Returns a subdirectory parametrized by sequencing type.
 """
 
 from typing import TYPE_CHECKING, Optional
@@ -180,7 +180,7 @@ class MultiCohort(Target):
         Attributes for Hail Batch job.
         """
         return {
-            # 'sequencing_groups': self.get_sequencing_group_ids(),
+            'sequencing_groups': self.get_sequencing_group_ids(),
             'datasets': [d.name for d in self.get_datasets()],
             'cohorts': [c.id for c in self.get_cohorts()],
         }

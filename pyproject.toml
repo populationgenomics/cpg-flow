@@ -10,7 +10,7 @@ readme = "README.md"
 license-files = ["LICENSE"]
 dynamic = ["version"]
 dependencies = [
-    "cpg-utils>=5.0.11",
+    "cpg-utils>=5.4.2",
     # Pin Hail at CPG"s installed version
     "hail==0.2.134",
     "grpcio>=1.53.0",
@@ -103,7 +103,7 @@ typeCheckingMode = "basic"
 
 [tool.semantic_release]
 version_variables = [
-    "src/__init__.py:__version__",
+    "src/cpg_flow/__init__.py:__version__",
     "Dockerfile:VERSION",
     ".github/workflows/docker.yaml:VERSION",
     ".github/workflows/test.yaml:VERSION",
@@ -187,9 +187,11 @@ upload_to_pypi = false
 upload_to_test_pypi = true
 upload_to_vcs_release = false
 
-[tool.setuptools.dynamic]
-version = {attr = "__init__.__version__"}
+[tool.setuptools.dynamic.version]
+attr = "cpg_flow.__version__"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
-packages = ["cpg_flow"]
+[tool.setuptools.package-data]
+cpg_flow = ["defaults.toml"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
