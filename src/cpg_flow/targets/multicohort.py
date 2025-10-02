@@ -11,7 +11,7 @@ Classes:
     PedigreeInfo: Represents pedigree relationships and other PED data.
 
 Functions:
-    seq_type_subdir: Returns a subdirectory parametrized by sequencing type.
+    sequencing_subdir: Returns a subdirectory parametrized by sequencing type.
 """
 
 from typing import TYPE_CHECKING, Optional
