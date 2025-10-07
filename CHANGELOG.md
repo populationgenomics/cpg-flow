@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.4.1 (2025-10-02)
+
+### Bug Fixes
+
+- **type**: Changes the FastQOra resource group return type
+  ([`fdbc368`](https://github.com/populationgenomics/cpg-flow/commit/fdbc368802d5e6c68b96bcd708f317785c2c23f5))
+
+
 ## v0.4.0 (2025-09-22)
 
 ### Continuous Integration

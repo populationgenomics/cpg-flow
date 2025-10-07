@@ -14,12 +14,12 @@ Classes:
     MultiCohort: Represents multiple cohorts.
 
 Functions:
-    seq_type_subdir: Helper function to get the subdirectory for a given sequencing type.
+    sequencing_subdir: Helper function to get the subdirectory for a given sequencing type.
 """
 
 # Note: the import order below is important in order to avoid circular imports
 from cpg_flow.targets.target import Target
-from cpg_flow.targets.helpers import seq_type_subdir
+from cpg_flow.targets.helpers import sequencing_subdir
 from cpg_flow.targets.types import Sex
 from cpg_flow.targets.pedigree_info import PedigreeInfo
 from cpg_flow.targets.sequencing_group import SequencingGroup

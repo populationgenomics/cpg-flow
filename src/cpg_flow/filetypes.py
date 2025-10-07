@@ -234,7 +234,7 @@ class FastqOraPair(AlignmentInput):
         self.reference_assembly = reference_assembly
         self.fq_pair = FastqPair(r1_path, r2_path)
 
-    def as_resources(self, b) -> 'FastqPair':
+    def resource_group(self, b) -> ResourceGroup:
         """
         Makes a trio of ResourceFile objects for r1, r2, and a reference assembly.
         """
