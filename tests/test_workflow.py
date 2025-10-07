@@ -19,7 +19,7 @@ from cpg_flow.stage import (
     stage,
 )
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
-from cpg_flow.workflow import _render_graph, path_walk, run_workflow
+from cpg_flow.workflow import _render_graph, get_workflow, path_walk, run_workflow
 from cpg_utils.config import dataset_path
 from cpg_utils.hail_batch import get_batch
 
@@ -32,6 +32,7 @@ access_level = 'test'
 dataset = 'fewgenomes'
 driver_image = 'test'
 sequencing_type = 'genome'
+name = 'config-name'
 
 check_inputs = false
 check_intermediates = false
@@ -129,6 +130,7 @@ def test_workflow(tmp_path: pathlib.Path):
             return self.make_outputs(cohort, self.expected_outputs(cohort))
 
     run_workflow(name='test-workflow', stages=[MyCohortStage])
+    assert get_workflow().name == 'test-workflow'
 
     print(f'Checking result in {output_path}:')
     with output_path.open() as f:
