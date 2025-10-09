@@ -1,12 +1,49 @@
 # CHANGELOG
 
 
+## v1.0.0 (2025-10-09)
+
+### Bug Fixes
+
+- Removed unneeded uv.lock changes
+  ([`574931c`](https://github.com/populationgenomics/cpg-flow/commit/574931c68616a070bc0d827e88ca1fdfa677f011))
+
+
 ## v0.4.1 (2025-10-02)
 
 ### Bug Fixes
 
+- Added test for workflow name
+  ([`be96298`](https://github.com/populationgenomics/cpg-flow/commit/be962984e6d7e2c4958f38f69a564351b9b29a02))
+
+- Fixed calls to get_workflow
+  ([`d43f912`](https://github.com/populationgenomics/cpg-flow/commit/d43f912f2cad6ffc17b7ce5f87e38add815b1779))
+
+- Modified how the global workflow instance is created
+  ([`b3a44be`](https://github.com/populationgenomics/cpg-flow/commit/b3a44bee432c838eca249223edf73e244cea66f5))
+
+- Removed unused function args
+  ([`394f165`](https://github.com/populationgenomics/cpg-flow/commit/394f1657bdc63df562f3c34e26f3b567298e7417))
+
+- Updated broken tests
+  ([`b325c90`](https://github.com/populationgenomics/cpg-flow/commit/b325c906b683ee5aab17f7806fcb85d31367bbee))
+
+- Updated pip version
+  ([`4f4cbb0`](https://github.com/populationgenomics/cpg-flow/commit/4f4cbb0855e807ba7ce7168d38b18304cb25c310))
+
 - **type**: Changes the FastQOra resource group return type
   ([`fdbc368`](https://github.com/populationgenomics/cpg-flow/commit/fdbc368802d5e6c68b96bcd708f317785c2c23f5))
+
+### Features
+
+- Workflow name is no longer an optional config
+  ([`46465aa`](https://github.com/populationgenomics/cpg-flow/commit/46465aac3c744c2db8ab92019d7d78022e202b16))
+
+BREAKING CHANGE: Workflow name must now be hardcoded in entrypoint.
+
+### Breaking Changes
+
+- Workflow name must now be hardcoded in entrypoint.
 
 
 ## v0.4.0 (2025-09-22)
