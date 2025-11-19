@@ -102,6 +102,38 @@ However, to setup for development we recommend using the makefile setup which wi
 make init-dev # installs pre-commit as a hook
 ```
 
+#### 📦 Upgrading Packages
+
+To upgrade dependencies in your development environment:
+
+```bash
+# Upgrade all packages to their latest compatible versions
+uv sync --upgrade
+
+# Upgrade a specific package
+uv sync --upgrade-package <package-name>
+```
+
+After upgrading packages, ensure all tests pass and pre-commit hooks still work correctly.
+
+#### 🪝 Installing Pre-commit Hooks
+
+Pre-commit hooks help maintain code quality by running checks before each commit. The `make init-dev` command installs these hooks automatically, but you can also install them manually:
+
+```bash
+# Install pre-commit hooks for standard checks
+uv run pre-commit install
+
+# Install commit message linting hook
+uv run pre-commit install --hook-type commit-msg
+```
+
+To run pre-commit hooks manually on all files:
+
+```bash
+uv run pre-commit run --all-files
+```
+
 To install `cpg-flow` locally for testing the code as an editable dependency
 
 ```bash
