@@ -68,26 +68,30 @@ jobs:
 
       - name: Pull cache images
         if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
+        env:
+          REF_NAME: ${{ github.ref_name }}
         run: |
           # Try to pull cache from main registry first
           docker pull $DOCKER_MAIN/$IMAGE_NAME:$VERSION || true
 
           # Also try to pull branch-specific cache
           # Sanitize branch name for use in Docker tags (replace / with -)
-          BRANCH_TAG=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
+          BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
           docker pull $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG || true
 
       - name: build
+        env:
+          REF_NAME: ${{ github.ref_name }}
         run: |
           # For non-main/alpha branches, use cache to speed up builds
-          if [ "${{ github.ref_name }}" != "main" ] && [ "${{ github.ref_name }}" != "alpha" ]; then
+          if [ "$REF_NAME" != "main" ] && [ "$REF_NAME" != "alpha" ]; then
             # Build cache-from arguments with multiple sources
             # First, use the production image as a base cache
             CACHE_ARGS="--cache-from $DOCKER_MAIN/$IMAGE_NAME:$VERSION"
 
             # Then append the branch-specific cache (note: we're concatenating, not replacing)
             # This gives Docker two cache sources to pull layers from
-            BRANCH_TAG=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
+            BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
             CACHE_ARGS="$CACHE_ARGS --cache-from $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG"
 
             docker build . -f Dockerfile $CACHE_ARGS --tag $IMAGE_NAME:${{ github.sha }}
@@ -107,9 +111,11 @@ jobs:
 
       - name: push branch cache
         if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
+        env:
+          REF_NAME: ${{ github.ref_name }}
         run: |
           # Sanitize branch name for use in Docker tags (replace / with -)
-          BRANCH_TAG=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
+          BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
           docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG
           docker push $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG
 
