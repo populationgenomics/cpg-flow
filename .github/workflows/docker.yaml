@@ -66,90 +66,63 @@ jobs:
         run: |
           gcloud auth configure-docker australia-southeast1-docker.pkg.dev
 
-      - name: Pull cache images
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push development image
         if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
-        env:
-          REF_NAME: ${{ github.ref_name }}
-        run: |
-          # Sanitize branch name for use in Docker tags (replace / with -)
-          BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_DEV }}/${{ env.IMAGE_NAME }}:${{ github.event.pull_request.head.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=image,name=${{ env.DOCKER_DEV }}/${{ env.IMAGE_NAME }},push-by-digest=false
 
-          # Try to pull branch-specific cache first
-          if docker pull $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG; then
-            echo "Successfully pulled branch cache: cache-$BRANCH_TAG"
-          else
-            echo "Branch cache not found, falling back to production cache"
-            # Only pull from main registry if branch cache doesn't exist
-            docker pull $DOCKER_MAIN/$IMAGE_NAME:$VERSION || true
-          fi
-
-      - name: build
-        env:
-          REF_NAME: ${{ github.ref_name }}
-        run: |
-          # For non-main/alpha branches, use cache to speed up builds
-          if [ "$REF_NAME" != "main" ] && [ "$REF_NAME" != "alpha" ]; then
-            BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
-
-            # Check if branch cache exists locally (was pulled successfully)
-            if docker image inspect $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG >/dev/null 2>&1; then
-              echo "Using branch-specific cache"
-              CACHE_ARGS="--cache-from $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG"
-            elif docker image inspect $DOCKER_MAIN/$IMAGE_NAME:$VERSION >/dev/null 2>&1; then
-              echo "Using production cache as fallback"
-              CACHE_ARGS="--cache-from $DOCKER_MAIN/$IMAGE_NAME:$VERSION"
-            else
-              echo "No cache available, building from scratch"
-              CACHE_ARGS=""
-            fi
-
-            docker build . -f Dockerfile $CACHE_ARGS --tag $IMAGE_NAME:${{ github.sha }}
-          else
-            # Production builds (main/alpha) - build from scratch for reproducibility
-            docker build . -f Dockerfile --tag $IMAGE_NAME:${{ github.sha }}
-          fi
-
-      - name: push commit sha tag
+      - name: Set development image env vars
         if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
         run: |
-          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
-          docker push $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }} | cut -d'@' -f2)
+          DIGEST=$(docker buildx imagetools inspect $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }} --format '{{json .}}' | jq -r '.manifest.digest')
           echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
           echo "DOCKER_DIGEST=$DIGEST" >> $GITHUB_ENV
 
-      - name: push branch cache
-        if: ${{ github.ref_name != 'main' && github.ref_name != 'alpha' }}
-        env:
-          REF_NAME: ${{ github.ref_name }}
-        run: |
-          # Sanitize branch name for use in Docker tags (replace / with -)
-          BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
-          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG
-          docker push $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG
+      - name: Build and push production image
+        if: ${{ github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'alpha') && startsWith(github.event.head_commit.message, 'bump:') }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_MAIN }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          # Production builds don't use cache for reproducibility
+          no-cache: true
 
-      - name: push production on version bump
+      - name: Set production image env vars
         if: ${{ github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'alpha') && startsWith(github.event.head_commit.message, 'bump:') }}
         run: |
-          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_MAIN/$IMAGE_NAME:$VERSION
-          docker push $DOCKER_MAIN/$IMAGE_NAME:$VERSION
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_MAIN/$IMAGE_NAME:$VERSION | cut -d'@' -f2)
+          DIGEST=$(docker buildx imagetools inspect $DOCKER_MAIN/$IMAGE_NAME:$VERSION --format '{{json .}}' | jq -r '.manifest.digest')
           echo "DOCKER_IMAGE=$DOCKER_MAIN/$IMAGE_NAME:$VERSION" >> $GITHUB_ENV
           echo "DOCKER_DIGEST=$DIGEST" >> $GITHUB_ENV
 
-      - name: manually triggered build
+      - name: Build and push manually triggered image
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
-        env:
-          IMAGE_NAME: $IMAGE_NAME
-          DOCKER_DEV: $DOCKER_DEV
-          TAG: ${{ github.event.inputs.tag }}
-          SHA: ${{ github.sha }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_DEV }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Set manually triggered image env vars
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
         run: |
-          set -euo pipefail
-          docker tag "$IMAGE_NAME:$SHA" "$DOCKER_DEV/$IMAGE_NAME:$TAG"
-          docker push "$DOCKER_DEV/$IMAGE_NAME:$TAG"
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$DOCKER_DEV/$IMAGE_NAME:$TAG" | cut -d'@' -f2)
-          echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$TAG" >> "$GITHUB_ENV"
+          DIGEST=$(docker buildx imagetools inspect $DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }} --format '{{json .}}' | jq -r '.manifest.digest')
+          echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }}" >> "$GITHUB_ENV"
           echo "DOCKER_DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
       - name: Add image link to GitHub Summary
