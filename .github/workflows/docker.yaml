@@ -109,7 +109,7 @@ jobs:
 
       - name: Build and push manually triggered image
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
-        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 #v6.9.0
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 #v6.18.0
         with:
           context: .
           file: ./Dockerfile
@@ -120,9 +120,11 @@ jobs:
 
       - name: Set manually triggered image env vars
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
+        env:
+          TAG: ${{ github.event.inputs.tag }}
         run: |
-          DIGEST=$(docker buildx imagetools inspect $DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }} --format '{{json .}}' | jq -r '.manifest.digest')
-          echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:${{ github.event.inputs.tag }}" >> "$GITHUB_ENV"
+          DIGEST=$(docker buildx imagetools inspect $DOCKER_DEV/$IMAGE_NAME:$TAG --format '{{json .}}' | jq -r '.manifest.digest')
+          echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$TAG" >> "$GITHUB_ENV"
           echo "DOCKER_DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
       - name: Add image link to GitHub Summary
