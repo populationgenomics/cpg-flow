@@ -71,13 +71,17 @@ jobs:
         env:
           REF_NAME: ${{ github.ref_name }}
         run: |
-          # Try to pull cache from main registry first
-          docker pull $DOCKER_MAIN/$IMAGE_NAME:$VERSION || true
-
-          # Also try to pull branch-specific cache
           # Sanitize branch name for use in Docker tags (replace / with -)
           BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
-          docker pull $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG || true
+
+          # Try to pull branch-specific cache first
+          if docker pull $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG; then
+            echo "Successfully pulled branch cache: cache-$BRANCH_TAG"
+          else
+            echo "Branch cache not found, falling back to production cache"
+            # Only pull from main registry if branch cache doesn't exist
+            docker pull $DOCKER_MAIN/$IMAGE_NAME:$VERSION || true
+          fi
 
       - name: build
         env:
@@ -85,14 +89,19 @@ jobs:
         run: |
           # For non-main/alpha branches, use cache to speed up builds
           if [ "$REF_NAME" != "main" ] && [ "$REF_NAME" != "alpha" ]; then
-            # Build cache-from arguments with multiple sources
-            # First, use the production image as a base cache
-            CACHE_ARGS="--cache-from $DOCKER_MAIN/$IMAGE_NAME:$VERSION"
-
-            # Then append the branch-specific cache (note: we're concatenating, not replacing)
-            # This gives Docker two cache sources to pull layers from
             BRANCH_TAG=$(echo "$REF_NAME" | sed 's/\//-/g')
-            CACHE_ARGS="$CACHE_ARGS --cache-from $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG"
+
+            # Check if branch cache exists locally (was pulled successfully)
+            if docker image inspect $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG >/dev/null 2>&1; then
+              echo "Using branch-specific cache"
+              CACHE_ARGS="--cache-from $DOCKER_DEV/$IMAGE_NAME:cache-$BRANCH_TAG"
+            elif docker image inspect $DOCKER_MAIN/$IMAGE_NAME:$VERSION >/dev/null 2>&1; then
+              echo "Using production cache as fallback"
+              CACHE_ARGS="--cache-from $DOCKER_MAIN/$IMAGE_NAME:$VERSION"
+            else
+              echo "No cache available, building from scratch"
+              CACHE_ARGS=""
+            fi
 
             docker build . -f Dockerfile $CACHE_ARGS --tag $IMAGE_NAME:${{ github.sha }}
           else
