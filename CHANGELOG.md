@@ -1,6 +1,28 @@
 # CHANGELOG
 
 
+## v1.0.1 (2025-11-21)
+
+### Bug Fixes
+
+- **type**: Make populating assays opt-in
+  ([`e1f781c`](https://github.com/populationgenomics/cpg-flow/commit/e1f781c8cca757d8b985007f7a5246a318ec2ff3))
+
+Assays populated by default but this causes failures when the reads meta is missing the location.
+  With population of assays not necessary for all pipelines we can choose to opt-in where needed and
+  skip it by default
+
+### Build System
+
+- Bumped pip to 25.3
+  ([`4f9f7a7`](https://github.com/populationgenomics/cpg-flow/commit/4f9f7a726d2449642d65537e3524ad875fe6f951))
+
+### Testing
+
+- Populate assays in test cohort config
+  ([`61af4bf`](https://github.com/populationgenomics/cpg-flow/commit/61af4bf237ab06ffee52b030404f009f19ee6706))
+
+
 ## v1.0.0 (2025-10-09)
 
 ### Bug Fixes
