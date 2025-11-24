@@ -57,7 +57,8 @@ def add_sg_to_dataset(dataset: Dataset, sg_data: dict) -> SequencingGroup:
         sequencing_group.pedigree.sex = Sex.parse(reported_sex)
 
     # parse the assays and related dict content
-    _populate_alignment_inputs(sequencing_group, sg_data)
+    if config_retrieve(['workflow', 'populate_assays'], None):
+        _populate_assays(sequencing_group, sg_data)
 
     return sequencing_group
 
@@ -173,13 +174,13 @@ def _combine_assay_meta(assays: list[Assay]) -> dict:
     return assays_meta
 
 
-def _populate_alignment_inputs(
+def _populate_assays(
     sequencing_group: SequencingGroup,
     entry: dict,
     check_existence: bool = False,
 ) -> None:
     """
-    Populate sequencing inputs for a sequencing group
+    Populate assay inputs for a sequencing group
     """
     assays: list[Assay] = []
 

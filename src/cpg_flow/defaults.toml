@@ -69,6 +69,9 @@ check_expected_outputs = true
 # [workflow.skip_stages_for_sgs]
 #CramQC = ['CPGaaa']
 
+# Opt-in to populate assays and meta
+populate_assays = false
+
 [hail]
 
 # This is different from the cpg_flow Workflow dry_run option.

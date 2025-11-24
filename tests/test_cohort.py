@@ -45,6 +45,8 @@ def _cohort_config(tmp_path, cohort_ids: list[str] | None = None, input_datasets
     check_expected_outputs = false
     path_scheme = 'local'
 
+    populate_assays = true
+
     [storage.default]
     default = '{tmp_path}'
 
