@@ -52,7 +52,7 @@ make init-dev # installs pre-commit as a hook
 
 To upgrade dependencies in your development environment:
 
-!!! important "Step 1: Calculate the security cutoff date"
+!!! warning "Step 1: Calculate the security cutoff date"
     This excludes packages released in the last 7 days, reducing risk of vulnerable releases.
 
 ```bash
@@ -60,7 +60,7 @@ To upgrade dependencies in your development environment:
 CUTOFF_DATE=$(python3 -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d'))")
 ```
 
-!!! tip "Step 2: Run upgrade with the cutoff date"
+!!! danger "Step 2: Run upgrade with the cutoff date"
 
 ```bash
 # Upgrade all packages to their latest compatible versions
