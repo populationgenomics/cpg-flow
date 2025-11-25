@@ -6,7 +6,7 @@ init: venv
 	uv run pre-commit install
 
 init-dev: init install-local
-	uv run pre-commit install --hook-type commit-msg
+
 
 # Actions
 test:
@@ -44,4 +44,14 @@ upload: clean build
 	uv run twine check dist/*
 	uv run twine upload -r testpypi dist/*
 
-.PHONY: venv init test docs clean ci-build build install-build install-local upload
+# Version Management
+bump-major:
+	uv run bump-my-version bump major
+
+bump-minor:
+	uv run bump-my-version bump minor
+
+bump-patch:
+	uv run bump-my-version bump patch
+
+.PHONY: venv init test docs clean ci-build build install-build install-local upload bump-major bump-minor bump-patch

@@ -1,4 +1,5 @@
 FROM australia-southeast1-docker.pkg.dev/analysis-runner/images/driver:latest
+# VERSION 1.0.1
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Set up working directory for the project
