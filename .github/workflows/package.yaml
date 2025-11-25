@@ -43,8 +43,8 @@ jobs:
 
       - name: Create and push tag
         run: |
-          git config user.name "cpg-software-ci-bot"
-          git config user.email "software-team+githubcibot@populationgenomics.org.au"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a "v${{ steps.version.outputs.version }}" -m "Release version ${{ steps.version.outputs.version }}"
           git push origin "v${{ steps.version.outputs.version }}"
 
@@ -59,21 +59,15 @@ jobs:
 
       - name: Build package
         run: |
-          make ci-build
-        env:
-          NEW_VERSION: ${{ steps.version.outputs.version }}
+          uv build --sdist --wheel
 
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc #v1.12.4
         if: github.event_name == 'push' || github.event.inputs.force_pypi_release == 'true'
 
-      - name: Clean stale build metadata
-        run: |
-          rm -rf src/*.egg-info || true
-
       - name: Publish | Update docs version
         run: |
           uv run mike deploy -F docs/mkdocs.yml --push --update-aliases ${{ steps.version.outputs.version }} latest
         env:
-          GIT_COMMITTER_NAME: cpg-software-ci-bot
-          GIT_COMMITTER_EMAIL: software-team+githubcibot@populationgenomics.org.au
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com

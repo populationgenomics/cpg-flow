@@ -27,10 +27,6 @@ docs:
 	uv pip install mkdocs-material "mkdocstrings[python]" griffe-typingdoc
 	uv run mkdocs serve -f docs/mkdocs.yml
 
-ci-build: clean
-	python -m pip install build "setuptools>=42" setuptools-scm wheel
-	SETUPTOOLS_SCM_PRETEND_VERSION="$$NEW_VERSION" python -m build --sdist --wheel
-
 build: clean
 	uv build --sdist --wheel
 
@@ -54,4 +50,4 @@ bump-minor:
 bump-patch:
 	uv run bump-my-version bump patch
 
-.PHONY: venv init test docs clean ci-build build install-build install-local upload bump-major bump-minor bump-patch
+.PHONY: venv init test docs clean build install-build install-local upload bump-major bump-minor bump-patch
