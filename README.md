@@ -107,23 +107,16 @@ make init-dev # installs pre-commit as a hook
 To upgrade dependencies in your development environment:
 
 > [!WARNING]
-> **Step 1: Calculate the security cutoff date**
->
-> This excludes packages released in the last 7 days, reducing risk of vulnerable releases.
+> Always use the `--exclude-newer` flag with a security cutoff date to exclude packages released in the last 7 days, reducing risk of vulnerable releases.
 
 ```bash
-# Calculate cutoff date (run this first!)
+# Calculate cutoff date and upgrade packages
 CUTOFF_DATE=$(python3 -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d'))")
-```
 
-> [!CAUTION]
-> **Step 2: Run upgrade with the cutoff date**
-
-```bash
 # Upgrade all packages to their latest compatible versions
 uv sync --upgrade --exclude-newer $CUTOFF_DATE
 
-# Upgrade a specific package
+# OR upgrade a specific package
 uv sync --upgrade-package <package-name> --exclude-newer $CUTOFF_DATE
 ```
 
