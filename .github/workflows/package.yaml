@@ -35,18 +35,22 @@ jobs:
 
       - name: Extract version from commit message
         id: version
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           # Extract version from commit message like "bump: version 1.0.1 → 1.0.2"
-          VERSION=$(echo "${{ github.event.head_commit.message }}" | grep -oP '→ \K[0-9]+\.[0-9]+\.[0-9]+')
+          VERSION=$(echo "$COMMIT_MESSAGE" | grep -oP '→ \K[0-9]+\.[0-9]+\.[0-9]+')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Detected version: $VERSION"
 
       - name: Create and push tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v${{ steps.version.outputs.version }}" -m "Release version ${{ steps.version.outputs.version }}"
-          git push origin "v${{ steps.version.outputs.version }}"
+          git tag -a "v${VERSION}" -m "Release version ${VERSION}"
+          git push origin "v${VERSION}"
 
       - name: Install uv
         uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca #v6.0.1
@@ -62,12 +66,13 @@ jobs:
           uv build --sdist --wheel
 
       - name: Publish | Upload package to PyPI
-        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc #v1.12.4
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e #v1.13.0
         if: github.event_name == 'push' || github.event.inputs.force_pypi_release == 'true'
 
       - name: Publish | Update docs version
-        run: |
-          uv run mike deploy -F docs/mkdocs.yml --push --update-aliases ${{ steps.version.outputs.version }} latest
         env:
+          VERSION: ${{ steps.version.outputs.version }}
           GIT_COMMITTER_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+        run: |
+          uv run mike deploy -F docs/mkdocs.yml --push --update-aliases "${VERSION}" latest
