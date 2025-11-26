@@ -535,7 +535,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     cohort_status = entries['cohorts'][0]['status']
     if cohort_status != 'ACTIVE':
         raise MetamistError(
-            f'Retrieved cohort is {cohort_status}. Only ACTIVE cohorts are allowed. Please check the input cohort list.'
+            f'Cohort {cohort_id} is {cohort_status}. Only ACTIVE cohorts are allowed. Please check the input cohort list.'
         )
 
     cohort_name = entries['cohorts'][0]['name']
