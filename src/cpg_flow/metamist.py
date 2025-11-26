@@ -512,7 +512,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     Retrieve sequencing group entries for a single cohort.
     """
     logger.info(f'Getting sequencing groups for cohort {cohort_id}')
-    entries = query(GET_SEQUENCING_GROUPS_BY_COHORT_QUERY, {'cohort_id': cohort_id, 'cohort_status':'ACTIVE'})
+    entries = query(GET_SEQUENCING_GROUPS_BY_COHORT_QUERY, {'cohort_id': cohort_id, 'cohort_status': 'ACTIVE'})
 
     # Create dictionary keying sequencing groups by project and including cohort name
     # {
