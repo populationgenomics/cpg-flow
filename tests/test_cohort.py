@@ -412,6 +412,7 @@ def test_custom_cohort(mocker: MockFixture, tmp_path, monkeypatch):
             'cohorts': [
                 {
                     'name': data.get('name'),
+                    'status': data.get('status'),
                     'project': {'dataset': data.get('dataset')},
                     'sequencingGroups': data.get('sequencing_groups'),
                 },
