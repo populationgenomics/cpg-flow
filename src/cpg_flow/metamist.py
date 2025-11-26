@@ -60,7 +60,7 @@ GET_SEQUENCING_GROUPS_QUERY = gql(
 
 GET_SEQUENCING_GROUPS_BY_COHORT_QUERY = gql(
     """
-    query SGByCohortQuery($cohort_id: String!) {
+    query SGByCohortQuery($cohort_id: String!, $cohort_status: CohortStatus!) {
         cohorts(id: {eq: $cohort_id}, status: {eq: $cohort_status}) {
             name
             project {
