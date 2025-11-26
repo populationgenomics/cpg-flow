@@ -60,9 +60,10 @@ GET_SEQUENCING_GROUPS_QUERY = gql(
 
 GET_SEQUENCING_GROUPS_BY_COHORT_QUERY = gql(
     """
-    query SGByCohortQuery($cohort_id: String!, $cohort_status: CohortStatus!) {
-        cohorts(id: {eq: $cohort_id}, status: {eq: $cohort_status}) {
+    query SGByCohortQuery($cohort_id: String!) {
+        cohorts(id: {eq: $cohort_id}) {
             name
+            status
             project {
                 dataset
             }
@@ -512,7 +513,7 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     Retrieve sequencing group entries for a single cohort.
     """
     logger.info(f'Getting sequencing groups for cohort {cohort_id}')
-    entries = query(GET_SEQUENCING_GROUPS_BY_COHORT_QUERY, {'cohort_id': cohort_id, 'cohort_status': 'ACTIVE'})
+    entries = query(GET_SEQUENCING_GROUPS_BY_COHORT_QUERY, {'cohort_id': cohort_id})
 
     # Create dictionary keying sequencing groups by project and including cohort name
     # {
@@ -524,17 +525,18 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     #     "dataset": "DatasetName"
     # }
 
-    if len(entries['cohorts']) == 0:
-        raise MetamistError(
-            'Could not retrieve an active cohort for the specified id. Please check the input cohort list.'
-        )
-
     if len(entries['cohorts']) != 1:
         raise MetamistError('We only support one cohort at a time currently')
 
     if entries.get('data') is None and 'errors' in entries:
         message = entries['errors'][0]['message']
         raise MetamistError(f'Error fetching cohort: {message}')
+
+    cohort_status = entries['cohorts'][0]['status']
+    if cohort_status != 'ACTIVE':
+        raise MetamistError(
+            f'Retrieved cohort is {cohort_status}. Only ACTIVE cohorts are allowed. Please check the input cohort list.'
+        )
 
     cohort_name = entries['cohorts'][0]['name']
     cohort_dataset = entries['cohorts'][0]['project']['dataset']
