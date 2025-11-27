@@ -100,8 +100,7 @@ def test_workflow(tmp_path: pathlib.Path):
         Just a sequencing-group-level stage.
         """
 
-        @staticmethod
-        def expected_outputs(sequencing_group: SequencingGroup) -> pathlib.Path:
+        def expected_outputs(self, sequencing_group: SequencingGroup) -> pathlib.Path:
             return pathlib.Path(dataset_path(f'{sequencing_group.id}.tsv'))
 
         def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -117,8 +116,7 @@ def test_workflow(tmp_path: pathlib.Path):
         Just a cohort-level stage.
         """
 
-        @staticmethod
-        def expected_outputs(_: Cohort) -> pathlib.Path:
+        def expected_outputs(self, _: Cohort) -> pathlib.Path:
             return output_path
 
         def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
@@ -133,7 +131,7 @@ def test_workflow(tmp_path: pathlib.Path):
             print(f'Writing to {self.expected_outputs(cohort)}')
             return self.make_outputs(cohort, self.expected_outputs(cohort))
 
-    run_workflow(stages=[MyCohortStage])
+    run_workflow(name='test_workflow', stages=[MyCohortStage])
 
     print(f'Checking result in {output_path}:')
     with output_path.open() as f:
