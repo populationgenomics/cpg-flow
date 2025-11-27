@@ -1,6 +1,102 @@
 # CHANGELOG
 
 
+## v1.1.0 (2025-11-27)
+
+### Features
+
+- **metamist-graphql**: [set-842] fetch cohort and verify status
+  ([`b8f3cd1`](https://github.com/populationgenomics/cpg-flow/commit/b8f3cd1059f0a4b356e6a6818390835bcce827d3))
+
+- **metamist-graphql**: [set-842] fetch only active cohorts
+  ([`84d6d1c`](https://github.com/populationgenomics/cpg-flow/commit/84d6d1ce779e6d15e927fc1d1531ba75a3f68f12))
+
+- **metamist-graphql**: [set-842] fix grapQL query
+  ([`5964d5b`](https://github.com/populationgenomics/cpg-flow/commit/5964d5bd42294d9122888199b1707c605d1a541d))
+
+- **metamist-graphql**: [set-842] fix lint issues
+  ([`1090482`](https://github.com/populationgenomics/cpg-flow/commit/1090482e214130431a4f253350660d77ac44d337))
+
+- **metamist-graphql**: [set-842] fix unit tests and populate status field in test data
+  ([`e51da42`](https://github.com/populationgenomics/cpg-flow/commit/e51da42053691fd0d4b7082b8c060d0d56c2d32b))
+
+- **metamist-graphql**: [set-842] include cohort id in the msg
+  ([`534da2f`](https://github.com/populationgenomics/cpg-flow/commit/534da2faad926cf554501d3f6fa85d1961c44cfc))
+
+- **metamist-graphql**: [set-842] update metamist version
+  ([`42a7e16`](https://github.com/populationgenomics/cpg-flow/commit/42a7e163a92d3891cd54709d5a0b7240add9d863))
+
+- **metamist-graphql**: [set-842] update metamist version in uv lock
+  ([`7932c22`](https://github.com/populationgenomics/cpg-flow/commit/7932c22b7d80a1a414dfd7bdd9f123152e2a6108))
+
+
+## v1.0.1 (2025-11-21)
+
+### Bug Fixes
+
+- **type**: Make populating assays opt-in
+  ([`e1f781c`](https://github.com/populationgenomics/cpg-flow/commit/e1f781c8cca757d8b985007f7a5246a318ec2ff3))
+
+Assays populated by default but this causes failures when the reads meta is missing the location.
+  With population of assays not necessary for all pipelines we can choose to opt-in where needed and
+  skip it by default
+
+### Build System
+
+- Bumped pip to 25.3
+  ([`4f9f7a7`](https://github.com/populationgenomics/cpg-flow/commit/4f9f7a726d2449642d65537e3524ad875fe6f951))
+
+### Testing
+
+- Populate assays in test cohort config
+  ([`61af4bf`](https://github.com/populationgenomics/cpg-flow/commit/61af4bf237ab06ffee52b030404f009f19ee6706))
+
+
+## v1.0.0 (2025-10-09)
+
+### Bug Fixes
+
+- Removed unneeded uv.lock changes
+  ([`574931c`](https://github.com/populationgenomics/cpg-flow/commit/574931c68616a070bc0d827e88ca1fdfa677f011))
+
+
+## v0.4.1 (2025-10-02)
+
+### Bug Fixes
+
+- Added test for workflow name
+  ([`be96298`](https://github.com/populationgenomics/cpg-flow/commit/be962984e6d7e2c4958f38f69a564351b9b29a02))
+
+- Fixed calls to get_workflow
+  ([`d43f912`](https://github.com/populationgenomics/cpg-flow/commit/d43f912f2cad6ffc17b7ce5f87e38add815b1779))
+
+- Modified how the global workflow instance is created
+  ([`b3a44be`](https://github.com/populationgenomics/cpg-flow/commit/b3a44bee432c838eca249223edf73e244cea66f5))
+
+- Removed unused function args
+  ([`394f165`](https://github.com/populationgenomics/cpg-flow/commit/394f1657bdc63df562f3c34e26f3b567298e7417))
+
+- Updated broken tests
+  ([`b325c90`](https://github.com/populationgenomics/cpg-flow/commit/b325c906b683ee5aab17f7806fcb85d31367bbee))
+
+- Updated pip version
+  ([`4f4cbb0`](https://github.com/populationgenomics/cpg-flow/commit/4f4cbb0855e807ba7ce7168d38b18304cb25c310))
+
+- **type**: Changes the FastQOra resource group return type
+  ([`fdbc368`](https://github.com/populationgenomics/cpg-flow/commit/fdbc368802d5e6c68b96bcd708f317785c2c23f5))
+
+### Features
+
+- Workflow name is no longer an optional config
+  ([`46465aa`](https://github.com/populationgenomics/cpg-flow/commit/46465aac3c744c2db8ab92019d7d78022e202b16))
+
+BREAKING CHANGE: Workflow name must now be hardcoded in entrypoint.
+
+### Breaking Changes
+
+- Workflow name must now be hardcoded in entrypoint.
+
+
 ## v0.4.0 (2025-09-22)
 
 ### Continuous Integration

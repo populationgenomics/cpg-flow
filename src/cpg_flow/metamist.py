@@ -63,6 +63,7 @@ GET_SEQUENCING_GROUPS_BY_COHORT_QUERY = gql(
     query SGByCohortQuery($cohort_id: String!) {
         cohorts(id: {eq: $cohort_id}) {
             name
+            status
             project {
                 dataset
             }
@@ -523,12 +524,19 @@ def get_cohort_sgs(cohort_id: str) -> dict:
     #     "name": "CohortName"
     #     "dataset": "DatasetName"
     # }
+
     if len(entries['cohorts']) != 1:
         raise MetamistError('We only support one cohort at a time currently')
 
     if entries.get('data') is None and 'errors' in entries:
         message = entries['errors'][0]['message']
         raise MetamistError(f'Error fetching cohort: {message}')
+
+    cohort_status = entries['cohorts'][0]['status']
+    if cohort_status != 'ACTIVE':
+        raise MetamistError(
+            f'Cohort {cohort_id} is {cohort_status}. Only ACTIVE cohorts are allowed. Please check the input cohort list.'
+        )
 
     cohort_name = entries['cohorts'][0]['name']
     cohort_dataset = entries['cohorts'][0]['project']['dataset']
