@@ -107,7 +107,7 @@ class Target:
         if self.sg_hash is None:
             self.set_sg_hash()
         if self.sg_hash is None:
-            raise TypeError('Alignment_inputs_hash was not populated by the setter method')
+            raise TypeError('SG_hash was not populated by the setter method')
         return self.sg_hash
 
     def set_sg_hash(self):
