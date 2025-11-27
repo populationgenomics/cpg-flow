@@ -57,6 +57,9 @@ class Target:
         # this begins as None, and is set upon first calling
         self.alignment_inputs_hash: str | None = None
 
+        # similar to alignment_inputs_hash, but based on the SG IDs instead of the underlying assays
+        self.sg_hash: str | None = None
+
     def get_sequencing_groups(
         self,
         only_active: bool = True,
@@ -98,6 +101,20 @@ class Target:
         )
         h = hashlib.sha256(s.encode()).hexdigest()[:38]
         self.alignment_inputs_hash = f'{h}_{len(self.get_sequencing_group_ids())}'
+
+    def get_sg_hash(self) -> str:
+        """If the SG hash was generated, return it, otherwise generate and return it."""
+        if self.sg_hash is None:
+            self.set_sg_hash()
+        if self.sg_hash is None:
+            raise TypeError('Alignment_inputs_hash was not populated by the setter method')
+        return self.sg_hash
+
+    def set_sg_hash(self):
+        """Unique hash string from Sequencing Group IDs, used to create a unique string to use in output paths."""
+        sg_ids = sorted(self.get_sequencing_group_ids())
+        h = hashlib.sha256(''.join(sg_ids).encode()).hexdigest()[:38]
+        self.sg_hash = f'{h}_{len(sg_ids)}'
 
     @property
     def target_id(self) -> str:
