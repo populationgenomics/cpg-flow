@@ -640,7 +640,7 @@ requires-dist = [
     { name = "hail", specifier = "==0.2.134" },
     { name = "ipywidgets", specifier = ">=8.1.5" },
     { name = "loguru", specifier = ">0.7.0" },
-    { name = "metamist", specifier = ">=6.9.0" },
+    { name = "metamist", specifier = ">=7.13.0" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "plotly", specifier = ">=5.24.1" },
     { name = "pre-commit", specifier = ">=4.0.1" },
@@ -1566,7 +1566,7 @@ wheels = [
 
 [[package]]
 name = "metamist"
-version = "7.10.0"
+version = "7.13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "backoff" },
@@ -1580,7 +1580,7 @@ dependencies = [
     { name = "tabulate" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/41/a5/be65f28dbf63eab806cb2f56784d4901e6bfd3518902d81a6afbc6e3dc19/metamist-7.10.0.tar.gz", hash = "sha256:c530cd9c5c9506cd9e7b90a27d9c5f59b685683f8257a3baae33b91664ed20eb", size = 216525, upload-time = "2025-05-16T01:52:15.196Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/06/a4/daed53e0453a0b812ec6008a57ede55b50e7b48e6556007b3839e41b0c49/metamist-7.13.0.tar.gz", hash = "sha256:2c9f1e7e2824fa5070a39a0dc772aa72c35764d09af4aecd3add095f57d3ccdb", size = 244405, upload-time = "2025-11-25T03:38:08.681Z" }
 
 [[package]]
 name = "mike"

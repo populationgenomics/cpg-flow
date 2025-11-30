@@ -1,6 +1,35 @@
 # CHANGELOG
 
 
+## v1.1.0 (2025-11-27)
+
+### Features
+
+- **metamist-graphql**: [set-842] fetch cohort and verify status
+  ([`b8f3cd1`](https://github.com/populationgenomics/cpg-flow/commit/b8f3cd1059f0a4b356e6a6818390835bcce827d3))
+
+- **metamist-graphql**: [set-842] fetch only active cohorts
+  ([`84d6d1c`](https://github.com/populationgenomics/cpg-flow/commit/84d6d1ce779e6d15e927fc1d1531ba75a3f68f12))
+
+- **metamist-graphql**: [set-842] fix grapQL query
+  ([`5964d5b`](https://github.com/populationgenomics/cpg-flow/commit/5964d5bd42294d9122888199b1707c605d1a541d))
+
+- **metamist-graphql**: [set-842] fix lint issues
+  ([`1090482`](https://github.com/populationgenomics/cpg-flow/commit/1090482e214130431a4f253350660d77ac44d337))
+
+- **metamist-graphql**: [set-842] fix unit tests and populate status field in test data
+  ([`e51da42`](https://github.com/populationgenomics/cpg-flow/commit/e51da42053691fd0d4b7082b8c060d0d56c2d32b))
+
+- **metamist-graphql**: [set-842] include cohort id in the msg
+  ([`534da2f`](https://github.com/populationgenomics/cpg-flow/commit/534da2faad926cf554501d3f6fa85d1961c44cfc))
+
+- **metamist-graphql**: [set-842] update metamist version
+  ([`42a7e16`](https://github.com/populationgenomics/cpg-flow/commit/42a7e163a92d3891cd54709d5a0b7240add9d863))
+
+- **metamist-graphql**: [set-842] update metamist version in uv lock
+  ([`7932c22`](https://github.com/populationgenomics/cpg-flow/commit/7932c22b7d80a1a414dfd7bdd9f123152e2a6108))
+
+
 ## v1.0.1 (2025-11-21)
 
 ### Bug Fixes
