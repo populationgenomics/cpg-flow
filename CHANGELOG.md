@@ -1,6 +1,34 @@
 # CHANGELOG
 
 
+## v1.1.1 (2025-12-02)
+
+### Bug Fixes
+
+- **metamist-cohorts query**: [set-856] ruff format
+  ([`2a10cad`](https://github.com/populationgenomics/cpg-flow/commit/2a10cad1c6e64632ef2676e412a1b163e7efa2fb))
+
+- **metamist-cohorts query**: [set-856] support upper and lower case enum formats
+  ([`0db034a`](https://github.com/populationgenomics/cpg-flow/commit/0db034a5e16d69b01081bc4a070a67886ff79861))
+
+- **metamist-cohorts query**: [set-856] use lowercase for cohortstatus
+  ([`a71f584`](https://github.com/populationgenomics/cpg-flow/commit/a71f584cb96c5a78d594de762bf4d722b983abc3))
+
+### Documentation
+
+- Add exclude-newer upgrade option
+  ([`7c73dee`](https://github.com/populationgenomics/cpg-flow/commit/7c73dee0733a8997383eff3be78970e6942b8994))
+
+- Change to warning symbols for cutoff
+  ([`a748488`](https://github.com/populationgenomics/cpg-flow/commit/a748488e484189eb4f91b3cb0d9b5f1adf6debbc))
+
+- Clean up upgrade docs
+  ([`8ad151a`](https://github.com/populationgenomics/cpg-flow/commit/8ad151a44ca4f4af5342642e7fcf929722105fbd))
+
+- Update docs for package upgrades and precommit
+  ([`cadda5d`](https://github.com/populationgenomics/cpg-flow/commit/cadda5d5c827c5020cebf13d59c4cb2ef246dd92))
+
+
 ## v1.1.0 (2025-11-27)
 
 ### Features
