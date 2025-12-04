@@ -102,6 +102,46 @@ However, to setup for development we recommend using the makefile setup which wi
 make init-dev # installs pre-commit as a hook
 ```
 
+#### 📦 Upgrading Packages
+
+To upgrade dependencies in your development environment:
+
+> [!WARNING]
+> Always use the `--exclude-newer` flag with a security cutoff date to exclude packages released in the last 7 days, reducing risk of vulnerable releases.
+
+```bash
+# Calculate cutoff date and upgrade packages
+CUTOFF_DATE=$(python3 -c "from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d'))")
+
+# Upgrade all packages to their latest compatible versions
+uv sync --upgrade --exclude-newer $CUTOFF_DATE
+
+# OR upgrade a specific package
+uv sync --upgrade-package <package-name> --exclude-newer $CUTOFF_DATE
+```
+
+The `--exclude-newer` flag helps avoid pulling very recent package versions that may contain vulnerabilities or haven't been thoroughly tested. Use a recent date (e.g., a few days or weeks ago) as a safety buffer.
+
+After upgrading packages, ensure all tests pass and pre-commit hooks still work correctly.
+
+#### 🪝 Installing Pre-commit Hooks
+
+Pre-commit hooks help maintain code quality by running checks before each commit. The `make init-dev` command installs these hooks automatically, but you can also install them manually:
+
+```bash
+# Install pre-commit hooks for standard checks
+uv run pre-commit install
+
+# Install commit message linting hook
+uv run pre-commit install --hook-type commit-msg
+```
+
+To run pre-commit hooks manually on all files:
+
+```bash
+uv run pre-commit run --all-files
+```
+
 To install `cpg-flow` locally for testing the code as an editable dependency
 
 ```bash
