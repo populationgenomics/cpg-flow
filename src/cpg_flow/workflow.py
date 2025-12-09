@@ -289,7 +289,9 @@ class Workflow:
 
     @property
     def output_version(self) -> str:
-        return self._output_version or get_multicohort().get_alignment_inputs_hash()
+        if config_retrieve(['workflow', 'populate_assays'], False):
+            return self._output_version or get_multicohort().get_alignment_inputs_hash()
+        return get_multicohort().get_sg_hash()
 
     @property
     def analysis_prefix(self) -> Path:
