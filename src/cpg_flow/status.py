@@ -12,12 +12,12 @@ from cpg_flow.metamist import AnalysisStatus, get_metamist
 from cpg_flow.targets import Target
 from cpg_flow.targets.cohort import Cohort
 from cpg_flow.targets.multicohort import MultiCohort
-from cpg_utils import to_path
+from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
 
 
 def complete_analysis_job(  # noqa: PLR0917
-    output: str,
+    outputs: dict[str, str | Path],
     analysis_type: str,
     cohort_ids: list[str],
     sg_ids: list[str],
@@ -31,7 +31,8 @@ def complete_analysis_job(  # noqa: PLR0917
     this will register the analysis outputs from a Stage
 
     Args:
-        output (str): path to the output file
+        outputs dict[str, str | path]: dict of output files,
+            where the keys are the output names and the values are the paths.
         analysis_type (str): metamist analysis type
         sg_ids (list[str]): all CPG IDs relevant to this target
         project_name (str): project/dataset name
@@ -40,11 +41,12 @@ def complete_analysis_job(  # noqa: PLR0917
         tolerate_missing (bool): if True, allow missing output
     """
 
-    assert isinstance(output, str)
-    output_cloudpath = to_path(output)
+    assert isinstance(outputs, dict)
+    output_cloudpaths = {k: to_path(v) for k, v in outputs.items()}
+
 
     if update_analysis_meta is not None:
-        meta |= update_analysis_meta(output)
+        meta = meta | update_analysis_meta(outputs)
 
     # if SG IDs are listed in the meta, remove them
     # these are already captured in the sg_ids list
@@ -64,18 +66,15 @@ def complete_analysis_job(  # noqa: PLR0917
     # we know that es indexes are registered names, not files/dirs
     # skip all relevant checks for this output type
     if analysis_type != 'es-index':
-        if not output_cloudpath.exists():
-            if tolerate_missing:
-                print(f"Output {output} doesn't exist, allowing silent return")
-                return
-            raise ValueError(f"Output {output} doesn't exist")
-
-        # add file size to meta
-        if not output_cloudpath.is_dir():
-            meta |= {'size': output_cloudpath.stat().st_size}
+        for k, output_cloudpath in output_cloudpaths.items():
+            if not output_cloudpath.exists():
+                if tolerate_missing:
+                    print(f"Output {output_cloudpath} doesn't exist, allowing silent return")
+                    return
+                raise ValueError(f"Output {k}: {output_cloudpath} doesn't exist")
 
     a_id = get_metamist().create_analysis(
-        output=output,
+        outputs=outputs,
         type_=analysis_type,
         status=AnalysisStatus('completed'),
         cohort_ids=cohort_ids,
@@ -84,11 +83,11 @@ def complete_analysis_job(  # noqa: PLR0917
         meta=meta,
     )
     if a_id is None:
-        msg = f'Creation of Analysis failed (type={analysis_type}, output={output}) in {project_name}'
+        msg = f'Creation of Analysis failed (type={analysis_type}, outputs={outputs}) in {project_name}'
         print(msg)
         raise ConnectionError(msg)
     print(
-        f'Created Analysis(id={a_id}, type={analysis_type}, output={output}) in {project_name}',
+        f'Created Analysis(id={a_id}, type={analysis_type}, outputs={outputs}) in {project_name}',
     )
 
 
@@ -107,7 +106,7 @@ class StatusReporter(ABC):
     def create_analysis(  # noqa: PLR0917
         self,
         b: Batch,
-        output: str,
+        outputs: dict[str, str | Path],
         analysis_type: str,
         target: Target,
         jobs: list[Job] | None = None,
@@ -133,7 +132,7 @@ class MetamistStatusReporter(StatusReporter):
     @staticmethod
     def create_analysis(  # noqa: PLR0917
         b: Batch,
-        output: str,
+        outputs: dict[str, str | Path],
         analysis_type: str,
         target: Target,
         jobs: list[Job] | None = None,
@@ -169,14 +168,15 @@ class MetamistStatusReporter(StatusReporter):
         else:
             sequencing_group_ids = target.get_sequencing_group_ids()
 
+        outputs_str = ', '.join(f'{k}: {str(v)}' for k, v in outputs.items())
         py_job = b.new_python_job(
-            f'Register analysis output {output}',
+            f'Register analysis output {outputs_str}',
             job_attr or {} | {'tool': 'metamist'},
         )
         py_job.image(get_config()['workflow']['driver_image'])
         py_job.call(
             complete_analysis_job,
-            str(output),
+            outputs,
             analysis_type,
             cohort_ids,
             sequencing_group_ids,
