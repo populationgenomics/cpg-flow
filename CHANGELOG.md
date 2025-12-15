@@ -1,6 +1,24 @@
 # CHANGELOG
 
 
+## v1.2.1 (2025-12-15)
+
+### Bug Fixes
+
+- **output_version**: Update usage readme with workflow output version
+  ([`45f6232`](https://github.com/populationgenomics/cpg-flow/commit/45f623262a5ccc53e9479c3e87352e9c4c7ebc5c))
+
+
+## v1.2.0 (2025-12-04)
+
+### Bug Fixes
+
+- **sg_hash**: Add SG-only hashing method, for WFs with no assays loaded
+  ([`f98f4a2`](https://github.com/populationgenomics/cpg-flow/commit/f98f4a2512f00c5073ece9361d5c60522ae07c2d))
+
+Adds a new SG-based hashing method
+
+
 ## v1.1.1 (2025-12-02)
 
 ### Bug Fixes
@@ -56,6 +74,13 @@
 
 - **metamist-graphql**: [set-842] update metamist version in uv lock
   ([`7932c22`](https://github.com/populationgenomics/cpg-flow/commit/7932c22b7d80a1a414dfd7bdd9f123152e2a6108))
+
+- **target.py**: Adds a new hashing method based on the sequencing group ids instead of the assays
+  ([`5ad1568`](https://github.com/populationgenomics/cpg-flow/commit/5ad1568f2700e22ba3182d786a3673ed3b291907))
+
+this change is necessary because we are now choosing not to populate alignment inputs in most
+  workflows, so the alignment inputs for most runs will be empty, causing all runs to get the same
+  hash
 
 
 ## v1.0.1 (2025-11-21)
