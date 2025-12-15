@@ -728,7 +728,8 @@ class Stage(ABC, Generic[TargetT]):
             logger.debug('No expected outputs, assuming outputs exist')
             return True, None
 
-        if get_config()['workflow'].get('check_expected_outputs'):
+        # By default pipelines will reuse outputs.
+        if get_config()['workflow'].get('check_expected_outputs', True):
             paths = path_walk(expected_out)
             logger.info(
                 f'Checking if {paths} from expected output {expected_out} exist',
