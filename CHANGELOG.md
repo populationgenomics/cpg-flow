@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.2.1 (2025-12-15)
+
+### Bug Fixes
+
+- **output_version**: Update usage readme with workflow output version
+  ([`45f6232`](https://github.com/populationgenomics/cpg-flow/commit/45f623262a5ccc53e9479c3e87352e9c4c7ebc5c))
+
+
 ## v1.2.0 (2025-12-04)
 
 ### Bug Fixes
