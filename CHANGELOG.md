@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.2.3 (2026-01-06)
+
+### Bug Fixes
+
+- **pyproject.toml**: Modernise the uv dev dependencies section syntax
+  ([`96f3f53`](https://github.com/populationgenomics/cpg-flow/commit/96f3f536379c3fcb9c4365f9a21c6a655aabd370))
+
+- **stage.py**: Altered logical flow to correctly report error modes if incorrect arguments are
+  passed
+  ([`0930671`](https://github.com/populationgenomics/cpg-flow/commit/0930671b95d6f5fee839c3bf7bfc33464a2f0fd4))
+
+_get requires a dictionary object to be accompanied by a key value. The previous logical tests to
+  confirm this were conditional on the existence of a key. If a dict is given, but no key, the error
+  message wrongly reported that the object was not a dictionary as a null logical case
+
+
 ## v1.2.2 (2025-12-15)
 
 
