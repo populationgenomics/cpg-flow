@@ -121,12 +121,11 @@ class StageOutput:
         if self.data is None:
             raise ValueError(f'{self.stage}: output data is not available')
 
-        if key is not None:
-            if not isinstance(self.data, dict):
-                raise ValueError(
-                    f'{self.stage}: {self.data} is not a dictionary, can\'t get "{key}"',
-                )
+        if isinstance(self.data, dict):
+            if key is None:
+                raise ValueError(f'{self.stage}: output is a dict, but no key has been specified')
             res = to_path(cast('dict', self.data)[key])
+
         elif isinstance(self.data, Path):
             res = self.data
         elif isinstance(self.data, str):
