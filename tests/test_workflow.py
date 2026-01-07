@@ -141,11 +141,8 @@ def test_workflow(tmp_path: pathlib.Path):
 
 @mock.patch('cpg_flow.inputs.create_multicohort', mock_create_create_cohort)
 def test_get_from_previous_output(tmp_path: pathlib.Path):
-    """
-    Testing running a workflow from a mock cohort.
-    """
-    conf = TOML.format(directory=tmp_path)
-    set_config(conf, tmp_path / 'config.toml')
+    """Testing the inputs.get(...) methods for a StageOutput."""
+    set_config(TOML.format(directory=tmp_path), tmp_path / 'config.toml')
 
     @stage
     class StageOneDict(SequencingGroupStage):
@@ -177,8 +174,8 @@ def test_get_from_previous_output(tmp_path: pathlib.Path):
             get_batch().write_output(j.output, outputs)
             return self.make_outputs(sequencing_group, outputs)
 
-    @stage(required_stages=StageOneDict)
-    class StageTwoDict(SequencingGroupStage):
+    @stage(required_stages=[StageOneDict, StageOnePath])
+    class StageTwo(SequencingGroupStage):
         """Test recall on the Dict return type"""
 
         def expected_outputs(self, _: SequencingGroup) -> pathlib.Path:
@@ -197,21 +194,6 @@ def test_get_from_previous_output(tmp_path: pathlib.Path):
             with pytest.raises(KeyError):
                 _wrong_key_dict = inputs.as_path(sequencing_group, StageOneDict, 'wrong_key')
 
-            j = get_batch().new_job('SG Dict Test job', self.get_job_attrs(sequencing_group))
-            j.command(f'touch {j.output}')
-            get_batch().write_output(j.output, output)
-            return self.make_outputs(sequencing_group, output)
-
-    @stage(required_stages=[StageOneDict, StageOnePath])
-    class StageTwoPath(SequencingGroupStage):
-        """Test recall on the Path return type"""
-
-        def expected_outputs(self, _: SequencingGroup) -> pathlib.Path:
-            return pathlib.Path(dataset_path('cohort_path.tsv'))
-
-        def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
-            output = self.expected_outputs(sequencing_group)
-
             # test recall from the Path return type
             two_path = inputs.as_path(sequencing_group, StageOnePath)
             assert two_path == pathlib.Path(dataset_path(f'{sequencing_group.id}_path.tsv'))
@@ -219,12 +201,12 @@ def test_get_from_previous_output(tmp_path: pathlib.Path):
             with pytest.raises(ValueError, match='StageOnePath: output is not a dict, but a key was specified'):
                 _two_path = inputs.as_path(sequencing_group, StageOnePath, key='one')
 
-            j = get_batch().new_job('SG Path Test job', self.get_job_attrs(sequencing_group))
+            j = get_batch().new_job('SG Test job', self.get_job_attrs(sequencing_group))
             j.command(f'touch {j.output}')
             get_batch().write_output(j.output, output)
             return self.make_outputs(sequencing_group, output)
 
-    run_workflow(name='test_workflow', stages=[StageTwoDict, StageTwoPath])
+    run_workflow(name='test_workflow', stages=[StageTwo])
 
 
 def test_path_walk():
