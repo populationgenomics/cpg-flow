@@ -1,0 +1,82 @@
+version: 2
+
+# Multi-ecosystem groups for Python dependencies
+multi-ecosystem-groups:
+  python-minor-patch:
+    applies-to: version-updates
+    update-types:
+      - "minor"
+      - "patch"
+  python-major:
+    applies-to: version-updates
+    update-types:
+      - "major"
+
+updates:
+  # pip ecosystem for pyproject.toml dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    multi-ecosystem-group: python-minor-patch
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    ignore:
+      # Don't update hail - pinned at CPG's installed version
+      - dependency-name: "hail"
+      # Don't update Python version
+      - dependency-name: "python"
+    open-pull-requests-limit: 10
+
+  # uv ecosystem for uv.lock file
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    multi-ecosystem-group: python-minor-patch
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    ignore:
+      # Don't update hail - pinned at CPG's installed version
+      - dependency-name: "hail"
+      # Don't update Python version
+      - dependency-name: "python"
+    open-pull-requests-limit: 10
+
+  # Separate update for major versions (pip)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    multi-ecosystem-group: python-major
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    ignore:
+      # Don't update hail - pinned at CPG's installed version
+      - dependency-name: "hail"
+      # Don't update Python version
+      - dependency-name: "python"
+      # Ignore minor and patch updates (handled by the other group)
+      - update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+    open-pull-requests-limit: 10
+
+  # Separate update for major versions (uv)
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    multi-ecosystem-group: python-major
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    ignore:
+      # Don't update hail - pinned at CPG's installed version
+      - dependency-name: "hail"
+      # Don't update Python version
+      - dependency-name: "python"
+      # Ignore minor and patch updates (handled by the other group)
+      - update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+    open-pull-requests-limit: 10

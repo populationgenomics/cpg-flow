@@ -1,0 +1,27 @@
+[tool.bumpversion]
+current_version = "1.0.1"
+commit = true
+tag = false
+tag_name = "v{new_version}"
+tag_message = "Release version {new_version}"
+message = "bump: version {current_version} → {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "src/cpg_flow/__init__.py"
+search = "__version__ = '{current_version}'"
+replace = "__version__ = '{new_version}'"
+
+[[tool.bumpversion.files]]
+filename = "Dockerfile"
+search = "# VERSION {current_version}"
+replace = "# VERSION {new_version}"
+
+[[tool.bumpversion.files]]
+filename = ".github/workflows/docker.yaml"
+search = "VERSION: {current_version}"
+replace = "VERSION: {new_version}"
+
+[[tool.bumpversion.files]]
+filename = ".github/workflows/test.yaml"
+search = "VERSION: {current_version}"
+replace = "VERSION: {new_version}"
