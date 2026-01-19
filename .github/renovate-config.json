@@ -13,7 +13,7 @@
     "pep621"
   ],
   "constraints": {
-    "python": "==3.10"
+    "python": "==3.11"
   },
   "pep621": {
     "lockFileMaintenance": {
