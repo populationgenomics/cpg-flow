@@ -9,7 +9,7 @@ import sys
 import time
 import traceback
 import unicodedata
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from functools import lru_cache
 from itertools import chain, islice
 from os.path import basename, dirname, join
@@ -421,7 +421,7 @@ def write_to_gcs_bucket(contents, path: Path):
 
 
 def dependency_handler(
-    target: Job | list[Job] | None, tail: Job | list[Job] | None, append_or_extend: bool = True
+    target: Job | Iterable[Job] | None, tail: Job | Iterable[Job] | None, append_or_extend: bool = True
 ) -> None:
     """
     A utility method for handling stage inter-dependencies, when it's possible that either the target job(s)
@@ -445,8 +445,8 @@ def dependency_handler(
     utils.dependency_handler(target=j, tail=prior_jobs)
 
     Args:
-        target (Job | list[Job] | None): job(s) which require a depends_on relationship with job(s) in tail
-        tail (Job | list[Job] | None): job(s) for this target job(s) to depend on; may be None
+        target (Job | Iterable[Job] | None): job(s) which require a depends_on relationship with job(s) in tail
+        tail (Job | Iterable[Job] | None): job(s) for this target job(s) to depend on; may be None
         append_or_extend: (bool) if this is True, and tail is a list, the current job(s) will be added to the tail
     """
 
@@ -455,13 +455,15 @@ def dependency_handler(
         return
 
     # easier if we expect everything to be a list
-    if isinstance(target, Job):
+    if not isinstance(target, Iterable):
         target = [target]
 
-    tail_list = tail if isinstance(tail, list) else [tail]
+    tail_list = tail if isinstance(tail, Iterable) else [tail]
 
     for job in target:
         job.depends_on(*tail_list)
 
     if append_or_extend and isinstance(tail, list):
         tail.extend(target)
+    if append_or_extend and isinstance(tail, set):
+        tail.update(target)
