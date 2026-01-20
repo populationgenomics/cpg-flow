@@ -21,6 +21,7 @@ from loguru import logger
 
 import hail as hl
 from hailtop.batch import ResourceFile
+from hailtop.batch.job import Job
 
 from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
@@ -417,3 +418,50 @@ def write_to_gcs_bucket(contents, path: Path):
     blob.upload_from_string(contents)
 
     return bucket_name, blob_name
+
+
+def dependency_handler(
+    target: Job | list[Job] | None, tail: Job | list[Job] | None, append_or_extend: bool = True
+) -> None:
+    """
+    A utility method for handling stage inter-dependencies, when it's possible that either the target job(s)
+    or dependency job(s) are None/empty list.
+
+    Use case is CPG-Flow or similar tasks, where a job can either run (new output needs to be generated), or doesn't
+    need to run (results/intermediate files exist from a prior run). This optional process can be in the centre of a
+    job chain, so the dependency setting, and extension of dependencies is crucial. A common usage pattern is:
+    ```
+    prior_jobs: list[Job] = []
+
+    j = class.run_process(...)
+    if j and prior_jobs:
+        j.depends_on(*prior_jobs)
+    if j:
+        prior_jobs.append(j)
+    ```
+
+    This scenario would be minimised to:
+
+    utils.dependency_handler(target=j, tail=prior_jobs)
+
+    Args:
+        target (Job | list[Job] | None): job(s) which require a depends_on relationship with job(s) in tail
+        tail (Job | list[Job] | None): job(s) for this target job(s) to depend on; may be None
+        append_or_extend: (bool) if this is True, and tail is a list, the current job(s) will be added to the tail
+    """
+
+    # no way to set a relationship between non-jobs
+    if target is None or tail is None:
+        return
+
+    # easier if we expect everything to be a list
+    if isinstance(target, Job):
+        target = [target]
+
+    tail_list = tail if isinstance(tail, list) else [tail]
+
+    for job in target:
+        job.depends_on(*tail_list)
+
+    if append_or_extend and isinstance(tail, list):
+        tail.extend(target)
