@@ -15,6 +15,6 @@ This package is designed to be used with pdoc for generating documentation.
 
 from . import stage, targets, workflow
 
-__version__ = '1.2.3'
+__version__ = '1.3.0'
 
 __all__ = ['stage', 'targets', 'workflow']

@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.3.0 (2026-01-20)
+
+### Features
+
+- **cpg-flow**: Remove python 310 version lock, allowing 311
+  ([`5f69e1f`](https://github.com/populationgenomics/cpg-flow/commit/5f69e1fe10111ce70ac79162b6876ed51462f735))
+
+### Testing
+
+- **test_workflow.py**: Adds explicit test cases for altered stageoutput get methods
+  ([`dad5e53`](https://github.com/populationgenomics/cpg-flow/commit/dad5e531dc006c1bf9a8de59db1c307c6384f3a9))
+
+
 ## v1.2.3 (2026-01-06)
 
 ### Bug Fixes
