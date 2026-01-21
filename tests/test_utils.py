@@ -92,3 +92,13 @@ def test_depends_on_none(caplog):
         )
 
     assert 'Failure to set dependencies between target ' in caplog.text
+
+
+def test_depends_on_only_last():
+    # new behaviour - what if we only want to dependency set on the last in a job series
+    target = MockJob('job1')
+    tail = [MockJob('job2'), MockJob('job3'), MockJob('job4')]
+    dependency_handler(target=target, tail=tail, only_last=True)
+
+    assert target._dependencies == {MockJob('job4')}
+    assert len(tail) == 4

@@ -421,7 +421,10 @@ def write_to_gcs_bucket(contents, path: Path):
 
 
 def dependency_handler(
-    target: Job | Iterable[Job] | None, tail: Job | Iterable[Job] | None, append_or_extend: bool = True
+    target: Job | Iterable[Job] | None,
+    tail: Job | Iterable[Job] | None,
+    append_or_extend: bool = True,
+    only_last: bool = False,
 ) -> None:
     """
     A utility method for handling stage inter-dependencies, when it's possible that either the target job(s)
@@ -447,7 +450,8 @@ def dependency_handler(
     Args:
         target (Job | Iterable[Job] | None): job(s) which require a depends_on relationship with job(s) in tail
         tail (Job | Iterable[Job] | None): job(s) for this target job(s) to depend on; may be None
-        append_or_extend: (bool) if this is True, and tail is a list, the current job(s) will be added to the tail
+        append_or_extend (bool): if this is True, and tail is a list, the current job(s) will be added to the tail
+        only_last (bool): if this is True, we only set dependencies against the last element in tail, else all of tail
     """
 
     # no way to set a relationship between non-jobs - values can be none, or empty lists
@@ -465,13 +469,16 @@ def dependency_handler(
 
     # easier if we expect to operate on iterables
     target = target if isinstance(target, Iterable) else [target]
-    tail_list = tail if isinstance(tail, Iterable) else [tail]
+    tail_list = list(tail) if isinstance(tail, Iterable) else [tail]
 
     try:
         # don't try and call depends_on(*x) with an empty iterable
         if tail_list:
             for job in target:
-                job.depends_on(*tail_list)
+                if only_last:
+                    job.depends_on(tail_list[-1])
+                else:
+                    job.depends_on(*tail_list)
 
         if append_or_extend:
             if isinstance(tail, list):
