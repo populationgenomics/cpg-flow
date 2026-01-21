@@ -463,10 +463,7 @@ def dependency_handler(
         logger.debug('No Tail, cannot set depends_on relationships or append')
         return
 
-    # easier if we expect everything to be a list
-    if not isinstance(target, Iterable):
-        target = [target]
-
+    # easier if we expect to operate on iterables
     target = target if isinstance(target, Iterable) else [target]
     tail_list = tail if isinstance(tail, Iterable) else [tail]
 
