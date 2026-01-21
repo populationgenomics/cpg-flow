@@ -450,20 +450,31 @@ def dependency_handler(
         append_or_extend: (bool) if this is True, and tail is a list, the current job(s) will be added to the tail
     """
 
-    # no way to set a relationship between non-jobs
-    if target is None or tail is None:
-        logger.debug('No target or tail provided')
+    # no way to set a relationship between non-jobs - values can be none, or empty lists
+    # if the tail is an empty list (no truthiness), we may still want to append to it
+
+    # if the target is null/empty, nothing to do
+    if not target:
+        logger.debug('No Target(s), cannot set depends_on relationships')
+        return
+
+    # if tail is None we can't set dependencies or append, nothing to do
+    if tail is None:
+        logger.debug('No Tail, cannot set depends_on relationships or append')
         return
 
     # easier if we expect everything to be a list
     if not isinstance(target, Iterable):
         target = [target]
 
+    target = target if isinstance(target, Iterable) else [target]
     tail_list = tail if isinstance(tail, Iterable) else [tail]
 
     try:
-        for job in target:
-            job.depends_on(*tail_list)
+        # don't try and call depends_on(*x) with an empty iterable
+        if tail_list:
+            for job in target:
+                job.depends_on(*tail_list)
 
         if append_or_extend:
             if isinstance(tail, list):
@@ -471,7 +482,7 @@ def dependency_handler(
             if isinstance(tail, set):
                 tail.update(target)
             else:
-                logger.warning(f'Append requested, but tail is not an iterable: {tail}')
+                logger.warning(f'Append requested, but tail is not an iterable: {tail}({type(tail)})')
     except AttributeError as ae:
         logger.error(f'Failure to set dependencies between target {target} and tail {tail}')
         raise ae

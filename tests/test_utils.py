@@ -35,20 +35,19 @@ class MockJob:
 
 
 @pytest.mark.parametrize(
-    ['new_dep', 'old_dep', 'append_arg', 'expect_dep', 'expect_append'],
+    ['new_dep', 'old_dep', 'error'],
     [
-        pytest.param(None, None, True, False, False),  # null case
-        pytest.param(MockJob('job1'), None, True, False, False),  # null case
-        pytest.param(None, MockJob('job1'), True, False, False),  # null case
-        pytest.param([MockJob('job1')], None, True, False, False),  # null case
-        pytest.param(None, [MockJob('job1')], True, False, False),  # null case
+        pytest.param(None, None, 'No Target(s), cannot set depends_on relationships'),
+        pytest.param(MockJob('job1'), None, 'No Tail, cannot set depends_on relationships or append'),
+        pytest.param(None, MockJob('job1'), 'No Target(s), cannot set depends_on relationships'),
+        pytest.param(None, [MockJob('job1')], 'No Target(s), cannot set depends_on relationships'),
     ],
 )
-def test_all_dependency_handlers_null(new_dep, old_dep, append_arg, expect_dep: bool, expect_append: bool, caplog):
+def test_all_dependency_handlers_null(new_dep, old_dep, error: str, caplog):
     caplog.set_level(logging.DEBUG)
 
-    dependency_handler(target=new_dep, tail=old_dep, append_or_extend=append_arg)
-    assert 'No target or tail provided' in caplog.text
+    dependency_handler(target=new_dep, tail=old_dep)
+    assert error in caplog.text
 
 
 @pytest.mark.parametrize(
@@ -58,6 +57,7 @@ def test_all_dependency_handlers_null(new_dep, old_dep, append_arg, expect_dep: 
         pytest.param([MockJob('job1'), MockJob('job2')], [MockJob('job3')], True, True),  # set and append
         pytest.param([MockJob('job1'), MockJob('job2')], MockJob('job3'), False, False),  # set and don't append
         pytest.param([MockJob('job1'), MockJob('job2')], MockJob('job3'), True, True),  # set and fail to append
+        pytest.param([MockJob('job1')], [], True, True),  # set and fail to append
     ],
 )
 def test_all_dependency_handlers_real(new_dep, old_dep, append_arg, expect_append: bool, caplog):
