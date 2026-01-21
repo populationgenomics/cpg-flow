@@ -27,7 +27,7 @@ from loguru import logger
 from hailtop.batch.job import Job
 
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Target
-from cpg_flow.utils import ExpectedResultT, exists
+from cpg_flow.utils import ExpectedResultT, dependency_handler, exists
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
@@ -554,11 +554,8 @@ class Stage(ABC, Generic[TargetT]):
         outputs.stage = self
         outputs.meta |= self.get_job_attrs(target)
 
-        for output_job in outputs.jobs:
-            if output_job:
-                for input_job in inputs.get_jobs(target):
-                    assert input_job, f'Input dependency job for stage: {self}, target: {target}'
-                    output_job.depends_on(input_job)
+        # make all output jobs dependent on all input jobs, but don't extend the list of prior deps
+        dependency_handler(target=outputs.jobs, tail=inputs.get_jobs(target), append_or_extend=False)
 
         if outputs.error_msg:
             return outputs
