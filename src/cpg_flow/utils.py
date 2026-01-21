@@ -452,6 +452,7 @@ def dependency_handler(
 
     # no way to set a relationship between non-jobs
     if target is None or tail is None:
+        logger.debug('No target or tail provided')
         return
 
     # easier if we expect everything to be a list
@@ -463,7 +464,10 @@ def dependency_handler(
     for job in target:
         job.depends_on(*tail_list)
 
-    if append_or_extend and isinstance(tail, list):
-        tail.extend(target)
-    if append_or_extend and isinstance(tail, set):
-        tail.update(target)
+    if append_or_extend:
+        if isinstance(tail, list):
+            tail.extend(target)
+        if isinstance(tail, set):
+            tail.update(target)
+        else:
+            logger.warning(f'Append requested, but tail is not an iterable: {tail}')
