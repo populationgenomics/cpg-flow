@@ -65,8 +65,8 @@ def test_all_dependency_handlers_real(new_dep, old_dep, append_arg, expect_appen
 
     dependency_handler(target=new_dep, tail=old_dep, append_or_extend=append_arg)
 
-    new_dep_list = deepcopy(new_dep if isinstance(new_dep, Iterable) else [new_dep])
-    new_tail_list = deepcopy(old_dep if isinstance(old_dep, Iterable) else [old_dep])
+    new_dep_list = new_dep if isinstance(new_dep, Iterable) else [new_dep]
+    new_tail_list = old_dep if isinstance(old_dep, Iterable) else [old_dep]
 
     # dependency setting, we expect all the original tail list to be in the current target dependencies
     for each_new, each_old in product(new_dep_list, og_tail_list):
