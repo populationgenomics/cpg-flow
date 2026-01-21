@@ -461,13 +461,17 @@ def dependency_handler(
 
     tail_list = tail if isinstance(tail, Iterable) else [tail]
 
-    for job in target:
-        job.depends_on(*tail_list)
+    try:
+        for job in target:
+            job.depends_on(*tail_list)
 
-    if append_or_extend:
-        if isinstance(tail, list):
-            tail.extend(target)
-        if isinstance(tail, set):
-            tail.update(target)
-        else:
-            logger.warning(f'Append requested, but tail is not an iterable: {tail}')
+        if append_or_extend:
+            if isinstance(tail, list):
+                tail.extend(target)
+            if isinstance(tail, set):
+                tail.update(target)
+            else:
+                logger.warning(f'Append requested, but tail is not an iterable: {tail}')
+    except AttributeError as ae:
+        logger.error(f'Failure to set dependencies between target {target} and tail {tail}')
+        raise ae
