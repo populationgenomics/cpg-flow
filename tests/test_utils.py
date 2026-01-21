@@ -79,6 +79,9 @@ def test_all_dependency_handlers_real(new_dep, old_dep, append_arg, expect_appen
                 assert each_new in new_tail_list
             except AssertionError:
                 assert 'Append requested, but tail is not an iterable:' in caplog.text
+    else:
+        for each_new in new_dep_list:
+            assert each_new not in new_tail_list
 
 
 # def test_dependency_handler_none():
