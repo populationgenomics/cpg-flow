@@ -479,14 +479,32 @@ def dependency_handler(
                     job.depends_on(tail_list[-1])
                 else:
                     job.depends_on(*tail_list)
-
-        if append_or_extend:
-            if isinstance(tail, list):
-                tail.extend(target)
-            if isinstance(tail, set):
-                tail.update(target)
-            else:
-                logger.warning(f'Append requested, but tail is not an iterable: {tail}({type(tail)})')
+        append_or_extend_jobs(target, tail, append_or_extend=append_or_extend)
     except AttributeError as ae:
         logger.error(f'Failure to set dependencies between target {target} and tail {tail}')
         raise ae
+
+
+def append_or_extend_jobs(target: Iterable[Job], tail: Job | Iterable[Job], append_or_extend: bool) -> None:
+    """
+    Separates the append logic from the depends logic.
+
+    Args:
+        target (list[Job): a list of Job objects
+        tail: a Job or iterable of Jobs. Only permit extension if this is an iterable
+        append_or_extend (bool): whether to attempt addition of target job(s) to tail
+    """
+
+    # if we don't want to extend the tail, this method does nothing
+    if not append_or_extend:
+        return
+
+    # if the tail is an identifiable iterable, select the appropriate extension method
+    if isinstance(tail, list):
+        tail.extend(target)
+    if isinstance(tail, set):
+        tail.update(target)
+
+    # if it's not iterable, log a message but don't fail
+    else:
+        logger.warning(f'Append requested, but tail is not an iterable: {tail}({type(tail)})')

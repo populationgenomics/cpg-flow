@@ -5,7 +5,7 @@ from itertools import product
 
 import pytest
 
-from cpg_flow.utils import dependency_handler
+from cpg_flow.utils import append_or_extend_jobs, dependency_handler
 
 
 class MockJob:
@@ -102,3 +102,42 @@ def test_depends_on_only_last():
 
     assert target._dependencies == {MockJob('job4')}
     assert len(tail) == 4
+
+
+def test_append_extend_no_empty():
+    target = [MockJob('job1')]
+    tail = []
+    append_or_extend_jobs(target, tail, False)
+    assert len(tail) == 0
+
+
+def test_append_extend_yes_empty():
+    target = [MockJob('job1')]
+    tail = []
+    append_or_extend_jobs(target, tail, True)
+    assert len(tail) == 1
+    assert tail == target
+
+
+def test_append_extend_yes_full():
+    target = [MockJob('job1')]
+    tail = [MockJob('job2')]
+    append_or_extend_jobs(target, tail, True)
+    assert len(tail) == 2
+    assert tail[-1] == target[0]
+
+
+def test_append_extend_yes_set():
+    target = [MockJob('job1')]
+    tail = {MockJob('job2')}
+    append_or_extend_jobs(target, tail, True)
+    assert len(tail) == 2
+    assert target[0] in tail
+
+
+def test_append_extend_no_logging(caplog):
+    target = [MockJob('job1')]
+    tail = MockJob('job2')
+    append_or_extend_jobs(target, tail, True)
+    assert tail == MockJob('job2')
+    assert 'Append requested, but tail is not an iterable:' in caplog.text
