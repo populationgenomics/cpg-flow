@@ -9,7 +9,7 @@ import sys
 import time
 import traceback
 import unicodedata
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator
 from functools import lru_cache
 from itertools import chain, islice
 from os.path import basename, dirname, join
@@ -472,7 +472,7 @@ def dependency_handler(
             target,
         ]
     )
-    tail_list = list(tail) if isinstance(tail, Iterable) else [tail]
+    tail_list = tail if isinstance(tail, list) else [tail]
 
     # use only_last switch to choose dependencies to set
     deps_to_apply = [tail_list[-1]] if only_last else tail_list
