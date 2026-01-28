@@ -5,7 +5,7 @@ from itertools import product
 
 import pytest
 
-from cpg_flow.utils import append_or_extend_jobs, dependency_handler
+from cpg_flow.utils import dependency_handler
 
 
 class MockJob:
