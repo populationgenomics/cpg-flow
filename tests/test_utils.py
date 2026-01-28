@@ -63,7 +63,7 @@ def test_all_dependency_handlers_null(new_dep, old_dep, error: str, caplog):
 def test_all_dependency_handlers_real(new_dep, old_dep, append_arg, expect_append: bool, caplog):
     og_tail_list = deepcopy(old_dep if isinstance(old_dep, Iterable) else [old_dep])
 
-    dependency_handler(target=new_dep, tail=old_dep, append_or_extend=append_arg)
+    dependency_handler(target=new_dep, tail=old_dep, append_to_tail=append_arg)
 
     new_dep_list = new_dep if isinstance(new_dep, Iterable) else [new_dep]
     new_tail_list = old_dep if isinstance(old_dep, Iterable) else [old_dep]
@@ -73,12 +73,9 @@ def test_all_dependency_handlers_real(new_dep, old_dep, append_arg, expect_appen
         assert each_old in each_new._dependencies
 
     # appending, we expect all the original targets to be in the new tail
-    if expect_append:
+    if expect_append and isinstance(old_dep, list):
         for each_new in new_dep_list:
-            try:
-                assert each_new in new_tail_list
-            except AssertionError:
-                assert 'Append requested, but tail is not an iterable:' in caplog.text
+            assert each_new in new_tail_list
     else:
         for each_new in new_dep_list:
             assert each_new not in new_tail_list
@@ -88,7 +85,7 @@ def test_depends_on_none(caplog):
     caplog.set_level(logging.WARNING)
     with pytest.raises(AttributeError):
         dependency_handler(
-            target=[MockJob('job1'), None], tail=[MockJob('job2'), MockJob('job3')], append_or_extend=False
+            target=[MockJob('job1'), None], tail=[MockJob('job2'), MockJob('job3')], append_to_tail=False
         )
 
     assert 'Failure to set dependencies between target ' in caplog.text
@@ -102,42 +99,3 @@ def test_depends_on_only_last():
 
     assert target._dependencies == {MockJob('job4')}
     assert len(tail) == 4
-
-
-def test_append_extend_no_empty():
-    target = [MockJob('job1')]
-    tail = []
-    append_or_extend_jobs(target, tail, False)
-    assert len(tail) == 0
-
-
-def test_append_extend_yes_empty():
-    target = [MockJob('job1')]
-    tail = []
-    append_or_extend_jobs(target, tail, True)
-    assert len(tail) == 1
-    assert tail == target
-
-
-def test_append_extend_yes_full():
-    target = [MockJob('job1')]
-    tail = [MockJob('job2')]
-    append_or_extend_jobs(target, tail, True)
-    assert len(tail) == 2
-    assert tail[-1] == target[0]
-
-
-def test_append_extend_yes_set():
-    target = [MockJob('job1')]
-    tail = {MockJob('job2')}
-    append_or_extend_jobs(target, tail, True)
-    assert len(tail) == 2
-    assert target[0] in tail
-
-
-def test_append_extend_no_logging(caplog):
-    target = [MockJob('job1')]
-    tail = MockJob('job2')
-    append_or_extend_jobs(target, tail, True)
-    assert tail == MockJob('job2')
-    assert 'Append requested, but tail is not an iterable:' in caplog.text

@@ -555,7 +555,7 @@ class Stage(ABC, Generic[TargetT]):
         outputs.meta |= self.get_job_attrs(target)
 
         # make all output jobs dependent on all input jobs, but don't extend the list of prior deps
-        dependency_handler(target=outputs.jobs, tail=inputs.get_jobs(target), append_or_extend=False)
+        dependency_handler(target=outputs.jobs, tail=inputs.get_jobs(target), append_to_tail=False)
 
         if outputs.error_msg:
             return outputs

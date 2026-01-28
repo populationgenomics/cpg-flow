@@ -421,9 +421,9 @@ def write_to_gcs_bucket(contents, path: Path):
 
 
 def dependency_handler(
-    target: Job | Iterable[Job] | None,
-    tail: Job | Iterable[Job] | None,
-    append_or_extend: bool = True,
+    target: Job | list[Job] | None,
+    tail: Job | list[Job] | None,
+    append_to_tail: bool = True,
     only_last: bool = False,
 ) -> None:
     """
@@ -448,14 +448,11 @@ def dependency_handler(
     utils.dependency_handler(target=j, tail=prior_jobs)
 
     Args:
-        target (Job | Iterable[Job] | None): job(s) which require a depends_on relationship with job(s) in tail
-        tail (Job | Iterable[Job] | None): job(s) for this target job(s) to depend on; may be None
-        append_or_extend (bool): if this is True, and tail is a list, the current job(s) will be added to the tail
+        target (Job | list[Job] | None): job(s) which require a depends_on relationship with job(s) in tail
+        tail (Job | list[Job] | None): job(s) for this target job(s) to depend on; may be None
+        append_to_tail (bool): if this is True, and tail is a list, the current job(s) will be added to the tail
         only_last (bool): if this is True, we only set dependencies against the last element in tail, else all of tail
     """
-
-    # no way to set a relationship between non-jobs - values can be none, or empty lists
-    # if the tail is an empty list (no truthiness), we may still want to append to it
 
     # if the target is null/empty, nothing to do
     if not target:
@@ -467,44 +464,27 @@ def dependency_handler(
         logger.debug('No Tail, cannot set depends_on relationships or append')
         return
 
-    # easier if we expect to operate on iterables
-    target = target if isinstance(target, Iterable) else [target]
+    # downstream operations are easier if we expect to operate on iterables - create new variable name
+    target_list = (
+        target
+        if isinstance(target, list)
+        else [
+            target,
+        ]
+    )
     tail_list = list(tail) if isinstance(tail, Iterable) else [tail]
+
+    # use only_last switch to choose dependencies to set
+    deps_to_apply = [tail_list[-1]] if only_last else tail_list
 
     try:
         # don't try and call depends_on(*x) with an empty iterable
         if tail_list:
-            for job in target:
-                if only_last:
-                    job.depends_on(tail_list[-1])
-                else:
-                    job.depends_on(*tail_list)
-        append_or_extend_jobs(target, tail, append_or_extend=append_or_extend)
+            for job in target_list:
+                job.depends_on(*deps_to_apply)
+
+        if append_to_tail and isinstance(tail, list):
+            tail.extend(target_list)
     except AttributeError as ae:
         logger.error(f'Failure to set dependencies between target {target} and tail {tail}')
         raise ae
-
-
-def append_or_extend_jobs(target: Iterable[Job], tail: Job | Iterable[Job], append_or_extend: bool) -> None:
-    """
-    Separates the append logic from the depends logic.
-
-    Args:
-        target (list[Job): a list of Job objects
-        tail: a Job or iterable of Jobs. Only permit extension if this is an iterable
-        append_or_extend (bool): whether to attempt addition of target job(s) to tail
-    """
-
-    # if we don't want to extend the tail, this method does nothing
-    if not append_or_extend:
-        return
-
-    # if the tail is an identifiable iterable, select the appropriate extension method
-    if isinstance(tail, list):
-        tail.extend(target)
-    if isinstance(tail, set):
-        tail.update(target)
-
-    # if it's not iterable, log a message but don't fail
-    else:
-        logger.warning(f'Append requested, but tail is not an iterable: {tail}({type(tail)})')
