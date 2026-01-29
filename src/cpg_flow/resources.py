@@ -67,7 +67,6 @@ class MachineType:
 
     def set_resources(
         self,
-        *,
         j: Job,
         fraction: float | None = None,
         ncpu: int | None = None,
