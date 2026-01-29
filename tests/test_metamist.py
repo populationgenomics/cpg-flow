@@ -223,7 +223,7 @@ class TestMetamist:
             mock_aapi_create_analysis_err,
         )
         analysis = metamist.create_analysis(
-            output=to_path('test_output'),
+            outputs=to_path('test_output'),
             type_='test',
             status='completed',
             sequencing_group_ids=['test'],
@@ -237,7 +237,7 @@ class TestMetamist:
             mock_aapi_create_analysis_timeout,
         )
         analysis = metamist.create_analysis(
-            output=to_path('test_output'),
+            outputs=to_path('test_output'),
             type_=AnalysisType.parse('custom'),
             status=AnalysisStatus.parse('completed'),
             sequencing_group_ids=['test'],
@@ -250,7 +250,7 @@ class TestMetamist:
             mock_aapi_create_analysis_ok,
         )
         analysis = metamist.create_analysis(
-            output=to_path('test_output'),
+            outputs=to_path('test_output'),
             type_=AnalysisType.parse('custom'),
             status=AnalysisStatus.parse('completed'),
             sequencing_group_ids=['test'],
