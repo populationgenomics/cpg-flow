@@ -1,0 +1,4440 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://populationgenomics.github.io/cpg-flow/reference/metamist/">
+      
+      
+        <link rel="prev" href="../inputs/">
+      
+      
+        <link rel="next" href="../resources/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Metamist - CPG Flow</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#metamist" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CPG Flow" class="md-header__button md-logo" aria-label="CPG Flow" data-md-component="logo">
+      
+  <img src="../../assets/logo-colour.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CPG Flow
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Metamist
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 2C5.13 2 2 5.13 2 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7M6 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H6zm13-8h-2l-3.2 9h1.9l.7-2h3.2l.7 2h1.9zm-2.15 5.65L18 15l1.15 3.65z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="amber"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/populationgenomics/cpg-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    populationgenomics/cpg-flow
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  CPG Flow
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../installation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Installation and Build
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Usage
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../considerations-limitations/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Considerations and Limitations
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../docker/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Docker
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tests/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tests
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CPG Flow" class="md-nav__button md-logo" aria-label="CPG Flow" data-md-component="logo">
+      
+  <img src="../../assets/logo-colour.svg" alt="logo">
+
+    </a>
+    CPG Flow
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/populationgenomics/cpg-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    populationgenomics/cpg-flow
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPG Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation and Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../considerations-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Considerations and Limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tests
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tests
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧪 Unit and E2E tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-analysis-consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔍 Code Linting and Formatting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎬 GitHub Actions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../targets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Target class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pedigree_info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PedigreeInfo class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filetypes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filetypes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inputs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metamist
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metamist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.get_metamist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_metamist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Metamist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Metamist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.default_dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;default_dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.aapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;aapi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.make_retry_aapi_call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;make_retry_aapi_call
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.make_aapi_call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;make_aapi_call
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_sg_entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_sg_entries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.update_analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;update_analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_analyses_by_sgid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_analyses_by_sgid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.create_analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;create_analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_ped_entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_ped_entries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_metamist_proj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_metamist_proj
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;AnalysisStatus
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" AnalysisStatus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.QUEUED" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;QUEUED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.IN_PROGRESS" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;IN_PROGRESS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.FAILED" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;FAILED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.COMPLETED" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;COMPLETED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.UNKNOWN" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;UNKNOWN
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;AnalysisType
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" AnalysisType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.QC" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;QC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.JOINT_CALLING" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;JOINT_CALLING
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.GVCF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;GVCF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.CRAM" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;CRAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.MITO_CRAM" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;MITO_CRAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.CUSTOM" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;CUSTOM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.ES_INDEX" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;ES_INDEX
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.COMBINER" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;COMBINER
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.sequencing_group_ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;sequencing_group_ids
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Assay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Assay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.sequencing_group_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;sequencing_group_id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.assay_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;assay_type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.alignment_input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;alignment_input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.get_cohort_sgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_cohort_sgs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.parse_reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;parse_reads
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utils
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.get_metamist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_metamist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Metamist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Metamist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.default_dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;default_dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.aapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;aapi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.make_retry_aapi_call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;make_retry_aapi_call
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.make_aapi_call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;make_aapi_call
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_sg_entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_sg_entries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.update_analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;update_analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_analyses_by_sgid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_analyses_by_sgid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.create_analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;create_analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_ped_entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_ped_entries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Metamist.get_metamist_proj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_metamist_proj
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;AnalysisStatus
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" AnalysisStatus">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.QUEUED" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;QUEUED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.IN_PROGRESS" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;IN_PROGRESS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.FAILED" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;FAILED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.COMPLETED" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;COMPLETED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.UNKNOWN" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;UNKNOWN
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisStatus.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;AnalysisType
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" AnalysisType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.QC" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;QC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.JOINT_CALLING" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;JOINT_CALLING
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.GVCF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;GVCF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.CRAM" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;CRAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.MITO_CRAM" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;MITO_CRAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.CUSTOM" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;CUSTOM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.ES_INDEX" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;ES_INDEX
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.COMBINER" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;COMBINER
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.AnalysisType.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.sequencing_group_ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;sequencing_group_ids
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Analysis.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Assay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Assay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.sequencing_group_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;sequencing_group_id
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;meta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.assay_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;assay_type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.alignment_input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;alignment_input
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.Assay.parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.get_cohort_sgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_cohort_sgs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.metamist.parse_reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;parse_reads
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    CPG Flow
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Reference
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="metamist"><a class="toclink" href="#metamist">Metamist</a><a class="headerlink" href="#metamist" title="Permanent link">&para;</a></h1>
+<p>Helpers to communicate with the <code>metamist</code> database.</p>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.metamist.get_metamist" class="doc doc-heading"><a href="#cpg_flow.metamist.get_metamist" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.metamist.get_metamist</span>
+
+
+</a><a href="#cpg_flow.metamist.get_metamist" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_metamist</span><span class="p">()</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Return the cohort object</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-135"><span class="k">def</span><span class="w"> </span><span class="nf">get_metamist</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s1">&#39;Metamist&#39;</span><span class="p">:</span>
+</span><span id="__span-0-136"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the cohort object&quot;&quot;&quot;</span>
+</span><span id="__span-0-137">    <span class="k">global</span> <span class="n">_metamist</span>
+</span><span id="__span-0-138">    <span class="k">if</span> <span class="ow">not</span> <span class="n">_metamist</span><span class="p">:</span>
+</span><span id="__span-0-139">        <span class="n">_metamist</span> <span class="o">=</span> <span class="n">Metamist</span><span class="p">()</span>
+</span><span id="__span-0-140">    <span class="k">return</span> <span class="n">_metamist</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="cpg_flow.metamist.Metamist" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">cpg_flow.metamist.Metamist</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">Metamist</span><span class="p">()</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Communication with metamist.</p>
+
+
+
+
+
+
+
+
+                  <details class="mkdocstrings-source">
+                    <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-250"><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-251">    <span class="bp">self</span><span class="o">.</span><span class="n">default_dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;workflow&#39;</span><span class="p">][</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span>
+</span><span id="__span-0-252">    <span class="bp">self</span><span class="o">.</span><span class="n">aapi</span> <span class="o">=</span> <span class="n">AnalysisApi</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Metamist.default_dataset" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.default_dataset" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">default_dataset</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Metamist.default_dataset" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">default_dataset</span> <span class="o">=</span> <span class="n"><span title="cpg_utils.config.get_config">get_config</span></span><span class="p">()[</span><span class="s1">&#39;workflow&#39;</span><span class="p">][</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Metamist.aapi" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.aapi" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">aapi</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Metamist.aapi" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">aapi</span> <span class="o">=</span> <span class="n"><span title="metamist.apis.AnalysisApi">AnalysisApi</span></span><span class="p">()</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.make_retry_aapi_call" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.make_retry_aapi_call" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">make_retry_aapi_call</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.make_retry_aapi_call" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">make_retry_aapi_call</span><span class="p">(</span><span class="n">api_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargv</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Make a generic API call to self.aapi with retries.
+Retry only if ServiceException is thrown</p>
+<p>TODO: How many retries?
+e.g. try 3 times, wait 2^3: 8, 16, 24 seconds</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-254"><span class="nd">@retry</span><span class="p">(</span>
+</span><span id="__span-0-255">    <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span id="__span-0-256">    <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+</span><span id="__span-0-257">    <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span><span class="n">ServiceException</span><span class="p">),</span>
+</span><span id="__span-0-258">    <span class="n">reraise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-259"><span class="p">)</span>
+</span><span id="__span-0-260"><span class="k">def</span><span class="w"> </span><span class="nf">make_retry_aapi_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargv</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>  <span class="c1"># noqa: PLR6301</span>
+</span><span id="__span-0-261"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-262"><span class="sd">    Make a generic API call to self.aapi with retries.</span>
+</span><span id="__span-0-263"><span class="sd">    Retry only if ServiceException is thrown</span>
+</span><span id="__span-0-264">
+</span><span id="__span-0-265"><span class="sd">    TODO: How many retries?</span>
+</span><span id="__span-0-266"><span class="sd">    e.g. try 3 times, wait 2^3: 8, 16, 24 seconds</span>
+</span><span id="__span-0-267"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-268">    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-269">        <span class="k">return</span> <span class="n">api_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargv</span><span class="p">)</span>
+</span><span id="__span-0-270">    <span class="k">except</span> <span class="n">ServiceException</span><span class="p">:</span>
+</span><span id="__span-0-271">        <span class="c1"># raise here so the retry occurs</span>
+</span><span id="__span-0-272">        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+</span><span id="__span-0-273">            <span class="sa">f</span><span class="s1">&#39;Retrying </span><span class="si">{</span><span class="n">api_func</span><span class="si">}</span><span class="s1"> ...&#39;</span><span class="p">,</span>
+</span><span id="__span-0-274">        <span class="p">)</span>
+</span><span id="__span-0-275">        <span class="k">raise</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.make_aapi_call" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.make_aapi_call" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">make_aapi_call</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.make_aapi_call" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">make_aapi_call</span><span class="p">(</span><span class="n">api_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargv</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Make a generic API call to self.aapi.
+This is a wrapper around retry of API call to handle exceptions and logger.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-277"><span class="k">def</span><span class="w"> </span><span class="nf">make_aapi_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargv</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+</span><span id="__span-0-278"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-279"><span class="sd">    Make a generic API call to self.aapi.</span>
+</span><span id="__span-0-280"><span class="sd">    This is a wrapper around retry of API call to handle exceptions and logger.</span>
+</span><span id="__span-0-281"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-282">    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-283">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_retry_aapi_call</span><span class="p">(</span><span class="n">api_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargv</span><span class="p">)</span>
+</span><span id="__span-0-284">    <span class="k">except</span> <span class="p">(</span><span class="n">ServiceException</span><span class="p">,</span> <span class="n">ApiException</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-0-285">        <span class="c1"># Metamist API failed even after retries</span>
+</span><span id="__span-0-286">        <span class="c1"># log the error and continue</span>
+</span><span id="__span-0-287">        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+</span><span id="__span-0-288">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+</span><span id="__span-0-289">            <span class="sa">f</span><span class="s1">&#39;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1"> Call </span><span class="si">{</span><span class="n">api_func</span><span class="si">}</span><span class="s1"> failed with payload:</span><span class="se">\n</span><span class="si">{</span><span class="n">kwargv</span><span class="si">!s}</span><span class="s1">&#39;</span><span class="p">,</span>
+</span><span id="__span-0-290">        <span class="p">)</span>
+</span><span id="__span-0-291">    <span class="c1"># TODO: discuss should we catch all here as well?</span>
+</span><span id="__span-0-292">    <span class="c1"># except Exception as e:</span>
+</span><span id="__span-0-293">    <span class="c1">#     # Other exceptions?</span>
+</span><span id="__span-0-294">
+</span><span id="__span-0-295">    <span class="k">return</span> <span class="kc">None</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.get_sg_entries" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.get_sg_entries" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_sg_entries</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.get_sg_entries" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_sg_entries</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Retrieve sequencing group entries for a dataset, in the context of access level
+and filtering options.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-297"><span class="nd">@retry</span><span class="p">(</span>
+</span><span id="__span-0-298">    <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span id="__span-0-299">    <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+</span><span id="__span-0-300">    <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span><span class="n">TransportServerError</span><span class="p">),</span>
+</span><span id="__span-0-301">    <span class="n">reraise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-302"><span class="p">)</span>
+</span><span id="__span-0-303"><span class="k">def</span><span class="w"> </span><span class="nf">get_sg_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+</span><span id="__span-0-304"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-305"><span class="sd">    Retrieve sequencing group entries for a dataset, in the context of access level</span>
+</span><span id="__span-0-306"><span class="sd">    and filtering options.</span>
+</span><span id="__span-0-307"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-308">    <span class="n">metamist_proj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metamist_proj</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">)</span>
+</span><span id="__span-0-309">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Getting sequencing groups for dataset </span><span class="si">{</span><span class="n">metamist_proj</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-310">
+</span><span id="__span-0-311">    <span class="n">skip_sgs</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;workflow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skip_sgs&#39;</span><span class="p">,</span> <span class="p">[])</span>
+</span><span id="__span-0-312">    <span class="n">only_sgs</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;workflow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;only_sgs&#39;</span><span class="p">,</span> <span class="p">[])</span>
+</span><span id="__span-0-313">    <span class="n">sequencing_type</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;workflow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sequencing_type&#39;</span><span class="p">)</span>
+</span><span id="__span-0-314">
+</span><span id="__span-0-315">    <span class="k">if</span> <span class="n">only_sgs</span> <span class="ow">and</span> <span class="n">skip_sgs</span><span class="p">:</span>
+</span><span id="__span-0-316">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span><span class="s1">&#39;Cannot specify both only_sgs and skip_sgs in config&#39;</span><span class="p">)</span>
+</span><span id="__span-0-317">
+</span><span id="__span-0-318">    <span class="n">sequencing_group_entries</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span>
+</span><span id="__span-0-319">        <span class="n">GET_SEQUENCING_GROUPS_QUERY</span><span class="p">,</span>
+</span><span id="__span-0-320">        <span class="n">variables</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-321">            <span class="s1">&#39;metamist_proj&#39;</span><span class="p">:</span> <span class="n">metamist_proj</span><span class="p">,</span>
+</span><span id="__span-0-322">            <span class="s1">&#39;only_sgs&#39;</span><span class="p">:</span> <span class="n">only_sgs</span><span class="p">,</span>
+</span><span id="__span-0-323">            <span class="s1">&#39;skip_sgs&#39;</span><span class="p">:</span> <span class="n">skip_sgs</span><span class="p">,</span>
+</span><span id="__span-0-324">            <span class="s1">&#39;sequencing_type&#39;</span><span class="p">:</span> <span class="n">sequencing_type</span><span class="p">,</span>
+</span><span id="__span-0-325">        <span class="p">},</span>
+</span><span id="__span-0-326">    <span class="p">)</span>
+</span><span id="__span-0-327">
+</span><span id="__span-0-328">    <span class="k">return</span> <span class="n">sequencing_group_entries</span><span class="p">[</span><span class="s1">&#39;project&#39;</span><span class="p">][</span><span class="s1">&#39;sequencingGroups&#39;</span><span class="p">]</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.update_analysis" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.update_analysis" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">update_analysis</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.update_analysis" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">update_analysis</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Update "status" of an Analysis entry.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-330"><span class="k">def</span><span class="w"> </span><span class="nf">update_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis</span><span class="p">:</span> <span class="n">Analysis</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">AnalysisStatus</span><span class="p">):</span>
+</span><span id="__span-0-331"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-332"><span class="sd">    Update &quot;status&quot; of an Analysis entry.</span>
+</span><span id="__span-0-333"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-334">    <span class="bp">self</span><span class="o">.</span><span class="n">make_aapi_call</span><span class="p">(</span>
+</span><span id="__span-0-335">        <span class="bp">self</span><span class="o">.</span><span class="n">aapi</span><span class="o">.</span><span class="n">update_analysis</span><span class="p">,</span>
+</span><span id="__span-0-336">        <span class="n">analysis_id</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+</span><span id="__span-0-337">        <span class="n">analysis_update_model</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">AnalysisUpdateModel</span><span class="p">(</span>
+</span><span id="__span-0-338">            <span class="n">status</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">AnalysisStatus</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+</span><span id="__span-0-339">        <span class="p">),</span>
+</span><span id="__span-0-340">    <span class="p">)</span>
+</span><span id="__span-0-341">    <span class="c1"># Keeping this as is for compatibility with the existing code</span>
+</span><span id="__span-0-342">    <span class="c1"># However this should only be set after the API call is successful</span>
+</span><span id="__span-0-343">    <span class="n">analysis</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.get_analyses_by_sgid" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.get_analyses_by_sgid" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_analyses_by_sgid</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.get_analyses_by_sgid" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_analyses_by_sgid</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">analysis_type</span><span class="p">,</span> <span class="n">analysis_status</span><span class="o">=</span><span class="n"><a class="autorefs autorefs-internal" title="&lt;code class=&quot;doc-symbol doc-symbol-heading doc-symbol-attribute&quot;&gt;&lt;/code&gt;            &lt;span class=&quot;doc doc-object-name doc-attribute-name&quot;&gt;COMPLETED&lt;/span&gt;
+
+
+  &lt;span class=&quot;doc doc-labels&quot;&gt;
+      &lt;small class=&quot;doc doc-label doc-label-class-attribute&quot;&gt;&lt;code&gt;class-attribute&lt;/code&gt;&lt;/small&gt;
+      &lt;small class=&quot;doc doc-label doc-label-instance-attribute&quot;&gt;&lt;code&gt;instance-attribute&lt;/code&gt;&lt;/small&gt;
+  &lt;/span&gt; (&lt;code&gt;cpg_flow.metamist.AnalysisStatus.COMPLETED&lt;/code&gt;)" href="#cpg_flow.metamist.AnalysisStatus.COMPLETED">COMPLETED</a></span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span>
+</span><span id="__span-0-3"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Query the DB to find the last completed analysis for the type, sequencing group ids,
+and sequencing type, one Analysis object per sequencing group. Assumes the analysis
+is defined for a single sequencing group (that is, analysis_type=cram|gvcf|qc).</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-346"><span class="k">def</span><span class="w"> </span><span class="nf">get_analyses_by_sgid</span><span class="p">(</span>
+</span><span id="__span-0-347">    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-0-348">    <span class="n">analysis_type</span><span class="p">:</span> <span class="n">AnalysisType</span><span class="p">,</span>
+</span><span id="__span-0-349">    <span class="n">analysis_status</span><span class="p">:</span> <span class="n">AnalysisStatus</span> <span class="o">=</span> <span class="n">AnalysisStatus</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span>
+</span><span id="__span-0-350">    <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-351"><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Analysis</span><span class="p">]:</span>
+</span><span id="__span-0-352"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-353"><span class="sd">    Query the DB to find the last completed analysis for the type, sequencing group ids,</span>
+</span><span id="__span-0-354"><span class="sd">    and sequencing type, one Analysis object per sequencing group. Assumes the analysis</span>
+</span><span id="__span-0-355"><span class="sd">    is defined for a single sequencing group (that is, analysis_type=cram|gvcf|qc).</span>
+</span><span id="__span-0-356"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-357">    <span class="n">metamist_proj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metamist_proj</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-0-358">
+</span><span id="__span-0-359">    <span class="n">analyses</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span>
+</span><span id="__span-0-360">        <span class="n">GET_ANALYSES_QUERY</span><span class="p">,</span>
+</span><span id="__span-0-361">        <span class="n">variables</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-362">            <span class="s1">&#39;metamist_proj&#39;</span><span class="p">:</span> <span class="n">metamist_proj</span><span class="p">,</span>
+</span><span id="__span-0-363">            <span class="s1">&#39;analysis_type&#39;</span><span class="p">:</span> <span class="n">analysis_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+</span><span id="__span-0-364">            <span class="s1">&#39;analysis_status&#39;</span><span class="p">:</span> <span class="n">analysis_status</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span id="__span-0-365">        <span class="p">},</span>
+</span><span id="__span-0-366">    <span class="p">)</span>
+</span><span id="__span-0-367">
+</span><span id="__span-0-368">    <span class="n">analysis_per_sid</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Analysis</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+</span><span id="__span-0-369">
+</span><span id="__span-0-370">    <span class="k">for</span> <span class="n">analysis</span> <span class="ow">in</span> <span class="n">analyses</span><span class="p">[</span><span class="s1">&#39;project&#39;</span><span class="p">][</span><span class="s1">&#39;analyses&#39;</span><span class="p">]:</span>
+</span><span id="__span-0-371">        <span class="n">a</span> <span class="o">=</span> <span class="n">Analysis</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+</span><span id="__span-0-372">        <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span><span class="p">:</span>
+</span><span id="__span-0-373">            <span class="k">continue</span>
+</span><span id="__span-0-374">
+</span><span id="__span-0-375">        <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">analysis_status</span><span class="p">,</span> <span class="n">analysis</span>
+</span><span id="__span-0-376">        <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">analysis_type</span><span class="p">,</span> <span class="n">analysis</span>
+</span><span id="__span-0-377">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">sequencing_group_ids</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-0-378">            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Analysis has no sequencing group ids. </span><span class="si">{</span><span class="n">analysis</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-379">            <span class="k">continue</span>
+</span><span id="__span-0-380">
+</span><span id="__span-0-381">        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">sequencing_group_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">analysis</span>
+</span><span id="__span-0-382">        <span class="n">analysis_per_sid</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">sequencing_group_ids</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">a</span>
+</span><span id="__span-0-383">
+</span><span id="__span-0-384">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+</span><span id="__span-0-385">        <span class="sa">f</span><span class="s1">&#39;Querying </span><span class="si">{</span><span class="n">analysis_type</span><span class="si">}</span><span class="s1"> analysis entries for </span><span class="si">{</span><span class="n">metamist_proj</span><span class="si">}</span><span class="s1">: found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">analysis_per_sid</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+</span><span id="__span-0-386">    <span class="p">)</span>
+</span><span id="__span-0-387">    <span class="k">return</span> <span class="n">analysis_per_sid</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.create_analysis" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.create_analysis" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">create_analysis</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.create_analysis" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">create_analysis</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">output</span><span class="p">,</span>
+</span><span id="__span-0-3">    <span class="n">type_</span><span class="p">,</span>
+</span><span id="__span-0-4">    <span class="n">status</span><span class="p">,</span>
+</span><span id="__span-0-5">    <span class="n">cohort_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-6">    <span class="n">sequencing_group_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-7">    <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-8">    <span class="n">meta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-9"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Tries to create an Analysis entry, returns its id if successful.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-389"><span class="k">def</span><span class="w"> </span><span class="nf">create_analysis</span><span class="p">(</span>  <span class="c1"># noqa: PLR0917</span>
+</span><span id="__span-0-390">    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-0-391">    <span class="n">output</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="__span-0-392">    <span class="n">type_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">AnalysisType</span><span class="p">,</span>
+</span><span id="__span-0-393">    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">AnalysisStatus</span><span class="p">,</span>
+</span><span id="__span-0-394">    <span class="n">cohort_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-395">    <span class="n">sequencing_group_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-396">    <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-397">    <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-398"><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-399"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-400"><span class="sd">    Tries to create an Analysis entry, returns its id if successful.</span>
+</span><span id="__span-0-401"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-402">    <span class="n">metamist_proj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metamist_proj</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-0-403">
+</span><span id="__span-0-404">    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">AnalysisType</span><span class="p">):</span>
+</span><span id="__span-0-405">        <span class="n">type_</span> <span class="o">=</span> <span class="n">type_</span><span class="o">.</span><span class="n">value</span>
+</span><span id="__span-0-406">    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">AnalysisStatus</span><span class="p">):</span>
+</span><span id="__span-0-407">        <span class="n">status</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">value</span>
+</span><span id="__span-0-408">
+</span><span id="__span-0-409">    <span class="k">if</span> <span class="ow">not</span> <span class="n">cohort_ids</span><span class="p">:</span>
+</span><span id="__span-0-410">        <span class="n">cohort_ids</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-411">
+</span><span id="__span-0-412">    <span class="k">if</span> <span class="ow">not</span> <span class="n">sequencing_group_ids</span><span class="p">:</span>
+</span><span id="__span-0-413">        <span class="n">sequencing_group_ids</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-414">
+</span><span id="__span-0-415">    <span class="n">am</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Analysis</span><span class="p">(</span>
+</span><span id="__span-0-416">        <span class="nb">type</span><span class="o">=</span><span class="n">type_</span><span class="p">,</span>
+</span><span id="__span-0-417">        <span class="n">status</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">AnalysisStatus</span><span class="p">(</span><span class="n">status</span><span class="p">),</span>
+</span><span id="__span-0-418">        <span class="n">output</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">),</span>
+</span><span id="__span-0-419">        <span class="n">cohort_ids</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">cohort_ids</span><span class="p">),</span>
+</span><span id="__span-0-420">        <span class="n">sequencing_group_ids</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">sequencing_group_ids</span><span class="p">),</span>
+</span><span id="__span-0-421">        <span class="n">meta</span><span class="o">=</span><span class="n">meta</span> <span class="ow">or</span> <span class="p">{},</span>
+</span><span id="__span-0-422">    <span class="p">)</span>
+</span><span id="__span-0-423">    <span class="n">aid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_aapi_call</span><span class="p">(</span>
+</span><span id="__span-0-424">        <span class="bp">self</span><span class="o">.</span><span class="n">aapi</span><span class="o">.</span><span class="n">create_analysis</span><span class="p">,</span>
+</span><span id="__span-0-425">        <span class="n">project</span><span class="o">=</span><span class="n">metamist_proj</span><span class="p">,</span>
+</span><span id="__span-0-426">        <span class="n">analysis</span><span class="o">=</span><span class="n">am</span><span class="p">,</span>
+</span><span id="__span-0-427">    <span class="p">)</span>
+</span><span id="__span-0-428">    <span class="k">if</span> <span class="n">aid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-429">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+</span><span id="__span-0-430">            <span class="sa">f</span><span class="s1">&#39;Failed to create Analysis(type=</span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s1">, status=</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s1">, output=</span><span class="si">{</span><span class="n">output</span><span class="si">!s}</span><span class="s1">) in </span><span class="si">{</span><span class="n">metamist_proj</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+</span><span id="__span-0-431">        <span class="p">)</span>
+</span><span id="__span-0-432">        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="__span-0-433">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+</span><span id="__span-0-434">        <span class="sa">f</span><span class="s1">&#39;Created Analysis(id=</span><span class="si">{</span><span class="n">aid</span><span class="si">}</span><span class="s1">, type=</span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s1">, status=</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s1">, output=</span><span class="si">{</span><span class="n">output</span><span class="si">!s}</span><span class="s1">) in </span><span class="si">{</span><span class="n">metamist_proj</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+</span><span id="__span-0-435">    <span class="p">)</span>
+</span><span id="__span-0-436">    <span class="k">return</span> <span class="n">aid</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.get_ped_entries" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.get_ped_entries" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_ped_entries</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.get_ped_entries" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_ped_entries</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Retrieve PED lines for a specified SM project, with external participant IDs.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-438"><span class="k">def</span><span class="w"> </span><span class="nf">get_ped_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+</span><span id="__span-0-439"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-440"><span class="sd">    Retrieve PED lines for a specified SM project, with external participant IDs.</span>
+</span><span id="__span-0-441"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-442">    <span class="n">metamist_proj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metamist_proj</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-0-443">    <span class="n">entries</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="n">GET_PEDIGREE_QUERY</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;metamist_proj&#39;</span><span class="p">:</span> <span class="n">metamist_proj</span><span class="p">})</span>
+</span><span id="__span-0-444">
+</span><span id="__span-0-445">    <span class="n">pedigree_entries</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="s1">&#39;project&#39;</span><span class="p">][</span><span class="s1">&#39;pedigree&#39;</span><span class="p">]</span>
+</span><span id="__span-0-446">
+</span><span id="__span-0-447">    <span class="k">return</span> <span class="n">pedigree_entries</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Metamist.get_metamist_proj" class="doc doc-heading"><a href="#cpg_flow.metamist.Metamist.get_metamist_proj" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_metamist_proj</span>
+
+
+</a><a href="#cpg_flow.metamist.Metamist.get_metamist_proj" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_metamist_proj</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the Metamist project name, appending '-test' if the access level is 'test'.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-449"><span class="k">def</span><span class="w"> </span><span class="nf">get_metamist_proj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-450"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-451"><span class="sd">    Return the Metamist project name, appending &#39;-test&#39; if the access level is &#39;test&#39;.</span>
+</span><span id="__span-0-452"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-453">    <span class="n">metamist_proj</span> <span class="o">=</span> <span class="n">dataset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_dataset</span>
+</span><span id="__span-0-454">    <span class="k">if</span> <span class="n">config_retrieve</span><span class="p">([</span><span class="s1">&#39;workflow&#39;</span><span class="p">,</span> <span class="s1">&#39;access_level&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">metamist_proj</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-test&#39;</span><span class="p">):</span>
+</span><span id="__span-0-455">        <span class="n">metamist_proj</span> <span class="o">+=</span> <span class="s1">&#39;-test&#39;</span>
+</span><span id="__span-0-456">
+</span><span id="__span-0-457">    <span class="k">return</span> <span class="n">metamist_proj</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="cpg_flow.metamist.AnalysisStatus" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisStatus" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">cpg_flow.metamist.AnalysisStatus</span>
+
+
+</a><a href="#cpg_flow.metamist.AnalysisStatus" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+
+
+        <p>Corresponds to metamist Analysis statuses:
+<a href="https://github.com/populationgenomics/sample-metadata/blob/dev/models/enums/analysis.py#L14-L21">https://github.com/populationgenomics/sample-metadata/blob/dev/models/enums/analysis.py#L14-L21</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisStatus.QUEUED" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisStatus.QUEUED" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">QUEUED</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisStatus.QUEUED" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">QUEUED</span> <span class="o">=</span> <span class="s1">&#39;queued&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisStatus.IN_PROGRESS" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisStatus.IN_PROGRESS" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">IN_PROGRESS</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisStatus.IN_PROGRESS" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s1">&#39;in-progress&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisStatus.FAILED" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisStatus.FAILED" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">FAILED</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisStatus.FAILED" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">FAILED</span> <span class="o">=</span> <span class="s1">&#39;failed&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisStatus.COMPLETED" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisStatus.COMPLETED" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">COMPLETED</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisStatus.COMPLETED" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">COMPLETED</span> <span class="o">=</span> <span class="s1">&#39;completed&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisStatus.UNKNOWN" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisStatus.UNKNOWN" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">UNKNOWN</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisStatus.UNKNOWN" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s1">&#39;unknown&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.AnalysisStatus.parse" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisStatus.parse" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">parse</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisStatus.parse" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">parse</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Parse str and create a AnalysisStatus object</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-161"><span class="nd">@staticmethod</span>
+</span><span id="__span-0-162"><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;AnalysisStatus&#39;</span><span class="p">:</span>
+</span><span id="__span-0-163"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-164"><span class="sd">    Parse str and create a AnalysisStatus object</span>
+</span><span id="__span-0-165"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-166">    <span class="k">return</span> <span class="p">{</span><span class="n">v</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">AnalysisStatus</span><span class="p">}[</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="cpg_flow.metamist.AnalysisType" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">cpg_flow.metamist.AnalysisType</span>
+
+
+</a><a href="#cpg_flow.metamist.AnalysisType" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+
+
+        <p>Corresponds to metamist Analysis types:
+<a href="https://github.com/populationgenomics/sample-metadata/blob/dev/models/enums">https://github.com/populationgenomics/sample-metadata/blob/dev/models/enums</a>
+/analysis.py#L4-L11</p>
+<p>Re-defined in a separate module to decouple from the main metamist module,
+so decorators can use <code>@stage(analysis_type=AnalysisType.QC)</code> without importing
+the metamist package.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.QC" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.QC" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">QC</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.QC" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">QC</span> <span class="o">=</span> <span class="s1">&#39;qc&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.JOINT_CALLING" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.JOINT_CALLING" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">JOINT_CALLING</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.JOINT_CALLING" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">JOINT_CALLING</span> <span class="o">=</span> <span class="s1">&#39;joint-calling&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.GVCF" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.GVCF" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">GVCF</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.GVCF" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">GVCF</span> <span class="o">=</span> <span class="s1">&#39;gvcf&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.CRAM" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.CRAM" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">CRAM</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.CRAM" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">CRAM</span> <span class="o">=</span> <span class="s1">&#39;cram&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.MITO_CRAM" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.MITO_CRAM" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">MITO_CRAM</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.MITO_CRAM" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">MITO_CRAM</span> <span class="o">=</span> <span class="s1">&#39;mito-cram&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.CUSTOM" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.CUSTOM" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">CUSTOM</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.CUSTOM" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">CUSTOM</span> <span class="o">=</span> <span class="s1">&#39;custom&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.ES_INDEX" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.ES_INDEX" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">ES_INDEX</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.ES_INDEX" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">ES_INDEX</span> <span class="o">=</span> <span class="s1">&#39;es-index&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.COMBINER" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.COMBINER" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">COMBINER</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.COMBINER" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">COMBINER</span> <span class="o">=</span> <span class="s1">&#39;combiner&#39;</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.AnalysisType.parse" class="doc doc-heading"><a href="#cpg_flow.metamist.AnalysisType.parse" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">parse</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.AnalysisType.parse" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">parse</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Parse str and create a AnalysisStatus object</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-189"><span class="nd">@staticmethod</span>
+</span><span id="__span-0-190"><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">val</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;AnalysisType&#39;</span><span class="p">:</span>
+</span><span id="__span-0-191"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-192"><span class="sd">    Parse str and create a AnalysisStatus object</span>
+</span><span id="__span-0-193"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-194">    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">AnalysisType</span><span class="p">}</span>
+</span><span id="__span-0-195">    <span class="k">if</span> <span class="n">val</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+</span><span id="__span-0-196">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span>
+</span><span id="__span-0-197">            <span class="sa">f</span><span class="s1">&#39;Unrecognised analysis type </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s1">. Available: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+</span><span id="__span-0-198">        <span class="p">)</span>
+</span><span id="__span-0-199">    <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="n">val</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="cpg_flow.metamist.Analysis" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">cpg_flow.metamist.Analysis</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">Analysis</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="nb">id</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">sequencing_group_ids</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">meta</span>
+</span><span id="__span-0-3"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Metamist DB Analysis entry.</p>
+<p>See the metamist package for more details:
+<a href="https://github.com/populationgenomics/sample-metadata">https://github.com/populationgenomics/sample-metadata</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Analysis.id" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis.id" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">id</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis.id" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nb">id</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Analysis.type" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis.type" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">type</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis.type" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nb">type</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Analysis.status" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis.status" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">status</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis.status" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">status</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Analysis.sequencing_group_ids" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis.sequencing_group_ids" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">sequencing_group_ids</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis.sequencing_group_ids" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">sequencing_group_ids</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Analysis.output" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis.output" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">output</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis.output" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">output</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Analysis.meta" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis.meta" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">meta</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis.meta" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">meta</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Analysis.parse" class="doc doc-heading"><a href="#cpg_flow.metamist.Analysis.parse" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">parse</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Analysis.parse" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">parse</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Parse data to create an Analysis object.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-218"><span class="nd">@staticmethod</span>
+</span><span id="__span-0-219"><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Analysis&#39;</span><span class="p">:</span>
+</span><span id="__span-0-220"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-221"><span class="sd">    Parse data to create an Analysis object.</span>
+</span><span id="__span-0-222"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-223">    <span class="n">req_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">]</span>
+</span><span id="__span-0-224">    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">req_keys</span><span class="p">):</span>
+</span><span id="__span-0-225">        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">req_keys</span><span class="p">:</span>
+</span><span id="__span-0-226">            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span id="__span-0-227">                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&quot;Analysis&quot; data does not have </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-228">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot parse metamist Sequence </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-229">
+</span><span id="__span-0-230">    <span class="n">output</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+</span><span id="__span-0-231">    <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+</span><span id="__span-0-232">        <span class="n">output</span> <span class="o">=</span> <span class="n">to_path</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</span><span id="__span-0-233">
+</span><span id="__span-0-234">    <span class="n">a</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">(</span>
+</span><span id="__span-0-235">        <span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]),</span>
+</span><span id="__span-0-236">        <span class="nb">type</span><span class="o">=</span><span class="n">AnalysisType</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]),</span>
+</span><span id="__span-0-237">        <span class="n">status</span><span class="o">=</span><span class="n">AnalysisStatus</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]),</span>
+</span><span id="__span-0-238">        <span class="n">sequencing_group_ids</span><span class="o">=</span><span class="nb">set</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sequencingGroups&#39;</span><span class="p">]]),</span>
+</span><span id="__span-0-239">        <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span>
+</span><span id="__span-0-240">        <span class="n">meta</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{},</span>
+</span><span id="__span-0-241">    <span class="p">)</span>
+</span><span id="__span-0-242">    <span class="k">return</span> <span class="n">a</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="cpg_flow.metamist.Assay" class="doc doc-heading"><a href="#cpg_flow.metamist.Assay" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">cpg_flow.metamist.Assay</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Assay" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">Assay</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="nb">id</span><span class="p">,</span>
+</span><span id="__span-0-3">    <span class="n">sequencing_group_id</span><span class="p">,</span>
+</span><span id="__span-0-4">    <span class="n">meta</span><span class="p">,</span>
+</span><span id="__span-0-5">    <span class="n">assay_type</span><span class="p">,</span>
+</span><span id="__span-0-6">    <span class="n">alignment_input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-7"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Metamist "Assay" entry.</p>
+<p>See metamist for more details:
+<a href="https://github.com/populationgenomics/sample-metadata">https://github.com/populationgenomics/sample-metadata</a></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Assay.id" class="doc doc-heading"><a href="#cpg_flow.metamist.Assay.id" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">id</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Assay.id" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nb">id</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Assay.sequencing_group_id" class="doc doc-heading"><a href="#cpg_flow.metamist.Assay.sequencing_group_id" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">sequencing_group_id</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Assay.sequencing_group_id" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">sequencing_group_id</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Assay.meta" class="doc doc-heading"><a href="#cpg_flow.metamist.Assay.meta" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">meta</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Assay.meta" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">meta</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Assay.assay_type" class="doc doc-heading"><a href="#cpg_flow.metamist.Assay.assay_type" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">assay_type</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Assay.assay_type" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">assay_type</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="cpg_flow.metamist.Assay.alignment_input" class="doc doc-heading"><a href="#cpg_flow.metamist.Assay.alignment_input" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">alignment_input</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Assay.alignment_input" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="n">alignment_input</span> <span class="o">=</span> <span class="kc">None</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cpg_flow.metamist.Assay.parse" class="doc doc-heading"><a href="#cpg_flow.metamist.Assay.parse" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">parse</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</a><a href="#cpg_flow.metamist.Assay.parse" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">parse</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">data</span><span class="p">,</span> <span class="n">sg_id</span><span class="p">,</span> <span class="n">check_existence</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">run_parse_reads</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-0-3"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Create from a dictionary.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span>
+<span class="normal">499</span>
+<span class="normal">500</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span>
+<span class="normal">507</span>
+<span class="normal">508</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-475"><span class="nd">@staticmethod</span>
+</span><span id="__span-0-476"><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span>
+</span><span id="__span-0-477">    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+</span><span id="__span-0-478">    <span class="n">sg_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="__span-0-479">    <span class="n">check_existence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-480">    <span class="n">run_parse_reads</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-481"><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Assay&#39;</span><span class="p">:</span>
+</span><span id="__span-0-482"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-483"><span class="sd">    Create from a dictionary.</span>
+</span><span id="__span-0-484"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-485">
+</span><span id="__span-0-486">    <span class="n">assay_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;meta&#39;</span><span class="p">]</span>
+</span><span id="__span-0-487">    <span class="n">missing_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">assay_keys</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>
+</span><span id="__span-0-488">
+</span><span id="__span-0-489">    <span class="k">if</span> <span class="n">missing_keys</span><span class="p">:</span>
+</span><span id="__span-0-490">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="__span-0-491">            <span class="sa">f</span><span class="s1">&#39;Cannot parse metamist Sequence </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s1">. Missing keys: </span><span class="si">{</span><span class="n">missing_keys</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+</span><span id="__span-0-492">        <span class="p">)</span>
+</span><span id="__span-0-493">
+</span><span id="__span-0-494">    <span class="n">assay_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+</span><span id="__span-0-495">    <span class="k">assert</span> <span class="n">assay_type</span><span class="p">,</span> <span class="n">data</span>
+</span><span id="__span-0-496">    <span class="n">mm_seq</span> <span class="o">=</span> <span class="n">Assay</span><span class="p">(</span>
+</span><span id="__span-0-497">        <span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]),</span>
+</span><span id="__span-0-498">        <span class="n">sequencing_group_id</span><span class="o">=</span><span class="n">sg_id</span><span class="p">,</span>
+</span><span id="__span-0-499">        <span class="n">meta</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">],</span>
+</span><span id="__span-0-500">        <span class="n">assay_type</span><span class="o">=</span><span class="n">assay_type</span><span class="p">,</span>
+</span><span id="__span-0-501">    <span class="p">)</span>
+</span><span id="__span-0-502">    <span class="k">if</span> <span class="n">run_parse_reads</span><span class="p">:</span>
+</span><span id="__span-0-503">        <span class="n">mm_seq</span><span class="o">.</span><span class="n">alignment_input</span> <span class="o">=</span> <span class="n">parse_reads</span><span class="p">(</span>
+</span><span id="__span-0-504">            <span class="n">sequencing_group_id</span><span class="o">=</span><span class="n">sg_id</span><span class="p">,</span>
+</span><span id="__span-0-505">            <span class="n">assay_meta</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">],</span>
+</span><span id="__span-0-506">            <span class="n">check_existence</span><span class="o">=</span><span class="n">check_existence</span><span class="p">,</span>
+</span><span id="__span-0-507">        <span class="p">)</span>
+</span><span id="__span-0-508">    <span class="k">return</span> <span class="n">mm_seq</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.metamist.get_cohort_sgs" class="doc doc-heading"><a href="#cpg_flow.metamist.get_cohort_sgs" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.metamist.get_cohort_sgs</span>
+
+
+</a><a href="#cpg_flow.metamist.get_cohort_sgs" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_cohort_sgs</span><span class="p">(</span><span class="n">cohort_id</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Retrieve sequencing group entries for a single cohort.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">511</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-511"><span class="k">def</span><span class="w"> </span><span class="nf">get_cohort_sgs</span><span class="p">(</span><span class="n">cohort_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span id="__span-0-512"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-513"><span class="sd">    Retrieve sequencing group entries for a single cohort.</span>
+</span><span id="__span-0-514"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-515">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Getting sequencing groups for cohort </span><span class="si">{</span><span class="n">cohort_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-516">    <span class="n">entries</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="n">GET_SEQUENCING_GROUPS_BY_COHORT_QUERY</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;cohort_id&#39;</span><span class="p">:</span> <span class="n">cohort_id</span><span class="p">})</span>
+</span><span id="__span-0-517">
+</span><span id="__span-0-518">    <span class="c1"># Create dictionary keying sequencing groups by project and including cohort name</span>
+</span><span id="__span-0-519">    <span class="c1"># {</span>
+</span><span id="__span-0-520">    <span class="c1">#     &quot;sequencing_groups&quot;: {</span>
+</span><span id="__span-0-521">    <span class="c1">#         project_id: [sequencing_group_1, sequencing_group_2, ...],</span>
+</span><span id="__span-0-522">    <span class="c1">#         ...</span>
+</span><span id="__span-0-523">    <span class="c1">#     },</span>
+</span><span id="__span-0-524">    <span class="c1">#     &quot;name&quot;: &quot;CohortName&quot;</span>
+</span><span id="__span-0-525">    <span class="c1">#     &quot;dataset&quot;: &quot;DatasetName&quot;</span>
+</span><span id="__span-0-526">    <span class="c1"># }</span>
+</span><span id="__span-0-527">
+</span><span id="__span-0-528">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">[</span><span class="s1">&#39;cohorts&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-0-529">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span><span class="s1">&#39;We only support one cohort at a time currently&#39;</span><span class="p">)</span>
+</span><span id="__span-0-530">
+</span><span id="__span-0-531">    <span class="k">if</span> <span class="n">entries</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;errors&#39;</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+</span><span id="__span-0-532">        <span class="n">message</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;message&#39;</span><span class="p">]</span>
+</span><span id="__span-0-533">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error fetching cohort: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-534">
+</span><span id="__span-0-535">    <span class="n">cohort_status</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="s1">&#39;cohorts&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;status&#39;</span><span class="p">]</span>
+</span><span id="__span-0-536">    <span class="k">if</span> <span class="n">cohort_status</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;active&#39;</span><span class="p">:</span>  <span class="c1"># support upper and lower formats during migration</span>
+</span><span id="__span-0-537">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span>
+</span><span id="__span-0-538">            <span class="sa">f</span><span class="s1">&#39;Cohort </span><span class="si">{</span><span class="n">cohort_id</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">cohort_status</span><span class="si">}</span><span class="s1">. Only active cohorts are allowed. Please check the input cohort list.&#39;</span>
+</span><span id="__span-0-539">        <span class="p">)</span>
+</span><span id="__span-0-540">
+</span><span id="__span-0-541">    <span class="n">cohort_name</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="s1">&#39;cohorts&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+</span><span id="__span-0-542">    <span class="n">cohort_dataset</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="s1">&#39;cohorts&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;project&#39;</span><span class="p">][</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span>
+</span><span id="__span-0-543">    <span class="n">sequencing_groups</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="s1">&#39;cohorts&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;sequencingGroups&#39;</span><span class="p">]</span>
+</span><span id="__span-0-544">
+</span><span id="__span-0-545">    <span class="k">return</span> <span class="p">{</span>
+</span><span id="__span-0-546">        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">cohort_name</span><span class="p">,</span>
+</span><span id="__span-0-547">        <span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="n">cohort_dataset</span><span class="p">,</span>
+</span><span id="__span-0-548">        <span class="s1">&#39;sequencing_groups&#39;</span><span class="p">:</span> <span class="n">sequencing_groups</span><span class="p">,</span>
+</span><span id="__span-0-549">    <span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.metamist.parse_reads" class="doc doc-heading"><a href="#cpg_flow.metamist.parse_reads" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.metamist.parse_reads</span>
+
+
+</a><a href="#cpg_flow.metamist.parse_reads" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">parse_reads</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">sequencing_group_id</span><span class="p">,</span> <span class="n">assay_meta</span><span class="p">,</span> <span class="n">check_existence</span>
+</span><span id="__span-0-3"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Parse a AlignmentInput object from the meta dictionary.
+<code>check_existence</code>: check if fastq/crams exist on buckets.
+Default value is pulled from self.metamist and can be overridden.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/metamist.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span>
+<span class="normal">568</span>
+<span class="normal">569</span>
+<span class="normal">570</span>
+<span class="normal">571</span>
+<span class="normal">572</span>
+<span class="normal">573</span>
+<span class="normal">574</span>
+<span class="normal">575</span>
+<span class="normal">576</span>
+<span class="normal">577</span>
+<span class="normal">578</span>
+<span class="normal">579</span>
+<span class="normal">580</span>
+<span class="normal">581</span>
+<span class="normal">582</span>
+<span class="normal">583</span>
+<span class="normal">584</span>
+<span class="normal">585</span>
+<span class="normal">586</span>
+<span class="normal">587</span>
+<span class="normal">588</span>
+<span class="normal">589</span>
+<span class="normal">590</span>
+<span class="normal">591</span>
+<span class="normal">592</span>
+<span class="normal">593</span>
+<span class="normal">594</span>
+<span class="normal">595</span>
+<span class="normal">596</span>
+<span class="normal">597</span>
+<span class="normal">598</span>
+<span class="normal">599</span>
+<span class="normal">600</span>
+<span class="normal">601</span>
+<span class="normal">602</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-552"><span class="k">def</span><span class="w"> </span><span class="nf">parse_reads</span><span class="p">(</span>
+</span><span id="__span-0-553">    <span class="n">sequencing_group_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="__span-0-554">    <span class="n">assay_meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+</span><span id="__span-0-555">    <span class="n">check_existence</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+</span><span id="__span-0-556"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlignmentInput</span><span class="p">:</span>
+</span><span id="__span-0-557"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-558"><span class="sd">    Parse a AlignmentInput object from the meta dictionary.</span>
+</span><span id="__span-0-559"><span class="sd">    `check_existence`: check if fastq/crams exist on buckets.</span>
+</span><span id="__span-0-560"><span class="sd">    Default value is pulled from self.metamist and can be overridden.</span>
+</span><span id="__span-0-561"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-562">    <span class="n">reads_data</span> <span class="o">=</span> <span class="n">assay_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reads&#39;</span><span class="p">)</span>
+</span><span id="__span-0-563">    <span class="n">reads_type</span> <span class="o">=</span> <span class="n">assay_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reads_type&#39;</span><span class="p">)</span>
+</span><span id="__span-0-564">    <span class="n">reference_assembly</span> <span class="o">=</span> <span class="n">assay_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reference_assembly&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">)</span>
+</span><span id="__span-0-565">
+</span><span id="__span-0-566">    <span class="k">if</span> <span class="ow">not</span> <span class="n">reads_data</span><span class="p">:</span>
+</span><span id="__span-0-567">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sequencing_group_id</span><span class="si">}</span><span class="s1">: no &quot;meta/reads&quot; field in meta&#39;</span><span class="p">)</span>
+</span><span id="__span-0-568">
+</span><span id="__span-0-569">    <span class="k">if</span> <span class="ow">not</span> <span class="n">reads_type</span><span class="p">:</span>
+</span><span id="__span-0-570">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span>
+</span><span id="__span-0-571">            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sequencing_group_id</span><span class="si">}</span><span class="s1">: no &quot;meta/reads_type&quot; field in meta&#39;</span><span class="p">,</span>
+</span><span id="__span-0-572">        <span class="p">)</span>
+</span><span id="__span-0-573">
+</span><span id="__span-0-574">    <span class="k">if</span> <span class="n">reads_type</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;bam&#39;</span><span class="p">,</span> <span class="s1">&#39;cram&#39;</span><span class="p">}</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">reads_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-0-575">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span>
+</span><span id="__span-0-576">            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sequencing_group_id</span><span class="si">}</span><span class="s1">: supporting only single bam/cram input&#39;</span><span class="p">,</span>
+</span><span id="__span-0-577">        <span class="p">)</span>
+</span><span id="__span-0-578">
+</span><span id="__span-0-579">    <span class="k">if</span> <span class="n">reads_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SUPPORTED_READ_TYPES</span><span class="p">:</span>
+</span><span id="__span-0-580">        <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span>
+</span><span id="__span-0-581">            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sequencing_group_id</span><span class="si">}</span><span class="s1">: ERROR: &quot;reads_type&quot; is expected to be one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">SUPPORTED_READ_TYPES</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+</span><span id="__span-0-582">        <span class="p">)</span>
+</span><span id="__span-0-583">
+</span><span id="__span-0-584">    <span class="k">if</span> <span class="n">reads_type</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;bam&#39;</span><span class="p">,</span> <span class="s1">&#39;cram&#39;</span><span class="p">}:</span>
+</span><span id="__span-0-585">        <span class="k">return</span> <span class="n">find_cram_or_bam</span><span class="p">(</span>
+</span><span id="__span-0-586">            <span class="n">reads_data</span><span class="p">,</span>
+</span><span id="__span-0-587">            <span class="n">sequencing_group_id</span><span class="p">,</span>
+</span><span id="__span-0-588">            <span class="n">check_existence</span><span class="p">,</span>
+</span><span id="__span-0-589">            <span class="n">reference_assembly</span><span class="p">,</span>
+</span><span id="__span-0-590">            <span class="n">access_level</span><span class="o">=</span><span class="n">config_retrieve</span><span class="p">([</span><span class="s1">&#39;workflow&#39;</span><span class="p">,</span> <span class="s1">&#39;access_level&#39;</span><span class="p">]),</span>
+</span><span id="__span-0-591">        <span class="p">)</span>
+</span><span id="__span-0-592">
+</span><span id="__span-0-593">    <span class="c1"># special handling case for FQ.ora files, these require a reference for decompression</span>
+</span><span id="__span-0-594">    <span class="k">elif</span> <span class="n">reads_type</span> <span class="o">==</span> <span class="s1">&#39;fastq_ora&#39;</span><span class="p">:</span>
+</span><span id="__span-0-595">        <span class="k">if</span> <span class="p">(</span><span class="n">ora_reference</span> <span class="o">:=</span> <span class="n">assay_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ora_reference&#39;</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span>
+</span><span id="__span-0-596">            <span class="n">reference_location</span> <span class="o">:=</span> <span class="n">ora_reference</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">)</span>
+</span><span id="__span-0-597">        <span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-598">            <span class="k">raise</span> <span class="n">MetamistError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&quot;meta.ora_reference.location&quot; is mandatory for </span><span class="si">{</span><span class="n">reads_type</span><span class="si">}</span><span class="s1"> assays: </span><span class="se">\n</span><span class="si">{</span><span class="n">assay_meta</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-599">        <span class="k">return</span> <span class="n">find_fastqs</span><span class="p">(</span><span class="n">reads_data</span><span class="p">,</span> <span class="n">sequencing_group_id</span><span class="p">,</span> <span class="n">check_existence</span><span class="p">,</span> <span class="n">read_reference</span><span class="o">=</span><span class="n">reference_location</span><span class="p">)</span>
+</span><span id="__span-0-600">
+</span><span id="__span-0-601">    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-602">        <span class="k">return</span> <span class="n">find_fastqs</span><span class="p">(</span><span class="n">reads_data</span><span class="p">,</span> <span class="n">sequencing_group_id</span><span class="p">,</span> <span class="n">check_existence</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../inputs/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Inputs">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Inputs
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../resources/" class="md-footer__link md-footer__link--next" aria-label="Next: Resources">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Resources
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
