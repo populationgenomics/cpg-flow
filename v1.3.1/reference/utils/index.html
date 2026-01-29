@@ -1,0 +1,3319 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://populationgenomics.github.io/cpg-flow/v1.3.1/reference/utils/">
+      
+      
+        <link rel="prev" href="../status/">
+      
+      
+        <link rel="next" href="../workflows/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Utils - CPG Flow</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#utils" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CPG Flow" class="md-header__button md-logo" aria-label="CPG Flow" data-md-component="logo">
+      
+  <img src="../../assets/logo-colour.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CPG Flow
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Utils
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 2C5.13 2 2 5.13 2 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7M6 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H6zm13-8h-2l-3.2 9h1.9l.7-2h3.2l.7 2h1.9zm-2.15 5.65L18 15l1.15 3.65z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="amber"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/populationgenomics/cpg-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    populationgenomics/cpg-flow
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  CPG Flow
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../installation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Installation and Build
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Usage
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../considerations-limitations/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Considerations and Limitations
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../docker/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Docker
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tests/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Tests
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CPG Flow" class="md-nav__button md-logo" aria-label="CPG Flow" data-md-component="logo">
+      
+  <img src="../../assets/logo-colour.svg" alt="logo">
+
+    </a>
+    CPG Flow
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/populationgenomics/cpg-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+  </div>
+  <div class="md-source__repository">
+    populationgenomics/cpg-flow
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPG Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation and Build
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../considerations-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Considerations and Limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tests
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tests
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧪 Unit and E2E tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-analysis-consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔍 Code Linting and Formatting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎬 GitHub Actions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../targets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Target class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pedigree_info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PedigreeInfo class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../filetypes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filetypes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inputs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inputs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metamist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metamist
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utils
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utils
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.format_logger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;format_logger
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.chunks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;chunks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.generator_chunks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;generator_chunks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.read_hail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;read_hail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.checkpoint_hail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;checkpoint_hail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;exists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.exists_not_cached" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;exists_not_cached
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.check_exists_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;check_exists_path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.get_contents_of_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_contents_of_path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.can_reuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;can_reuse
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.timestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;timestamp
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.slugify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;slugify
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.rich_sequencing_group_id_seds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;rich_sequencing_group_id_seds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.tshirt_mt_sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;tshirt_mt_sizing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.get_intervals_from_bed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_intervals_from_bed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.make_job_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;make_job_name
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.hash_from_list_of_strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;hash_from_list_of_strings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.write_to_gcs_bucket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;write_to_gcs_bucket
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.format_logger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;format_logger
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.chunks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;chunks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.generator_chunks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;generator_chunks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.read_hail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;read_hail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.checkpoint_hail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;checkpoint_hail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;exists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.exists_not_cached" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;exists_not_cached
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.check_exists_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;check_exists_path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.get_contents_of_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_contents_of_path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.can_reuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;can_reuse
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.timestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;timestamp
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.slugify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;slugify
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.rich_sequencing_group_id_seds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;rich_sequencing_group_id_seds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.tshirt_mt_sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;tshirt_mt_sizing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.get_intervals_from_bed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_intervals_from_bed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.make_job_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;make_job_name
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.hash_from_list_of_strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;hash_from_list_of_strings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpg_flow.utils.write_to_gcs_bucket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;write_to_gcs_bucket
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    CPG Flow
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Reference
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="utils"><a class="toclink" href="#utils">Utils</a><a class="headerlink" href="#utils" title="Permanent link">&para;</a></h1>
+<p>Utility functions and constants.</p>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.format_logger" class="doc doc-heading"><a href="#cpg_flow.utils.format_logger" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.format_logger</span>
+
+
+</a><a href="#cpg_flow.utils.format_logger" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">format_logger</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">log_level</span><span class="o">=</span><span class="n"><span title="no">no</span></span><span class="p">,</span>
+</span><span id="__span-0-3">    <span class="n">fmt_string</span><span class="o">=</span><span class="n"><span title="cpg_flow.utils.DEFAULT_LOG_FORMAT">DEFAULT_LOG_FORMAT</span></span><span class="p">,</span>
+</span><span id="__span-0-4">    <span class="n">coloured</span><span class="o">=</span><span class="n"><span title="cpg_flow.utils.COLOURED_LOGS">COLOURED_LOGS</span></span><span class="p">,</span>
+</span><span id="__span-0-5"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>loguru is a cleaner interface than the standard logging module, but it doesn't allow for multiple instances
+instead of calling a get_logger function which returns a logger, we assume that any module using logging has
+imported <code>from loguru import logger</code> to get access to the logger.</p>
+<p>loguru.logger is also resistant to deepcopy, so there really is only a single global instance, meaning that the
+display/formatting of the logger is global to the entire process, and should only be set once.</p>
+<p>This helper method formats the logger instance with the given parameters, stripping out any previous handlers
+Because the global logger instance is modified, there is no return value</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>from loguru import logger
+from cpg_flow.utils import format_logger
+format_logger(log_level=10, fmt_string='{time} {level} {message}', coloured=True)
+logger.info('This is an info message')</p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>log_level</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>logging level, defaults to INFO. Can be overridden by config</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="int">int</span></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code><span title="no">no</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fmt_string</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>format string for this logger, defaults to DEFAULT_LOG_FORMAT</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="str">str</span></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code><span title="cpg_flow.utils.DEFAULT_LOG_FORMAT">DEFAULT_LOG_FORMAT</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>coloured</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>whether to colour the logger output</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="bool">bool</span></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code><span title="cpg_flow.utils.COLOURED_LOGS">COLOURED_LOGS</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-38"><span class="k">def</span><span class="w"> </span><span class="nf">format_logger</span><span class="p">(</span>
+</span><span id="__span-0-39">    <span class="n">log_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span><span class="p">(</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">no</span><span class="p">,</span>
+</span><span id="__span-0-40">    <span class="n">fmt_string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_LOG_FORMAT</span><span class="p">,</span>
+</span><span id="__span-0-41">    <span class="n">coloured</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">COLOURED_LOGS</span><span class="p">,</span>
+</span><span id="__span-0-42"><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-43"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-44"><span class="sd">    loguru is a cleaner interface than the standard logging module, but it doesn&#39;t allow for multiple instances</span>
+</span><span id="__span-0-45"><span class="sd">    instead of calling a get_logger function which returns a logger, we assume that any module using logging has</span>
+</span><span id="__span-0-46"><span class="sd">    imported `from loguru import logger` to get access to the logger.</span>
+</span><span id="__span-0-47">
+</span><span id="__span-0-48"><span class="sd">    loguru.logger is also resistant to deepcopy, so there really is only a single global instance, meaning that the</span>
+</span><span id="__span-0-49"><span class="sd">    display/formatting of the logger is global to the entire process, and should only be set once.</span>
+</span><span id="__span-0-50">
+</span><span id="__span-0-51"><span class="sd">    This helper method formats the logger instance with the given parameters, stripping out any previous handlers</span>
+</span><span id="__span-0-52"><span class="sd">    Because the global logger instance is modified, there is no return value</span>
+</span><span id="__span-0-53">
+</span><span id="__span-0-54"><span class="sd">    &gt;&gt;&gt; from loguru import logger</span>
+</span><span id="__span-0-55"><span class="sd">    &gt;&gt;&gt; from cpg_flow.utils import format_logger</span>
+</span><span id="__span-0-56"><span class="sd">    &gt;&gt;&gt; format_logger(log_level=10, fmt_string=&#39;{time} {level} {message}&#39;, coloured=True)</span>
+</span><span id="__span-0-57"><span class="sd">    &gt;&gt;&gt; logger.info(&#39;This is an info message&#39;)</span>
+</span><span id="__span-0-58">
+</span><span id="__span-0-59"><span class="sd">    Args:</span>
+</span><span id="__span-0-60"><span class="sd">        log_level (int): logging level, defaults to INFO. Can be overridden by config</span>
+</span><span id="__span-0-61"><span class="sd">        fmt_string (str): format string for this logger, defaults to DEFAULT_LOG_FORMAT</span>
+</span><span id="__span-0-62"><span class="sd">        coloured (bool): whether to colour the logger output</span>
+</span><span id="__span-0-63"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-64">
+</span><span id="__span-0-65">    <span class="c1"># Remove any previous loguru handlers</span>
+</span><span id="__span-0-66">    <span class="n">logger</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+</span><span id="__span-0-67">
+</span><span id="__span-0-68">    <span class="c1"># Add loguru handler with given format and level</span>
+</span><span id="__span-0-69">    <span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+</span><span id="__span-0-70">        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+</span><span id="__span-0-71">        <span class="n">level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span>
+</span><span id="__span-0-72">        <span class="nb">format</span><span class="o">=</span><span class="n">fmt_string</span><span class="p">,</span>
+</span><span id="__span-0-73">        <span class="n">colorize</span><span class="o">=</span><span class="n">coloured</span><span class="p">,</span>
+</span><span id="__span-0-74">        <span class="n">enqueue</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-75">    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.chunks" class="doc doc-heading"><a href="#cpg_flow.utils.chunks" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.chunks</span>
+
+
+</a><a href="#cpg_flow.utils.chunks" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">chunks</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Yield successive n-sized chunks from an iterable</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>iterable</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>any iterable - tuple, str, list, set</p>
+              </div>
+              <p>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>chunk_size</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>size of intervals to return</p>
+              </div>
+              <p>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="collections.abc.Iterator">Iterator</span>[<span title="typing.Any">Any</span>]</code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>intervals of requested size across the collection</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-78"><span class="k">def</span><span class="w"> </span><span class="nf">chunks</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+</span><span id="__span-0-79"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-80"><span class="sd">    Yield successive n-sized chunks from an iterable</span>
+</span><span id="__span-0-81">
+</span><span id="__span-0-82"><span class="sd">    Args:</span>
+</span><span id="__span-0-83"><span class="sd">        iterable (): any iterable - tuple, str, list, set</span>
+</span><span id="__span-0-84"><span class="sd">        chunk_size (): size of intervals to return</span>
+</span><span id="__span-0-85">
+</span><span id="__span-0-86"><span class="sd">    Returns:</span>
+</span><span id="__span-0-87"><span class="sd">        intervals of requested size across the collection</span>
+</span><span id="__span-0-88"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-89">
+</span><span id="__span-0-90">    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+</span><span id="__span-0-91">        <span class="n">iterable</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+</span><span id="__span-0-92">
+</span><span id="__span-0-93">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">),</span> <span class="n">chunk_size</span><span class="p">):</span>
+</span><span id="__span-0-94">        <span class="k">yield</span> <span class="n">iterable</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">chunk_size</span><span class="p">)]</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.generator_chunks" class="doc doc-heading"><a href="#cpg_flow.utils.generator_chunks" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.generator_chunks</span>
+
+
+</a><a href="#cpg_flow.utils.generator_chunks" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">generator_chunks</span><span class="p">(</span><span class="n">generator</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Iterates across a generator, returning specifically sized chunks</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>generator</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>any generator or method implementing yield</p>
+              </div>
+              <p>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>size</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>size of iterator to return</p>
+              </div>
+              <p>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="collections.abc.Iterator">Iterator</span>[<span title="list">list</span>[<span title="typing.Any">Any</span>]]</code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>a subset of the generator results</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-97"><span class="k">def</span><span class="w"> </span><span class="nf">generator_chunks</span><span class="p">(</span><span class="n">generator</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+</span><span id="__span-0-98"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-99"><span class="sd">    Iterates across a generator, returning specifically sized chunks</span>
+</span><span id="__span-0-100">
+</span><span id="__span-0-101"><span class="sd">    Args:</span>
+</span><span id="__span-0-102"><span class="sd">        generator (): any generator or method implementing yield</span>
+</span><span id="__span-0-103"><span class="sd">        size (): size of iterator to return</span>
+</span><span id="__span-0-104">
+</span><span id="__span-0-105"><span class="sd">    Returns:</span>
+</span><span id="__span-0-106"><span class="sd">        a subset of the generator results</span>
+</span><span id="__span-0-107"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-108">    <span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">generator</span><span class="p">)</span>
+</span><span id="__span-0-109">    <span class="k">for</span> <span class="n">first</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+</span><span id="__span-0-110">        <span class="k">yield</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="p">([</span><span class="n">first</span><span class="p">],</span> <span class="n">islice</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.read_hail" class="doc doc-heading"><a href="#cpg_flow.utils.read_hail" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.read_hail</span>
+
+
+</a><a href="#cpg_flow.utils.read_hail" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">read_hail</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>read a hail object using the appropriate method
+Args:
+    path (str): path to the input object
+Returns:
+    hail object (hl.MatrixTable or hl.Table)</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-113"><span class="k">def</span><span class="w"> </span><span class="nf">read_hail</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+</span><span id="__span-0-114"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-115"><span class="sd">    read a hail object using the appropriate method</span>
+</span><span id="__span-0-116"><span class="sd">    Args:</span>
+</span><span id="__span-0-117"><span class="sd">        path (str): path to the input object</span>
+</span><span id="__span-0-118"><span class="sd">    Returns:</span>
+</span><span id="__span-0-119"><span class="sd">        hail object (hl.MatrixTable or hl.Table)</span>
+</span><span id="__span-0-120"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-121">    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.ht&#39;</span><span class="p">):</span>
+</span><span id="__span-0-122">        <span class="n">t</span> <span class="o">=</span> <span class="n">hl</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+</span><span id="__span-0-123">    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-124">        <span class="k">assert</span> <span class="n">path</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.mt&#39;</span><span class="p">)</span>
+</span><span id="__span-0-125">        <span class="n">t</span> <span class="o">=</span> <span class="n">hl</span><span class="o">.</span><span class="n">read_matrix_table</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+</span><span id="__span-0-126">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Read data from </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-127">    <span class="k">return</span> <span class="n">t</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.checkpoint_hail" class="doc doc-heading"><a href="#cpg_flow.utils.checkpoint_hail" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.checkpoint_hail</span>
+
+
+</a><a href="#cpg_flow.utils.checkpoint_hail" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">checkpoint_hail</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">t</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">checkpoint_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-0-3"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>checkpoint method
+provide with a path and a prefix (GCP directory, can be None)
+allow_reuse sets whether the checkpoint can be reused - we
+typically want to avoid reuse, as it means we're continuing a previous
+failure from an unknown state</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>t</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="hail.Table">Table</span> | <span title="hail.MatrixTable">MatrixTable</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>file_name</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>name for this checkpoint</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="str">str</span></code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>checkpoint_prefix</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>path to the checkpoint directory</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="str">str</span></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>allow_reuse</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                <p>whether to permit reuse of an existing checkpoint</p>
+              </div>
+              <p>
+                  <span class="doc-param-annotation">
+                    <b>TYPE:</b>
+                      <code><span title="bool">bool</span></code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>False</code>
+                  </span>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-130"><span class="k">def</span><span class="w"> </span><span class="nf">checkpoint_hail</span><span class="p">(</span>
+</span><span id="__span-0-131">    <span class="n">t</span><span class="p">:</span> <span class="n">hl</span><span class="o">.</span><span class="n">Table</span> <span class="o">|</span> <span class="n">hl</span><span class="o">.</span><span class="n">MatrixTable</span><span class="p">,</span>
+</span><span id="__span-0-132">    <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="__span-0-133">    <span class="n">checkpoint_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-134">    <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-135"><span class="p">):</span>
+</span><span id="__span-0-136"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-137"><span class="sd">    checkpoint method</span>
+</span><span id="__span-0-138"><span class="sd">    provide with a path and a prefix (GCP directory, can be None)</span>
+</span><span id="__span-0-139"><span class="sd">    allow_reuse sets whether the checkpoint can be reused - we</span>
+</span><span id="__span-0-140"><span class="sd">    typically want to avoid reuse, as it means we&#39;re continuing a previous</span>
+</span><span id="__span-0-141"><span class="sd">    failure from an unknown state</span>
+</span><span id="__span-0-142">
+</span><span id="__span-0-143"><span class="sd">    Args:</span>
+</span><span id="__span-0-144"><span class="sd">        t (hl.Table | hl.MatrixTable):</span>
+</span><span id="__span-0-145"><span class="sd">        file_name (str): name for this checkpoint</span>
+</span><span id="__span-0-146"><span class="sd">        checkpoint_prefix (str): path to the checkpoint directory</span>
+</span><span id="__span-0-147"><span class="sd">        allow_reuse (bool): whether to permit reuse of an existing checkpoint</span>
+</span><span id="__span-0-148"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-149">
+</span><span id="__span-0-150">    <span class="c1"># drop the schema here</span>
+</span><span id="__span-0-151">    <span class="n">t</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</span><span id="__span-0-152">
+</span><span id="__span-0-153">    <span class="c1"># log the current number of partitions</span>
+</span><span id="__span-0-154">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Checkpointing object as </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">n_partitions</span><span class="p">()</span><span class="si">}</span><span class="s1"> partitions&#39;</span><span class="p">)</span>
+</span><span id="__span-0-155">
+</span><span id="__span-0-156">    <span class="k">if</span> <span class="n">checkpoint_prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-157">        <span class="k">return</span> <span class="n">t</span>
+</span><span id="__span-0-158">
+</span><span id="__span-0-159">    <span class="n">path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">checkpoint_prefix</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+</span><span id="__span-0-160">    <span class="k">if</span> <span class="n">can_reuse</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">allow_reuse</span><span class="p">:</span>
+</span><span id="__span-0-161">        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Re-using </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-162">        <span class="k">return</span> <span class="n">read_hail</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span id="__span-0-163">
+</span><span id="__span-0-164">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Checkpointing </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-165">    <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.exists" class="doc doc-heading"><a href="#cpg_flow.utils.exists" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.exists</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-cached"><code>cached</code></small>
+  </span>
+
+</a><a href="#cpg_flow.utils.exists" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p><code>exists_not_cached</code> that caches the result.</p>
+<p>The python code runtime happens entirely during the workflow construction,
+without waiting for it to finish, so there is no expectation that the object
+existence status would change during the runtime. This, this function uses
+<code>@lru_cache</code> to make sure that object existence is checked only once.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-168"><span class="nd">@lru_cache</span>
+</span><span id="__span-0-169"><span class="k">def</span><span class="w"> </span><span class="nf">exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-0-170"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-171"><span class="sd">    `exists_not_cached` that caches the result.</span>
+</span><span id="__span-0-172">
+</span><span id="__span-0-173"><span class="sd">    The python code runtime happens entirely during the workflow construction,</span>
+</span><span id="__span-0-174"><span class="sd">    without waiting for it to finish, so there is no expectation that the object</span>
+</span><span id="__span-0-175"><span class="sd">    existence status would change during the runtime. This, this function uses</span>
+</span><span id="__span-0-176"><span class="sd">    `@lru_cache` to make sure that object existence is checked only once.</span>
+</span><span id="__span-0-177"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-178">    <span class="k">return</span> <span class="n">exists_not_cached</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.exists_not_cached" class="doc doc-heading"><a href="#cpg_flow.utils.exists_not_cached" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.exists_not_cached</span>
+
+
+</a><a href="#cpg_flow.utils.exists_not_cached" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">exists_not_cached</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Check if the object by path exists, where the object can be:
+    * local file,
+    * local directory,
+    * cloud object,
+    * cloud or local *.mt, *.ht, or *.vds Hail data, in which case it will check
+      for the existence of a corresponding _SUCCESS object instead.
+@param path: path to the file/directory/object/mt/ht
+@param verbose: print on each check
+@return: True if the object exists</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-181"><span class="k">def</span><span class="w"> </span><span class="nf">exists_not_cached</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-0-182"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-183"><span class="sd">    Check if the object by path exists, where the object can be:</span>
+</span><span id="__span-0-184"><span class="sd">        * local file,</span>
+</span><span id="__span-0-185"><span class="sd">        * local directory,</span>
+</span><span id="__span-0-186"><span class="sd">        * cloud object,</span>
+</span><span id="__span-0-187"><span class="sd">        * cloud or local *.mt, *.ht, or *.vds Hail data, in which case it will check</span>
+</span><span id="__span-0-188"><span class="sd">          for the existence of a corresponding _SUCCESS object instead.</span>
+</span><span id="__span-0-189"><span class="sd">    @param path: path to the file/directory/object/mt/ht</span>
+</span><span id="__span-0-190"><span class="sd">    @param verbose: print on each check</span>
+</span><span id="__span-0-191"><span class="sd">    @return: True if the object exists</span>
+</span><span id="__span-0-192"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-193">    <span class="n">path</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s1">&#39;Path&#39;</span><span class="p">,</span> <span class="n">to_path</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+</span><span id="__span-0-194">
+</span><span id="__span-0-195">    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;.mt&#39;</span><span class="p">,</span> <span class="s1">&#39;.ht&#39;</span><span class="p">}:</span>
+</span><span id="__span-0-196">        <span class="n">path</span> <span class="o">/=</span> <span class="s1">&#39;_SUCCESS&#39;</span>
+</span><span id="__span-0-197">    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.vds&#39;</span><span class="p">:</span>
+</span><span id="__span-0-198">        <span class="n">path</span> <span class="o">/=</span> <span class="s1">&#39;variant_data/_SUCCESS&#39;</span>
+</span><span id="__span-0-199">
+</span><span id="__span-0-200">    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+</span><span id="__span-0-201">        <span class="c1"># noinspection PyBroadException</span>
+</span><span id="__span-0-202">        <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-203">            <span class="n">res</span> <span class="o">=</span> <span class="n">check_exists_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span id="__span-0-204">
+</span><span id="__span-0-205">        <span class="c1"># a failure to detect the parent folder causes a crash</span>
+</span><span id="__span-0-206">        <span class="c1"># instead stick to a core responsibility -</span>
+</span><span id="__span-0-207">        <span class="c1"># existence = False</span>
+</span><span id="__span-0-208">        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">fnfe</span><span class="p">:</span>
+</span><span id="__span-0-209">            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed checking </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-210">            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fnfe</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-211">            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-0-212">        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+</span><span id="__span-0-213">            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+</span><span id="__span-0-214">            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed checking </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-215">            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-216">        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Checked </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> [&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;exists&#39;</span> <span class="k">if</span> <span class="n">res</span> <span class="k">else</span> <span class="s1">&#39;missing&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="p">)</span>
+</span><span id="__span-0-217">        <span class="k">return</span> <span class="n">res</span>
+</span><span id="__span-0-218">
+</span><span id="__span-0-219">    <span class="k">return</span> <span class="n">check_exists_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.check_exists_path" class="doc doc-heading"><a href="#cpg_flow.utils.check_exists_path" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.check_exists_path</span>
+
+
+</a><a href="#cpg_flow.utils.check_exists_path" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">check_exists_path</span><span class="p">(</span><span class="n">test_path</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Check whether a path exists using a cached per-directory listing.
+NB. reversion to Strings prevents a get call, which is typically
+forbidden to local users - this prevents this method being used in the
+metamist audit processes</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-222"><span class="k">def</span><span class="w"> </span><span class="nf">check_exists_path</span><span class="p">(</span><span class="n">test_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-0-223"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-224"><span class="sd">    Check whether a path exists using a cached per-directory listing.</span>
+</span><span id="__span-0-225"><span class="sd">    NB. reversion to Strings prevents a get call, which is typically</span>
+</span><span id="__span-0-226"><span class="sd">    forbidden to local users - this prevents this method being used in the</span>
+</span><span id="__span-0-227"><span class="sd">    metamist audit processes</span>
+</span><span id="__span-0-228"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-229">    <span class="k">return</span> <span class="n">basename</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">test_path</span><span class="p">))</span> <span class="ow">in</span> <span class="n">get_contents_of_path</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">test_path</span><span class="p">)))</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.get_contents_of_path" class="doc doc-heading"><a href="#cpg_flow.utils.get_contents_of_path" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.get_contents_of_path</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-cached"><code>cached</code></small>
+  </span>
+
+</a><a href="#cpg_flow.utils.get_contents_of_path" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_contents_of_path</span><span class="p">(</span><span class="n">test_path</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Get the contents of a GCS path, returning non-complete paths, eg:</p>
+<div class="highlight"><pre><span></span><code>get_contents_of_path(&#39;gs://my-bucket/my-dir/&#39;)
+&#39;my-file.txt&#39;
+</code></pre></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-232"><span class="nd">@lru_cache</span>
+</span><span id="__span-0-233"><span class="k">def</span><span class="w"> </span><span class="nf">get_contents_of_path</span><span class="p">(</span><span class="n">test_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-0-234"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-235"><span class="sd">    Get the contents of a GCS path, returning non-complete paths, eg:</span>
+</span><span id="__span-0-236">
+</span><span id="__span-0-237"><span class="sd">        get_contents_of_path(&#39;gs://my-bucket/my-dir/&#39;)</span>
+</span><span id="__span-0-238"><span class="sd">        &#39;my-file.txt&#39;</span>
+</span><span id="__span-0-239">
+</span><span id="__span-0-240"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-241">    <span class="k">return</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">to_path</span><span class="p">(</span><span class="n">test_path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()}</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.can_reuse" class="doc doc-heading"><a href="#cpg_flow.utils.can_reuse" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.can_reuse</span>
+
+
+</a><a href="#cpg_flow.utils.can_reuse" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">can_reuse</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Checks if the object at <code>path</code> is good to reuse:
+* overwrite has the default value of False,
+* check_intermediates has the default value of True,
+* object exists.</p>
+<p>If <code>path</code> is a collection, it requires all paths to exist.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-244"><span class="k">def</span><span class="w"> </span><span class="nf">can_reuse</span><span class="p">(</span>
+</span><span id="__span-0-245">    <span class="n">path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-246">    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-247"><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="__span-0-248"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-249"><span class="sd">    Checks if the object at `path` is good to reuse:</span>
+</span><span id="__span-0-250"><span class="sd">    * overwrite has the default value of False,</span>
+</span><span id="__span-0-251"><span class="sd">    * check_intermediates has the default value of True,</span>
+</span><span id="__span-0-252"><span class="sd">    * object exists.</span>
+</span><span id="__span-0-253">
+</span><span id="__span-0-254"><span class="sd">    If `path` is a collection, it requires all paths to exist.</span>
+</span><span id="__span-0-255"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-256">    <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
+</span><span id="__span-0-257">        <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-0-258">
+</span><span id="__span-0-259">    <span class="k">if</span> <span class="ow">not</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;workflow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;check_intermediates&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+</span><span id="__span-0-260">        <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-0-261">
+</span><span id="__span-0-262">    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+</span><span id="__span-0-263">        <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-0-264">
+</span><span id="__span-0-265">    <span class="n">paths</span> <span class="o">=</span> <span class="n">path</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">path</span><span class="p">]</span>
+</span><span id="__span-0-266">    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">exists</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span> <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">):</span>
+</span><span id="__span-0-267">        <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-0-268">
+</span><span id="__span-0-269">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Reusing existing </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-270">    <span class="k">return</span> <span class="kc">True</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.timestamp" class="doc doc-heading"><a href="#cpg_flow.utils.timestamp" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.timestamp</span>
+
+
+</a><a href="#cpg_flow.utils.timestamp" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">timestamp</span><span class="p">(</span><span class="n">rand_suffix_len</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Generate a timestamp string. If <code>rand_suffix_len</code> is set, adds a short random
+string of this length for uniqueness.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-273"><span class="k">def</span><span class="w"> </span><span class="nf">timestamp</span><span class="p">(</span><span class="n">rand_suffix_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-274"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-275"><span class="sd">    Generate a timestamp string. If `rand_suffix_len` is set, adds a short random</span>
+</span><span id="__span-0-276"><span class="sd">    string of this length for uniqueness.</span>
+</span><span id="__span-0-277"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-278">    <span class="n">result</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y_%m</span><span class="si">%d</span><span class="s1">_%H%M&#39;</span><span class="p">)</span>
+</span><span id="__span-0-279">    <span class="k">if</span> <span class="n">rand_suffix_len</span><span class="p">:</span>
+</span><span id="__span-0-280">        <span class="n">rand_bit</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+</span><span id="__span-0-281">            <span class="n">choices</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">rand_suffix_len</span><span class="p">),</span>
+</span><span id="__span-0-282">        <span class="p">)</span>
+</span><span id="__span-0-283">        <span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;_</span><span class="si">{</span><span class="n">rand_bit</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="__span-0-284">    <span class="k">return</span> <span class="n">result</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.slugify" class="doc doc-heading"><a href="#cpg_flow.utils.slugify" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.slugify</span>
+
+
+</a><a href="#cpg_flow.utils.slugify" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">slugify</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Slugify a string.</p>
+<p>Example:</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>slugify(u'Héllø W.1')
+'hello-w-1'</p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-287"><span class="k">def</span><span class="w"> </span><span class="nf">slugify</span><span class="p">(</span><span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-0-288"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-289"><span class="sd">    Slugify a string.</span>
+</span><span id="__span-0-290">
+</span><span id="__span-0-291"><span class="sd">    Example:</span>
+</span><span id="__span-0-292"><span class="sd">    &gt;&gt;&gt; slugify(u&#39;Héllø W.1&#39;)</span>
+</span><span id="__span-0-293"><span class="sd">    &#39;hello-w-1&#39;</span>
+</span><span id="__span-0-294"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-295">
+</span><span id="__span-0-296">    <span class="n">line</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</span><span id="__span-0-297">    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</span><span id="__span-0-298">    <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+</span><span id="__span-0-299">        <span class="sa">r</span><span class="s1">&#39;[\s.]+&#39;</span><span class="p">,</span>
+</span><span id="__span-0-300">        <span class="s1">&#39;-&#39;</span><span class="p">,</span>
+</span><span id="__span-0-301">        <span class="n">line</span><span class="p">,</span>
+</span><span id="__span-0-302">    <span class="p">)</span>
+</span><span id="__span-0-303">    <span class="k">return</span> <span class="n">line</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.rich_sequencing_group_id_seds" class="doc doc-heading"><a href="#cpg_flow.utils.rich_sequencing_group_id_seds" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.rich_sequencing_group_id_seds</span>
+
+
+</a><a href="#cpg_flow.utils.rich_sequencing_group_id_seds" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">rich_sequencing_group_id_seds</span><span class="p">(</span><span class="n">rich_id_map</span><span class="p">,</span> <span class="n">file_names</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Helper function to add seds into a command that would extend sequencing group IDs
+in each file in <code>file_names</code> with an external ID, only if external ID is
+different from the original.</p>
+<p>@param rich_id_map: map used to replace sequencing groups, e.g. {'CPGAA': 'CPGAA|EXTID'}
+@param file_names: file names and Hail Batch Resource files where to replace IDs
+@return: bash command that does replacement</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-306"><span class="k">def</span><span class="w"> </span><span class="nf">rich_sequencing_group_id_seds</span><span class="p">(</span>
+</span><span id="__span-0-307">    <span class="n">rich_id_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+</span><span id="__span-0-308">    <span class="n">file_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">ResourceFile</span><span class="p">],</span>
+</span><span id="__span-0-309"><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-310"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-311"><span class="sd">    Helper function to add seds into a command that would extend sequencing group IDs</span>
+</span><span id="__span-0-312"><span class="sd">    in each file in `file_names` with an external ID, only if external ID is</span>
+</span><span id="__span-0-313"><span class="sd">    different from the original.</span>
+</span><span id="__span-0-314">
+</span><span id="__span-0-315"><span class="sd">    @param rich_id_map: map used to replace sequencing groups, e.g. {&#39;CPGAA&#39;: &#39;CPGAA|EXTID&#39;}</span>
+</span><span id="__span-0-316"><span class="sd">    @param file_names: file names and Hail Batch Resource files where to replace IDs</span>
+</span><span id="__span-0-317"><span class="sd">    @return: bash command that does replacement</span>
+</span><span id="__span-0-318"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-319">    <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span id="__span-0-320">    <span class="k">for</span> <span class="n">sgid</span><span class="p">,</span> <span class="n">rich_sgid</span> <span class="ow">in</span> <span class="n">rich_id_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-0-321">        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">:</span>
+</span><span id="__span-0-322">            <span class="n">cmd</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;sed -iBAK &#39;s/</span><span class="si">{</span><span class="n">sgid</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">rich_sgid</span><span class="si">}</span><span class="s2">/g&#39; </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-0-323">            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+</span><span id="__span-0-324">    <span class="k">return</span> <span class="n">cmd</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.tshirt_mt_sizing" class="doc doc-heading"><a href="#cpg_flow.utils.tshirt_mt_sizing" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.tshirt_mt_sizing</span>
+
+
+</a><a href="#cpg_flow.utils.tshirt_mt_sizing" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">tshirt_mt_sizing</span><span class="p">(</span><span class="n">sequencing_type</span><span class="p">,</span> <span class="n">cohort_size</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Some way of taking the details we have (#SGs, sequencing type)
+and producing an estimate (with padding) of the MT size on disc
+used to determine VM provision during ES export and Talos</p>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">PARAMETER</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>sequencing_type</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                
+              </div>
+              <p>
+              </p>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>cohort_size</code>
+            </td>
+            <td class="doc-param-details">
+              <div class="doc-md-description">
+                
+              </div>
+              <p>
+              </p>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<table>
+      <thead>
+        <tr>
+          <th><span class="doc-section-title">RETURNS</span></th>
+          <th><span>DESCRIPTION</span></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <span class="doc-returns-annotation">
+                    <code><span title="int">int</span></code>
+                </span>
+            </td>
+            <td class="doc-returns-details">
+              <div class="doc-md-description">
+                <p>str, the value for job.storage(X)</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-327"><span class="k">def</span><span class="w"> </span><span class="nf">tshirt_mt_sizing</span><span class="p">(</span><span class="n">sequencing_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cohort_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="__span-0-328"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-329"><span class="sd">    Some way of taking the details we have (#SGs, sequencing type)</span>
+</span><span id="__span-0-330"><span class="sd">    and producing an estimate (with padding) of the MT size on disc</span>
+</span><span id="__span-0-331"><span class="sd">    used to determine VM provision during ES export and Talos</span>
+</span><span id="__span-0-332">
+</span><span id="__span-0-333"><span class="sd">    Args:</span>
+</span><span id="__span-0-334"><span class="sd">        sequencing_type ():</span>
+</span><span id="__span-0-335"><span class="sd">        cohort_size ():</span>
+</span><span id="__span-0-336">
+</span><span id="__span-0-337"><span class="sd">    Returns:</span>
+</span><span id="__span-0-338"><span class="sd">        str, the value for job.storage(X)</span>
+</span><span id="__span-0-339"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-340">
+</span><span id="__span-0-341">    <span class="c1"># allow for an override from config</span>
+</span><span id="__span-0-342">    <span class="k">if</span> <span class="n">preset</span> <span class="o">:=</span> <span class="n">config_retrieve</span><span class="p">([</span><span class="s1">&#39;workflow&#39;</span><span class="p">,</span> <span class="s1">&#39;es_storage&#39;</span><span class="p">],</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="__span-0-343">        <span class="k">return</span> <span class="n">preset</span>
+</span><span id="__span-0-344">
+</span><span id="__span-0-345">    <span class="k">if</span> <span class="p">(</span><span class="n">sequencing_type</span> <span class="o">==</span> <span class="s1">&#39;genome&#39;</span> <span class="ow">and</span> <span class="n">cohort_size</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">sequencing_type</span> <span class="o">==</span> <span class="s1">&#39;exome&#39;</span> <span class="ow">and</span> <span class="n">cohort_size</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">):</span>
+</span><span id="__span-0-346">        <span class="k">return</span> <span class="mi">50</span>
+</span><span id="__span-0-347">    <span class="k">return</span> <span class="mi">500</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.get_intervals_from_bed" class="doc doc-heading"><a href="#cpg_flow.utils.get_intervals_from_bed" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.get_intervals_from_bed</span>
+
+
+</a><a href="#cpg_flow.utils.get_intervals_from_bed" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">get_intervals_from_bed</span><span class="p">(</span><span class="n">intervals_path</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Read genomic intervals from a bed file.
+Increment the start position of each interval by 1 to match the 1-based
+coordinate system used by GATK.</p>
+<p>Returns a list of interval strings in the format 'chrN:start-end'.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-350"><span class="k">def</span><span class="w"> </span><span class="nf">get_intervals_from_bed</span><span class="p">(</span><span class="n">intervals_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-0-351"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-352"><span class="sd">    Read genomic intervals from a bed file.</span>
+</span><span id="__span-0-353"><span class="sd">    Increment the start position of each interval by 1 to match the 1-based</span>
+</span><span id="__span-0-354"><span class="sd">    coordinate system used by GATK.</span>
+</span><span id="__span-0-355">
+</span><span id="__span-0-356"><span class="sd">    Returns a list of interval strings in the format &#39;chrN:start-end&#39;.</span>
+</span><span id="__span-0-357"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-358">    <span class="k">with</span> <span class="n">intervals_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-0-359">        <span class="n">intervals</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-360">        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-0-361">            <span class="n">chrom</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-362">            <span class="n">intervals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span id="__span-0-363">    <span class="k">return</span> <span class="n">intervals</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.make_job_name" class="doc doc-heading"><a href="#cpg_flow.utils.make_job_name" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.make_job_name</span>
+
+
+</a><a href="#cpg_flow.utils.make_job_name" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">make_job_name</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">name</span><span class="p">,</span>
+</span><span id="__span-0-3">    <span class="n">sequencing_group</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-4">    <span class="n">participant_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-5">    <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-6">    <span class="n">part</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-7"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Extend the descriptive job name to reflect job attributes.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-366"><span class="k">def</span><span class="w"> </span><span class="nf">make_job_name</span><span class="p">(</span>
+</span><span id="__span-0-367">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="__span-0-368">    <span class="n">sequencing_group</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-369">    <span class="n">participant_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-370">    <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-371">    <span class="n">part</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-372"><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-373"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-374"><span class="sd">    Extend the descriptive job name to reflect job attributes.</span>
+</span><span id="__span-0-375"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-376">    <span class="k">if</span> <span class="n">sequencing_group</span> <span class="ow">and</span> <span class="n">participant_id</span><span class="p">:</span>
+</span><span id="__span-0-377">        <span class="n">sequencing_group</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sequencing_group</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">participant_id</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="__span-0-378">    <span class="k">if</span> <span class="n">sequencing_group</span> <span class="ow">and</span> <span class="n">dataset</span><span class="p">:</span>
+</span><span id="__span-0-379">        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">sequencing_group</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="__span-0-380">    <span class="k">elif</span> <span class="n">dataset</span><span class="p">:</span>
+</span><span id="__span-0-381">        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="__span-0-382">    <span class="k">if</span> <span class="n">part</span><span class="p">:</span>
+</span><span id="__span-0-383">        <span class="n">name</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;, </span><span class="si">{</span><span class="n">part</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="__span-0-384">    <span class="k">return</span> <span class="n">name</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.hash_from_list_of_strings" class="doc doc-heading"><a href="#cpg_flow.utils.hash_from_list_of_strings" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.hash_from_list_of_strings</span>
+
+
+</a><a href="#cpg_flow.utils.hash_from_list_of_strings" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">hash_from_list_of_strings</span><span class="p">(</span>
+</span><span id="__span-0-2">    <span class="n">string_list</span><span class="p">,</span> <span class="n">hash_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span>
+</span><span id="__span-0-3"><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+        <p>Create a hash from a list of strings
+Args:
+    string_list ():
+    hash_length (int): how many characters to use from the hash
+    suffix (str): optional, clarify the type of value which was hashed
+Returns:</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-387"><span class="k">def</span><span class="w"> </span><span class="nf">hash_from_list_of_strings</span><span class="p">(</span><span class="n">string_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">hash_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-388"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-389"><span class="sd">    Create a hash from a list of strings</span>
+</span><span id="__span-0-390"><span class="sd">    Args:</span>
+</span><span id="__span-0-391"><span class="sd">        string_list ():</span>
+</span><span id="__span-0-392"><span class="sd">        hash_length (int): how many characters to use from the hash</span>
+</span><span id="__span-0-393"><span class="sd">        suffix (str): optional, clarify the type of value which was hashed</span>
+</span><span id="__span-0-394"><span class="sd">    Returns:</span>
+</span><span id="__span-0-395"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-396">    <span class="n">hash_portion</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">string_list</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="n">hash_length</span><span class="p">]</span>
+</span><span id="__span-0-397">    <span class="n">full_hash</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">hash_portion</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">string_list</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="__span-0-398">
+</span><span id="__span-0-399">    <span class="k">if</span> <span class="n">suffix</span><span class="p">:</span>
+</span><span id="__span-0-400">        <span class="n">full_hash</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;_</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="__span-0-401">    <span class="k">return</span> <span class="n">full_hash</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cpg_flow.utils.write_to_gcs_bucket" class="doc doc-heading"><a href="#cpg_flow.utils.write_to_gcs_bucket" class="toclink">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cpg_flow.utils.write_to_gcs_bucket</span>
+
+
+</a><a href="#cpg_flow.utils.write_to_gcs_bucket" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><span class="nf">write_to_gcs_bucket</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/cpg_flow/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-404"><span class="k">def</span><span class="w"> </span><span class="nf">write_to_gcs_bucket</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+</span><span id="__span-0-405">    <span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+</span><span id="__span-0-406">
+</span><span id="__span-0-407">    <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;gs:/&#39;</span><span class="p">):</span>
+</span><span id="__span-0-408">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Path </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> must be a GCS path&#39;</span><span class="p">)</span>
+</span><span id="__span-0-409">
+</span><span id="__span-0-410">    <span class="n">new_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s1">&#39;gs:/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span id="__span-0-411">    <span class="n">bucket_name</span><span class="p">,</span> <span class="n">blob_name</span> <span class="o">=</span> <span class="n">new_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-412">
+</span><span id="__span-0-413">    <span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+</span><span id="__span-0-414">    <span class="k">if</span> <span class="ow">not</span> <span class="n">bucket</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+</span><span id="__span-0-415">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1"> does not exist&#39;</span><span class="p">)</span>
+</span><span id="__span-0-416">
+</span><span id="__span-0-417">    <span class="n">blob</span> <span class="o">=</span> <span class="n">bucket</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span><span class="n">blob_name</span><span class="p">)</span>
+</span><span id="__span-0-418">    <span class="n">blob</span><span class="o">.</span><span class="n">upload_from_string</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</span><span id="__span-0-419">
+</span><span id="__span-0-420">    <span class="k">return</span> <span class="n">bucket_name</span><span class="p">,</span> <span class="n">blob_name</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../status/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Status">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Status
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../workflows/" class="md-footer__link md-footer__link--next" aria-label="Next: Workflow class">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Workflow class
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
