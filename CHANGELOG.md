@@ -1,6 +1,59 @@
 # CHANGELOG
 
 
+## v1.3.1 (2026-01-29)
+
+### Bug Fixes
+
+- **pyproject.toml**: Python version
+  ([`a4becea`](https://github.com/populationgenomics/cpg-flow/commit/a4becea935d45ceed24c6fcbeeb8519822b17ceb))
+
+- **stage.py**: Add implementation
+  ([`324d6a6`](https://github.com/populationgenomics/cpg-flow/commit/324d6a653eb0fa162809a8b02fcfb0993e2f5487))
+
+- **test_utils.py**: Add a depends-on-last
+  ([`2694aff`](https://github.com/populationgenomics/cpg-flow/commit/2694aff52b080855dc55d0000c25297cc133e86f))
+
+- **test_utils.py**: Add error handling
+  ([`ed3ab86`](https://github.com/populationgenomics/cpg-flow/commit/ed3ab866b189e0e9510dfcc7b91e2d7f5e677051))
+
+- **test_utils.py**: Added dependency test cases
+  ([`a670906`](https://github.com/populationgenomics/cpg-flow/commit/a670906643946b2e956b5e01cad6595791db0a7d))
+
+- **test_utils.py**: Changes following review
+  ([`fd50d09`](https://github.com/populationgenomics/cpg-flow/commit/fd50d09840f25ed85debf7d64cad5ef1e36c3e9b))
+
+- **test_utils.py**: Extra test case
+  ([`ebc3fc9`](https://github.com/populationgenomics/cpg-flow/commit/ebc3fc9bbdd51b27358f688c26f299ad5ba68f7a))
+
+- **test_utils.py**: Less deepcopy
+  ([`0c9e474`](https://github.com/populationgenomics/cpg-flow/commit/0c9e4741421983b3c8f048f81fa2871d56245a4b))
+
+- **test_utils.py**: Linting following method deletion
+  ([`fd167dd`](https://github.com/populationgenomics/cpg-flow/commit/fd167dd1a18cee860dd28364dc3a482fb2969617))
+
+- **test_utils.py**: Pytest.parametrize
+  ([`c98ac05`](https://github.com/populationgenomics/cpg-flow/commit/c98ac05937a8a709d0f83d7afeb9ae83ff208a25))
+
+- **test_utils.py**: Remove commented out tests
+  ([`628acae`](https://github.com/populationgenomics/cpg-flow/commit/628acaee3fbd51e013f6af3441d55c0f76221044))
+
+- **test_utils.py**: Remove Iterable import
+  ([`cd87c5f`](https://github.com/populationgenomics/cpg-flow/commit/cd87c5f4971ab1b82c55eb555de5bd9060c070f8))
+
+- **test_utils.py**: Split logic to please sonar
+  ([`2fb89b7`](https://github.com/populationgenomics/cpg-flow/commit/2fb89b77b7ba215b568b427d24fc8b70907055c3))
+
+- **utils.py**: Add dependency handling wrapper
+  ([`ba523d4`](https://github.com/populationgenomics/cpg-flow/commit/ba523d4b95a98afb50ae1e53f7bd5e2acde56057))
+
+- **utils.py**: Remove duplicated operation
+  ([`51ff494`](https://github.com/populationgenomics/cpg-flow/commit/51ff49493149b8b13592c3fcf58190494fef0c38))
+
+- **utils.py**: Strange logging error
+  ([`e8b43b5`](https://github.com/populationgenomics/cpg-flow/commit/e8b43b505151468464c67f43387b32a1799c4140))
+
+
 ## v1.3.0 (2026-01-20)
 
 ### Features
