@@ -21,6 +21,7 @@ from loguru import logger
 
 import hail as hl
 from hailtop.batch import ResourceFile
+from hailtop.batch.job import Job
 
 from cpg_utils import Path, to_path
 from cpg_utils.config import config_retrieve, get_config
@@ -417,3 +418,73 @@ def write_to_gcs_bucket(contents, path: Path):
     blob.upload_from_string(contents)
 
     return bucket_name, blob_name
+
+
+def dependency_handler(
+    target: Job | list[Job] | None,
+    tail: Job | list[Job] | None,
+    append_to_tail: bool = True,
+    only_last: bool = False,
+) -> None:
+    """
+    A utility method for handling stage inter-dependencies, when it's possible that either the target job(s)
+    or dependency job(s) are None/empty list.
+
+    Use case is CPG-Flow or similar tasks, where a job can either run (new output needs to be generated), or doesn't
+    need to run (results/intermediate files exist from a prior run). This optional process can be in the centre of a
+    job chain, so the dependency setting, and extension of dependencies is crucial. A common usage pattern is:
+    ```
+    prior_jobs: list[Job] = []
+
+    j = class.run_process(...)
+    if j and prior_jobs:
+        j.depends_on(*prior_jobs)
+    if j:
+        prior_jobs.append(j)
+    ```
+
+    This scenario would be minimised to:
+
+    utils.dependency_handler(target=j, tail=prior_jobs)
+
+    Args:
+        target (Job | list[Job] | None): job(s) which require a depends_on relationship with job(s) in tail
+        tail (Job | list[Job] | None): job(s) for this target job(s) to depend on; may be None
+        append_to_tail (bool): if this is True, and tail is a list, the current job(s) will be added to the tail
+        only_last (bool): if this is True, we only set dependencies against the last element in tail, else all of tail
+    """
+
+    # if the target is null/empty, nothing to do
+    if not target:
+        logger.debug('No Target(s), cannot set depends_on relationships')
+        return
+
+    # if tail is None we can't set dependencies or append, nothing to do
+    if tail is None:
+        logger.debug('No Tail, cannot set depends_on relationships or append')
+        return
+
+    # downstream operations are easier if we expect to operate on iterables - create new variable name
+    target_list = (
+        target
+        if isinstance(target, list)
+        else [
+            target,
+        ]
+    )
+    tail_list = tail if isinstance(tail, list) else [tail]
+
+    # use only_last switch to choose dependencies to set
+    deps_to_apply = [tail_list[-1]] if only_last else tail_list
+
+    try:
+        # don't try and call depends_on(*x) with an empty iterable
+        if tail_list:
+            for job in target_list:
+                job.depends_on(*deps_to_apply)
+
+        if append_to_tail and isinstance(tail, list):
+            tail.extend(target_list)
+    except AttributeError as ae:
+        logger.error(f'Failure to set dependencies between target {target} and tail {tail}')
+        raise ae
