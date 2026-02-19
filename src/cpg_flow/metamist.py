@@ -508,6 +508,12 @@ class Assay:
         return mm_seq
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=3, min=8, max=30),
+    retry=retry_if_exception_type(TransportServerError),
+    reraise=True,
+)
 def get_cohort_sgs(cohort_id: str) -> dict:
     """
     Retrieve sequencing group entries for a single cohort.
