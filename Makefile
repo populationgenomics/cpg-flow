@@ -42,12 +42,21 @@ upload: clean build
 
 # Version Management
 bump-major:
-	uv run bump-my-version bump major
+	uv version --bump major
+	@VERSION=$$(uv version --short); \
+	git add pyproject.toml uv.lock; \
+	git commit -m "bump: $$VERSION"
 
 bump-minor:
-	uv run bump-my-version bump minor
+	uv version --bump minor
+	@VERSION=$$(uv version --short); \
+	git add pyproject.toml uv.lock; \
+	git commit -m "bump: $$VERSION"
 
 bump-patch:
-	uv run bump-my-version bump patch
+	uv version --bump patch
+	@VERSION=$$(uv version --short); \
+	git add pyproject.toml uv.lock; \
+	git commit -m "bump: $$VERSION"
 
 .PHONY: venv init test docs clean build install-build install-local upload bump-major bump-minor bump-patch

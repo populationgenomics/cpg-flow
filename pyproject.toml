@@ -8,7 +8,7 @@ description = "CPG Flow API for Hail Batch"
 requires-python = ">=3.10,<3.12"
 readme = "README.md"
 license-files = ["LICENSE"]
-dynamic = ["version"]
+version = "1.3.1"
 dependencies = [
     "cpg-utils>=5.4.2",
     # Pin Hail at CPG"s installed version
@@ -52,7 +52,6 @@ keywords = ["hail", "flow", "api", "bioinformatics", "genomics"]
 dev = [
     "black>=24.10.0",
     "build>=1.2.2.post1",
-    "bump-my-version>=0.30.0",
     "coverage>=7.6.4",
     "hail>=0.2.133",
     "pip-audit>=2.7.3",
@@ -100,11 +99,6 @@ omit = ["test/*", "setup.py"]
 venvPath = "."
 venv = ".venv"
 typeCheckingMode = "basic"
-
-
-
-[tool.setuptools.dynamic.version]
-attr = "cpg_flow.__version__"
 
 [tool.setuptools.package-data]
 cpg_flow = ["defaults.toml"]
