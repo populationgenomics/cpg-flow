@@ -19,7 +19,7 @@ from cpg_flow.stage import (
     stage,
 )
 from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
-from cpg_flow.workflow import _render_graph, get_workflow, path_walk, run_workflow
+from cpg_flow.workflow import _render_graph, path_walk, run_workflow
 from cpg_utils.config import dataset_path
 from cpg_utils.hail_batch import get_batch
 
@@ -32,7 +32,6 @@ access_level = 'test'
 dataset = 'fewgenomes'
 driver_image = 'test'
 sequencing_type = 'genome'
-name = 'config-name'
 
 check_inputs = false
 check_intermediates = false
@@ -90,14 +89,18 @@ def test_workflow(tmp_path: pathlib.Path):
     assert multi_cohort.alignment_inputs_hash == mc_hash
     assert mc_hash == 'e3b0c44298fc1c149afbf4c8996fb92427ae41_2'
 
+    assert multi_cohort.sg_hash is None
+    mc_sg_hash = multi_cohort.get_sg_hash()
+    assert multi_cohort.sg_hash == mc_sg_hash
+    assert mc_sg_hash == '5ecfbcb86b94df30ddb6b9d4cfe3e3f49c31a3_2'
+
     @stage
     class MySequencingGroupStage(SequencingGroupStage):
         """
         Just a sequencing-group-level stage.
         """
 
-        @staticmethod
-        def expected_outputs(sequencing_group: SequencingGroup) -> pathlib.Path:
+        def expected_outputs(self, sequencing_group: SequencingGroup) -> pathlib.Path:
             return pathlib.Path(dataset_path(f'{sequencing_group.id}.tsv'))
 
         def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -113,8 +116,7 @@ def test_workflow(tmp_path: pathlib.Path):
         Just a cohort-level stage.
         """
 
-        @staticmethod
-        def expected_outputs(_: Cohort) -> pathlib.Path:
+        def expected_outputs(self, _: Cohort) -> pathlib.Path:
             return output_path
 
         def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
@@ -129,13 +131,82 @@ def test_workflow(tmp_path: pathlib.Path):
             print(f'Writing to {self.expected_outputs(cohort)}')
             return self.make_outputs(cohort, self.expected_outputs(cohort))
 
-    run_workflow(name='test-workflow', stages=[MyCohortStage])
-    assert get_workflow().name == 'test-workflow'
+    run_workflow(name='test_workflow', stages=[MyCohortStage])
 
     print(f'Checking result in {output_path}:')
     with output_path.open() as f:
         result = f.read()
         assert result.split() == ['CPGAA_done', 'CPGBB_done'], result
+
+
+@mock.patch('cpg_flow.inputs.create_multicohort', mock_create_create_cohort)
+def test_get_from_previous_output(tmp_path: pathlib.Path):
+    """Testing the inputs.get(...) methods for a StageOutput."""
+    set_config(TOML.format(directory=tmp_path), tmp_path / 'config.toml')
+
+    @stage
+    class StageOneDict(SequencingGroupStage):
+        """SG-level stage, returning a dictionary of str: Path"""
+
+        def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, pathlib.Path]:
+            return {
+                'one': pathlib.Path(dataset_path(f'{sequencing_group.id}_dict.tsv')),
+            }
+
+        def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
+            outputs = self.expected_outputs(sequencing_group)
+            j = get_batch().new_job('SequencingGroupDict job', self.get_job_attrs(sequencing_group))
+            j.command(f'echo {sequencing_group.id}_done >> {j.output}')
+            get_batch().write_output(j.output, outputs['one'])
+            return self.make_outputs(sequencing_group, outputs)
+
+    @stage
+    class StageOnePath(SequencingGroupStage):
+        """SG-level stage, using the"""
+
+        def expected_outputs(self, sequencing_group: SequencingGroup) -> pathlib.Path:
+            return pathlib.Path(dataset_path(f'{sequencing_group.id}_path.tsv'))
+
+        def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
+            outputs = self.expected_outputs(sequencing_group)
+            j = get_batch().new_job('SequencingGroupPath job', self.get_job_attrs(sequencing_group))
+            j.command(f'echo {sequencing_group.id}_done >> {j.output}')
+            get_batch().write_output(j.output, outputs)
+            return self.make_outputs(sequencing_group, outputs)
+
+    @stage(required_stages=[StageOneDict, StageOnePath])
+    class StageTwo(SequencingGroupStage):
+        """Test recall on the Dict return type"""
+
+        def expected_outputs(self, _: SequencingGroup) -> pathlib.Path:
+            return pathlib.Path(dataset_path('cohort_dict.tsv'))
+
+        def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
+            output = self.expected_outputs(sequencing_group)
+
+            # test recall from the Dict return type
+            one_path = inputs.as_path(sequencing_group, StageOneDict, key='one')
+            assert one_path == pathlib.Path(dataset_path(f'{sequencing_group.id}_dict.tsv'))
+
+            with pytest.raises(ValueError, match='StageOneDict: output is a dict, but no key has been specified'):
+                _no_key_dict = inputs.as_path(sequencing_group, StageOneDict)
+
+            with pytest.raises(KeyError):
+                _wrong_key_dict = inputs.as_path(sequencing_group, StageOneDict, 'wrong_key')
+
+            # test recall from the Path return type
+            two_path = inputs.as_path(sequencing_group, StageOnePath)
+            assert two_path == pathlib.Path(dataset_path(f'{sequencing_group.id}_path.tsv'))
+
+            with pytest.raises(ValueError, match='StageOnePath: output is not a dict, but a key was specified'):
+                _two_path = inputs.as_path(sequencing_group, StageOnePath, key='one')
+
+            j = get_batch().new_job('SG Test job', self.get_job_attrs(sequencing_group))
+            j.command(f'touch {j.output}')
+            get_batch().write_output(j.output, output)
+            return self.make_outputs(sequencing_group, output)
+
+    run_workflow(name='test_workflow', stages=[StageTwo])
 
 
 def test_path_walk():
