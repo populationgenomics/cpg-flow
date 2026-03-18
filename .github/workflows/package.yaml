@@ -47,9 +47,13 @@ jobs:
 
       - name: Publish | Update docs version
         env:
-          VERSION: ${{ github.event.release.tag_name || github.ref_name }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
           GIT_COMMITTER_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
         run: |
-          uv run mike deploy -F docs/mkdocs.yml --push --alias-type=redirect --update-aliases "${VERSION#v}" latest
+          VERSION="${TAG_NAME#v}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(uv version --short)
+          fi
+          uv run mike deploy -F docs/mkdocs.yml --push --alias-type=redirect --update-aliases "$VERSION" latest
           uv run mike set-default -F docs/mkdocs.yml --push latest
