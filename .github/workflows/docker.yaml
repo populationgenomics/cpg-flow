@@ -41,16 +41,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Extract version from pyproject.toml
+      - name: Extract version from release tag
         id: version
         if: github.event_name == 'release'
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
-          VERSION="${{ github.event.release.tag_name }}"
-          echo "version=${VERSION#v}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG_NAME#v}" >> "$GITHUB_OUTPUT"
 
       - name: Log the PR commit sha
         if: github.event_name == 'pull_request'
-        run: "echo 'PR commit sha: ${{ github.event.pull_request.head.sha }}'"
+        env:
+          PR_SHA: ${{ github.event.pull_request.head.sha }}
+        run: 'echo "PR commit sha: $PR_SHA"'
 
       - id: 'google-cloud-auth'
         name: 'Authenticate to Google Cloud'
@@ -69,24 +72,30 @@ jobs:
           gcloud auth configure-docker australia-southeast1-docker.pkg.dev
 
       - name: build
+        env:
+          GIT_SHA: ${{ github.sha }}
         run: |
-          docker build . -f Dockerfile --tag $IMAGE_NAME:${{ github.sha }}
+          docker build . -f Dockerfile --tag "$IMAGE_NAME:$GIT_SHA"
 
       - name: push commit sha tag
         if: github.event_name == 'pull_request'
+        env:
+          PR_SHA: ${{ github.event.pull_request.head.sha }}
+          GIT_SHA: ${{ github.sha }}
         run: |
-          docker tag $IMAGE_NAME:${{ github.sha }} $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
-          docker push $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }} | cut -d'@' -f2)
-          echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
-          echo "DOCKER_DIGEST=$DIGEST" >> $GITHUB_ENV
+          docker tag "$IMAGE_NAME:$GIT_SHA" "$DOCKER_DEV/$IMAGE_NAME:$PR_SHA"
+          docker push "$DOCKER_DEV/$IMAGE_NAME:$PR_SHA"
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$DOCKER_DEV/$IMAGE_NAME:$PR_SHA" | cut -d'@' -f2)
+          echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$PR_SHA" >> "$GITHUB_ENV"
+          echo "DOCKER_DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
       - name: push production image
         if: github.event_name == 'release'
         env:
           VERSION: ${{ steps.version.outputs.version }}
+          GIT_SHA: ${{ github.sha }}
         run: |
-          docker tag "$IMAGE_NAME:${{ github.sha }}" "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
+          docker tag "$IMAGE_NAME:$GIT_SHA" "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
           docker push "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
           DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$DOCKER_MAIN/$IMAGE_NAME:$VERSION" | cut -d'@' -f2)
           echo "DOCKER_IMAGE=$DOCKER_MAIN/$IMAGE_NAME:$VERSION" >> "$GITHUB_ENV"
@@ -139,6 +148,7 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           # Only proceed if we have a Docker image
           if [ -z "${DOCKER_IMAGE:-}" ]; then
@@ -180,4 +190,4 @@ jobs:
           EOF
 
           # Create or update PR comment
-          gh pr comment --edit-last --create-if-none --body-file docker-comment.md ${{ github.event.pull_request.number }}
+          gh pr comment --edit-last --create-if-none --body-file docker-comment.md "$PR_NUMBER"
