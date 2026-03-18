@@ -13,8 +13,13 @@ Modules:
 This package is designed to be used with pdoc for generating documentation.
 """
 
+from importlib.metadata import PackageNotFoundError, version
+
 from . import stage, targets, workflow
 
-__version__ = '1.3.1'
+try:
+    __version__ = version('cpg-flow')
+except PackageNotFoundError:
+    __version__ = '0.0.0'
 
 __all__ = ['stage', 'targets', 'workflow']
