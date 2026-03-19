@@ -15,13 +15,13 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
           submodules: 'true'
           persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca #v6.0.1
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 #v7.6.0
 
       - name: Install project dev dependencies
         run: uv sync --only-dev
@@ -36,20 +36,20 @@ jobs:
           echo "rc=$rc" >> $GITHUB_OUTPUT
 
       - name: 'Save coverage report as an Artifact'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.3.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f #v4.3.0
         with:
           name: coverage-report
           path: ./coverage.xml
 
       - name: 'Save execution report as an Artifact'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.3.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f #v4.3.0
         with:
           name: execution-report
           path: ./test-execution.xml
 
       - name: Fail if unit tests are not passing
         if: ${{ steps.runtests.outputs.rc != 0}}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea #v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd #v8.0.0
         env:
           rc: ${{ steps.runtests.outputs.rc }}
         with:
@@ -63,13 +63,13 @@ jobs:
     needs: test
     environment: production
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca #v6.0.1
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 #v7.6.0
         with:
           enable-cache: false
 
@@ -78,7 +78,7 @@ jobs:
         run: echo "version=$(uv version --short)" >> "$GITHUB_OUTPUT"
 
       - name: 'Download coverage and execution report'
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 #4.3.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c #8.0.1
         with:
           pattern: '*-report'
 
@@ -87,7 +87,7 @@ jobs:
           mv *-report/* .
 
       - name: SonarQube scan
-        uses: sonarsource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf #v5.2.0
+        uses: sonarsource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9 #v7.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
@@ -99,7 +99,7 @@ jobs:
 
       - name: SonarQube Quality Gate
         id: quality-gate
-        uses: sonarsource/sonarqube-quality-gate-action@d304d050d930b02a896b0f85935344f023928496  #v1.1.0
+        uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b  #v1.2.0
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_GLOBAL_TOKEN }}
