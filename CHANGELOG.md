@@ -1,6 +1,260 @@
 # CHANGELOG
 
 
+## v1.3.1 (2026-01-29)
+
+### Bug Fixes
+
+- **pyproject.toml**: Python version
+  ([`a4becea`](https://github.com/populationgenomics/cpg-flow/commit/a4becea935d45ceed24c6fcbeeb8519822b17ceb))
+
+- **stage.py**: Add implementation
+  ([`324d6a6`](https://github.com/populationgenomics/cpg-flow/commit/324d6a653eb0fa162809a8b02fcfb0993e2f5487))
+
+- **test_utils.py**: Add a depends-on-last
+  ([`2694aff`](https://github.com/populationgenomics/cpg-flow/commit/2694aff52b080855dc55d0000c25297cc133e86f))
+
+- **test_utils.py**: Add error handling
+  ([`ed3ab86`](https://github.com/populationgenomics/cpg-flow/commit/ed3ab866b189e0e9510dfcc7b91e2d7f5e677051))
+
+- **test_utils.py**: Added dependency test cases
+  ([`a670906`](https://github.com/populationgenomics/cpg-flow/commit/a670906643946b2e956b5e01cad6595791db0a7d))
+
+- **test_utils.py**: Changes following review
+  ([`fd50d09`](https://github.com/populationgenomics/cpg-flow/commit/fd50d09840f25ed85debf7d64cad5ef1e36c3e9b))
+
+- **test_utils.py**: Extra test case
+  ([`ebc3fc9`](https://github.com/populationgenomics/cpg-flow/commit/ebc3fc9bbdd51b27358f688c26f299ad5ba68f7a))
+
+- **test_utils.py**: Less deepcopy
+  ([`0c9e474`](https://github.com/populationgenomics/cpg-flow/commit/0c9e4741421983b3c8f048f81fa2871d56245a4b))
+
+- **test_utils.py**: Linting following method deletion
+  ([`fd167dd`](https://github.com/populationgenomics/cpg-flow/commit/fd167dd1a18cee860dd28364dc3a482fb2969617))
+
+- **test_utils.py**: Pytest.parametrize
+  ([`c98ac05`](https://github.com/populationgenomics/cpg-flow/commit/c98ac05937a8a709d0f83d7afeb9ae83ff208a25))
+
+- **test_utils.py**: Remove commented out tests
+  ([`628acae`](https://github.com/populationgenomics/cpg-flow/commit/628acaee3fbd51e013f6af3441d55c0f76221044))
+
+- **test_utils.py**: Remove Iterable import
+  ([`cd87c5f`](https://github.com/populationgenomics/cpg-flow/commit/cd87c5f4971ab1b82c55eb555de5bd9060c070f8))
+
+- **test_utils.py**: Split logic to please sonar
+  ([`2fb89b7`](https://github.com/populationgenomics/cpg-flow/commit/2fb89b77b7ba215b568b427d24fc8b70907055c3))
+
+- **utils.py**: Add dependency handling wrapper
+  ([`ba523d4`](https://github.com/populationgenomics/cpg-flow/commit/ba523d4b95a98afb50ae1e53f7bd5e2acde56057))
+
+- **utils.py**: Remove duplicated operation
+  ([`51ff494`](https://github.com/populationgenomics/cpg-flow/commit/51ff49493149b8b13592c3fcf58190494fef0c38))
+
+- **utils.py**: Strange logging error
+  ([`e8b43b5`](https://github.com/populationgenomics/cpg-flow/commit/e8b43b505151468464c67f43387b32a1799c4140))
+
+
+## v1.3.0 (2026-01-20)
+
+### Features
+
+- **cpg-flow**: Remove python 310 version lock, allowing 311
+  ([`5f69e1f`](https://github.com/populationgenomics/cpg-flow/commit/5f69e1fe10111ce70ac79162b6876ed51462f735))
+
+### Testing
+
+- **test_workflow.py**: Adds explicit test cases for altered stageoutput get methods
+  ([`dad5e53`](https://github.com/populationgenomics/cpg-flow/commit/dad5e531dc006c1bf9a8de59db1c307c6384f3a9))
+
+
+## v1.2.3 (2026-01-06)
+
+### Bug Fixes
+
+- **pyproject.toml**: Modernise the uv dev dependencies section syntax
+  ([`96f3f53`](https://github.com/populationgenomics/cpg-flow/commit/96f3f536379c3fcb9c4365f9a21c6a655aabd370))
+
+- **stage.py**: Altered logical flow to correctly report error modes if incorrect arguments are
+  passed
+  ([`0930671`](https://github.com/populationgenomics/cpg-flow/commit/0930671b95d6f5fee839c3bf7bfc33464a2f0fd4))
+
+_get requires a dictionary object to be accompanied by a key value. The previous logical tests to
+  confirm this were conditional on the existence of a key. If a dict is given, but no key, the error
+  message wrongly reported that the object was not a dictionary as a null logical case
+
+
+## v1.2.2 (2025-12-15)
+
+
+## v1.2.1 (2025-12-15)
+
+### Bug Fixes
+
+- **output_version**: Update usage readme with workflow output version
+  ([`45f6232`](https://github.com/populationgenomics/cpg-flow/commit/45f623262a5ccc53e9479c3e87352e9c4c7ebc5c))
+
+
+## v1.2.0 (2025-12-04)
+
+### Bug Fixes
+
+- **check_expected_outputs**: Switch default reuse behaviour
+  ([`df29e36`](https://github.com/populationgenomics/cpg-flow/commit/df29e36767ce040a31fa57b4f537946732ab4e72))
+
+- **sg_hash**: Add SG-only hashing method, for WFs with no assays loaded
+  ([`f98f4a2`](https://github.com/populationgenomics/cpg-flow/commit/f98f4a2512f00c5073ece9361d5c60522ae07c2d))
+
+Adds a new SG-based hashing method
+
+### Features
+
+- **target.py**: Adds a new hashing method based on the sequencing group ids instead of the assays
+  ([`5ad1568`](https://github.com/populationgenomics/cpg-flow/commit/5ad1568f2700e22ba3182d786a3673ed3b291907))
+
+this change is necessary because we are now choosing not to populate alignment inputs in most
+  workflows, so the alignment inputs for most runs will be empty, causing all runs to get the same
+  hash
+
+
+## v1.1.1 (2025-12-02)
+
+### Bug Fixes
+
+- **metamist-cohorts query**: [set-856] ruff format
+  ([`2a10cad`](https://github.com/populationgenomics/cpg-flow/commit/2a10cad1c6e64632ef2676e412a1b163e7efa2fb))
+
+- **metamist-cohorts query**: [set-856] support upper and lower case enum formats
+  ([`0db034a`](https://github.com/populationgenomics/cpg-flow/commit/0db034a5e16d69b01081bc4a070a67886ff79861))
+
+- **metamist-cohorts query**: [set-856] use lowercase for cohortstatus
+  ([`a71f584`](https://github.com/populationgenomics/cpg-flow/commit/a71f584cb96c5a78d594de762bf4d722b983abc3))
+
+### Documentation
+
+- Add exclude-newer upgrade option
+  ([`7c73dee`](https://github.com/populationgenomics/cpg-flow/commit/7c73dee0733a8997383eff3be78970e6942b8994))
+
+- Change to warning symbols for cutoff
+  ([`a748488`](https://github.com/populationgenomics/cpg-flow/commit/a748488e484189eb4f91b3cb0d9b5f1adf6debbc))
+
+- Clean up upgrade docs
+  ([`8ad151a`](https://github.com/populationgenomics/cpg-flow/commit/8ad151a44ca4f4af5342642e7fcf929722105fbd))
+
+- Update docs for package upgrades and precommit
+  ([`cadda5d`](https://github.com/populationgenomics/cpg-flow/commit/cadda5d5c827c5020cebf13d59c4cb2ef246dd92))
+
+
+## v1.1.0 (2025-11-27)
+
+### Features
+
+- **metamist-graphql**: [set-842] fetch cohort and verify status
+  ([`b8f3cd1`](https://github.com/populationgenomics/cpg-flow/commit/b8f3cd1059f0a4b356e6a6818390835bcce827d3))
+
+- **metamist-graphql**: [set-842] fetch only active cohorts
+  ([`84d6d1c`](https://github.com/populationgenomics/cpg-flow/commit/84d6d1ce779e6d15e927fc1d1531ba75a3f68f12))
+
+- **metamist-graphql**: [set-842] fix grapQL query
+  ([`5964d5b`](https://github.com/populationgenomics/cpg-flow/commit/5964d5bd42294d9122888199b1707c605d1a541d))
+
+- **metamist-graphql**: [set-842] fix lint issues
+  ([`1090482`](https://github.com/populationgenomics/cpg-flow/commit/1090482e214130431a4f253350660d77ac44d337))
+
+- **metamist-graphql**: [set-842] fix unit tests and populate status field in test data
+  ([`e51da42`](https://github.com/populationgenomics/cpg-flow/commit/e51da42053691fd0d4b7082b8c060d0d56c2d32b))
+
+- **metamist-graphql**: [set-842] include cohort id in the msg
+  ([`534da2f`](https://github.com/populationgenomics/cpg-flow/commit/534da2faad926cf554501d3f6fa85d1961c44cfc))
+
+- **metamist-graphql**: [set-842] update metamist version
+  ([`42a7e16`](https://github.com/populationgenomics/cpg-flow/commit/42a7e163a92d3891cd54709d5a0b7240add9d863))
+
+- **metamist-graphql**: [set-842] update metamist version in uv lock
+  ([`7932c22`](https://github.com/populationgenomics/cpg-flow/commit/7932c22b7d80a1a414dfd7bdd9f123152e2a6108))
+
+
+## v1.0.1 (2025-11-21)
+
+### Bug Fixes
+
+- **type**: Make populating assays opt-in
+  ([`e1f781c`](https://github.com/populationgenomics/cpg-flow/commit/e1f781c8cca757d8b985007f7a5246a318ec2ff3))
+
+Assays populated by default but this causes failures when the reads meta is missing the location.
+  With population of assays not necessary for all pipelines we can choose to opt-in where needed and
+  skip it by default
+
+### Build System
+
+- Bumped pip to 25.3
+  ([`4f9f7a7`](https://github.com/populationgenomics/cpg-flow/commit/4f9f7a726d2449642d65537e3524ad875fe6f951))
+
+### Testing
+
+- Populate assays in test cohort config
+  ([`61af4bf`](https://github.com/populationgenomics/cpg-flow/commit/61af4bf237ab06ffee52b030404f009f19ee6706))
+
+
+## v1.0.0 (2025-10-09)
+
+### Bug Fixes
+
+- Removed unneeded uv.lock changes
+  ([`574931c`](https://github.com/populationgenomics/cpg-flow/commit/574931c68616a070bc0d827e88ca1fdfa677f011))
+
+
+## v0.4.1 (2025-10-02)
+
+### Bug Fixes
+
+- Added test for workflow name
+  ([`be96298`](https://github.com/populationgenomics/cpg-flow/commit/be962984e6d7e2c4958f38f69a564351b9b29a02))
+
+- Fixed calls to get_workflow
+  ([`d43f912`](https://github.com/populationgenomics/cpg-flow/commit/d43f912f2cad6ffc17b7ce5f87e38add815b1779))
+
+- Modified how the global workflow instance is created
+  ([`b3a44be`](https://github.com/populationgenomics/cpg-flow/commit/b3a44bee432c838eca249223edf73e244cea66f5))
+
+- Removed unused function args
+  ([`394f165`](https://github.com/populationgenomics/cpg-flow/commit/394f1657bdc63df562f3c34e26f3b567298e7417))
+
+- Updated broken tests
+  ([`b325c90`](https://github.com/populationgenomics/cpg-flow/commit/b325c906b683ee5aab17f7806fcb85d31367bbee))
+
+- Updated pip version
+  ([`4f4cbb0`](https://github.com/populationgenomics/cpg-flow/commit/4f4cbb0855e807ba7ce7168d38b18304cb25c310))
+
+- **type**: Changes the FastQOra resource group return type
+  ([`fdbc368`](https://github.com/populationgenomics/cpg-flow/commit/fdbc368802d5e6c68b96bcd708f317785c2c23f5))
+
+### Features
+
+- Workflow name is no longer an optional config
+  ([`46465aa`](https://github.com/populationgenomics/cpg-flow/commit/46465aac3c744c2db8ab92019d7d78022e202b16))
+
+BREAKING CHANGE: Workflow name must now be hardcoded in entrypoint.
+
+### Breaking Changes
+
+- Workflow name must now be hardcoded in entrypoint.
+
+
+## v0.4.0 (2025-09-22)
+
+### Continuous Integration
+
+- Disable upgrades of python and hail
+  ([`118291d`](https://github.com/populationgenomics/cpg-flow/commit/118291d0b42a65a0ed0ee15275850fe07fe55672))
+
+Disable suggestions to uprade python and hail from renovate
+
+### Features
+
+- **ora**: Create FastqOra filetype
+  ([`a4db915`](https://github.com/populationgenomics/cpg-flow/commit/a4db915088df28b6cebf1e47a8686140f2ea233d))
+
+
 ## v0.3.2 (2025-07-02)
 
 ### Build System

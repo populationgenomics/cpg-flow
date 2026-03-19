@@ -23,6 +23,10 @@ dataset = 'fewgenomes'
 # Note: for fewgenomes and sandbox mentioning datasets by name is not a security risk
 # DO NOT DO THIS FOR OTHER DATASETS
 
+# set this to specify the output version used by
+# workflow.output_version, target.tmp|web_prefix, etc.
+output_version = 'ABC123'
+
 input_cohorts = ['COH2142']
 access_level = 'test'
 

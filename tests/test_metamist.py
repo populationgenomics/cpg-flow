@@ -5,6 +5,7 @@ Test workflow status reporter.
 import pytest
 from pytest_mock import MockFixture
 
+from cpg_flow.filetypes import FastqOraPair, FastqPair, FastqPairs
 from cpg_flow.metamist import (
     Analysis,
     AnalysisStatus,
@@ -430,7 +431,10 @@ class TestMetamist:
                 },
                 check_existence=False,
             )
-        assert str(exc_info.value) == "SG01: ERROR: \"reads_type\" is expected to be one of ['bam', 'cram', 'fastq']"
+        assert (
+            str(exc_info.value)
+            == "SG01: ERROR: \"reads_type\" is expected to be one of ['bam', 'cram', 'fastq', 'fastq_ora']"
+        )
 
         # test incorrectly formatted error
         with pytest.raises(ValueError) as exc_info:
@@ -592,3 +596,28 @@ class TestMetamist:
             check_existence=False,
         )
         assert str(reads) == 'test{1,2}.fastq.gz'
+
+    def test_metamist_parse_reads_fastq_ora_ok(self, metamist: Metamist):
+        """
+        Test simple fastq case, do not check for file existence
+        """
+        reads = parse_reads(
+            sequencing_group_id='SG01',
+            assay_meta={
+                'ora_reference': {
+                    'location': 'decompression_reference',
+                },
+                'reads': [
+                    [
+                        {'location': 'test1.fastq.ora'},
+                        {'location': 'test2.fastq.ora'},
+                    ],
+                ],
+                'reads_type': 'fastq_ora',
+            },
+            check_existence=False,
+        )
+        assert str(reads) == 'test{1,2}.fastq.ora'
+        assert isinstance(reads, FastqPairs)
+        assert isinstance(reads[0], FastqOraPair)
+        assert reads[0].reference_assembly == 'decompression_reference'

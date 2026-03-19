@@ -27,7 +27,7 @@ from loguru import logger
 from hailtop.batch.job import Job
 
 from cpg_flow.targets import Cohort, Dataset, MultiCohort, SequencingGroup, Target
-from cpg_flow.utils import ExpectedResultT, exists
+from cpg_flow.utils import ExpectedResultT, dependency_handler, exists
 from cpg_flow.workflow import Action, WorkflowError, get_workflow, path_walk
 from cpg_utils import Path, to_path
 from cpg_utils.config import get_config
@@ -121,20 +121,21 @@ class StageOutput:
         if self.data is None:
             raise ValueError(f'{self.stage}: output data is not available')
 
-        if key is not None:
-            if not isinstance(self.data, dict):
-                raise ValueError(
-                    f'{self.stage}: {self.data} is not a dictionary, can\'t get "{key}"',
-                )
-            res = to_path(cast('dict', self.data)[key])
-        elif isinstance(self.data, Path):
-            res = self.data
-        elif isinstance(self.data, str):
-            res = to_path(self.data)
-        else:
-            raise ValueError(f'{self.stage}: {self.data} is not a string or dictionary, can\'t get "{key}"')
+        if key and not isinstance(self.data, dict):
+            raise ValueError(f'{self.stage}: output is not a dict, but a key was specified')
 
-        return res
+        if isinstance(self.data, dict):
+            if key is None:
+                raise ValueError(f'{self.stage}: output is a dict, but no key has been specified')
+            return to_path(cast('dict', self.data)[key])
+
+        if isinstance(self.data, Path):
+            return self.data
+
+        if isinstance(self.data, str):
+            return to_path(self.data)
+
+        raise ValueError(f'{self.stage}: {self.data} is not a string or dictionary, can\'t get "{key}"')
 
     def as_str(self, key=None) -> str:
         """
@@ -553,11 +554,8 @@ class Stage(ABC, Generic[TargetT]):
         outputs.stage = self
         outputs.meta |= self.get_job_attrs(target)
 
-        for output_job in outputs.jobs:
-            if output_job:
-                for input_job in inputs.get_jobs(target):
-                    assert input_job, f'Input dependency job for stage: {self}, target: {target}'
-                    output_job.depends_on(input_job)
+        # make all output jobs dependent on all input jobs, but don't extend the list of prior deps
+        dependency_handler(target=outputs.jobs, tail=inputs.get_jobs(target), append_to_tail=False)
 
         if outputs.error_msg:
             return outputs
@@ -728,7 +726,8 @@ class Stage(ABC, Generic[TargetT]):
             logger.debug('No expected outputs, assuming outputs exist')
             return True, None
 
-        if get_config()['workflow'].get('check_expected_outputs'):
+        # By default pipelines will reuse outputs.
+        if get_config()['workflow'].get('check_expected_outputs', True):
             paths = path_walk(expected_out)
             logger.info(
                 f'Checking if {paths} from expected output {expected_out} exist',
