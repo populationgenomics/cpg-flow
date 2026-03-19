@@ -6,7 +6,7 @@ init: venv
 	uv run pre-commit install
 
 init-dev: init install-local
-	uv run pre-commit install --hook-type commit-msg
+
 
 # Actions
 test:
@@ -27,10 +27,6 @@ docs:
 	uv pip install mkdocs-material "mkdocstrings[python]" griffe-typingdoc
 	uv run mkdocs serve -f docs/mkdocs.yml
 
-ci-build: clean
-	python -m pip install build "setuptools>=42" setuptools-scm wheel
-	SETUPTOOLS_SCM_PRETEND_VERSION="$$NEW_VERSION" python -m build --sdist --wheel
-
 build: clean
 	uv build --sdist --wheel
 
@@ -44,4 +40,23 @@ upload: clean build
 	uv run twine check dist/*
 	uv run twine upload -r testpypi dist/*
 
-.PHONY: venv init test docs clean ci-build build install-build install-local upload
+# Version Management
+bump-major:
+	uv version --bump major
+	@VERSION=$$(uv version --short); \
+	git add pyproject.toml uv.lock; \
+	git commit -m "bump: $$VERSION"
+
+bump-minor:
+	uv version --bump minor
+	@VERSION=$$(uv version --short); \
+	git add pyproject.toml uv.lock; \
+	git commit -m "bump: $$VERSION"
+
+bump-patch:
+	uv version --bump patch
+	@VERSION=$$(uv version --short); \
+	git add pyproject.toml uv.lock; \
+	git commit -m "bump: $$VERSION"
+
+.PHONY: venv init test docs clean build install-build install-local upload bump-major bump-minor bump-patch
