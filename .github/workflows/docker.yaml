@@ -72,18 +72,15 @@ jobs:
           gcloud auth configure-docker australia-southeast1-docker.pkg.dev
 
       - name: build
-        env:
-          GIT_SHA: ${{ github.sha }}
         run: |
-          docker build . -f Dockerfile --tag "$IMAGE_NAME:$GIT_SHA"
+          docker build . -f Dockerfile --tag "$IMAGE_NAME:$GITHUB_SHA"
 
       - name: push commit sha tag
         if: github.event_name == 'pull_request'
         env:
           PR_SHA: ${{ github.event.pull_request.head.sha }}
-          GIT_SHA: ${{ github.sha }}
         run: |
-          docker tag "$IMAGE_NAME:$GIT_SHA" "$DOCKER_DEV/$IMAGE_NAME:$PR_SHA"
+          docker tag "$IMAGE_NAME:$GITHUB_SHA" "$DOCKER_DEV/$IMAGE_NAME:$PR_SHA"
           docker push "$DOCKER_DEV/$IMAGE_NAME:$PR_SHA"
           DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$DOCKER_DEV/$IMAGE_NAME:$PR_SHA" | cut -d'@' -f2)
           echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$PR_SHA" >> "$GITHUB_ENV"
@@ -93,9 +90,8 @@ jobs:
         if: github.event_name == 'release'
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          GIT_SHA: ${{ github.sha }}
         run: |
-          docker tag "$IMAGE_NAME:$GIT_SHA" "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
+          docker tag "$IMAGE_NAME:$GITHUB_SHA" "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
           docker push "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
           DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$DOCKER_MAIN/$IMAGE_NAME:$VERSION" | cut -d'@' -f2)
           echo "DOCKER_IMAGE=$DOCKER_MAIN/$IMAGE_NAME:$VERSION" >> "$GITHUB_ENV"
@@ -104,13 +100,10 @@ jobs:
       - name: manually triggered build
         if: github.event_name == 'workflow_dispatch'
         env:
-          IMAGE_NAME: $IMAGE_NAME
-          DOCKER_DEV: $DOCKER_DEV
           TAG: ${{ github.event.inputs.tag }}
-          SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          docker tag "$IMAGE_NAME:$SHA" "$DOCKER_DEV/$IMAGE_NAME:$TAG"
+          docker tag "$IMAGE_NAME:$GITHUB_SHA" "$DOCKER_DEV/$IMAGE_NAME:$TAG"
           docker push "$DOCKER_DEV/$IMAGE_NAME:$TAG"
           DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$DOCKER_DEV/$IMAGE_NAME:$TAG" | cut -d'@' -f2)
           echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$TAG" >> "$GITHUB_ENV"
