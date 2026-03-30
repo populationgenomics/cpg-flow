@@ -3,6 +3,8 @@ name: Security Checks
 on:
   workflow_dispatch:
   push:
+    branches: [main]
+  pull_request:
 
 permissions: {}
 
@@ -40,7 +42,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: populationgenomics/python-package-scanner@1000b342a759dbc7cb2ff9c17ef3d9efae3d9e67 # v0
+      - uses: populationgenomics/python-package-scanner@3cc954b26e037c0f85008aef69eed3e16ec0b303 # v0
         with:
           mode: uv
           fail-on-vulns: false
