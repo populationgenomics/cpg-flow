@@ -30,6 +30,22 @@ jobs:
           ignore-vulns: |
             GHSA-8qvm-5x2c-j2w7  # Denial of service in protobuf=3.20.2; hail pins this version.
 
+  package-scanner:
+    runs-on: ubuntu-latest
+    name: Python Package Scanner
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+        with:
+          persist-credentials: false
+
+      - uses: populationgenomics/python-package-scanner@971d2e38b23ebbb1236c538c6e3d2efdbc7df928 # v0
+        with:
+          mode: uv
+          fail-on-vulns: false
+          comment-on-pr: true
+
   zizmor:
     name: Zizmor Scan
     runs-on: ubuntu-latest
