@@ -191,6 +191,46 @@ class MultiCohortStage1(TestMultiCohortStage):
     pass
 
 
+# PR test case, using A as a naming prefix. Intention:
+# A->C
+#  ->B->D
+#     ->E->F->G
+#     ->G
+@stage
+class AA(TestStage):
+    pass
+
+
+@stage(required_stages=AA)
+class AC(TestStage):
+    pass
+
+
+@stage(required_stages=AA)
+class AB(TestStage):
+    pass
+
+
+@stage(required_stages=AB)
+class AD(TestStage):
+    pass
+
+
+@stage(required_stages=AB)
+class AE(TestStage):
+    pass
+
+
+@stage(required_stages=AE)
+class AF(TestStage):
+    pass
+
+
+@stage(required_stages=[AB, AF])
+class AG(TestStage):
+    pass
+
+
 StageType = Union[type[TestStage], type[TestDatasetStage], type[TestCohortStage], type[TestMultiCohortStage]]
 
 
@@ -204,3 +244,13 @@ def run_workflow(
 
     stages = stages or [C, C2]
     _run_workflow(name='test-workflow', stages=stages)
+
+
+def Arun_workflow(
+    mocker,
+    cohort_mocker: Callable[..., Cohort | MultiCohort] = mock_cohort,
+):
+    mocker.patch('cpg_flow.inputs.create_multicohort', lambda x: cohort_mocker())
+    mocker.patch('cpg_flow.inputs.get_multicohort', cohort_mocker)
+
+    _run_workflow(name='Atest-workflow', stages=[AC, AD, AG])
