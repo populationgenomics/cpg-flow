@@ -383,6 +383,17 @@ class Workflow:
         if not (first_stages or last_stages):
             return
 
+        stage_names = [s.name for s in stages]
+        lower_names = {s.lower() for s in stage_names}
+        for param, stage_list in [('first_stages', first_stages), ('last_stages', last_stages)]:
+            for name in stage_list:
+                if name.lower() not in lower_names:
+                    raise WorkflowError(
+                        f'Value in workflow/{param} "{name}" must be a stage name '
+                        f'or a subset of stages from the available list: '
+                        f'{", ".join(stage_names)}',
+                    )
+
         pre_first = _compute_shadow(graph, set(first_stages))
         post_last = _compute_shadow(graph.reverse(), set(last_stages))
 
