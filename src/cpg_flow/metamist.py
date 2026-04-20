@@ -388,7 +388,7 @@ class Metamist:
 
     def create_analysis(  # noqa: PLR0917
         self,
-        output: Path | str,
+        outputs: dict[str, Path | str],
         type_: str | AnalysisType,
         status: str | AnalysisStatus,
         cohort_ids: list[str] | None = None,
@@ -406,6 +406,12 @@ class Metamist:
         if isinstance(status, AnalysisStatus):
             status = status.value
 
+        if len(outputs) == 1:
+            # If output is a single file, just use the string path
+            outputs_ = {'basename': str(next(iter(outputs.values())))}
+        else:
+            outputs_ = {k: {'basename': str(v)} for k, v in outputs.items()}
+
         if not cohort_ids:
             cohort_ids = []
 
@@ -415,7 +421,7 @@ class Metamist:
         am = models.Analysis(
             type=type_,
             status=models.AnalysisStatus(status),
-            output=str(output),
+            outputs=outputs_,
             cohort_ids=list(cohort_ids),
             sequencing_group_ids=list(sequencing_group_ids),
             meta=meta or {},
@@ -427,11 +433,11 @@ class Metamist:
         )
         if aid is None:
             logger.error(
-                f'Failed to create Analysis(type={type_}, status={status}, output={output!s}) in {metamist_proj}',
+                f'Failed to create Analysis(type={type_}, status={status}, outputs={outputs_!s}) in {metamist_proj}',
             )
             return None
         logger.info(
-            f'Created Analysis(id={aid}, type={type_}, status={status}, output={output!s}) in {metamist_proj}',
+            f'Created Analysis(id={aid}, type={type_}, status={status}, outputs={outputs_!s}) in {metamist_proj}',
         )
         return aid
 
