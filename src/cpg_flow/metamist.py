@@ -32,7 +32,6 @@ COHORT_ACTIVE_CHECK = gql(
     query CohortActiveQuery($cohorts: [String!]!) {
         cohorts(id: {in_: $cohorts}) {
             id
-            description
             status
         }
     }
