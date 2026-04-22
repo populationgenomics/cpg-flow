@@ -27,6 +27,18 @@ from metamist.apis import AnalysisApi
 from metamist.exceptions import ApiException, ServiceException
 from metamist.graphql import gql, query
 
+COHORT_ACTIVE_CHECK = gql(
+    """
+    query CohortActiveQuery($cohorts: [String!]!) {
+        cohorts(id: {in_: $cohorts}) {
+            id
+            description
+            status
+        }
+    }
+    """
+)
+
 GET_SEQUENCING_GROUPS_QUERY = gql(
     """
         query SGQuery($metamist_proj: String!, $only_sgs: [String!]!, $skip_sgs: [String!]!, $sequencing_type: String!){
@@ -506,6 +518,33 @@ class Assay:
                 check_existence=check_existence,
             )
         return mm_seq
+
+
+def check_for_inactive_cohorts(cohort_ids: list[str]) -> None:
+    """
+    Runs a check on all Cohort IDs being used as input - raises an error if any Cohorts are inactive.
+    Instead of detecting failing cohorts one by one (requiring reruns), this flags all cohorts which will cause
+    downstream failures.
+
+    Args:
+        cohort_ids(list[str]): Cohort IDs to use as input
+
+    Returns:
+        None, will fail if any Cohorts are inactive, and will print the offending cohorts
+    """
+    result = query(COHORT_ACTIVE_CHECK, {'cohorts': cohort_ids})
+
+    invalid_cohorts: list[str] = []
+
+    for cohort_result in result['data']['cohorts']:
+        if cohort_result['status'] != 'active':
+            invalid_cohorts.append(cohort_result['id'])
+
+    if invalid_cohorts:
+        raise MetamistError(
+            'Some Cohorts in the input list are inactive, only active cohorts are allowed.\n'
+            f'Inactive Cohorts: {invalid_cohorts}',
+        )
 
 
 def get_cohort_sgs(cohort_id: str) -> dict:
