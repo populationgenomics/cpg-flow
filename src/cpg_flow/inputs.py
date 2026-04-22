@@ -11,6 +11,7 @@ from cpg_flow.metamist import (
     AnalysisType,
     Assay,
     MetamistError,
+    check_for_inactive_cohorts,
     get_cohort_sgs,
     get_metamist,
     parse_reads,
@@ -115,6 +116,10 @@ def create_multicohort(custom_cohort_ids: tuple[str]) -> MultiCohort:
         logger.warning(f'Non-unique cohort IDs: {duplicated_cohort_ids}')
 
     multicohort = MultiCohort()
+
+    # flag inactive/invalid cohorts prior to querying
+    # if we change behaviour to allowing inactive cohorts, this should be relaxed/removed
+    check_for_inactive_cohorts(custom_cohort_ids_unique)
 
     # for each Cohort ID
     for cohort_id in custom_cohort_ids_unique:
