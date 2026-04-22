@@ -221,28 +221,6 @@ def test_multicohort_dataset_config(mocker: MockFixture, tmp_path):
     assert multicohort.get_sequencing_groups()[3].dataset.name == 'projectb'
 
 
-def mock_query_get_analysis_query_returns_one_analysis_one_sg(*args, **kwargs):
-    """
-    Mock function for AnalysisApi.query(GET_ANALYSES_QUERY) as sucess.
-    It returns valid analyses data.
-    where type and status are derived from the input kwargs.
-    """
-    return {
-        'project': {
-            'analyses': [
-                {
-                    'id': 12345,
-                    'type': kwargs.get('variables', {}).get('analysis_type', None),
-                    'meta': {},
-                    'output': 'test_output',
-                    'status': kwargs.get('variables', {}).get('analysis_status', None),
-                    'sequencingGroups': [{'id': 'SG01'}],
-                },
-            ],
-        },
-    }
-
-
 def test_check_invalid_cohorts(mocker: MockFixture, tmp_path, caplog):
     cohort_list = ['COH1', 'COH2']
     set_config(_multicohort_config(tmp_path, cohort_list), tmp_path / 'config.toml')
