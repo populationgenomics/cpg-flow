@@ -5,7 +5,7 @@ Test workflow status reporter.
 import pytest
 from pytest_mock import MockFixture
 
-from cpg_flow.filetypes import FastqOraPair, FastqPair, FastqPairs
+from cpg_flow.filetypes import FastqOraPair, FastqPairs
 from cpg_flow.metamist import (
     Analysis,
     AnalysisStatus,

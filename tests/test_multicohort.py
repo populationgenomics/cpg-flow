@@ -5,11 +5,14 @@ Test reading inputs into a Cohort object.
 import json
 import logging
 
+import pytest
 from pytest_mock import MockFixture
 
 from cpg_flow.inputs import MultiCohort
+from cpg_flow.metamist import MetamistError, check_for_inactive_cohorts
 
 from tests import set_config
+from tests.test_cohort import mock_give_args_get_none
 
 LOGGER = logging.getLogger(__name__)
 
@@ -89,6 +92,7 @@ def test_multicohort(mocker: MockFixture, tmp_path):
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
     # don't patch the method location, patch where it's imported/called
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohorts)
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
 
     from cpg_flow.inputs import get_multicohort
 
@@ -143,6 +147,7 @@ def test_overlapping_multicohort(mocker: MockFixture, tmp_path):
     mocker.patch('cpg_flow.metamist.Metamist.get_ped_entries', mock_get_pedigree)
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_overlapping_cohorts)
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
 
     from cpg_flow.inputs import get_multicohort
 
@@ -190,6 +195,7 @@ def test_multicohort_dataset_config(mocker: MockFixture, tmp_path):
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
     # mockup the cohort data with '-test' suffix
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_test_project_cohorts)
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
 
     from cpg_flow.inputs import get_multicohort
 
@@ -213,3 +219,55 @@ def test_multicohort_dataset_config(mocker: MockFixture, tmp_path):
     assert multicohort.get_sequencing_groups()[1].dataset.name == 'projecta'
     assert multicohort.get_sequencing_groups()[2].dataset.name == 'projectb'
     assert multicohort.get_sequencing_groups()[3].dataset.name == 'projectb'
+
+
+def mock_query_get_analysis_query_returns_one_analysis_one_sg(*args, **kwargs):
+    """
+    Mock function for AnalysisApi.query(GET_ANALYSES_QUERY) as sucess.
+    It returns valid analyses data.
+    where type and status are derived from the input kwargs.
+    """
+    return {
+        'project': {
+            'analyses': [
+                {
+                    'id': 12345,
+                    'type': kwargs.get('variables', {}).get('analysis_type', None),
+                    'meta': {},
+                    'output': 'test_output',
+                    'status': kwargs.get('variables', {}).get('analysis_status', None),
+                    'sequencingGroups': [{'id': 'SG01'}],
+                },
+            ],
+        },
+    }
+
+
+def test_check_invalid_cohorts(mocker: MockFixture, tmp_path, caplog):
+    cohort_list = ['COH1', 'COH2']
+    set_config(_multicohort_config(tmp_path, cohort_list), tmp_path / 'config.toml')
+
+    def mock_query(query, variables):
+        return load_mock_data('tests/assets/test_multicohort/cohort_check_bad.json')
+
+    mocker.patch(
+        'cpg_flow.metamist.query',
+        mock_query,
+    )
+    with pytest.raises(MetamistError):
+        check_for_inactive_cohorts(cohort_list)
+        assert f'Inactive Cohorts: {["COH2"]}' in caplog.text
+
+
+def test_check_valid_cohorts(mocker: MockFixture, tmp_path, caplog):
+    cohort_list = ['COH1', 'COH2']
+    set_config(_multicohort_config(tmp_path, cohort_list), tmp_path / 'config.toml')
+
+    def mock_query(query, variables):
+        return load_mock_data('tests/assets/test_multicohort/cohort_check_good.json')
+
+    mocker.patch(
+        'cpg_flow.metamist.query',
+        mock_query,
+    )
+    check_for_inactive_cohorts(cohort_list)
