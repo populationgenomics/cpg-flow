@@ -37,6 +37,8 @@ Targets for workflow stages: SequencingGroup, Dataset, Cohort.
 import hashlib
 from typing import TYPE_CHECKING
 
+from cpg_utils.config import config_retrieve
+
 if TYPE_CHECKING:
     from cpg_flow.targets import SequencingGroup
 
@@ -95,12 +97,19 @@ class Target:
         """
         Unique hash string of sample alignment inputs. Useful to decide
         whether the analysis on the target needs to be rerun.
+
+        As we no longer populate alignment inputs for all workflows, this hash is now conditional
+        - if assay metadata is populated, hash of sequencing inputs
+        - if not, the Target's SG hash (same logic, but for CPG IDs, not fastq paths)
         """
-        s = ' '.join(
-            sorted(' '.join(str(s.alignment_input)) for s in self.get_sequencing_groups() if s.alignment_input),
-        )
-        h = hashlib.sha256(s.encode()).hexdigest()[:38]
-        self.alignment_inputs_hash = f'{h}_{len(self.get_sequencing_group_ids())}'
+        if config_retrieve(['workflow', 'populate_assays'], False):
+            s = ' '.join(
+                sorted(' '.join(str(s.alignment_input)) for s in self.get_sequencing_groups() if s.alignment_input),
+            )
+            h = hashlib.sha256(s.encode()).hexdigest()[:38]
+            self.alignment_inputs_hash = f'{h}_{len(self.get_sequencing_group_ids())}'
+        else:
+            self.alignment_inputs_hash = self.get_sg_hash()
 
     def get_sg_hash(self) -> str:
         """If the SG hash was generated, return it, otherwise generate and return it."""
