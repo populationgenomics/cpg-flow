@@ -11,18 +11,17 @@ license-files = ["LICENSE"]
 version = "1.3.1"
 dependencies = [
     "cpg-utils>=5.4.2",
-    # Pin Hail at CPG"s installed version
-    "hail==0.2.137",
+    # Loose pin Hail at CPG"s installed version or higher
+    "hail~=0.2.137",
     "grpcio>=1.53.0",
     # Avoid dependency resolution backtracking, Python 3.10 compatibility
-    "grpcio-status>=1.48,<1.50",
+    "grpcio-status>=1.48,<1.79",
     "loguru>0.7.0",
     "metamist>=7.13.0",
     "networkx>=3.4.2",
     "pyyaml>=6.0.2",
     "plotly>=5.24.1",
     "ipywidgets>=8.1.5",
-    "pre-commit>=4.0.1",
     # Security adjustments
     "tornado>=6.5",
 ]
@@ -53,8 +52,8 @@ dev = [
     "black>=24.10.0",
     "build>=1.2.2.post1",
     "coverage>=7.6.4",
-    "hail>=0.2.133",
     "pip-audit>=2.7.3",
+    "pre-commit>=4.0.1",
     "pylint>=3.3.1",
     "pytest-mock>=3.14.0",
     "pytest>=8.3.3",
@@ -68,7 +67,6 @@ dev = [
     "mike>=2.1.3",
     "pyright>=1.1.400",
 ]
-
 
 [project.urls]
 Repository = "https://github.com/populationgenomics/cpg-flow"

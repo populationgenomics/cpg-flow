@@ -1,0 +1,12 @@
+{
+  "cohorts": [
+    {
+      "id": "COH1",
+      "status": "active"
+    },
+    {
+      "id": "COH2",
+      "status": "invalid"
+    }
+  ]
+}
