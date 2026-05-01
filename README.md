@@ -18,6 +18,8 @@
 
 <br />
 
+Version 1.3.1
+
 ## 📋 Table of Contents
 
 1. 🐙 [What is this API ?](#what-is-this-api)

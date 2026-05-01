@@ -1,6 +1,8 @@
 FROM australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_hail_gcloud:0.2.138.cpg1-1
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+ENV VERSION=1.3.1
+
 # Set up working directory for the project
 WORKDIR /cpg-flow
 
