@@ -535,7 +535,7 @@ def check_for_inactive_cohorts(cohort_ids: list[str]) -> None:
 
     invalid_cohorts: list[str] = []
 
-    for cohort_result in result['data']['cohorts']:
+    for cohort_result in result['cohorts']:
         if cohort_result['status'] != 'active':
             invalid_cohorts.append(cohort_result['id'])
 
