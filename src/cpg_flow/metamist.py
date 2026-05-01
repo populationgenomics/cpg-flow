@@ -518,7 +518,7 @@ class Assay:
             )
         return mm_seq
 
-      
+
 def check_for_inactive_cohorts(cohort_ids: list[str]) -> None:
     """
     Runs a check on all Cohort IDs being used as input - raises an error if any Cohorts are inactive.
