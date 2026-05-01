@@ -8,7 +8,7 @@ description = "CPG Flow API for Hail Batch"
 requires-python = ">=3.10,<3.12"
 readme = "README.md"
 license-files = ["LICENSE"]
-version = "1.3.1"
+version = "1.3.2"
 dependencies = [
     "cpg-utils>=5.4.2",
     # Loose pin Hail at CPG"s installed version or higher
@@ -112,7 +112,7 @@ cpg_flow = ["defaults.toml"]
 where = ["src"]
 
 [tool.bumpversion]
-current_version = "1.3.1"
+current_version = "1.3.2"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 commit = true
