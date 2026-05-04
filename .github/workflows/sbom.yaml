@@ -47,13 +47,17 @@ jobs:
       - name: Upload SBOM to Dependency-Track
         env:
           TOKEN: ${{ steps.auth.outputs.id_token }}
+          DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
           PROJECT_NAME: ${{ github.event.repository.name }}
           PROJECT_VERSION: ${{ steps.version.outputs.value }}
         run: |
+            # Stream the SBOM through a file + --rawfile to avoid the
+            # ARG_MAX limit hit when passing it inline via --arg.
+            base64 -w0 sbom.cdx.json > sbom.b64
             jq -n \
               --arg name "$PROJECT_NAME" \
               --arg version "$PROJECT_VERSION" \
-              --arg bom "$(base64 -w0 sbom.cdx.json)" \
+              --rawfile bom sbom.b64 \
               --arg ref "$GITHUB_REF_NAME" \
               '{
                 projectName: $name,
@@ -67,6 +71,6 @@ jobs:
               }' | \
             curl -sf -X PUT "https://dtrack.popgen.rocks/api/v1/bom" \
               -H "Authorization: Bearer $TOKEN" \
-              -H "X-Api-Key: ${{ secrets.DTRACK_API_KEY }}" \
+              -H "X-Api-Key: $DTRACK_API_KEY" \
               -H "Content-Type: application/json" \
               -d @-
