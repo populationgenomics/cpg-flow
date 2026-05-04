@@ -169,6 +169,23 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Generate changelog page from GitHub releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          {
+            echo "# 📈 Releases & Changelog"
+            echo
+            echo "Release notes for every published version, generated from [GitHub Releases](https://github.com/${REPO}/releases) at docs build time."
+            echo
+            echo "## 🏷️ <a href=\"https://github.com/${REPO}/releases\" target=\"_blank\">All releases for this project are available here</a>."
+            echo
+            gh api --paginate "/repos/${REPO}/releases?per_page=100" --jq '
+              .[] | "## \(.name // .tag_name)\n\n_Released \(.published_at | sub("T.*"; ""))_\n\n\(.body)\n"
+            '
+          } > docs/docs/changelog.md
+
       - name: Deploy versioned docs
         env:
           VERSION: ${{ needs.check-version.outputs.version }}
