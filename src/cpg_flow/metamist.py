@@ -535,7 +535,7 @@ def check_for_inactive_cohorts(cohort_ids: list[str]) -> None:
 
     invalid_cohorts: list[str] = []
 
-    for cohort_result in result['data']['cohorts']:
+    for cohort_result in result['cohorts']:
         if cohort_result['status'] != 'active':
             invalid_cohorts.append(cohort_result['id'])
 
@@ -546,6 +546,12 @@ def check_for_inactive_cohorts(cohort_ids: list[str]) -> None:
         )
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=3, min=8, max=30),
+    retry=retry_if_exception_type(TransportServerError),
+    reraise=True,
+)
 def get_cohort_sgs(cohort_id: str) -> dict:
     """
     Retrieve sequencing group entries for a single cohort.
