@@ -19,7 +19,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: populationgenomics/python-package-scanner@1996135cf0e2a2c1e06b242f8eb99b65365da6a0 # v0
+      - uses: populationgenomics/python-package-scanner@7565101b3af83600ce32260e5e70755bf80f6ee4 # v0
         with:
           mode: uv
           fail-on-vulns: true
