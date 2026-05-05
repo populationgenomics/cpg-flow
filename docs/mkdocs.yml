@@ -92,6 +92,7 @@ markdown_extensions:
   pymdownx.caret:
   pymdownx.highlight:
     line_spans: __span
+    auto_title: true
   pymdownx.inlinehilite:
   pymdownx.keys:
   pymdownx.mark:
@@ -138,7 +139,6 @@ nav:
       - reference/index.md
       - reference/stage.md
       - reference/targets.md
-      - reference/pedigree_info.md
       - reference/filetypes.md
       - reference/inputs.md
       - reference/metamist.md
