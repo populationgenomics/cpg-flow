@@ -6,10 +6,9 @@
 ![Python](https://img.shields.io/badge/-Python-black?style=for-the-badge&logoColor=white&logo=python&color=2F73BF)
 
 [![⚙️ Test Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)
-[![🚀 Deploy To Production Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)
+[![🚀 Release Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/release.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/release.yaml)
 [![GitHub Latest Main Release](https://img.shields.io/github/v/release/populationgenomics/cpg-flow?label=main%20release)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
 [![GitHub Release](https://img.shields.io/github/v/release/populationgenomics/cpg-flow?include_prereleases&label=latest)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
-[![semantic-release: conventional commits](https://img.shields.io/badge/semantic--release-conventional%20commits-Æ1A7DBD?logo=semantic-release&color=1E7FBF)](https://github.com/semantic-release/semantic-release)
 [![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
 
 [![Technical Debt](https://sonarqube.populationgenomics.org.au/api/project_badges/measure?project=populationgenomics_cpg-flow&metric=sqale_index&token=sqb_bd2c5ce00628492c0af714f727ef6f8e939d235c)](https://sonarqube.populationgenomics.org.au/dashboard?id=populationgenomics_cpg-flow)
@@ -50,7 +49,7 @@ The API constructs a DAG (Directed Acyclic Graph) structure from a set of chaine
 
 The production version of this API is documented at **[populationgenomics.github.io/cpg-flow/](https://populationgenomics.github.io/cpg-flow/)**.
 
-The documentation is updated automatically when a commit is pushed on the `alpha` (prerelease) or `main` (release) branch.
+The documentation is updated automatically by the Release workflow when a new version is cut from `main`. Older versions remain accessible via the version selector (powered by [`mike`](https://github.com/jimporter/mike)).
 
 ## <a name="installation">🔨 Installation</a>
 
@@ -498,18 +497,11 @@ To pull and use the Docker image for the `cpg-flow` Python package, follow these
     gcloud auth configure-docker australia-southeast1-docker.pkg.dev
     ```
 
-2. **Pull the Docker Image**:
-    - For alpha releases:
+2. **Pull the Docker Image** (replace `<version>` with the desired release tag — see the [Releases page](https://github.com/populationgenomics/cpg-flow/releases)):
 
-      ```sh
-      docker pull australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:0.1.0-alpha.11
-      ```
-
-    - For main releases:
-
-      ```sh
-      docker pull australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:1.0.0
-      ```
+    ```sh
+    docker pull australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:<version>
+    ```
 
 3. **Run the Docker Container**:
 
@@ -607,18 +599,21 @@ SonarQube summary is available **[here](https://sonarqube.populationgenomics.org
 
 ## <a name="versions">📈 Releases & Changelog</a>
 
-Releases on **main** branch are generated and published automatically,
-pre-releases on the **alpha** branch are also generated and published by:
+Releases are cut from the `main` branch when the version in `pyproject.toml` changes. The version is bumped manually with [`uv version`](https://docs.astral.sh/uv/reference/cli/#uv-version) — `pyproject.toml` is the single source of truth.
 
-![Semantic Release](https://img.shields.io/badge/-Semantic%20Release-black?style=for-the-badge&logoColor=white&logo=semantic-release&color=000000)
+To cut a release:
 
-It uses the **[conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)** strategy.
+```bash
+uv version --bump patch    # 1.3.1 -> 1.3.2 (bug fixes)
+uv version --bump minor    # 1.3.1 -> 1.4.0 (backwards-compatible features)
+uv version --bump major    # 1.3.1 -> 2.0.0 (breaking changes)
+```
 
-This is enforced using the **[commitlint](https://github.com/opensource-nepal/commitlint)** pre-commit hook that checks commit messages conform to the conventional commit standard.
+Commit both `pyproject.toml` and `uv.lock`, open a PR, and merge to `main`. The `Create Release` workflow then tags the commit and creates a GitHub Release, which in turn triggers the `Publish` workflow (PyPI + versioned docs) and the `Docker` workflow (production image push).
 
-We recommend installing and using the tool **[commitizen](https://commitizen-tools.github.io/commitizen/) in order to create commit messages. Once installed, you can use either `cz commit` or `git cz` to create a commitizen generated commit message.
+You should never tag or push releases by hand — the workflow does it from the bumped version on `main`. See [docs/docs/changelog.md](https://github.com/populationgenomics/cpg-flow/blob/main/docs/docs/changelog.md) for the full release flow.
 
-Each change when a new release comes up is listed in the **<a href="https://github.com/populationgenomics/cpg-flow/blob/main/CHANGELOG.md" target="_blank">CHANGELOG.md file</a>**.
+Each change in a new release is listed in the **<a href="https://github.com/populationgenomics/cpg-flow/blob/main/CHANGELOG.md" target="_blank">CHANGELOG.md file</a>**.
 
 Also, you can keep up with changes by watching releases via the **Watch GitHub button** at the top of this page.
 
@@ -634,14 +629,11 @@ You can find all the workflows in the **[.github/workflows directory](https://gi
 
 |                                                   Name                                                   |                                                                                                                        Description & Status                                                                                                                         |                                    Triggered on                                     |
 | :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
-|        **[Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)**        |             Builds and pushes Docker images for the project.<br/><br/>[![Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)             | `pull_request` on `main, alpha` and `push` on `main, alpha` and `workflow_dispatch` |
+|        **[Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)**        |             Builds and pushes dev Docker images on PRs and manual dispatch. Production images are built and pushed by the Release workflow.<br/><br/>[![Docker](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)             | `pull_request` on `main` and `workflow_dispatch` |
 |          **[Lint](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml)**          |                  Runs linting checks using pre-commit hooks.<br/><br/>[![Lint](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/lint.yaml)                   |                                       `push`                                        |
-|       **[Package](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)**       |  Packages the project and publishes it to PyPI and GitHub Releases.<br/><br/>[![Package](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)   |                               `push` on `main, alpha`                               |
-|      **[Renovate](https://github.com/populationgenomics/cpg-flow/actions/workflows/renovate.yaml)**      |               Runs Renovate to update dependencies.<br/><br/>[![Renovate](https://github.com/populationgenomics/cpg-flow/actions/workflows/renovate.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/renovate.yaml)                |                         `schedule` and `workflow_dispatch`                          |
+|       **[Release](https://github.com/populationgenomics/cpg-flow/actions/workflows/release.yaml)**       |  Cuts a GitHub Release, publishes to PyPI, deploys versioned docs, and pushes the production Docker image when `pyproject.toml`'s version changes on `main`.<br/><br/>[![Release](https://github.com/populationgenomics/cpg-flow/actions/workflows/release.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/release.yaml)   |                               `push` on `main`                               |
 |  **[Security Checks](https://github.com/populationgenomics/cpg-flow/actions/workflows/security.yaml)**   |          Performs security checks using pip-audit.<br/><br/>[![Security Checks](https://github.com/populationgenomics/cpg-flow/actions/workflows/security.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/security.yaml)          |                           `workflow_dispatch` and `push`                            |
 |          **[Test](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)**          |                Runs unit tests and generates coverage reports.<br/><br/>[![Test](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)                 |                                       `push`                                        |
-| **[Update Badges](https://github.com/populationgenomics/cpg-flow/actions/workflows/update-badges.yaml)** | Updates badges.yaml with test results and coverage.<br/><br/>[![Update Badges](https://github.com/populationgenomics/cpg-flow/actions/workflows/update-badges.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/update-badges.yaml) |                             `workflow_run` (completed)                              |
-|       **[mkdocs](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml)**       |              Deploys API documentation to GitHub Pages.<br/><br/>[![mkdocs](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/web-docs.yaml)              |                                  `push` on `alpha`                                  |
 
 
 ## <a name="license">©️ License</a>

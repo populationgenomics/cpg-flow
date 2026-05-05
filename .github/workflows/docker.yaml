@@ -4,10 +4,6 @@ on:
     branches:
       - main
 
-  release:
-    types:
-      - created
-
   workflow_dispatch:
     inputs:
       tag:
@@ -34,20 +30,11 @@ jobs:
       CLOUDSDK_CORE_DISABLE_PROMPTS: 1
       IMAGE_NAME: cpg_flow
       DOCKER_DEV: australia-southeast1-docker.pkg.dev/cpg-common/images-dev
-      DOCKER_MAIN: australia-southeast1-docker.pkg.dev/cpg-common/images
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
           persist-credentials: false
-
-      - name: Extract version from release tag
-        id: version
-        if: github.event_name == 'release'
-        env:
-          TAG_NAME: ${{ github.event.release.tag_name }}
-        run: |
-          echo "version=${TAG_NAME#v}" >> "$GITHUB_OUTPUT"
 
       - name: Log the PR commit sha
         if: github.event_name == 'pull_request'
@@ -86,17 +73,6 @@ jobs:
           echo "DOCKER_IMAGE=$DOCKER_DEV/$IMAGE_NAME:$PR_SHA" >> "$GITHUB_ENV"
           echo "DOCKER_DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
-      - name: push production image
-        if: github.event_name == 'release'
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          docker tag "$IMAGE_NAME:$GITHUB_SHA" "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
-          docker push "$DOCKER_MAIN/$IMAGE_NAME:$VERSION"
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$DOCKER_MAIN/$IMAGE_NAME:$VERSION" | cut -d'@' -f2)
-          echo "DOCKER_IMAGE=$DOCKER_MAIN/$IMAGE_NAME:$VERSION" >> "$GITHUB_ENV"
-          echo "DOCKER_DIGEST=$DIGEST" >> "$GITHUB_ENV"
-
       - name: manually triggered build
         if: github.event_name == 'workflow_dispatch'
         env:
@@ -122,20 +98,12 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          # Determine which registry was used
-          if [[ "${DOCKER_IMAGE}" == *"images-dev"* ]]; then
-            REGISTRY="images-dev"
-          else
-            REGISTRY="images"
-          fi
-
-          # Create GCP Artifact Registry link with digest if available
           if [ -n "${DOCKER_DIGEST:-}" ]; then
-            GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/${REGISTRY}/${IMAGE_NAME}/${DOCKER_DIGEST}"
-            echo "**🔗 [View in Google Cloud Console](${GCP_LINK})**" >> $GITHUB_STEP_SUMMARY
+            GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/images-dev/${IMAGE_NAME}/${DOCKER_DIGEST}"
           else
-            echo "**🔗 [View in Google Cloud Console](https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/${REGISTRY}/${IMAGE_NAME})**" >> $GITHUB_STEP_SUMMARY
+            GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/images-dev/${IMAGE_NAME}"
           fi
+          echo "**🔗 [View in Google Cloud Console](${GCP_LINK})**" >> $GITHUB_STEP_SUMMARY
 
       - name: Comment on PR with Docker image
         if: github.event_name == 'pull_request'
@@ -143,24 +111,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          # Only proceed if we have a Docker image
           if [ -z "${DOCKER_IMAGE:-}" ]; then
             echo "No Docker image found, skipping PR comment"
             exit 0
           fi
 
-          # Determine which registry was used
-          if [[ "${DOCKER_IMAGE}" == *"images-dev"* ]]; then
-            REGISTRY="images-dev"
-          else
-            REGISTRY="images"
-          fi
-
-          # Create GCP link
           if [ -n "${DOCKER_DIGEST:-}" ]; then
-            GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/${REGISTRY}/${IMAGE_NAME}/${DOCKER_DIGEST}"
+            GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/images-dev/${IMAGE_NAME}/${DOCKER_DIGEST}"
           else
-            GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/${REGISTRY}/${IMAGE_NAME}"
+            GCP_LINK="https://console.cloud.google.com/artifacts/docker/cpg-common/australia-southeast1/images-dev/${IMAGE_NAME}"
           fi
 
           MARKER="<!-- cpg-flow-docker -->"
