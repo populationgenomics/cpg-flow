@@ -6,10 +6,9 @@
 ![Python](https://img.shields.io/badge/-Python-black?style=for-the-badge&logoColor=white&logo=python&color=2F73BF)
 
 [![⚙️ Test Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/test.yaml)
-[![🚀 Deploy To Production Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/package.yaml)
+[![🚀 Release Workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/release.yaml/badge.svg)](https://github.com/populationgenomics/cpg-flow/actions/workflows/release.yaml)
 [![GitHub Latest Main Release](https://img.shields.io/github/v/release/populationgenomics/cpg-flow?label=main%20release)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
 [![GitHub Release](https://img.shields.io/github/v/release/populationgenomics/cpg-flow?include_prereleases&label=latest)](https://GitHub.com/populationgenomics/cpg-flow/releases/)
-[![semantic-release: conventional commits](https://img.shields.io/badge/semantic--release-conventional%20commits-Æ1A7DBD?logo=semantic-release&color=1E7FBF)](https://github.com/semantic-release/semantic-release)
 [![GitHub license](https://img.shields.io/github/license/populationgenomics/cpg-flow.svg)](https://github.com/populationgenomics/cpg-flow/blob/main/LICENSE)
 
 
@@ -53,4 +52,4 @@ The API constructs a DAG (Directed Acyclic Graph) structure from a set of chaine
 
 The production version of this API is documented at **[populationgenomics.github.io/cpg-flow/](https://populationgenomics.github.io/cpg-flow/)**.
 
-The documentation is updated automatically when a commit is pushed on the `alpha` (prerelease) or `main` (release) branch.
+The documentation is updated automatically by the Release workflow when a new version is cut from `main`. Older versions remain accessible via the version selector (powered by [`mike`](https://github.com/jimporter/mike)).

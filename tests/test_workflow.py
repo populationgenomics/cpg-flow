@@ -86,15 +86,18 @@ def test_workflow(tmp_path: pathlib.Path):
 
     assert len(multi_cohort.get_sequencing_groups()) == 2
 
-    assert multi_cohort.alignment_inputs_hash is None
-    mc_hash = multi_cohort.get_alignment_inputs_hash()
-    assert multi_cohort.alignment_inputs_hash == mc_hash
-    assert mc_hash == 'e3b0c44298fc1c149afbf4c8996fb92427ae41_2'
+    expected_cpg_id_hash = '5ecfbcb86b94df30ddb6b9d4cfe3e3f49c31a3_2'
 
     assert multi_cohort.sg_hash is None
     mc_sg_hash = multi_cohort.get_sg_hash()
     assert multi_cohort.sg_hash == mc_sg_hash
-    assert mc_sg_hash == '5ecfbcb86b94df30ddb6b9d4cfe3e3f49c31a3_2'
+    assert mc_sg_hash == expected_cpg_id_hash
+
+    # this must come second, as the no-assay scenario populates the sg_hash
+    assert multi_cohort.alignment_inputs_hash is None
+    mc_hash = multi_cohort.get_alignment_inputs_hash()
+    assert multi_cohort.alignment_inputs_hash == mc_hash
+    assert mc_hash == expected_cpg_id_hash
 
     @stage
     class MySequencingGroupStage(SequencingGroupStage):

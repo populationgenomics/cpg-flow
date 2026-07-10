@@ -106,6 +106,10 @@ def mock_get_analysis_by_sgs(*args, **kwargs) -> dict:
     return {}
 
 
+def mock_give_args_get_none(*args, **kwargs) -> None:
+    return None
+
+
 def mock_get_pedigree_empty(*args, **kwargs):
     return []
 
@@ -154,6 +158,7 @@ def test_input_cohorts_dont_exist(mocker: MockFixture, tmp_path, caplog):
     set_config(_cohort_config(tmp_path, cohort_ids=[missing_cohort_id]), tmp_path / 'config.toml')
 
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
 
     # Assert the value error is raised
     from cpg_flow.inputs import get_multicohort
@@ -189,6 +194,7 @@ def test_cohort(mocker: MockFixture, tmp_path, caplog):
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
 
     caplog.set_level(logging.WARNING)
 
@@ -264,6 +270,8 @@ def test_missing_reads(mocker: MockFixture, tmp_path):
 
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
+
     # from cpg_flow.filetypes import BamPath
     from cpg_flow.inputs import get_multicohort
     from cpg_flow.targets import Sex
@@ -334,6 +342,8 @@ def test_mixed_reads(mocker: MockFixture, tmp_path, caplog):
     )
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
+
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
 
     from cpg_flow.inputs import get_multicohort
@@ -380,6 +390,7 @@ def test_unknown_data(mocker: MockFixture, tmp_path, caplog):
     mocker.patch('cpg_flow.metamist.Metamist.get_analyses_by_sgid', mock_get_analysis_by_sgs)
 
     mocker.patch('cpg_flow.inputs.get_cohort_sgs', mock_get_cohort_sgs)
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
 
     from cpg_flow.inputs import get_multicohort
     from cpg_flow.targets import Sex
@@ -420,6 +431,7 @@ def test_custom_cohort(mocker: MockFixture, tmp_path, monkeypatch):
         }
 
     monkeypatch.setattr('cpg_flow.metamist.query', mock_query)
+    mocker.patch('cpg_flow.inputs.check_for_inactive_cohorts', mock_give_args_get_none)
 
     from cpg_flow.inputs import get_multicohort
 

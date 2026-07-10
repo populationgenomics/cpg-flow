@@ -18,15 +18,24 @@ The CPG software team continuously maintains and improves the application to mee
 
 Reviewing PRs requires time and attention, so we prioritize them as part of our regular sprint planning. The team works in fortnightly sprints, which means if you submit a PR early in the cycle, it might take some time before it’s reviewed. We understand this can be frustrating and strive to provide updates on the status of your PR as promptly as possible.
 
-## Commitlint and Commitizen
+## Versioning and releases
 
-Releases on **main** branch are generated and published automatically,
-pre-releases on the **alpha** branch are also generated and published by:
+We no longer rely on conventional commits, commitlint, or semantic-release. The version in `pyproject.toml` is the single source of truth and is bumped manually with [`uv version`](https://docs.astral.sh/uv/reference/cli/#uv-version).
 
-![Semantic Release](https://img.shields.io/badge/-Semantic%20Release-black?style=for-the-badge&logoColor=white&logo=semantic-release&color=000000)
+To cut a new release:
 
-It uses the **[conventional commit](https://www.conventionalcommits.org/en/v1.0.0/)** strategy.
+1. On a release PR branch, bump the version with `uv`. Pick the bump type that matches the change:
 
-This is enforced using the **[commitlint](https://github.com/opensource-nepal/commitlint)** pre-commit hook that checks commit messages conform to the conventional commit standard.
+   ```bash
+   uv version --bump patch    # 1.3.1 -> 1.3.2 (bug fixes)
+   uv version --bump minor    # 1.3.1 -> 1.4.0 (backwards-compatible features)
+   uv version --bump major    # 1.3.1 -> 2.0.0 (breaking changes)
+   ```
 
-We recommend installing and using the tool **[commitizen](https://commitizen-tools.github.io/commitizen/) in order to create commit messages. Once installed, you can use either `cz commit` or `git cz` to create a commitizen generated commit message.
+   This rewrites the `version = "..."` line in `pyproject.toml` and updates `uv.lock`.
+
+2. Commit both files (`pyproject.toml` and `uv.lock`), open the PR, and merge it into `main` once approved.
+
+3. Once the bump lands on `main`, the [`Release`](.github/workflows/release.yaml) workflow does everything in one shot: it compares `uv version --short` to the latest `v*` git tag, and if they differ it tags the commit and creates a GitHub Release with auto-generated notes, publishes the package to PyPI via [trusted publishing](https://docs.pypi.org/trusted-publishers/), deploys the versioned docs via `mike`, and pushes the production Docker image.
+
+You should never tag or push releases by hand — the workflow does it from the bumped version on `main`. See [docs/docs/changelog.md](docs/docs/changelog.md) for the full job-by-job breakdown.

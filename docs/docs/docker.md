@@ -12,18 +12,11 @@ To pull and use the Docker image for the `cpg-flow` Python package, follow these
     gcloud auth configure-docker australia-southeast1-docker.pkg.dev
     ```
 
-2. **Pull the Docker Image**:
-    - For alpha releases:
+2. **Pull the Docker Image** (replace `<version>` with the desired release tag — see the [Releases page](https://github.com/populationgenomics/cpg-flow/releases)):
 
-      ```sh
-      docker pull australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:0.1.0-alpha.11
-      ```
-
-    - For main releases:
-
-      ```sh
-      docker pull australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:1.0.0
-      ```
+    ```sh
+    docker pull australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:<version>
+    ```
 
 3. **Run the Docker Container**:
 
