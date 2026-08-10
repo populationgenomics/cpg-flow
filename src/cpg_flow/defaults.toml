@@ -41,6 +41,11 @@
 # Limit to data of this sequencing type
 #sequencing_type = 'genome'
 
+# If any SG in a Cohort is inactive, the whole Cohort is marked as inactive. By default this prevents any workflow run
+# from using the Cohort.
+# If this is set to `true`, these cohorts can be used, and the failure will be downgraded to a warning logging message.
+#permit_inactive_cohorts = false
+
 # Check input file existence. When they are missing,
 # the `skip_sgs_with_missing_input` option controls whether such
 # sequencing groups should be ignored, or it should raise an error.

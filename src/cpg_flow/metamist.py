@@ -540,10 +540,15 @@ def check_for_inactive_cohorts(cohort_ids: list[str]) -> None:
             invalid_cohorts.append(cohort_result['id'])
 
     if invalid_cohorts:
-        raise MetamistError(
-            'Some Cohorts in the input list are inactive, only active cohorts are allowed.\n'
-            f'Inactive Cohorts: {invalid_cohorts}',
-        )
+        if config_retrieve(['workflow', 'permit_inactive_cohorts'], False):
+            logger.warning(
+                f'Inactive Cohorts detected: {invalid_cohorts}.\nContinuing anyway (workflow.permit_invalid_cohorts)',
+            )
+        else:
+            raise MetamistError(
+                'Some Cohorts in the input list are inactive, only active cohorts are allowed.\n'
+                f'Inactive Cohorts: {invalid_cohorts}',
+            )
 
 
 @retry(
