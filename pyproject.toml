@@ -8,7 +8,7 @@ description = "CPG Flow API for Hail Batch"
 requires-python = ">=3.10,<3.12"
 readme = "README.md"
 license-files = ["LICENSE"]
-version = "1.4.0"
+version = "1.4.1"
 dependencies = [
     "cpg-utils>=5.4.2",
     # Loose pin Hail at CPG"s installed version or higher
