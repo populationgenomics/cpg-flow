@@ -13,9 +13,6 @@ dependencies = [
     "cpg-utils>=5.4.2",
     # Loose pin Hail at CPG"s installed version or higher
     "hail~=0.2.137",
-    "grpcio>=1.83.0",
-    # Avoid dependency resolution backtracking, Python 3.10 compatibility
-    "grpcio-status>=1.83.0",
     "loguru>0.7.0",
     "metamist>=7.13.0",
     "networkx>=3.4.2",
@@ -102,3 +99,8 @@ cpg_flow = ["defaults.toml", 'py.typed']
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.uv]
+constraint-dependencies = [
+    "grpcio>=1.83.0",
+]

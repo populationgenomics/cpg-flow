@@ -6,6 +6,9 @@ resolution-markers = [
     "python_full_version < '3.11'",
 ]
 
+[manifest]
+constraints = [{ name = "grpcio", specifier = ">=1.83.0" }]
+
 [[package]]
 name = "aiodns"
 version = "2.0.0"
@@ -652,8 +655,6 @@ version = "1.4.1"
 source = { editable = "." }
 dependencies = [
     { name = "cpg-utils" },
-    { name = "grpcio" },
-    { name = "grpcio-status" },
     { name = "hail" },
     { name = "ipywidgets" },
     { name = "loguru" },
@@ -688,8 +689,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "cpg-utils", specifier = ">=5.4.2" },
-    { name = "grpcio", specifier = ">=1.83.0" },
-    { name = "grpcio-status", specifier = ">=1.83.0" },
     { name = "hail", specifier = "~=0.2.137" },
     { name = "ipywidgets", specifier = ">=8.1.5" },
     { name = "loguru", specifier = ">0.7.0" },
