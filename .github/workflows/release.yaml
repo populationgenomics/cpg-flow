@@ -71,7 +71,7 @@ jobs:
       contents: read
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -leo pipefail {0}
     env:
       DOCKER_BUILDKIT: 1
       BUILDKIT_PROGRESS: plain
@@ -117,7 +117,7 @@ jobs:
       id-token: write
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -leo pipefail {0}
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
@@ -146,7 +146,7 @@ jobs:
       contents: write
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -leo pipefail {0}
     steps:
       # Persisted credentials are required so `mike deploy --push` can push to
       # gh-pages. This job uploads no artifacts, so the token cannot leak via
