@@ -103,4 +103,14 @@ where = ["src"]
 [tool.uv]
 constraint-dependencies = [
     "grpcio>=1.83.0",
+    # Held to the Hail in the Docker image's base image (Dockerfile FROM), so
+    # uv.lock resolves the dependency versions that Hail was built against. The
+    # image installs everything in the lock except Hail itself. Move this with the
+    # FROM tag.
+    "hail==0.2.138",
+    # From 3.14.0 aiohttp raises ClientPayloadError on the HTTP 308 that GCS returns
+    # between hailtop 0.2.138's resumable-upload chunks, which fails every
+    # multi-chunk upload (aio-libs/aiohttp#12195, populationgenomics/talos#718).
+    # Lift this once the base image's Hail handles it.
+    "aiohttp<3.14",
 ]
