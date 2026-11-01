@@ -17,11 +17,12 @@ from tests.test_cohort import mock_give_args_get_none
 LOGGER = logging.getLogger(__name__)
 
 
-def _multicohort_config(tmp_path, cohort_ids=['COH123', 'COH456']) -> str:
+def _multicohort_config(tmp_path, cohort_ids=['COH123', 'COH456'], workflow_extra: str | None = None) -> str:
     conf = f"""
     [workflow]
     dataset = 'projecta'
     input_cohorts = [{', '.join([f"'{x}'" for x in cohort_ids])}]
+    {workflow_extra if workflow_extra else ''}
 
     path_scheme = 'local'
 
@@ -235,6 +236,22 @@ def test_check_invalid_cohorts(mocker: MockFixture, tmp_path, caplog):
     with pytest.raises(MetamistError):
         check_for_inactive_cohorts(cohort_list)
         assert f'Inactive Cohorts: {["COH2"]}' in caplog.text
+
+
+def test_check_invalid_cohorts_permitted(mocker: MockFixture, tmp_path, caplog):
+    cohort_list = ['COH1', 'COH2']
+    set_config(
+        _multicohort_config(tmp_path, cohort_list, workflow_extra='permit_inactive_cohorts = true'),
+        tmp_path / 'config.toml',
+    )
+
+    def mock_query(query, variables):
+        return load_mock_data('tests/assets/test_multicohort/cohort_check_bad.json')
+
+    mocker.patch('cpg_flow.metamist.query', mock_query)
+
+    check_for_inactive_cohorts(cohort_list)
+    assert f'Inactive Cohorts detected: {["COH2"]}' in caplog.text
 
 
 def test_check_valid_cohorts(mocker: MockFixture, tmp_path, caplog):

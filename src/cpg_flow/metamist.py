@@ -540,10 +540,15 @@ def check_for_inactive_cohorts(cohort_ids: list[str]) -> None:
             invalid_cohorts.append(cohort_result['id'])
 
     if invalid_cohorts:
-        raise MetamistError(
-            'Some Cohorts in the input list are inactive, only active cohorts are allowed.\n'
-            f'Inactive Cohorts: {invalid_cohorts}',
-        )
+        if config_retrieve(['workflow', 'permit_inactive_cohorts'], False):
+            logger.warning(
+                f'Inactive Cohorts detected: {invalid_cohorts}.\nContinuing anyway (workflow.permit_invalid_cohorts)',
+            )
+        else:
+            raise MetamistError(
+                'Some Cohorts in the input list are inactive, only active cohorts are allowed.\n'
+                f'Inactive Cohorts: {invalid_cohorts}',
+            )
 
 
 @retry(
@@ -576,11 +581,12 @@ def get_cohort_sgs(cohort_id: str) -> dict:
         message = entries['errors'][0]['message']
         raise MetamistError(f'Error fetching cohort: {message}')
 
-    cohort_status = entries['cohorts'][0]['status']
-    if cohort_status.lower() != 'active':  # support upper and lower formats during migration
-        raise MetamistError(
-            f'Cohort {cohort_id} is {cohort_status}. Only active cohorts are allowed. Please check the input cohort list.'
-        )
+    # inactive cohorts were already flagged during check_for_inactive_cohorts().
+    # This check is skipped completely if the configuration options allow for use of inactive cohorts
+    if not config_retrieve(['workflow', 'permit_inactive_cohorts'], False):
+        cohort_status = entries['cohorts'][0]['status']
+        if cohort_status.lower() != 'active':
+            raise MetamistError(f'Cohort {cohort_id} is {cohort_status}. Only active cohorts are allowed.')
 
     cohort_name = entries['cohorts'][0]['name']
     cohort_dataset = entries['cohorts'][0]['project']['dataset']
