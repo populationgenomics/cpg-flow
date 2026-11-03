@@ -118,6 +118,7 @@ GET_ANALYSES_QUERY = gql(
                     type
                     meta
                     output
+                    outputs
                     status
                     sequencingGroups {
                         id
@@ -242,12 +243,17 @@ class Analysis:
         if output:
             output = to_path(output)
 
+        # more modern implementation - analysis.outputs.path is the first-class-files path
+        outputs_path = data.get('outputs', {}).get('path')
+        if outputs_path:
+            outputs_path = to_path(outputs_path)
+
         a = Analysis(
             id=int(data['id']),
             type=AnalysisType.parse(data['type']),
             status=AnalysisStatus.parse(data['status']),
             sequencing_group_ids=set([s['id'] for s in data['sequencingGroups']]),
-            output=output,
+            output=outputs_path or output,
             meta=data.get('meta') or {},
         )
         return a
