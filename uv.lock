@@ -651,7 +651,7 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "1.4.1"
+version = "1.4.2"
 source = { editable = "." }
 dependencies = [
     { name = "cpg-utils" },
