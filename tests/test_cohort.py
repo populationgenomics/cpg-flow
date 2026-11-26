@@ -152,6 +152,20 @@ def test_no_input_cohorts(mocker: MockFixture, tmp_path, caplog):
         get_multicohort()
 
 
+def test_input_cohorts_not_set(tmp_path):
+    """
+    Leaving input_cohorts out of the config altogether should fail in the same way,
+    rather than building an empty MultiCohort for which no stage plans anything.
+    """
+    # This config has no 'input_cohorts' entry at all
+    set_config(_cohort_config(tmp_path), tmp_path / 'config.toml')
+
+    from cpg_flow.inputs import get_multicohort
+
+    with pytest.raises(ValueError, match='No input cohorts provided'):
+        get_multicohort()
+
+
 def test_input_cohorts_dont_exist(mocker: MockFixture, tmp_path, caplog):
     # This config will 'input_cohorts = [COH09876543]' but the cohort doesn't exist
     missing_cohort_id = 'COH09876543'

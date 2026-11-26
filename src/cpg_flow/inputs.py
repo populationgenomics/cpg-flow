@@ -103,6 +103,10 @@ def create_multicohort(custom_cohort_ids: tuple[str]) -> MultiCohort:
     """
     Add cohorts in the multicohort.
     """
+    # without any cohorts there are no targets, so every stage would silently plan nothing
+    if not custom_cohort_ids:
+        raise ValueError('No input cohorts provided: set workflow/input_cohorts to a list of cohort IDs')
+
     # get a unique set of cohort IDs
     custom_cohort_ids_unique = sorted(set(custom_cohort_ids))
     custom_cohort_ids_removed = sorted(set(custom_cohort_ids) - set(custom_cohort_ids_unique))
